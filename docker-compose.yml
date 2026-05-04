@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   # frontend:
@@ -16,11 +15,11 @@ services:
   #   ports:
   #     - "8000:8000"
 
-  # db:
-  #   image: postgres:15
-  #   environment:
-  #     POSTGRES_USER: user
-  #     POSTGRES_PASSWORD: password
-  #     POSTGRES_DB: insurancedb
-  #   ports:
-  #     - "5432:5432"
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: insurance_saas_db
+    ports:
+      - "5433:5432"
