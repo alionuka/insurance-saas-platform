@@ -1,12 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getProducts, InsuranceProduct } from "@/lib/api";
+import { getProducts, createDemoApplication, InsuranceProduct } from "@/lib/api";
 
 export default function Home() {
   const [products, setProducts] = useState<InsuranceProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [applying, setApplying] = useState<Record<string, boolean>>({});
+  const [applyResult, setApplyResult] = useState<Record<string, any>>({});
+  const [applyError, setApplyError] = useState<Record<string, string>>({});
 
   useEffect(() => {
     async function loadProducts() {
@@ -21,6 +25,20 @@ export default function Home() {
     }
     loadProducts();
   }, []);
+
+  async function handleApply(productId: string) {
+    setApplying(prev => ({ ...prev, [productId]: true }));
+    setApplyError(prev => ({ ...prev, [productId]: '' }));
+    
+    try {
+      const result = await createDemoApplication(productId);
+      setApplyResult(prev => ({ ...prev, [productId]: result }));
+    } catch (err) {
+      setApplyError(prev => ({ ...prev, [productId]: 'Failed to process application. Please try again.' }));
+    } finally {
+      setApplying(prev => ({ ...prev, [productId]: false }));
+    }
+  }
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-indigo-500/30">
@@ -58,8 +76,11 @@ export default function Home() {
       </div>
 
       {/* Products Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <h2 className="text-3xl font-bold text-center mb-12">Available Insurance Products</h2>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+        <h2 className="text-3xl font-bold text-center mb-4">Available Insurance Products</h2>
+        <p className="text-center text-sm text-slate-500 mb-12 max-w-2xl mx-auto bg-slate-900/50 py-2 px-4 rounded-full border border-slate-800/80 backdrop-blur-sm">
+          <span className="text-indigo-400 font-medium">Note:</span> This is a temporary demo flow. You will automatically apply using a demo customer profile to test the ML risk assessment pipeline.
+        </p>
         
         {loading && (
           <div className="flex justify-center items-center py-20">
@@ -93,9 +114,54 @@ export default function Home() {
                   {product.description || "No description provided."}
                 </p>
                 <div className="mt-6 pt-6 border-t border-slate-800/50">
-                  <button className="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-2">
-                    Learn more <span aria-hidden="true">&rarr;</span>
-                  </button>
+                  {applyResult[product.id] ? (
+                    <div className="p-4 rounded-xl bg-slate-800/50 border border-emerald-500/30">
+                      <h4 className="text-sm font-bold text-emerald-400 mb-3 flex items-center gap-2">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        Application Submitted
+                      </h4>
+                      {applyResult[product.id].riskAssessments?.[0] && (
+                        <div className="mt-2 text-sm bg-slate-900/80 p-3 rounded-lg border border-slate-700/50">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-slate-400">Risk Score:</span>
+                            <span className="font-mono font-medium text-indigo-300">{applyResult[product.id].riskAssessments[0].riskScore}/100</span>
+                          </div>
+                          <div className="flex justify-between items-center mb-3">
+                            <span className="text-slate-400">Risk Level:</span>
+                            <span className={`font-medium px-2 py-0.5 rounded-md text-xs ${
+                              applyResult[product.id].riskAssessments[0].riskLevel === 'LOW' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/20' : 
+                              applyResult[product.id].riskAssessments[0].riskLevel === 'HIGH' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/20' : 'bg-amber-500/20 text-amber-400 border border-amber-500/20'
+                            }`}>{applyResult[product.id].riskAssessments[0].riskLevel}</span>
+                          </div>
+                          <p className="text-xs text-slate-400 italic leading-relaxed border-l-2 border-indigo-500/30 pl-2">
+                            "{applyResult[product.id].riskAssessments[0].explanation}"
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <>
+                      {applyError[product.id] && (
+                        <p className="text-sm text-rose-400 mb-3 text-center bg-rose-500/10 py-2 rounded-lg border border-rose-500/20">{applyError[product.id]}</p>
+                      )}
+                      <button 
+                        onClick={() => handleApply(product.id)}
+                        disabled={applying[product.id]}
+                        className="w-full py-3 px-4 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-medium transition-all shadow-[0_0_20px_-5px_rgba(99,102,241,0.4)] hover:shadow-[0_0_25px_-5px_rgba(99,102,241,0.6)] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
+                      >
+                        {applying[product.id] ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+                            Processing...
+                          </>
+                        ) : (
+                          'Apply for Policy'
+                        )}
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             ))}
