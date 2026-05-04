@@ -2,6 +2,9 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { RiskPredictDto } from './dto/risk.dto';
 import { FraudDetectDto } from './dto/fraud.dto';
 import { RecommendationsDto } from './dto/recommendation.dto';
+import { RiskResponseDto } from './dto/risk-response.dto';
+import { FraudResponseDto } from './dto/fraud-response.dto';
+import { RecommendationResponseDto } from './dto/recommendation-response.dto';
 
 @Injectable()
 export class MlClientService {
@@ -21,7 +24,7 @@ export class MlClientService {
     }
   }
 
-  async predictRisk(data: RiskPredictDto) {
+  async predictRisk(data: RiskPredictDto): Promise<RiskResponseDto> {
     try {
       const response = await fetch(`${this.baseUrl}/risk/predict`, {
         method: 'POST',
@@ -35,7 +38,7 @@ export class MlClientService {
     }
   }
 
-  async detectFraud(data: FraudDetectDto) {
+  async detectFraud(data: FraudDetectDto): Promise<FraudResponseDto> {
     try {
       const response = await fetch(`${this.baseUrl}/fraud/detect`, {
         method: 'POST',
@@ -49,7 +52,7 @@ export class MlClientService {
     }
   }
 
-  async getRecommendations(data: RecommendationsDto) {
+  async getRecommendations(data: RecommendationsDto): Promise<RecommendationResponseDto> {
     try {
       const response = await fetch(`${this.baseUrl}/recommendations`, {
         method: 'POST',

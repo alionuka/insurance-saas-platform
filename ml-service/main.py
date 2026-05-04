@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-from typing import List
+from pydantic import BaseModel, Field
+from typing import List, Literal
 
 app = FastAPI(
     title="Insurance SaaS ML Service",
@@ -16,8 +16,8 @@ class RiskRequest(BaseModel):
     creditScore: int
 
 class RiskResponse(BaseModel):
-    riskScore: float
-    riskLevel: str
+    riskScore: float = Field(..., ge=0, le=100)
+    riskLevel: Literal["LOW", "MEDIUM", "HIGH"]
     explanation: str
 
 class FraudRequest(BaseModel):
@@ -27,8 +27,8 @@ class FraudRequest(BaseModel):
     description: str
 
 class FraudResponse(BaseModel):
-    fraudScore: float
-    flag: bool
+    fraudScore: float = Field(..., ge=0, le=100)
+    flag: Literal["NORMAL", "SUSPICIOUS"]
     explanation: str
 
 class RecommendationRequest(BaseModel):
@@ -51,20 +51,20 @@ def predict_risk(request: RiskRequest):
     # Rule-based mock logic
     if request.creditScore >= 750:
         return RiskResponse(
-            riskScore=0.15,
-            riskLevel="Low",
+            riskScore=15.0,
+            riskLevel="LOW",
             explanation="High credit score indicates low default risk."
         )
     elif request.creditScore >= 600:
         return RiskResponse(
-            riskScore=0.50,
-            riskLevel="Medium",
+            riskScore=50.0,
+            riskLevel="MEDIUM",
             explanation="Average credit score indicates moderate risk."
         )
     else:
         return RiskResponse(
-            riskScore=0.85,
-            riskLevel="High",
+            riskScore=85.0,
+            riskLevel="HIGH",
             explanation="Low credit score strongly suggests high risk."
         )
 
@@ -74,14 +74,14 @@ def detect_fraud(request: FraudRequest):
     suspicious_keywords = ["stolen", "lost", "fire", "unwitnessed", "cash"]
     desc_lower = request.description.lower()
     
-    score = 0.1
+    score = 10.0
     if request.amount > 50000:
-        score += 0.4
+        score += 40.0
     if any(word in desc_lower for word in suspicious_keywords):
-        score += 0.3
+        score += 30.0
         
-    flag = score >= 0.7
-    explanation = "Flagged due to high claim amount and suspicious keywords." if flag else "Claim appears normal."
+    flag = "SUSPICIOUS" if score >= 70.0 else "NORMAL"
+    explanation = "Flagged due to high claim amount and suspicious keywords." if flag == "SUSPICIOUS" else "Claim appears normal."
     
     return FraudResponse(
         fraudScore=score,
