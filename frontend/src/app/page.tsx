@@ -1,6 +1,27 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { getProducts, InsuranceProduct } from "@/lib/api";
 
 export default function Home() {
+  const [products, setProducts] = useState<InsuranceProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        const data = await getProducts();
+        setProducts(data);
+      } catch (err) {
+        setError("Failed to load products. Please ensure the backend is running.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadProducts();
+  }, []);
+
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-indigo-500/30">
       {/* Hero Section */}
@@ -36,48 +57,50 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Features Section */}
+      {/* Products Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Risk Analysis */}
-          <div className="group p-8 rounded-3xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 transition-all backdrop-blur-sm hover:-translate-y-2 hover:shadow-[0_10px_40px_-15px_rgba(99,102,241,0.2)]">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <svg className="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-slate-200 mb-3">AI Risk Analysis</h3>
-            <p className="text-slate-400 leading-relaxed">
-              Leverage machine learning models to accurately assess client risk profiles instantly, improving underwriting speed and accuracy.
-            </p>
+        <h2 className="text-3xl font-bold text-center mb-12">Available Insurance Products</h2>
+        
+        {loading && (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
           </div>
+        )}
 
-          {/* Fraud Detection */}
-          <div className="group p-8 rounded-3xl bg-slate-900/50 border border-slate-800 hover:border-emerald-500/50 transition-all backdrop-blur-sm hover:-translate-y-2 hover:shadow-[0_10px_40px_-15px_rgba(16,185,129,0.2)]">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-slate-200 mb-3">Fraud Detection</h3>
-            <p className="text-slate-400 leading-relaxed">
-              Identify suspicious claims patterns using advanced anomaly detection, saving millions for insurance companies automatically.
-            </p>
+        {error && (
+          <div className="p-6 bg-red-500/10 border border-red-500/50 rounded-2xl text-center text-red-400 max-w-2xl mx-auto backdrop-blur-sm">
+            <p>{error}</p>
           </div>
+        )}
 
-          {/* Product Recommendations */}
-          <div className="group p-8 rounded-3xl bg-slate-900/50 border border-slate-800 hover:border-cyan-500/50 transition-all backdrop-blur-sm hover:-translate-y-2 hover:shadow-[0_10px_40px_-15px_rgba(6,182,212,0.2)]">
-            <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <svg className="w-6 h-6 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-slate-200 mb-3">Product Recommendations</h3>
-            <p className="text-slate-400 leading-relaxed">
-              Provide agents with smart, context-aware policy recommendations tailored to individual client needs and life events.
-            </p>
+        {!loading && !error && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {products.map((product) => (
+              <div key={product.id} className="group p-8 rounded-3xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 transition-all backdrop-blur-sm hover:-translate-y-2 hover:shadow-[0_10px_40px_-15px_rgba(99,102,241,0.2)] flex flex-col h-full">
+                <div className="flex justify-between items-start mb-6">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <svg className="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  </div>
+                  <span className="px-3 py-1 rounded-full bg-slate-800 text-xs font-medium text-indigo-300 border border-indigo-500/20 uppercase tracking-wider">
+                    {product.type}
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold text-slate-200 mb-2">{product.name}</h3>
+                <p className="text-sm font-medium text-emerald-400 mb-4">{product.company.name}</p>
+                <p className="text-slate-400 leading-relaxed flex-grow">
+                  {product.description || "No description provided."}
+                </p>
+                <div className="mt-6 pt-6 border-t border-slate-800/50">
+                  <button className="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-2">
+                    Learn more <span aria-hidden="true">&rarr;</span>
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
+        )}
       </div>
     </main>
   );
