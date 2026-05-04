@@ -11,3 +11,11 @@ __pycache__/
 ml-service/.venv/
 ml-service/__pycache__/
 *.pyc
+
+# Python local environment
+ml-service/.venv/
+ml-service/__pycache__/
+*.pyc
+
+# Local editor settings
+.vscode/settings.json
