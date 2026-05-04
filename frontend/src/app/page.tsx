@@ -79,7 +79,7 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
         <h2 className="text-3xl font-bold text-center mb-4">Available Insurance Products</h2>
         <p className="text-center text-sm text-slate-500 mb-12 max-w-2xl mx-auto bg-slate-900/50 py-2 px-4 rounded-full border border-slate-800/80 backdrop-blur-sm">
-          <span className="text-indigo-400 font-medium">Note:</span> This is a temporary demo flow. You will automatically apply using a demo customer profile to test the ML risk assessment pipeline.
+          <span className="text-indigo-400 font-medium">Note:</span> Demo application flow before authentication.
         </p>
         
         {loading && (
