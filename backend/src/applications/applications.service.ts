@@ -90,4 +90,15 @@ export class ApplicationsService {
     // 6. Return fully populated Application
     return this.findOne(application.id);
   }
+
+  // Note: This method is temporary and will be replaced by auth-based user detection later.
+  async createDemo(productId: string) {
+    const email = 'alice.customer@example.com';
+    const demoUser = await this.prisma.user.findUnique({ where: { email } });
+    if (!demoUser) {
+      throw new NotFoundException(`Demo user with email ${email} not found`);
+    }
+
+    return this.create({ userId: demoUser.id, productId });
+  }
 }

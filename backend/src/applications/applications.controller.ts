@@ -23,4 +23,13 @@ export class ApplicationsController {
     }
     return this.applicationsService.create(createApplicationDto);
   }
+
+  // Note: This endpoint is temporary and will be replaced by auth-based user detection later.
+  @Post('demo')
+  createDemo(@Body('productId') productId: string) {
+    if (!productId) {
+      throw new BadRequestException('productId is required');
+    }
+    return this.applicationsService.createDemo(productId);
+  }
 }
