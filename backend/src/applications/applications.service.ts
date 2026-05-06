@@ -101,4 +101,21 @@ export class ApplicationsService {
 
     return this.create({ userId: demoUser.id, productId });
   }
+
+  async updateStatus(id: string, status: any) {
+    const application = await this.prisma.application.findUnique({
+      where: { id },
+    });
+
+    if (!application) {
+      throw new NotFoundException(`Application with ID ${id} not found`);
+    }
+
+    await this.prisma.application.update({
+      where: { id },
+      data: { status },
+    });
+
+    return this.findOne(id);
+  }
 }

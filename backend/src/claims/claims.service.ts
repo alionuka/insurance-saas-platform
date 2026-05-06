@@ -137,4 +137,21 @@ export class ClaimsService {
       description: dto.description
     });
   }
+
+  async updateStatus(id: string, status: any) {
+    const claim = await this.prisma.claim.findUnique({
+      where: { id },
+    });
+
+    if (!claim) {
+      throw new NotFoundException(`Claim with ID ${id} not found`);
+    }
+
+    await this.prisma.claim.update({
+      where: { id },
+      data: { status },
+    });
+
+    return this.findOne(id);
+  }
 }
