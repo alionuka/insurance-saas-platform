@@ -1,4 +1,5 @@
 import { Shield, FileCheck, ArrowRight, Activity } from 'lucide-react';
+import { formatDate } from '@/lib/formatDate';
 
 async function getClientData() {
   try {
@@ -67,7 +68,7 @@ export default async function ClientDashboard() {
                     </div>
                     <div className="ml-3">
                       <p className="text-sm font-medium text-white">Application #{app.id.substring(0, 8)}</p>
-                      <p className="text-xs text-zinc-400">Submitted on {new Date(app.createdAt).toLocaleDateString()}</p>
+                      <p className="text-xs text-zinc-400">Submitted on {formatDate(app.createdAt)}</p>
                     </div>
                   </div>
                   <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${app.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400' : app.status === 'REJECTED' ? 'bg-red-500/10 text-red-400' : 'bg-yellow-500/10 text-yellow-400'}`}>
