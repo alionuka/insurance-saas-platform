@@ -1,11 +1,39 @@
+'use client';
+
 import Link from 'next/link';
-import { LayoutDashboard, Users, UserSquare2, ShieldCheck, Settings, Bell, Search, Menu } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { LayoutDashboard, Users, UserSquare2, ShieldCheck, Settings, Bell, Search, Menu, ArrowLeft, LogOut } from 'lucide-react';
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  
+  const isClient = pathname.startsWith('/dashboard/client');
+  const isAgent = pathname.startsWith('/dashboard/agent');
+  const isCompany = pathname.startsWith('/dashboard/company');
+  const isAdmin = pathname.startsWith('/dashboard/admin');
+  const isHome = pathname === '/dashboard' || pathname === '/dashboard/';
+
+  let roleLabel = '';
+  let rolePath = '/dashboard';
+
+  if (isClient) {
+    roleLabel = 'Client Portal';
+    rolePath = '/dashboard/client';
+  } else if (isAgent) {
+    roleLabel = 'Agent Portal';
+    rolePath = '/dashboard/agent';
+  } else if (isCompany) {
+    roleLabel = 'Company Admin';
+    rolePath = '/dashboard/company';
+  } else if (isAdmin) {
+    roleLabel = 'Platform Admin';
+    rolePath = '/dashboard/admin';
+  }
+
   return (
     <div className="flex h-screen bg-zinc-950 text-white overflow-hidden">
       {/* Sidebar */}
@@ -17,50 +45,59 @@ export default function DashboardLayout({
         
         <div className="flex-1 overflow-y-auto py-4">
           <nav className="px-3 space-y-1">
-            <div className="px-3 mb-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">
-              Overview
-            </div>
-            <Link href="/dashboard" className="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-zinc-800 hover:text-white group text-zinc-300">
-              <LayoutDashboard className="mr-3 h-5 w-5 text-zinc-400 group-hover:text-indigo-400" />
-              Main Dashboard
-            </Link>
-            
-            <div className="px-3 mt-6 mb-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">
-              Demo Role Switcher
-              <span className="block mt-1 text-[10px] text-yellow-500/80 normal-case">(Authentication pending)</span>
-            </div>
-            
-            <Link href="/dashboard/client" className="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-zinc-800 hover:text-white group text-zinc-300">
-              <UserSquare2 className="mr-3 h-5 w-5 text-zinc-400 group-hover:text-indigo-400" />
-              Client View
-            </Link>
-            
-            <Link href="/dashboard/agent" className="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-zinc-800 hover:text-white group text-zinc-300">
-              <Users className="mr-3 h-5 w-5 text-zinc-400 group-hover:text-indigo-400" />
-              Agent View
-            </Link>
-            
-            <Link href="/dashboard/company" className="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-zinc-800 hover:text-white group text-zinc-300">
-              <Settings className="mr-3 h-5 w-5 text-zinc-400 group-hover:text-indigo-400" />
-              Company View
-            </Link>
-            
-            <Link href="/dashboard/admin" className="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-zinc-800 hover:text-white group text-zinc-300">
-              <ShieldCheck className="mr-3 h-5 w-5 text-zinc-400 group-hover:text-indigo-400" />
-              Admin View
-            </Link>
+            {!isHome ? (
+              <>
+                <div className="px-3 mb-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+                  Active Session: {roleLabel}
+                </div>
+                <Link 
+                  href={rolePath} 
+                  className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors group ${
+                    pathname === rolePath ? 'bg-indigo-500/10 text-indigo-400' : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
+                  }`}
+                >
+                  <LayoutDashboard className={`mr-3 h-5 w-5 ${pathname === rolePath ? 'text-indigo-400' : 'text-zinc-400 group-hover:text-indigo-400'}`} />
+                  Main Dashboard
+                </Link>
+                
+                <div className="my-6 border-t border-zinc-800/50 mx-3"></div>
+                
+                <Link 
+                  href="/dashboard" 
+                  className="flex items-center px-3 py-2 text-sm font-medium rounded-md text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors group"
+                >
+                  <ArrowLeft className="mr-3 h-5 w-5 text-zinc-500 group-hover:text-zinc-300" />
+                  Back to Demo Home
+                </Link>
+              </>
+            ) : (
+              <div className="px-4 py-6">
+                <div className="p-4 rounded-xl bg-indigo-500/5 border border-indigo-500/10 text-center">
+                  <p className="text-xs text-zinc-500 leading-relaxed italic">
+                    Welcome to the InsurSaaS Demo. Select a role from the entry page to view specialized dashboards.
+                  </p>
+                </div>
+              </div>
+            )}
           </nav>
         </div>
         
         <div className="p-4 border-t border-zinc-800">
-          <div className="flex items-center">
-            <div className="h-8 w-8 rounded-full bg-indigo-500 flex items-center justify-center text-sm font-medium text-white">
-              JD
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <div className="h-8 w-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-indigo-400">
+                DU
+              </div>
+              <div className="ml-3">
+                <p className="text-sm font-medium text-white line-clamp-1">Demo User</p>
+                <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-tighter">Read-Only</p>
+              </div>
             </div>
-            <div className="ml-3">
-              <p className="text-sm font-medium text-white">Demo User</p>
-              <p className="text-xs text-zinc-400">View Only Mode</p>
-            </div>
+            {!isHome && (
+              <Link href="/dashboard" title="Exit Session">
+                <LogOut className="h-4 w-4 text-zinc-600 hover:text-rose-400 transition-colors" />
+              </Link>
+            )}
           </div>
         </div>
       </aside>
@@ -103,3 +140,4 @@ export default function DashboardLayout({
     </div>
   );
 }
+
