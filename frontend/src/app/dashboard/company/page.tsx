@@ -1,151 +1,279 @@
-import { Building2, Package, Briefcase, FileBarChart2 } from 'lucide-react';
+import { Building2, Package, Briefcase, FileBarChart2, ShieldCheck, ShieldAlert, TrendingUp, AlertTriangle } from 'lucide-react';
+import { formatDate, formatCurrency } from '@/lib/formatDate';
+
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 async function getCompanyData() {
   try {
     const [productsRes, appsRes, claimsRes] = await Promise.all([
-      fetch('http://localhost:3001/products', { cache: 'no-store' }).catch(() => null),
-      fetch('http://localhost:3001/applications', { cache: 'no-store' }).catch(() => null),
-      fetch('http://localhost:3001/claims', { cache: 'no-store' }).catch(() => null),
+      fetch(`${API_URL}/products`, { cache: 'no-store' }).catch(() => null),
+      fetch(`${API_URL}/applications`, { cache: 'no-store' }).catch(() => null),
+      fetch(`${API_URL}/claims`, { cache: 'no-store' }).catch(() => null),
     ]);
 
     const products = productsRes && productsRes.ok ? await productsRes.json() : [];
     const applications = appsRes && appsRes.ok ? await appsRes.json() : [];
     const claims = claimsRes && claimsRes.ok ? await claimsRes.json() : [];
 
-    // Aggregate by product to mock company view since we don't have company auth context
     return { products, applications, claims };
   } catch (error) {
     return { products: [], applications: [], claims: [] };
   }
 }
 
+
 export default async function CompanyDashboard() {
   const { products, applications, claims } = await getCompanyData();
 
+  // Calculate Metrics
+  const totalProducts = products.length;
+  const totalApps = applications.length;
+  const approvedApps = applications.filter((a: any) => a.status === 'APPROVED').length;
+  const rejectedApps = applications.filter((a: any) => a.status === 'REJECTED').length;
+  const totalClaims = claims.length;
+  const suspiciousClaims = claims.filter((c: any) => c.fraudAssessments?.[0]?.flag === 'SUSPICIOUS').length;
+  
+  const appsWithRisk = applications.filter((a: any) => a.riskAssessments?.length > 0);
+  const avgRiskScore = appsWithRisk.length > 0 
+    ? appsWithRisk.reduce((acc: number, a: any) => acc + a.riskAssessments[0].riskScore, 0) / appsWithRisk.length 
+    : 0;
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">Company Dashboard</h1>
-          <p className="text-zinc-400 mt-1">Manage your insurance products and analyze performance.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-white">Company Analytics</h1>
+          <p className="text-zinc-400 mt-1">Real-time performance and risk metrics across all portfolios.</p>
         </div>
         <div className="flex items-center space-x-2">
-          <span className="text-sm text-zinc-500">Demo Org: </span>
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-zinc-800 text-white">
-            <Building2 className="w-4 h-4 mr-2 text-indigo-400" />
-            Acme Insurance Co.
+          <span className="text-xs text-zinc-500 uppercase tracking-widest font-bold">Organization: </span>
+          <span className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+            <Building2 className="w-4 h-4 mr-2" />
+            All Demo Insurance Companies
           </span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 flex items-center">
-          <div className="h-12 w-12 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-            <Package className="h-6 w-6 text-indigo-500" />
+      {/* Overview Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
+          <div className="flex justify-between items-start mb-4">
+            <div className="h-10 w-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
+              <Package className="h-5 w-5 text-indigo-400" />
+            </div>
+            <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Inventory</span>
           </div>
-          <div className="ml-4">
-            <p className="text-sm font-medium text-zinc-400">Active Products</p>
-            <p className="text-2xl font-bold text-white">{products.length}</p>
-          </div>
-        </div>
-        
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 flex items-center">
-          <div className="h-12 w-12 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-            <Briefcase className="h-6 w-6 text-blue-500" />
-          </div>
-          <div className="ml-4">
-            <p className="text-sm font-medium text-zinc-400">Total Applications</p>
-            <p className="text-2xl font-bold text-white">{applications.length}</p>
-          </div>
+          <p className="text-2xl font-bold text-white">{totalProducts}</p>
+          <p className="text-xs text-zinc-500 mt-1">Total Active Products</p>
         </div>
 
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 flex items-center">
-          <div className="h-12 w-12 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-            <FileBarChart2 className="h-6 w-6 text-emerald-500" />
+        <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
+          <div className="flex justify-between items-start mb-4">
+            <div className="h-10 w-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+              <Briefcase className="h-5 w-5 text-blue-400" />
+            </div>
+            <div className="flex flex-col items-end">
+              <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">{approvedApps} Approved</span>
+              <span className="text-[10px] font-bold text-rose-400 uppercase tracking-wider">{rejectedApps} Rejected</span>
+            </div>
           </div>
-          <div className="ml-4">
-            <p className="text-sm font-medium text-zinc-400">Claims Processed</p>
-            <p className="text-2xl font-bold text-white">{claims.length}</p>
+          <p className="text-2xl font-bold text-white">{totalApps}</p>
+          <p className="text-xs text-zinc-500 mt-1">Total Applications</p>
+        </div>
+
+        <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
+          <div className="flex justify-between items-start mb-4">
+            <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+              <FileBarChart2 className="h-5 w-5 text-emerald-400" />
+            </div>
+            <span className={`text-[10px] font-bold uppercase tracking-wider ${suspiciousClaims > 0 ? 'text-rose-400 animate-pulse' : 'text-emerald-400'}`}>
+              {suspiciousClaims} Suspicious
+            </span>
           </div>
+          <p className="text-2xl font-bold text-white">{totalClaims}</p>
+          <p className="text-xs text-zinc-500 mt-1">Total Claims Filed</p>
+        </div>
+
+        <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
+          <div className="flex justify-between items-start mb-4">
+            <div className="h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+              <TrendingUp className="h-5 w-5 text-amber-400" />
+            </div>
+            <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Avg Risk</span>
+          </div>
+          <p className="text-2xl font-bold text-white">{avgRiskScore.toFixed(1)}</p>
+          <p className="text-xs text-zinc-500 mt-1">Portfolio Risk Index</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-          <div className="px-6 py-4 border-b border-zinc-800 flex justify-between items-center">
-            <h2 className="text-lg font-medium text-white">Your Products</h2>
-            <button className="text-sm text-indigo-400 hover:text-indigo-300 font-medium">Add New</button>
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+        {/* Products Section */}
+        <section className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
+          <div className="px-6 py-4 border-b border-zinc-800 bg-zinc-900/50 flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <Package className="h-5 w-5 text-indigo-400" />
+              <h2 className="text-lg font-bold text-white">Product Catalog</h2>
+            </div>
           </div>
-          <div className="divide-y divide-zinc-800">
-            {products.map((product: any) => (
-              <div key={product.id} className="p-6 hover:bg-zinc-800/50 transition-colors">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-md font-medium text-white">{product.name}</h3>
-                    <p className="text-sm text-zinc-400 mt-1 line-clamp-1">{product.description}</p>
-                  </div>
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-zinc-800 text-zinc-300">
-                    ${product.basePrice}/mo
-                  </span>
-                </div>
-                <div className="mt-4 flex items-center space-x-4 text-sm text-zinc-500">
-                  <span>Applications: {applications.filter((a: any) => a.productId === product.id).length}</span>
-                  <span>•</span>
-                  <span>Active Policies: {Math.floor(applications.filter((a: any) => a.productId === product.id && a.status === 'APPROVED').length)}</span>
-                </div>
-              </div>
-            ))}
-            {products.length === 0 && (
-              <div className="p-6 text-center text-zinc-500 text-sm">No products found.</div>
-            )}
+          <div className="p-0 overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-zinc-950 text-zinc-500 uppercase text-[10px] font-bold tracking-wider">
+                <tr>
+                  <th className="px-6 py-3">Product Name</th>
+                  <th className="px-6 py-3">Type</th>
+                  <th className="px-6 py-3">Company</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-800">
+                {products.map((product: any) => (
+                  <tr key={product.id} className="hover:bg-zinc-800/30 transition-colors group">
+                    <td className="px-6 py-4">
+                      <p className="font-bold text-white group-hover:text-indigo-400 transition-colors">{product.name}</p>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="px-2 py-1 rounded-md bg-zinc-800 text-zinc-400 text-[10px] font-bold border border-zinc-700 uppercase">
+                        {product.type}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <p className="text-sm text-zinc-400 font-medium">{product.company?.name || '—'}</p>
+                    </td>
+                  </tr>
+                ))}
+                {products.length === 0 && (
+                  <tr>
+                    <td colSpan={3} className="px-6 py-12 text-center text-zinc-500 italic">No products registered yet.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
-        </div>
+        </section>
 
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-          <div className="px-6 py-4 border-b border-zinc-800">
-             <h2 className="text-lg font-medium text-white">Performance Overview</h2>
+        {/* Applications Overview Section */}
+        <section className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
+          <div className="px-6 py-4 border-b border-zinc-800 bg-zinc-900/50 flex items-center gap-2">
+            <ShieldCheck className="h-5 w-5 text-blue-400" />
+            <h2 className="text-lg font-bold text-white">Application Pipeline</h2>
           </div>
-          <div className="p-6 space-y-6">
-             <div>
-               <div className="flex justify-between text-sm mb-2">
-                 <span className="text-zinc-400">Application Approval Rate</span>
-                 <span className="text-white font-medium">
-                    {applications.length > 0 
-                      ? Math.round((applications.filter((a: any) => a.status === 'APPROVED').length / applications.length) * 100) 
-                      : 0}%
-                 </span>
-               </div>
-               <div className="w-full bg-zinc-800 rounded-full h-2">
-                 <div className="bg-emerald-500 h-2 rounded-full" style={{ width: `${applications.length > 0 ? (applications.filter((a: any) => a.status === 'APPROVED').length / applications.length) * 100 : 0}%` }}></div>
-               </div>
-             </div>
-
-             <div>
-               <div className="flex justify-between text-sm mb-2">
-                 <span className="text-zinc-400">Claims Rejection Rate</span>
-                 <span className="text-white font-medium">
-                    {claims.length > 0 
-                      ? Math.round((claims.filter((c: any) => c.status === 'REJECTED').length / claims.length) * 100) 
-                      : 0}%
-                 </span>
-               </div>
-               <div className="w-full bg-zinc-800 rounded-full h-2">
-                 <div className="bg-red-500 h-2 rounded-full" style={{ width: `${claims.length > 0 ? (claims.filter((c: any) => c.status === 'REJECTED').length / claims.length) * 100 : 0}%` }}></div>
-               </div>
-             </div>
-
-             <div className="pt-4 border-t border-zinc-800">
-               <h3 className="text-sm font-medium text-white mb-4">Recent Feedback</h3>
-               <div className="space-y-3">
-                 <div className="p-3 bg-zinc-950 rounded-lg border border-zinc-800">
-                    <p className="text-xs text-zinc-400 italic">"The new auto policy is very competitive, seeing high uptake."</p>
-                    <p className="text-[10px] text-zinc-500 mt-2">- Agent Smith</p>
-                 </div>
-               </div>
-             </div>
+          <div className="p-0 overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-zinc-950 text-zinc-500 uppercase text-[10px] font-bold tracking-wider">
+                <tr>
+                  <th className="px-6 py-3">Customer & Product</th>
+                  <th className="px-6 py-3 text-center">Status</th>
+                  <th className="px-6 py-3 text-right">Risk Score</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-800">
+                {applications.map((app: any) => {
+                  const risk = app.riskAssessments?.[0];
+                  return (
+                    <tr key={app.id} className="hover:bg-zinc-800/30 transition-colors">
+                      <td className="px-6 py-4">
+                        <p className="font-bold text-white">{app.user?.firstName} {app.user?.lastName}</p>
+                        <p className="text-xs text-zinc-500">{app.product?.name}</p>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase border ${
+                          app.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
+                          app.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 
+                          'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                        }`}>
+                          {app.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        {risk ? (
+                          <div className="flex flex-col items-end">
+                            <span className="font-mono font-bold text-white">{risk.riskScore.toFixed(1)}</span>
+                            <span className={`text-[9px] font-bold uppercase ${
+                              risk.riskLevel === 'LOW' ? 'text-emerald-400' : 
+                              risk.riskLevel === 'HIGH' ? 'text-rose-400' : 'text-amber-400'
+                            }`}>{risk.riskLevel}</span>
+                          </div>
+                        ) : <span className="text-zinc-700">—</span>}
+                      </td>
+                    </tr>
+                  );
+                })}
+                {applications.length === 0 && (
+                  <tr>
+                    <td colSpan={3} className="px-6 py-12 text-center text-zinc-500 italic">No applications pending.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
-        </div>
+        </section>
+
+        {/* Claims Overview Section */}
+        <section className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden xl:col-span-2">
+          <div className="px-6 py-4 border-b border-zinc-800 bg-zinc-900/50 flex items-center gap-2">
+            <ShieldAlert className="h-5 w-5 text-emerald-400" />
+            <h2 className="text-lg font-bold text-white">Claims Management</h2>
+          </div>
+          <div className="p-0 overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-zinc-950 text-zinc-500 uppercase text-[10px] font-bold tracking-wider">
+                <tr>
+                  <th className="px-6 py-3">Claim Details</th>
+                  <th className="px-6 py-3">Amount</th>
+                  <th className="px-6 py-3 text-center">Status</th>
+                  <th className="px-6 py-3 text-right">Fraud Analysis</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-800">
+                {claims.map((claim: any) => {
+                  const fraud = claim.fraudAssessments?.[0];
+                  return (
+                    <tr key={claim.id} className="hover:bg-zinc-800/30 transition-colors">
+                      <td className="px-6 py-4 max-w-xs">
+                        <p className="font-bold text-white">{claim.application?.product?.name}</p>
+                        <p className="text-xs text-zinc-400 line-clamp-1 italic">"{claim.description}"</p>
+                        <p className="text-[9px] text-zinc-600 mt-1">{formatDate(claim.createdAt)}</p>
+                      </td>
+                      <td className="px-6 py-4 font-mono font-bold text-white">
+                        {formatCurrency(claim.amount)}
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase border ${
+                          claim.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
+                          claim.status === 'DENIED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 
+                          'bg-zinc-800 text-zinc-500 border-zinc-700'
+                        }`}>
+                          {claim.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        {fraud ? (
+                          <div className="flex flex-col items-end">
+                            <span className="font-mono font-bold text-white">{fraud.fraudScore.toFixed(1)}</span>
+                            <div className="flex items-center gap-1">
+                              {fraud.flag === 'SUSPICIOUS' && <AlertTriangle className="h-3 w-3 text-rose-400" />}
+                              <span className={`text-[9px] font-bold uppercase ${
+                                fraud.flag === 'NORMAL' ? 'text-emerald-400' : 'text-rose-400'
+                              }`}>{fraud.flag}</span>
+                            </div>
+                          </div>
+                        ) : <span className="text-zinc-700">—</span>}
+                      </td>
+                    </tr>
+                  );
+                })}
+                {claims.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className="px-6 py-12 text-center text-zinc-500 italic">No claims filed yet.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
     </div>
   );
 }
+
