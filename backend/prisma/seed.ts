@@ -1,4 +1,4 @@
-import { PrismaClient, UserRole, ProductType, ApplicationStatus, ClaimStatus, RiskLevel, FraudFlag } from '@prisma/client';
+import { PrismaClient, UserRole, ProductType, ApplicationStatus, ClaimStatus, RiskLevel, FraudFlag, PolicyStatus } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -8,6 +8,7 @@ async function main() {
   await prisma.recommendation.deleteMany();
   await prisma.fraudAssessment.deleteMany();
   await prisma.riskAssessment.deleteMany();
+  await prisma.policy.deleteMany();
   await prisma.claim.deleteMany();
   await prisma.application.deleteMany();
   await prisma.insuranceProduct.deleteMany();
@@ -139,6 +140,22 @@ async function main() {
       userId: customer1.id,
       productId: autoProduct.id,
       status: ApplicationStatus.APPROVED,
+    },
+  });
+
+  // 4.1 Create Policy for the approved application
+  const policyStartDate = new Date('2026-01-01T00:00:00.000Z');
+  const policyEndDate = new Date('2027-01-01T00:00:00.000Z');
+
+  await prisma.policy.create({
+    data: {
+      policyNumber: 'POL-100001',
+      userId: customer1.id,
+      productId: autoProduct.id,
+      applicationId: application1.id,
+      status: PolicyStatus.ACTIVE,
+      startDate: policyStartDate,
+      endDate: policyEndDate,
     },
   });
 
