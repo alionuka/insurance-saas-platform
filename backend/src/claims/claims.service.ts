@@ -25,6 +25,7 @@ export class ClaimsService {
             },
           },
         },
+        policy: true,
         fraudAssessments: true,
       },
     });
@@ -44,6 +45,7 @@ export class ClaimsService {
             },
           },
         },
+        policy: true,
         fraudAssessments: true,
       },
     });
@@ -56,32 +58,69 @@ export class ClaimsService {
   }
 
   async create(dto: CreateClaimDto) {
-    const { userId, applicationId, amount, description } = dto;
+    const { userId, applicationId, policyId, amount, description } = dto;
 
-    // 1. Verify User exists
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    if (!user) {
-      throw new NotFoundException(`User with ID ${userId} not found`);
+    let finalUserId = userId;
+    let finalApplicationId = applicationId;
+
+    // 1. If policyId is provided, derive IDs and verify status
+    if (policyId) {
+      const policy = await this.prisma.policy.findUnique({
+        where: { id: policyId },
+        include: { application: { include: { product: true } } }
+      });
+
+      if (!policy) {
+        throw new NotFoundException(`Policy with ID ${policyId} not found`);
+      }
+
+      if (policy.status !== 'ACTIVE') {
+        throw new BadRequestException(`Claims can only be filed against ACTIVE policies. Current status: ${policy.status}`);
+      }
+
+      finalUserId = policy.userId;
+      finalApplicationId = policy.applicationId;
+    } else {
+      // Legacy path / Manual override
+      if (!finalUserId || !finalApplicationId) {
+        throw new BadRequestException('Either policyId or both userId and applicationId must be provided');
+      }
+
+      // Verify User exists
+      const user = await this.prisma.user.findUnique({ where: { id: finalUserId } });
+      if (!user) {
+        throw new NotFoundException(`User with ID ${finalUserId} not found`);
+      }
+
+      // Verify Application exists and belongs to user
+      const application = await this.prisma.application.findUnique({
+        where: { id: finalApplicationId },
+      });
+      
+      if (!application) {
+        throw new NotFoundException(`Application with ID ${finalApplicationId} not found`);
+      }
+      if (application.userId !== finalUserId) {
+        throw new BadRequestException(`Application does not belong to the given user`);
+      }
     }
 
-    // 2. Verify Application exists and belongs to user
+    // 2. Fetch full application for ML service and response
     const application = await this.prisma.application.findUnique({
-      where: { id: applicationId },
+      where: { id: finalApplicationId },
       include: { product: true }
     });
-    
+
     if (!application) {
-      throw new NotFoundException(`Application with ID ${applicationId} not found`);
-    }
-    if (application.userId !== userId) {
-      throw new BadRequestException(`Application does not belong to the given user`);
+      throw new NotFoundException(`Application with ID ${finalApplicationId} not found`);
     }
 
     // 3. Create Claim (FILED status is default)
     const claim = await this.prisma.claim.create({
       data: {
-        userId,
-        applicationId,
+        userId: finalUserId,
+        applicationId: finalApplicationId,
+        policyId,
         amount,
         description,
         status: 'FILED',
