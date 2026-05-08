@@ -1,7 +1,8 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { LayoutDashboard, Users, UserSquare2, ShieldCheck, Settings, Bell, Search, Menu, ArrowLeft, LogOut } from 'lucide-react';
 
 export default function DashboardLayout({
@@ -9,8 +10,33 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
   const pathname = usePathname();
   
+  const [user, setUser] = useState<{ firstName: string; lastName: string; role: string } | null>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error('Failed to parse user data');
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user');
+    router.push('/auth/sign-in');
+  };
+
+  const getInitials = () => {
+    if (!user) return 'DU';
+    return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
+  };
+
   const isClient = pathname.startsWith('/dashboard/client');
   const isAgent = pathname.startsWith('/dashboard/agent');
   const isCompany = pathname.startsWith('/dashboard/company');
@@ -86,18 +112,24 @@ export default function DashboardLayout({
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <div className="h-8 w-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-indigo-400">
-                DU
+                {getInitials()}
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-white line-clamp-1">Demo User</p>
-                <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-tighter">Read-Only</p>
+                <p className="text-sm font-medium text-white line-clamp-1">
+                  {user ? `${user.firstName} ${user.lastName}` : 'Demo User'}
+                </p>
+                <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-tighter">
+                  {user ? user.role.replace('_', ' ') : 'Read-Only'}
+                </p>
               </div>
             </div>
-            {!isHome && (
-              <Link href="/dashboard" title="Exit Session">
-                <LogOut className="h-4 w-4 text-zinc-600 hover:text-rose-400 transition-colors" />
-              </Link>
-            )}
+            <button 
+              onClick={handleLogout}
+              className="text-zinc-600 hover:text-rose-400 transition-colors"
+              title="Sign Out"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </aside>
