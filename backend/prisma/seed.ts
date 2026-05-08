@@ -32,23 +32,40 @@ async function main() {
   });
 
   // 2. Create Users
-  const adminUser = await prisma.user.create({
+  // Hash for "Password123!" is $2b$10$GgdGL0IGK8sy2UXsoRjHquhY3UtOsqzCAb91p9kZs6M7arj7QQnKG
+  const demoPasswordHash = '$2b$10$GgdGL0IGK8sy2UXsoRjHquhY3UtOsqzCAb91p9kZs6M7arj7QQnKG';
+  
+  const platformAdmin = await prisma.user.create({
     data: {
       email: 'admin@insurance-saas.com',
-      firstName: 'Admin',
-      lastName: 'User',
-      role: UserRole.ADMIN,
+      firstName: 'Platform',
+      lastName: 'Admin',
+      role: UserRole.PLATFORM_ADMIN,
+      passwordHash: demoPasswordHash,
       age: 35,
     },
   });
 
-  const brokerUser = await prisma.user.create({
+  const companyAdmin = await prisma.user.create({
     data: {
-      email: 'broker@safeguard.com',
-      firstName: 'Bob',
-      lastName: 'Broker',
-      role: UserRole.BROKER,
+      email: 'company.admin@example.com',
+      firstName: 'Company',
+      lastName: 'Admin',
+      role: UserRole.COMPANY_ADMIN,
       companyId: company1.id,
+      passwordHash: demoPasswordHash,
+      age: 40,
+    },
+  });
+
+  const agentUser = await prisma.user.create({
+    data: {
+      email: 'agent@example.com',
+      firstName: 'Demo',
+      lastName: 'Agent',
+      role: UserRole.AGENT,
+      companyId: company1.id,
+      passwordHash: demoPasswordHash,
       age: 42,
     },
   });
@@ -59,6 +76,7 @@ async function main() {
       firstName: 'Alice',
       lastName: 'Smith',
       role: UserRole.CUSTOMER,
+      passwordHash: demoPasswordHash,
       age: 28,
       annualIncome: 65000,
       creditScore: 720,
@@ -71,6 +89,7 @@ async function main() {
       firstName: 'John',
       lastName: 'Doe',
       role: UserRole.CUSTOMER,
+      passwordHash: demoPasswordHash,
       age: 45,
       annualIncome: 120000,
       creditScore: 680,

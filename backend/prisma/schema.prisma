@@ -10,9 +10,10 @@ datasource db {
 // --- Enums ---
 
 enum UserRole {
-  ADMIN
-  BROKER
   CUSTOMER
+  AGENT
+  COMPANY_ADMIN
+  PLATFORM_ADMIN
 }
 
 enum ProductType {
@@ -58,6 +59,7 @@ model User {
   age            Int?
   annualIncome   Float?
   creditScore    Int?
+  passwordHash   String?
   
   companyId      String?
   company        Company?         @relation(fields: [companyId], references: [id])
