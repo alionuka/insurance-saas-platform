@@ -21,6 +21,7 @@ export class ApplicationsService {
           },
         },
         riskAssessments: true,
+        policy: true,
       },
     });
   }
@@ -36,6 +37,7 @@ export class ApplicationsService {
           },
         },
         riskAssessments: true,
+        policy: true,
       },
     });
 
@@ -106,6 +108,7 @@ export class ApplicationsService {
   async updateStatus(id: string, status: any) {
     const application = await this.prisma.application.findUnique({
       where: { id },
+      include: { policy: true },
     });
 
     if (!application) {
@@ -117,6 +120,27 @@ export class ApplicationsService {
       data: { status },
     });
 
+    // Auto-create policy when application is approved (idempotent)
+    if (status === 'APPROVED' && !application.policy) {
+      const policyNumber = `POL-${id.slice(0, 8).toUpperCase()}`;
+      const startDate = new Date();
+      const endDate = new Date(startDate);
+      endDate.setFullYear(endDate.getFullYear() + 1);
+
+      await this.prisma.policy.create({
+        data: {
+          policyNumber,
+          userId: application.userId,
+          productId: application.productId,
+          applicationId: id,
+          status: 'ACTIVE',
+          startDate,
+          endDate,
+        },
+      });
+    }
+
     return this.findOne(id);
   }
 }
+
