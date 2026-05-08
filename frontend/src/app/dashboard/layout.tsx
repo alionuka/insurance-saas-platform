@@ -13,18 +13,55 @@ export default function DashboardLayout({
   const router = useRouter();
   const pathname = usePathname();
   
+  const isClient = pathname.startsWith('/dashboard/client');
+  const isAgent = pathname.startsWith('/dashboard/agent');
+  const isCompany = pathname.startsWith('/dashboard/company');
+  const isAdmin = pathname.startsWith('/dashboard/admin');
+  const isHome = pathname === '/dashboard' || pathname === '/dashboard/';
+
   const [user, setUser] = useState<{ firstName: string; lastName: string; role: string } | null>(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (e) {
-        console.error('Failed to parse user data');
+    const token = localStorage.getItem('access_token');
+    
+    if (!storedUser || !token) {
+      // If not logged in and trying to access a specific dashboard role, redirect to sign-in
+      if (!isHome) {
+        router.push('/auth/sign-in');
       }
+      return;
     }
-  }, []);
+
+    try {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+      
+      // Role-based redirect logic
+      const roleRedirects: Record<string, string> = {
+        'CUSTOMER': '/dashboard/client',
+        'AGENT': '/dashboard/agent',
+        'COMPANY_ADMIN': '/dashboard/company',
+        'PLATFORM_ADMIN': '/dashboard/admin',
+      };
+      
+      const correctPath = roleRedirects[parsedUser.role] || '/dashboard';
+      
+      // If on the generic dashboard page, go to the specific one
+      if (isHome) {
+        router.push(correctPath);
+      } 
+      // If on a sub-dashboard that doesn't match the user's role, redirect to their correct one
+      else if (pathname.startsWith('/dashboard/') && pathname !== correctPath) {
+        router.push(correctPath);
+      }
+    } catch (e) {
+      console.error('Auth error:', e);
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user');
+      router.push('/auth/sign-in');
+    }
+  }, [pathname, isHome, router]);
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
@@ -36,12 +73,6 @@ export default function DashboardLayout({
     if (!user) return 'DU';
     return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
   };
-
-  const isClient = pathname.startsWith('/dashboard/client');
-  const isAgent = pathname.startsWith('/dashboard/agent');
-  const isCompany = pathname.startsWith('/dashboard/company');
-  const isAdmin = pathname.startsWith('/dashboard/admin');
-  const isHome = pathname === '/dashboard' || pathname === '/dashboard/';
 
   let roleLabel = '';
   let rolePath = '/dashboard';
