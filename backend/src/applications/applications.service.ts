@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { safeUserSelect } from '../prisma/safe-user-select';
 import { MlClientService } from '../ml-client/ml-client.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
 
@@ -13,7 +14,7 @@ export class ApplicationsService {
   async findAll() {
     return this.prisma.application.findMany({
       include: {
-        user: true,
+        user: { select: safeUserSelect },
         product: {
           include: {
             company: true,
@@ -28,7 +29,7 @@ export class ApplicationsService {
     const application = await this.prisma.application.findUnique({
       where: { id },
       include: {
-        user: true,
+        user: { select: safeUserSelect },
         product: {
           include: {
             company: true,

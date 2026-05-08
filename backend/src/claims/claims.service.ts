@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { safeUserSelect } from '../prisma/safe-user-select';
 import { MlClientService } from '../ml-client/ml-client.service';
 import { CreateClaimDto } from './dto/create-claim.dto';
 import { DemoClaimDto } from './dto/demo-claim.dto';
@@ -14,7 +15,7 @@ export class ClaimsService {
   async findAll() {
     return this.prisma.claim.findMany({
       include: {
-        user: true,
+        user: { select: safeUserSelect },
         application: {
           include: {
             product: {
@@ -33,7 +34,7 @@ export class ClaimsService {
     const claim = await this.prisma.claim.findUnique({
       where: { id },
       include: {
-        user: true,
+        user: { select: safeUserSelect },
         application: {
           include: {
             product: {
