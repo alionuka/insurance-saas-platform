@@ -1,5 +1,6 @@
 import { Shield, FileCheck, Activity, AlertCircle, TrendingUp, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
+import ClaimSubmissionForm from '@/components/ClaimSubmissionForm';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -65,6 +66,9 @@ export default async function ClientDashboard() {
       </div>
 
       <div className="space-y-12">
+        {/* Claim Submission Form */}
+        <ClaimSubmissionForm policies={policies} />
+
         {/* My Policies Section */}
         <section>
           <div className="flex items-center gap-2 mb-4">
