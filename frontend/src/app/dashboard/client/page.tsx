@@ -1,38 +1,49 @@
-import { Shield, FileCheck, Activity, AlertCircle, TrendingUp, AlertTriangle } from 'lucide-react';
+import { Shield, FileCheck, Activity, AlertCircle, TrendingUp, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 async function getClientData() {
   try {
-    const [appsRes, claimsRes] = await Promise.all([
+    const [appsRes, claimsRes, policiesRes] = await Promise.all([
       fetch(`${API_URL}/applications`, { cache: 'no-store' }).catch(() => null),
       fetch(`${API_URL}/claims`, { cache: 'no-store' }).catch(() => null),
+      fetch(`${API_URL}/policies`, { cache: 'no-store' }).catch(() => null),
     ]);
 
     const applications = appsRes && appsRes.ok ? await appsRes.json() : [];
     const claims = claimsRes && claimsRes.ok ? await claimsRes.json() : [];
+    const policies = policiesRes && policiesRes.ok ? await policiesRes.json() : [];
 
-    return { applications, claims };
+    return { applications, claims, policies };
   } catch (error) {
-    return { applications: [], claims: [] };
+    return { applications: [], claims: [], policies: [] };
   }
 }
 
 export default async function ClientDashboard() {
-  const { applications, claims } = await getClientData();
+  const { applications, claims, policies } = await getClientData();
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-white">Client Portal</h1>
-          <p className="text-zinc-400 mt-1">Monitor your insurance applications and claims status.</p>
+          <p className="text-zinc-400 mt-1">Manage your active policies, applications, and claims.</p>
         </div>
       </div>
 
-      {/* Stats Overview (Optional but fits the style) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-xl flex items-center gap-4">
+          <div className="h-10 w-10 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+            <ShieldCheck className="h-5 w-5 text-blue-400" />
+          </div>
+          <div>
+            <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Active Policies</p>
+            <p className="text-xl font-bold text-white">{policies.filter((p: any) => p.status === 'ACTIVE').length}</p>
+          </div>
+        </div>
         <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-xl flex items-center gap-4">
           <div className="h-10 w-10 rounded-lg bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
             <FileCheck className="h-5 w-5 text-indigo-400" />
@@ -53,11 +64,73 @@ export default async function ClientDashboard() {
         </div>
       </div>
 
-      <div className="space-y-8">
+      <div className="space-y-12">
+        {/* My Policies Section */}
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <ShieldCheck className="h-5 w-5 text-blue-400" />
+            <h2 className="text-xl font-semibold text-white">My Policies</h2>
+          </div>
+
+          <div className="grid gap-4">
+            {policies.length > 0 ? (
+              policies.map((policy: any) => (
+                <div key={policy.id} className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-700 transition-colors">
+                  <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex items-start gap-4">
+                      <div className="h-12 w-12 rounded-xl bg-zinc-800 flex items-center justify-center border border-zinc-700 flex-shrink-0">
+                        <ShieldCheck className="h-6 w-6 text-blue-400" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-bold text-white text-lg">{policy.product?.name || 'Unknown Product'}</h3>
+                          <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 font-bold uppercase border border-zinc-700">
+                            {policy.product?.type}
+                          </span>
+                        </div>
+                        <p className="text-sm text-emerald-400 font-medium">{policy.product?.company?.name || 'Unknown Company'}</p>
+                        <p className="text-xs text-zinc-500 mt-1 font-mono">Policy #: {policy.policyNumber}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-wrap items-center gap-3">
+                      <div className="text-right mr-4 hidden md:block">
+                        <p className="text-[10px] text-zinc-500 uppercase font-bold">Coverage Period</p>
+                        <p className="text-xs text-zinc-300">{formatDate(policy.startDate)} to {formatDate(policy.endDate)}</p>
+                      </div>
+                      <span className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider border ${
+                        policy.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
+                        'bg-zinc-500/10 text-zinc-400 border-zinc-500/20'
+                      }`}>
+                        {policy.status}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {/* Footer info */}
+                  <div className="px-5 py-3 border-t border-zinc-800/50 bg-zinc-950/30 flex items-center justify-between">
+                    <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-tight">
+                      Linked Application: <span className="text-zinc-400 ml-1">{policy.applicationId.substring(0, 8)}... ({policy.application?.status})</span>
+                    </p>
+                    <button className="text-[10px] text-blue-400 hover:text-blue-300 font-bold uppercase tracking-tight transition-colors">
+                      View Details →
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="bg-zinc-900/50 border border-zinc-800 border-dashed rounded-xl p-12 text-center">
+                <ShieldCheck className="h-12 w-12 text-zinc-700 mx-auto mb-4" />
+                <p className="text-zinc-500">No active policies yet. Approved applications will become policies.</p>
+              </div>
+            )}
+          </div>
+        </section>
+
         {/* My Applications Section */}
         <section>
           <div className="flex items-center gap-2 mb-4">
-            <Shield className="h-5 w-5 text-indigo-400" />
+            <FileCheck className="h-5 w-5 text-indigo-400" />
             <h2 className="text-xl font-semibold text-white">My Applications</h2>
           </div>
           
