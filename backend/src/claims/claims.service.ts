@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import * as crypto from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../prisma/safe-user-select';
 import { MlClientService } from '../ml-client/ml-client.service';
@@ -115,34 +116,47 @@ export class ClaimsService {
       throw new NotFoundException(`Application with ID ${finalApplicationId} not found`);
     }
 
-    // 3. Create Claim (FILED status is default)
-    const claim = await this.prisma.claim.create({
-      data: {
-        userId: finalUserId,
-        applicationId: finalApplicationId,
-        policyId,
+    // 3. Pre-generate Claim ID for ML service
+    const claimId = crypto.randomUUID();
+
+    // 4. Call ML Service for Fraud Detection BEFORE creating anything in DB
+    // This ensures we don't have "orphan" claims without fraud assessments
+    let fraudResponse;
+    try {
+      fraudResponse = await this.mlClient.detectFraud({
+        claimId: claimId,
         amount,
+        claimType: application.product.type,
         description,
-        status: 'FILED',
-      },
-    });
+      });
+    } catch (error) {
+      throw new BadRequestException(`Fraud detection failed: ${error.message}. Claim submission aborted to ensure data consistency.`);
+    }
 
-    // 4. Call ML Service for Fraud Detection
-    const fraudResponse = await this.mlClient.detectFraud({
-      claimId: claim.id,
-      amount: claim.amount,
-      claimType: application.product.type, // passing product type as claimType
-      description: claim.description,
-    });
+    // 5. Atomic transaction to create Claim and FraudAssessment
+    const claim = await this.prisma.$transaction(async (tx) => {
+      const newClaim = await tx.claim.create({
+        data: {
+          id: claimId,
+          userId: finalUserId,
+          applicationId: finalApplicationId,
+          policyId,
+          amount,
+          description,
+          status: 'FILED',
+        },
+      });
 
-    // 5. Save FraudAssessment
-    await this.prisma.fraudAssessment.create({
-      data: {
-        claimId: claim.id,
-        fraudScore: fraudResponse.fraudScore,
-        flag: fraudResponse.flag as any, // assuming it aligns with FraudFlag enum (NORMAL, SUSPICIOUS)
-        explanation: fraudResponse.explanation,
-      },
+      await tx.fraudAssessment.create({
+        data: {
+          claimId: newClaim.id,
+          fraudScore: fraudResponse.fraudScore,
+          flag: fraudResponse.flag as any,
+          explanation: fraudResponse.explanation,
+        },
+      });
+
+      return newClaim;
     });
 
     // 6. Return fully populated Claim
