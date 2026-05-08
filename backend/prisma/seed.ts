@@ -147,7 +147,7 @@ async function main() {
   const policyStartDate = new Date('2026-01-01T00:00:00.000Z');
   const policyEndDate = new Date('2027-01-01T00:00:00.000Z');
 
-  await prisma.policy.create({
+  const activePolicy = await prisma.policy.create({
     data: {
       policyNumber: 'POL-100001',
       userId: customer1.id,
@@ -172,6 +172,7 @@ async function main() {
     data: {
       userId: customer1.id,
       applicationId: application1.id,
+      policyId: activePolicy.id,
       amount: 4500.0,
       description: 'Fender bender on highway 101',
       status: ClaimStatus.IN_PROGRESS,
@@ -182,6 +183,7 @@ async function main() {
     data: {
       userId: customer1.id,
       applicationId: application1.id,
+      policyId: activePolicy.id,
       amount: 75000.0,
       description: 'Unwitnessed cash stolen from vehicle',
       status: ClaimStatus.FILED,

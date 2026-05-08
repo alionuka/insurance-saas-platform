@@ -128,6 +128,8 @@ model Claim {
   user          User        @relation(fields: [userId], references: [id])
   applicationId String
   application   Application @relation(fields: [applicationId], references: [id])
+  policyId      String?
+  policy        Policy?     @relation(fields: [policyId], references: [id])
   amount        Float
   description   String
   status        ClaimStatus @default(FILED)
@@ -182,6 +184,8 @@ model Policy {
   status        PolicyStatus     @default(ACTIVE)
   startDate     DateTime
   endDate       DateTime
+
+  claims Claim[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
