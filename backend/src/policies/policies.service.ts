@@ -30,7 +30,16 @@ export class PoliciesService {
   }
 
   async findAll(user: AuthUser) {
-    const where = user.role === UserRole.CUSTOMER ? { userId: user.id } : {};
+    let where: any = {};
+
+    if (user.role === UserRole.CUSTOMER) {
+      where = { userId: user.id };
+    } else if (user.role === UserRole.COMPANY_ADMIN) {
+      if (!user.companyId) {
+        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+      }
+      where = { product: { companyId: user.companyId } };
+    }
 
     return this.prisma.policy.findMany({
       where,
@@ -52,6 +61,16 @@ export class PoliciesService {
     // Ownership check: CUSTOMER can only see their own policy
     if (user.role === UserRole.CUSTOMER && policy.userId !== user.id) {
       throw new ForbiddenException('You do not have permission to view this policy');
+    }
+
+    // Scoping check: COMPANY_ADMIN can only see policies for their company
+    if (user.role === UserRole.COMPANY_ADMIN) {
+      if (!user.companyId) {
+        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+      }
+      if (policy.product.companyId !== user.companyId) {
+        throw new ForbiddenException('You do not have permission to view this policy');
+      }
     }
 
     return policy;

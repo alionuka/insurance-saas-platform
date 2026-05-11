@@ -37,7 +37,8 @@ export class ClaimsController {
   updateStatus(
     @Param('id') id: string,
     @Body() updateClaimStatusDto: UpdateClaimStatusDto,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.claimsService.updateStatus(id, updateClaimStatusDto.status);
+    return this.claimsService.updateStatus(id, updateClaimStatusDto.status, user);
   }
 }

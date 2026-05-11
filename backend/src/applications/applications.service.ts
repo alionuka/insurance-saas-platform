@@ -14,7 +14,16 @@ export class ApplicationsService {
   ) {}
 
   async findAll(user: AuthUser) {
-    const where = user.role === UserRole.CUSTOMER ? { userId: user.id } : {};
+    let where: any = {};
+
+    if (user.role === UserRole.CUSTOMER) {
+      where = { userId: user.id };
+    } else if (user.role === UserRole.COMPANY_ADMIN) {
+      if (!user.companyId) {
+        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+      }
+      where = { product: { companyId: user.companyId } };
+    }
 
     return this.prisma.application.findMany({
       where,
@@ -59,6 +68,16 @@ export class ApplicationsService {
     // Ownership check: CUSTOMER can only see their own application
     if (user.role === UserRole.CUSTOMER && application.userId !== user.id) {
       throw new ForbiddenException('You do not have permission to view this application');
+    }
+
+    // Scoping check: COMPANY_ADMIN can only see applications for their company
+    if (user.role === UserRole.COMPANY_ADMIN) {
+      if (!user.companyId) {
+        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+      }
+      if (application.product.companyId !== user.companyId) {
+        throw new ForbiddenException('You do not have permission to view this application');
+      }
     }
 
     return application;
@@ -110,8 +129,18 @@ export class ApplicationsService {
     return this._findOneOrThrow(application.id);
   }
 
-  async updateStatus(id: string, status: ApplicationStatus) {
+  async updateStatus(id: string, status: ApplicationStatus, user: AuthUser) {
     const application = await this._findOneOrThrow(id);
+
+    // Scoping check: COMPANY_ADMIN can only update applications for their company
+    if (user.role === UserRole.COMPANY_ADMIN) {
+      if (!user.companyId) {
+        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+      }
+      if (application.product.companyId !== user.companyId) {
+        throw new ForbiddenException('You do not have permission to view this application');
+      }
+    }
 
     await this.prisma.application.update({
       where: { id },

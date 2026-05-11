@@ -37,7 +37,8 @@ export class ApplicationsController {
   updateStatus(
     @Param('id') id: string,
     @Body() updateApplicationStatusDto: UpdateApplicationStatusDto,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.applicationsService.updateStatus(id, updateApplicationStatusDto.status);
+    return this.applicationsService.updateStatus(id, updateApplicationStatusDto.status, user);
   }
 }

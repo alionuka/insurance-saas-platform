@@ -15,7 +15,16 @@ export class ClaimsService {
   ) {}
 
   async findAll(user: AuthUser) {
-    const where = user.role === UserRole.CUSTOMER ? { userId: user.id } : {};
+    let where: any = {};
+
+    if (user.role === UserRole.CUSTOMER) {
+      where = { userId: user.id };
+    } else if (user.role === UserRole.COMPANY_ADMIN) {
+      if (!user.companyId) {
+        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+      }
+      where = { application: { product: { companyId: user.companyId } } };
+    }
 
     return this.prisma.claim.findMany({
       where,
@@ -68,6 +77,16 @@ export class ClaimsService {
     // Ownership check: CUSTOMER can only see their own claim
     if (user.role === UserRole.CUSTOMER && claim.userId !== user.id) {
       throw new ForbiddenException('You do not have permission to view this claim');
+    }
+
+    // Scoping check: COMPANY_ADMIN can only see claims for their company
+    if (user.role === UserRole.COMPANY_ADMIN) {
+      if (!user.companyId) {
+        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+      }
+      if (claim.application.product.companyId !== user.companyId) {
+        throw new ForbiddenException('You do not have permission to view this claim');
+      }
     }
 
     return claim;
@@ -189,8 +208,18 @@ export class ClaimsService {
     return this._findOneOrThrow(claimId);
   }
 
-  async updateStatus(id: string, status: ClaimStatus) {
-    await this._findOneOrThrow(id);
+  async updateStatus(id: string, status: ClaimStatus, user: AuthUser) {
+    const claim = await this._findOneOrThrow(id);
+
+    // Scoping check: COMPANY_ADMIN can only update claims for their company
+    if (user.role === UserRole.COMPANY_ADMIN) {
+      if (!user.companyId) {
+        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+      }
+      if (claim.application.product.companyId !== user.companyId) {
+        throw new ForbiddenException('You do not have permission to view this claim');
+      }
+    }
 
     await this.prisma.claim.update({
       where: { id },
