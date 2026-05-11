@@ -11,7 +11,10 @@ async function getAdminData() {
     const authHeader: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
 
     const [companiesRes, productsRes, appsRes, claimsRes] = await Promise.all([
-      fetch(`${API_URL}/companies`, { cache: 'no-store' }).catch(() => null),
+      fetch(`${API_URL}/companies`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
       fetch(`${API_URL}/products`, { cache: 'no-store' }).catch(() => null),
       fetch(`${API_URL}/applications`, { 
         cache: 'no-store',

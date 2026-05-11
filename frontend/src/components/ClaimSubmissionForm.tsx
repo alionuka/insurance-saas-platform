@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Activity, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { logout } from '@/lib/auth';
 
 interface Policy {
   id: string;
@@ -67,6 +68,10 @@ export default function ClaimSubmissionForm({ policies }: ClaimSubmissionFormPro
 
       if (!response.ok) {
         const data = await response.json();
+        if (response.status === 401) {
+          logout();
+          return;
+        }
         throw new Error(data.message || 'Failed to submit claim');
       }
 

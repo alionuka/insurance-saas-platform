@@ -12,6 +12,7 @@ import {
   AlertCircle,
   User,
 } from 'lucide-react';
+import { logout } from '@/lib/auth';
 
 /* ─── Constants ─────────────────────────────────────────────────────────────── */
 
@@ -193,6 +194,10 @@ export default function AgentWorkspace({
         },
         body: JSON.stringify({ status }),
       });
+      if (res.status === 401) {
+        logout();
+        return;
+      }
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const updated = await res.json();
       setApplications((prev) => prev.map((a) => (a.id === id ? updated : a)));
@@ -225,6 +230,10 @@ export default function AgentWorkspace({
         },
         body: JSON.stringify({ status }),
       });
+      if (res.status === 401) {
+        logout();
+        return;
+      }
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const updated = await res.json();
       setClaims((prev) => prev.map((c) => (c.id === id ? updated : c)));
@@ -245,14 +254,6 @@ export default function AgentWorkspace({
         <p className="text-zinc-400 mt-1">Review applications and investigate claims.</p>
       </div>
 
-      {/* Demo notice */}
-      <div className="flex items-start gap-2 px-4 py-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-xs">
-        <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-        <span>
-          <strong>Demo mode:</strong> Status actions are visible to all users until authentication is
-          implemented. All changes are persisted to the database.
-        </span>
-      </div>
 
       {/* ── Applications Table ──────────────────────────────────────────────── */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
