@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../prisma/safe-user-select';
 import { MlClientService } from '../ml-client/ml-client.service';
 import { CreateClaimDto } from './dto/create-claim.dto';
-import { UserRole } from '@prisma/client';
+import { UserRole, ClaimStatus } from '@prisma/client';
 import { AuthUser } from '../auth/types/auth-user';
 
 @Injectable()
@@ -189,7 +189,7 @@ export class ClaimsService {
     return this._findOneOrThrow(claimId);
   }
 
-  async updateStatus(id: string, status: any) {
+  async updateStatus(id: string, status: ClaimStatus) {
     await this._findOneOrThrow(id);
 
     await this.prisma.claim.update({

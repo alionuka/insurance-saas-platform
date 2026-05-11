@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../prisma/safe-user-select';
 import { MlClientService } from '../ml-client/ml-client.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
-import { UserRole } from '@prisma/client';
+import { UserRole, ApplicationStatus } from '@prisma/client';
 import { AuthUser } from '../auth/types/auth-user';
 
 @Injectable()
@@ -110,7 +110,7 @@ export class ApplicationsService {
     return this._findOneOrThrow(application.id);
   }
 
-  async updateStatus(id: string, status: any) {
+  async updateStatus(id: string, status: ApplicationStatus) {
     const application = await this._findOneOrThrow(id);
 
     await this.prisma.application.update({

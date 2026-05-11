@@ -1,6 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ProductsService } from './products.service';
 
+// Intentionally public: product catalog is browsed by anonymous visitors and customers.
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
