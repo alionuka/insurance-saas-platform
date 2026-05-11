@@ -1,4 +1,4 @@
-import { Users, Server, Activity, Database, Zap, Shield, TrendingUp, Package, ShieldCheck, ShieldAlert, AlertTriangle, UserPlus } from 'lucide-react';
+import { Users, Server, Activity, Database, Zap, Shield, TrendingUp, Package, ShieldCheck, ShieldAlert, AlertTriangle, UserPlus, ShieldX } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
@@ -9,9 +9,11 @@ async function getAdminData() {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('access_token')?.value ?? '';
-    const authHeader: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+    if (!token) return { status: 401 };
 
-    const [companiesRes, productsRes, appsRes, claimsRes] = await Promise.all([
+    const authHeader: HeadersInit = { Authorization: `Bearer ${token}` };
+
+    const [companiesRes, productsRes, appsRes, claimsRes, policiesRes] = await Promise.all([
       fetch(`${API_URL}/companies`, { 
         cache: 'no-store',
         headers: authHeader,
@@ -25,27 +27,62 @@ async function getAdminData() {
         cache: 'no-store',
         headers: authHeader,
       }).catch(() => null),
+      fetch(`${API_URL}/policies`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
     ]);
+
+    if (companiesRes?.status === 401 || appsRes?.status === 401 || claimsRes?.status === 401) {
+      return { status: 401 };
+    }
+    
+    if (companiesRes?.status === 403 || appsRes?.status === 403 || claimsRes?.status === 403) {
+      return { status: 403 };
+    }
 
     const companies = companiesRes && companiesRes.ok ? await companiesRes.json() : [];
     const products = productsRes && productsRes.ok ? await productsRes.json() : [];
     const applications = appsRes && appsRes.ok ? await appsRes.json() : [];
     const claims = claimsRes && claimsRes.ok ? await claimsRes.json() : [];
+    const policies = policiesRes && policiesRes.ok ? await policiesRes.json() : [];
 
-    return { companies, products, applications, claims };
+    return { companies, products, applications, claims, policies, status: 200 };
   } catch (error) {
-    return { companies: [], products: [], applications: [], claims: [] };
+    return { companies: [], products: [], applications: [], claims: [], policies: [], status: 500 };
   }
 }
 
 export default async function AdminDashboard() {
-  const { companies, products, applications, claims } = await getAdminData();
+  const data = await getAdminData();
+
+  if (data.status === 401) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+        <p className="mt-4 text-zinc-400">Session expired. Redirecting...</p>
+      </div>
+    );
+  }
+
+  if (data.status === 403) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 border-2 border-dashed border-rose-900/30 rounded-3xl bg-rose-950/10 text-center">
+        <ShieldX className="h-12 w-12 text-rose-500 mb-4" />
+        <h2 className="text-xl font-bold text-white mb-2">Access Restricted</h2>
+        <p className="text-zinc-400 max-w-md">Platform administration is restricted to authorized personnel only.</p>
+      </div>
+    );
+  }
+
+  const { companies, products, applications, claims, policies } = data;
 
   // Aggregate Metrics
   const totalCompanies = companies.length;
   const totalProducts = products.length;
   const totalApps = applications.length;
   const totalClaims = claims.length;
+  const totalPolicies = policies.length;
   const suspiciousClaims = claims.filter((c: any) => c.fraudAssessments?.[0]?.flag === 'SUSPICIOUS').length;
   
   const uniqueUserIds = new Set(applications.map((a: any) => a.userId));
@@ -58,9 +95,11 @@ export default async function AdminDashboard() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">Platform Administration</h1>
-        <p className="text-zinc-400 mt-1">Global system metrics and platform-wide monitoring.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-white">Platform Administration</h1>
+          <p className="text-zinc-400 mt-1">Global system metrics and platform-wide monitoring.</p>
+        </div>
       </div>
       
       {/* Navigation Quick Links */}
@@ -85,7 +124,7 @@ export default async function AdminDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Companies</span>
+            <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Tenants</span>
             <Database className="h-4 w-4 text-indigo-500" />
           </div>
           <p className="text-xl font-bold text-white">{totalCompanies}</p>
@@ -93,7 +132,7 @@ export default async function AdminDashboard() {
         
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Applicants</span>
+            <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Users</span>
             <Users className="h-4 w-4 text-emerald-500" />
           </div>
           <p className="text-xl font-bold text-white">{totalApplicants}</p>
@@ -117,6 +156,14 @@ export default async function AdminDashboard() {
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Policies</span>
+            <ShieldCheck className="h-4 w-4 text-indigo-400" />
+          </div>
+          <p className="text-xl font-bold text-white">{totalPolicies}</p>
+        </div>
+
+        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+          <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Claims</span>
             <Activity className="h-4 w-4 text-rose-500" />
           </div>
@@ -125,18 +172,10 @@ export default async function AdminDashboard() {
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-bold text-rose-400 tracking-wider">Suspicious</span>
+            <span className="text-[10px] uppercase font-bold text-rose-400 tracking-wider">Flagged</span>
             <AlertTriangle className="h-4 w-4 text-rose-500" />
           </div>
           <p className="text-xl font-bold text-rose-400">{suspiciousClaims}</p>
-        </div>
-
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-bold text-amber-500 tracking-wider">Avg Risk</span>
-            <TrendingUp className="h-4 w-4 text-amber-500" />
-          </div>
-          <p className="text-xl font-bold text-white">{avgRiskScore.toFixed(1)}</p>
         </div>
       </div>
 
