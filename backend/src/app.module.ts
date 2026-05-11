@@ -11,9 +11,22 @@ import { ClaimsModule } from './claims/claims.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { MlClientModule } from './ml-client/ml-client.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
-  imports: [AuthModule, UsersModule, CompaniesModule, ProductsModule, ApplicationsModule, PoliciesModule, ClaimsModule, AnalyticsModule, MlClientModule, PrismaModule],
+  imports: [
+    AuthModule,
+    UsersModule,
+    CompaniesModule,
+    ProductsModule,
+    ApplicationsModule,
+    PoliciesModule,
+    ClaimsModule,
+    AnalyticsModule,
+    MlClientModule,
+    PrismaModule,
+    AdminModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
