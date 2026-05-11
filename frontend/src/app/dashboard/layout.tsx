@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { LayoutDashboard, Users, UserSquare2, ShieldCheck, Settings, Bell, Search, Menu, ArrowLeft, LogOut } from 'lucide-react';
 
+import { logout } from '@/lib/auth';
+
 export default function DashboardLayout({
   children,
 }: {
@@ -57,15 +59,13 @@ export default function DashboardLayout({
       }
     } catch (e) {
       console.error('Auth error:', e);
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('user');
+      logout();
       router.push('/auth/sign-in');
     }
   }, [pathname, isHome, router]);
 
   const handleLogout = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user');
+    logout();
     router.push('/auth/sign-in');
   };
 

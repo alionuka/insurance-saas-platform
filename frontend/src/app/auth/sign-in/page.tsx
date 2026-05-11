@@ -144,7 +144,6 @@ export default function SignInPage() {
 
             <div className="mt-4 grid grid-cols-1 gap-2">
               <div className="p-2 rounded-lg bg-zinc-950 border border-zinc-800 text-[10px] text-zinc-400">
-                <p><span className="text-indigo-400 font-bold">Admin:</span> admin@insurance-saas.com / Password123!</p>
                 <p><span className="text-emerald-400 font-bold">Agent:</span> agent@example.com / Password123!</p>
                 <p><span className="text-blue-400 font-bold">Client:</span> alice.customer@example.com / Password123!</p>
               </div>
