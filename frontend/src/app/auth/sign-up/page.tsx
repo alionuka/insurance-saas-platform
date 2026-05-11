@@ -157,21 +157,21 @@ export default function SignUpPage() {
 
             <div>
               <label htmlFor="role" className="block text-sm font-medium text-zinc-300">
-                I am a...
+                Registering as
               </label>
               <div className="mt-1">
                 <select
                   id="role"
                   name="role"
+                  disabled
                   value={formData.role}
-                  onChange={handleChange}
-                  className="block w-full px-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent sm:text-sm"
+                  className="block w-full px-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950/50 text-zinc-500 cursor-not-allowed sm:text-sm"
                 >
                   <option value="CUSTOMER">Customer</option>
-                  <option value="AGENT">Insurance Agent</option>
-                  <option value="COMPANY_ADMIN">Company Administrator</option>
-                  <option value="PLATFORM_ADMIN">Platform Administrator</option>
                 </select>
+                <p className="mt-2 text-[10px] text-zinc-500 uppercase font-bold tracking-wider">
+                  Agent and Admin accounts must be provisioned by the platform administrator.
+                </p>
               </div>
             </div>
 

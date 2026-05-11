@@ -177,10 +177,20 @@ export default function AgentWorkspace({
     setLoadingAppId(id);
     setErrorAppIds((prev) => { const s = new Set(prev); s.delete(id); return s; });
     setSuccessAppId(null);
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    if (!token) {
+      setErrorAppIds((prev) => new Set(prev).add(id));
+      setLoadingAppId(null);
+      return;
+    }
+
     try {
       const res = await fetch(`${API_BASE}/applications/${id}/status`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
         body: JSON.stringify({ status }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -199,10 +209,20 @@ export default function AgentWorkspace({
     setLoadingClaimId(id);
     setErrorClaimIds((prev) => { const s = new Set(prev); s.delete(id); return s; });
     setSuccessClaimId(null);
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    if (!token) {
+      setErrorClaimIds((prev) => new Set(prev).add(id));
+      setLoadingClaimId(null);
+      return;
+    }
+
     try {
       const res = await fetch(`${API_BASE}/claims/${id}/status`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
         body: JSON.stringify({ status }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

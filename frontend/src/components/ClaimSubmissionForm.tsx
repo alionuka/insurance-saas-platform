@@ -43,11 +43,20 @@ export default function ClaimSubmissionForm({ policies }: ClaimSubmissionFormPro
       return;
     }
 
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+
+    if (!token) {
+      setError('Not authenticated');
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/claims`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           policyId: selectedPolicyId,

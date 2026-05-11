@@ -1,15 +1,29 @@
 import { Shield, FileCheck, Activity, AlertCircle, TrendingUp, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import ClaimSubmissionForm from '@/components/ClaimSubmissionForm';
+import { cookies } from 'next/headers';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 async function getClientData() {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('access_token')?.value ?? '';
+    const authHeader: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+
     const [appsRes, claimsRes, policiesRes] = await Promise.all([
-      fetch(`${API_URL}/applications`, { cache: 'no-store' }).catch(() => null),
-      fetch(`${API_URL}/claims`, { cache: 'no-store' }).catch(() => null),
-      fetch(`${API_URL}/policies`, { cache: 'no-store' }).catch(() => null),
+      fetch(`${API_URL}/applications`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
+      fetch(`${API_URL}/claims`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
+      fetch(`${API_URL}/policies`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
     ]);
 
     const applications = appsRes && appsRes.ok ? await appsRes.json() : [];

@@ -118,24 +118,8 @@ export default function DashboardLayout({
                 </Link>
                 
                 <div className="my-6 border-t border-zinc-800/50 mx-3"></div>
-                
-                <Link 
-                  href="/dashboard" 
-                  className="flex items-center px-3 py-2 text-sm font-medium rounded-md text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors group"
-                >
-                  <ArrowLeft className="mr-3 h-5 w-5 text-zinc-500 group-hover:text-zinc-300" />
-                  Back to Demo Home
-                </Link>
               </>
-            ) : (
-              <div className="px-4 py-6">
-                <div className="p-4 rounded-xl bg-indigo-500/5 border border-indigo-500/10 text-center">
-                  <p className="text-xs text-zinc-500 leading-relaxed italic">
-                    Welcome to the InsurSaaS Demo. Select a role from the entry page to view specialized dashboards.
-                  </p>
-                </div>
-              </div>
-            )}
+            ) : null}
           </nav>
         </div>
         

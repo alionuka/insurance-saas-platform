@@ -16,6 +16,10 @@ export function setAuthData(token: string, user: User) {
   if (typeof window !== 'undefined') {
     localStorage.setItem('access_token', token);
     localStorage.setItem('user', JSON.stringify(user));
+    
+    // Step 1: Sync to cookie for middleware support
+    const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `access_token=${token}; path=/; max-age=86400; SameSite=Lax${secure}`;
   }
 }
 
@@ -40,8 +44,16 @@ export function getStoredUser(): User | null {
   return null;
 }
 
+export function clearAuthCookie() {
+  if (typeof window !== 'undefined') {
+    const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `access_token=; path=/; max-age=0; SameSite=Lax${secure}`;
+  }
+}
+
 export function logout() {
   if (typeof window !== 'undefined') {
+    clearAuthCookie();
     localStorage.removeItem('access_token');
     localStorage.removeItem('user');
     window.location.href = '/auth/sign-in';

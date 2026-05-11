@@ -1,30 +1,46 @@
 import { Building2, Package, Briefcase, FileBarChart2, ShieldCheck, ShieldAlert, TrendingUp, AlertTriangle } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
+import { cookies } from 'next/headers';
 
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 async function getCompanyData() {
   try {
-    const [productsRes, appsRes, claimsRes] = await Promise.all([
+    const cookieStore = await cookies();
+    const token = cookieStore.get('access_token')?.value ?? '';
+    const authHeader: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+
+    const [productsRes, appsRes, claimsRes, policiesRes] = await Promise.all([
       fetch(`${API_URL}/products`, { cache: 'no-store' }).catch(() => null),
-      fetch(`${API_URL}/applications`, { cache: 'no-store' }).catch(() => null),
-      fetch(`${API_URL}/claims`, { cache: 'no-store' }).catch(() => null),
+      fetch(`${API_URL}/applications`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
+      fetch(`${API_URL}/claims`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
+      fetch(`${API_URL}/policies`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
     ]);
 
     const products = productsRes && productsRes.ok ? await productsRes.json() : [];
     const applications = appsRes && appsRes.ok ? await appsRes.json() : [];
     const claims = claimsRes && claimsRes.ok ? await claimsRes.json() : [];
+    const policies = policiesRes && policiesRes.ok ? await policiesRes.json() : [];
 
-    return { products, applications, claims };
+    return { products, applications, claims, policies };
   } catch (error) {
-    return { products: [], applications: [], claims: [] };
+    return { products: [], applications: [], claims: [], policies: [] };
   }
 }
 
 
 export default async function CompanyDashboard() {
-  const { products, applications, claims } = await getCompanyData();
+  const { products, applications, claims, policies } = await getCompanyData();
 
   // Calculate Metrics
   const totalProducts = products.length;
@@ -272,8 +288,60 @@ export default async function CompanyDashboard() {
             </table>
           </div>
         </section>
+
+        {/* Policy Portfolio Section */}
+        <section className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden xl:col-span-2">
+          <div className="px-6 py-4 border-b border-zinc-800 bg-zinc-900/50 flex items-center gap-2">
+            <ShieldCheck className="h-5 w-5 text-indigo-400" />
+            <h2 className="text-lg font-bold text-white">Policy Portfolio</h2>
+          </div>
+          <div className="p-0 overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-zinc-950 text-zinc-500 uppercase text-[10px] font-bold tracking-wider">
+                <tr>
+                  <th className="px-6 py-3">Policy Number</th>
+                  <th className="px-6 py-3">Customer</th>
+                  <th className="px-6 py-3">Product</th>
+                  <th className="px-6 py-3 text-center">Status</th>
+                  <th className="px-6 py-3 text-right">Start Date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-800">
+                {policies.map((policy: any) => (
+                  <tr key={policy.id} className="hover:bg-zinc-800/30 transition-colors">
+                    <td className="px-6 py-4 font-mono font-bold text-white uppercase tracking-tight">
+                      {policy.policyNumber}
+                    </td>
+                    <td className="px-6 py-4 text-zinc-300 font-medium">
+                      {policy.user?.firstName} {policy.user?.lastName}
+                    </td>
+                    <td className="px-6 py-4 text-zinc-400">
+                      {policy.product?.name}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase border ${
+                        policy.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
+                        policy.status === 'EXPIRED' ? 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20' : 
+                        'bg-rose-500/10 text-rose-400 border-rose-500/20'
+                      }`}>
+                        {policy.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-right text-zinc-500 font-mono text-xs">
+                      {formatDate(policy.startDate)}
+                    </td>
+                  </tr>
+                ))}
+                {policies.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="px-6 py-12 text-center text-zinc-500 italic">No policies in portfolio.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
     </div>
   );
 }
-

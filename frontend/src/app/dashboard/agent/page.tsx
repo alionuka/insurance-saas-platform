@@ -1,10 +1,23 @@
 import AgentWorkspace from './AgentWorkspace';
+import { cookies } from 'next/headers';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 async function getAgentData() {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('access_token')?.value ?? '';
+    const authHeader: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+
     const [appsRes, claimsRes] = await Promise.all([
-      fetch('http://localhost:3001/applications', { cache: 'no-store' }).catch(() => null),
-      fetch('http://localhost:3001/claims', { cache: 'no-store' }).catch(() => null),
+      fetch(`${API_URL}/applications`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
+      fetch(`${API_URL}/claims`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
     ]);
 
     const applications = appsRes && appsRes.ok ? await appsRes.json() : [];

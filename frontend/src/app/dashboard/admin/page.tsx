@@ -1,15 +1,26 @@
 import { Users, Server, Activity, Database, Zap, Shield, TrendingUp, Package, ShieldCheck, ShieldAlert, AlertTriangle } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
+import { cookies } from 'next/headers';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 async function getAdminData() {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('access_token')?.value ?? '';
+    const authHeader: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+
     const [companiesRes, productsRes, appsRes, claimsRes] = await Promise.all([
       fetch(`${API_URL}/companies`, { cache: 'no-store' }).catch(() => null),
       fetch(`${API_URL}/products`, { cache: 'no-store' }).catch(() => null),
-      fetch(`${API_URL}/applications`, { cache: 'no-store' }).catch(() => null),
-      fetch(`${API_URL}/claims`, { cache: 'no-store' }).catch(() => null),
+      fetch(`${API_URL}/applications`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
+      fetch(`${API_URL}/claims`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
     ]);
 
     const companies = companiesRes && companiesRes.ok ? await companiesRes.json() : [];
@@ -33,6 +44,9 @@ export default async function AdminDashboard() {
   const totalClaims = claims.length;
   const suspiciousClaims = claims.filter((c: any) => c.fraudAssessments?.[0]?.flag === 'SUSPICIOUS').length;
   
+  const uniqueUserIds = new Set(applications.map((a: any) => a.userId));
+  const totalApplicants = uniqueUserIds.size;
+
   const appsWithRisk = applications.filter((a: any) => a.riskAssessments?.length > 0);
   const avgRiskScore = appsWithRisk.length > 0 
     ? appsWithRisk.reduce((acc: number, a: any) => acc + a.riskAssessments[0].riskScore, 0) / appsWithRisk.length 
@@ -57,10 +71,10 @@ export default async function AdminDashboard() {
         
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Users</span>
+            <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Applicants</span>
             <Users className="h-4 w-4 text-emerald-500" />
           </div>
-          <p className="text-xl font-bold text-white">Demo Users</p>
+          <p className="text-xl font-bold text-white">{totalApplicants}</p>
         </div>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
@@ -258,4 +272,3 @@ export default async function AdminDashboard() {
     </div>
   );
 }
-
