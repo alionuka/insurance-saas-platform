@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/commo
 import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../prisma/safe-user-select';
 import { AuthUser } from '../auth/types/auth-user';
-import { UserRole } from '@prisma/client';
+import { Prisma, UserRole } from '@prisma/client';
 
 @Injectable()
 export class PoliciesService {
@@ -30,7 +30,7 @@ export class PoliciesService {
   }
 
   async findAll(user: AuthUser) {
-    let where: any = {};
+    let where: Prisma.PolicyWhereInput = {};
 
     if (user.role === UserRole.CUSTOMER) {
       where = { userId: user.id };

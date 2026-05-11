@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../prisma/safe-user-select';
 import { MlClientService } from '../ml-client/ml-client.service';
 import { CreateClaimDto } from './dto/create-claim.dto';
-import { UserRole, ClaimStatus } from '@prisma/client';
+import { Prisma, UserRole, ClaimStatus } from '@prisma/client';
 import { AuthUser } from '../auth/types/auth-user';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class ClaimsService {
   ) {}
 
   async findAll(user: AuthUser) {
-    let where: any = {};
+    let where: Prisma.ClaimWhereInput = {};
 
     if (user.role === UserRole.CUSTOMER) {
       where = { userId: user.id };
