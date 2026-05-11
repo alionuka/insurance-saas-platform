@@ -54,7 +54,7 @@ export default function DashboardLayout({
         router.push(correctPath);
       } 
       // If on a sub-dashboard that doesn't match the user's role, redirect to their correct one
-      else if (pathname.startsWith('/dashboard/') && pathname !== correctPath) {
+      else if (pathname.startsWith('/dashboard/') && pathname !== correctPath && !pathname.startsWith(correctPath + '/')) {
         router.push(correctPath);
       }
     } catch (e) {

@@ -1,6 +1,7 @@
-import { Users, Server, Activity, Database, Zap, Shield, TrendingUp, Package, ShieldCheck, ShieldAlert, AlertTriangle } from 'lucide-react';
+import { Users, Server, Activity, Database, Zap, Shield, TrendingUp, Package, ShieldCheck, ShieldAlert, AlertTriangle, UserPlus } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { cookies } from 'next/headers';
+import Link from 'next/link';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -60,6 +61,24 @@ export default async function AdminDashboard() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-white">Platform Administration</h1>
         <p className="text-zinc-400 mt-1">Global system metrics and platform-wide monitoring.</p>
+      </div>
+      
+      {/* Navigation Quick Links */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Link 
+          href="/dashboard/admin/users"
+          className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 hover:border-zinc-700 transition-colors group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="h-10 w-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center group-hover:bg-indigo-500/20 transition-colors">
+              <UserPlus className="h-5 w-5 text-indigo-400" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-white">Manage Users</p>
+              <p className="text-[10px] text-zinc-500 font-medium uppercase tracking-tight">Create new staff accounts</p>
+            </div>
+          </div>
+        </Link>
       </div>
 
       {/* Overview Statistics */}
