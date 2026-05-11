@@ -29,7 +29,7 @@ export class AuthService {
         passwordHash,
         firstName: dto.firstName,
         lastName: dto.lastName,
-        role: dto.role || 'CUSTOMER',
+        role: 'CUSTOMER',
         age: dto.age,
       },
     });

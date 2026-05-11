@@ -1,39 +1,43 @@
-import { Controller, Get, Post, Body, Param, Patch, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, UseGuards } from '@nestjs/common';
 import { ClaimsService } from './claims.service';
 import { CreateClaimDto } from './dto/create-claim.dto';
-import { DemoClaimDto } from './dto/demo-claim.dto';
 import { UpdateClaimStatusDto } from './dto/update-claim-status.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '@prisma/client';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { AuthUser } from '../auth/types/auth-user';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('claims')
 export class ClaimsController {
   constructor(private readonly claimsService: ClaimsService) {}
 
   @Get()
-  findAll() {
-    return this.claimsService.findAll();
+  @Roles(UserRole.CUSTOMER, UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
+  findAll(@CurrentUser() user: AuthUser) {
+    return this.claimsService.findAll(user);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.claimsService.findOne(id);
+  @Roles(UserRole.CUSTOMER, UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
+  findOne(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.claimsService.findOne(id, user);
   }
 
   @Post()
-  create(@Body() createClaimDto: CreateClaimDto) {
-    return this.claimsService.create(createClaimDto);
+  @Roles(UserRole.CUSTOMER)
+  create(@Body() createClaimDto: CreateClaimDto, @CurrentUser() user: AuthUser) {
+    return this.claimsService.create(createClaimDto, user.id);
   }
 
   @Patch(':id/status')
+  @Roles(UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
   updateStatus(
     @Param('id') id: string,
     @Body() updateClaimStatusDto: UpdateClaimStatusDto,
   ) {
     return this.claimsService.updateStatus(id, updateClaimStatusDto.status);
-  }
-
-  // Note: This endpoint is temporary and will be replaced by auth-based user detection later.
-  @Post('demo')
-  createDemo(@Body() demoClaimDto: DemoClaimDto) {
-    return this.claimsService.createDemo(demoClaimDto);
   }
 }

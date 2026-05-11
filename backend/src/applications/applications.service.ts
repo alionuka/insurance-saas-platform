@@ -1,8 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../prisma/safe-user-select';
 import { MlClientService } from '../ml-client/ml-client.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
+import { UserRole } from '@prisma/client';
+import { AuthUser } from '../auth/types/auth-user';
 
 @Injectable()
 export class ApplicationsService {
@@ -11,8 +13,11 @@ export class ApplicationsService {
     private readonly mlClient: MlClientService,
   ) {}
 
-  async findAll() {
+  async findAll(user: AuthUser) {
+    const where = user.role === UserRole.CUSTOMER ? { userId: user.id } : {};
+
     return this.prisma.application.findMany({
+      where,
       include: {
         user: { select: safeUserSelect },
         product: {
@@ -26,7 +31,7 @@ export class ApplicationsService {
     });
   }
 
-  async findOne(id: string) {
+  private async _findOneOrThrow(id: string) {
     const application = await this.prisma.application.findUnique({
       where: { id },
       include: {
@@ -48,8 +53,19 @@ export class ApplicationsService {
     return application;
   }
 
-  async create(dto: CreateApplicationDto) {
-    const { userId, productId } = dto;
+  async findOne(id: string, user: AuthUser) {
+    const application = await this._findOneOrThrow(id);
+
+    // Ownership check: CUSTOMER can only see their own application
+    if (user.role === UserRole.CUSTOMER && application.userId !== user.id) {
+      throw new ForbiddenException('You do not have permission to view this application');
+    }
+
+    return application;
+  }
+
+  async create(dto: CreateApplicationDto, userId: string) {
+    const { productId } = dto;
 
     // 1. Verify User exists
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
@@ -91,29 +107,11 @@ export class ApplicationsService {
     });
 
     // 6. Return fully populated Application
-    return this.findOne(application.id);
-  }
-
-  // Note: This method is temporary and will be replaced by auth-based user detection later.
-  async createDemo(productId: string) {
-    const email = 'alice.customer@example.com';
-    const demoUser = await this.prisma.user.findUnique({ where: { email } });
-    if (!demoUser) {
-      throw new NotFoundException(`Demo user with email ${email} not found`);
-    }
-
-    return this.create({ userId: demoUser.id, productId });
+    return this._findOneOrThrow(application.id);
   }
 
   async updateStatus(id: string, status: any) {
-    const application = await this.prisma.application.findUnique({
-      where: { id },
-      include: { policy: true },
-    });
-
-    if (!application) {
-      throw new NotFoundException(`Application with ID ${id} not found`);
-    }
+    const application = await this._findOneOrThrow(id);
 
     await this.prisma.application.update({
       where: { id },
@@ -140,7 +138,6 @@ export class ApplicationsService {
       });
     }
 
-    return this.findOne(id);
+    return this._findOneOrThrow(id);
   }
 }
-

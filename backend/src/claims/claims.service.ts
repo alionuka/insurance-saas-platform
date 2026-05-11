@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../prisma/safe-user-select';
 import { MlClientService } from '../ml-client/ml-client.service';
 import { CreateClaimDto } from './dto/create-claim.dto';
-import { DemoClaimDto } from './dto/demo-claim.dto';
+import { UserRole } from '@prisma/client';
+import { AuthUser } from '../auth/types/auth-user';
 
 @Injectable()
 export class ClaimsService {
@@ -13,8 +14,11 @@ export class ClaimsService {
     private readonly mlClient: MlClientService,
   ) {}
 
-  async findAll() {
+  async findAll(user: AuthUser) {
+    const where = user.role === UserRole.CUSTOMER ? { userId: user.id } : {};
+
     return this.prisma.claim.findMany({
+      where,
       include: {
         user: { select: safeUserSelect },
         application: {
@@ -32,7 +36,7 @@ export class ClaimsService {
     });
   }
 
-  async findOne(id: string) {
+  private async _findOneOrThrow(id: string) {
     const claim = await this.prisma.claim.findUnique({
       where: { id },
       include: {
@@ -58,8 +62,19 @@ export class ClaimsService {
     return claim;
   }
 
-  async create(dto: CreateClaimDto) {
-    const { userId, applicationId, policyId, amount, description } = dto;
+  async findOne(id: string, user: AuthUser) {
+    const claim = await this._findOneOrThrow(id);
+
+    // Ownership check: CUSTOMER can only see their own claim
+    if (user.role === UserRole.CUSTOMER && claim.userId !== user.id) {
+      throw new ForbiddenException('You do not have permission to view this claim');
+    }
+
+    return claim;
+  }
+
+  async create(dto: CreateClaimDto, userId: string) {
+    const { applicationId, policyId, amount, description } = dto;
 
     let finalUserId = userId;
     let finalApplicationId = applicationId;
@@ -81,10 +96,15 @@ export class ClaimsService {
 
       finalUserId = policy.userId;
       finalApplicationId = policy.applicationId;
+      
+      // Safety check: ensure policy belongs to user
+      if (finalUserId !== userId) {
+        throw new ForbiddenException('You can only file claims against your own policies');
+      }
     } else {
-      // Legacy path / Manual override
-      if (!finalUserId || !finalApplicationId) {
-        throw new BadRequestException('Either policyId or both userId and applicationId must be provided');
+      // Legacy path / Manual override (still requires applicationId)
+      if (!finalApplicationId) {
+        throw new BadRequestException('Either policyId or applicationId must be provided');
       }
 
       // Verify User exists
@@ -101,6 +121,12 @@ export class ClaimsService {
       if (!application) {
         throw new NotFoundException(`Application with ID ${finalApplicationId} not found`);
       }
+      
+      // FIX: Add ownership check in legacy path
+      if (application.userId !== userId) {
+        throw new ForbiddenException('You can only file claims against your own applications');
+      }
+
       if (application.userId !== finalUserId) {
         throw new BadRequestException(`Application does not belong to the given user`);
       }
@@ -134,7 +160,7 @@ export class ClaimsService {
     }
 
     // 5. Atomic transaction to create Claim and FraudAssessment
-    const claim = await this.prisma.$transaction(async (tx) => {
+    await this.prisma.$transaction(async (tx) => {
       const newClaim = await tx.claim.create({
         data: {
           id: claimId,
@@ -160,52 +186,17 @@ export class ClaimsService {
     });
 
     // 6. Return fully populated Claim
-    return this.findOne(claim.id);
-  }
-
-  // Temporary demo endpoint
-  async createDemo(dto: DemoClaimDto) {
-    const email = 'alice.customer@example.com';
-    const demoUser = await this.prisma.user.findUnique({ 
-      where: { email },
-      include: {
-        applications: true
-      }
-    });
-
-    if (!demoUser) {
-      throw new NotFoundException(`Demo user with email ${email} not found`);
-    }
-
-    if (demoUser.applications.length === 0) {
-      throw new BadRequestException(`Demo user has no applications to file a claim against. Apply for a product first.`);
-    }
-
-    // Pick the first application for demo purposes
-    const targetApplication = demoUser.applications[0];
-
-    return this.create({
-      userId: demoUser.id,
-      applicationId: targetApplication.id,
-      amount: dto.amount,
-      description: dto.description
-    });
+    return this._findOneOrThrow(claimId);
   }
 
   async updateStatus(id: string, status: any) {
-    const claim = await this.prisma.claim.findUnique({
-      where: { id },
-    });
-
-    if (!claim) {
-      throw new NotFoundException(`Claim with ID ${id} not found`);
-    }
+    await this._findOneOrThrow(id);
 
     await this.prisma.claim.update({
       where: { id },
       data: { status },
     });
 
-    return this.findOne(id);
+    return this._findOneOrThrow(id);
   }
 }

@@ -2,9 +2,6 @@ import { IsString, IsNotEmpty, IsNumber, Min, IsOptional } from 'class-validator
 import { Type } from 'class-transformer';
 
 export class CreateClaimDto {
-  @IsOptional()
-  @IsString()
-  userId?: string;
 
   @IsOptional()
   @IsString()

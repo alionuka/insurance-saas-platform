@@ -1,44 +1,43 @@
-import { Controller, Get, Post, Body, Param, Patch, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, UseGuards } from '@nestjs/common';
 import { ApplicationsService } from './applications.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationStatusDto } from './dto/update-application-status.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '@prisma/client';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { AuthUser } from '../auth/types/auth-user';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('applications')
 export class ApplicationsController {
   constructor(private readonly applicationsService: ApplicationsService) {}
 
   @Get()
-  findAll() {
-    return this.applicationsService.findAll();
+  @Roles(UserRole.CUSTOMER, UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
+  findAll(@CurrentUser() user: AuthUser) {
+    return this.applicationsService.findAll(user);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.applicationsService.findOne(id);
+  @Roles(UserRole.CUSTOMER, UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
+  findOne(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.applicationsService.findOne(id, user);
   }
 
   @Post()
-  create(@Body() createApplicationDto: CreateApplicationDto) {
-    if (!createApplicationDto.userId || !createApplicationDto.productId) {
-      throw new BadRequestException('userId and productId are required');
-    }
-    return this.applicationsService.create(createApplicationDto);
+  @Roles(UserRole.CUSTOMER)
+  create(@Body() createApplicationDto: CreateApplicationDto, @CurrentUser() user: AuthUser) {
+    return this.applicationsService.create(createApplicationDto, user.id);
   }
 
   @Patch(':id/status')
+  @Roles(UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
   updateStatus(
     @Param('id') id: string,
     @Body() updateApplicationStatusDto: UpdateApplicationStatusDto,
   ) {
     return this.applicationsService.updateStatus(id, updateApplicationStatusDto.status);
-  }
-
-  // Note: This endpoint is temporary and will be replaced by auth-based user detection later.
-  @Post('demo')
-  createDemo(@Body('productId') productId: string) {
-    if (!productId) {
-      throw new BadRequestException('productId is required');
-    }
-    return this.applicationsService.createDemo(productId);
   }
 }
