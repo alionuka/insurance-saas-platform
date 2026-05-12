@@ -35,7 +35,7 @@ async function main() {
   // 2. Create Users
   // Hash for "Password123!" is $2b$10$GgdGL0IGK8sy2UXsoRjHquhY3UtOsqzCAb91p9kZs6M7arj7QQnKG
   const demoPasswordHash = '$2b$10$GgdGL0IGK8sy2UXsoRjHquhY3UtOsqzCAb91p9kZs6M7arj7QQnKG';
-  
+
   const platformAdmin = await prisma.user.create({
     data: {
       email: 'admin@insurance-saas.com',

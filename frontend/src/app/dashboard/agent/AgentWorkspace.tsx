@@ -11,8 +11,10 @@ import {
   Loader2,
   AlertCircle,
   User,
+  ChevronRight,
 } from 'lucide-react';
 import { logout } from '@/lib/auth';
+import ClaimDocuments from '@/components/ClaimDocuments';
 
 /* ─── Constants ─────────────────────────────────────────────────────────────── */
 
@@ -386,14 +388,15 @@ export default function AgentWorkspace({
                 const company = product?.company ?? null;
 
                 return (
-                  <tr
-                    key={claim.id}
-                    className={`transition-colors ${
-                      successClaimId === claim.id
-                        ? 'bg-emerald-500/5'
-                        : 'hover:bg-zinc-800/50'
-                    }`}
-                  >
+                  <>
+                    <tr
+                      key={claim.id}
+                      className={`transition-colors ${
+                        successClaimId === claim.id
+                          ? 'bg-emerald-500/5'
+                          : 'hover:bg-zinc-800/50'
+                      }`}
+                    >
                     {/* Customer / Description */}
                     <td className="px-6 py-4 min-w-[250px]">
                       <div className="flex items-start gap-2">
@@ -481,6 +484,21 @@ export default function AgentWorkspace({
                       />
                     </td>
                   </tr>
+                  {/* Documents Sub-row */}
+                  <tr key={`${claim.id}-docs`} className="bg-zinc-950/20">
+                    <td colSpan={6} className="px-6 py-0 border-b border-zinc-800">
+                      <details className="group">
+                        <summary className="list-none cursor-pointer py-3 flex items-center gap-2 text-[10px] text-zinc-500 hover:text-indigo-400 uppercase font-bold tracking-tight transition-colors">
+                          <ChevronRight className="h-3 w-3 group-open:rotate-90 transition-transform" />
+                          Supporting Documents
+                        </summary>
+                        <div className="pb-6">
+                          <ClaimDocuments claimId={claim.id} canUpload={false} />
+                        </div>
+                      </details>
+                    </td>
+                  </tr>
+                </>
                 );
               })}
               {claims.length === 0 && (

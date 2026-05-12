@@ -22,3 +22,5 @@ ml-service/__pycache__/
 
 # Local environment files
 backend/.env
+
+backend/uploads/

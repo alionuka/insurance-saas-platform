@@ -4,16 +4,20 @@ import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../prisma/safe-user-select';
 import { MlClientService } from '../ml-client/ml-client.service';
 import { EmailService } from '../email/email.service';
+import { StorageService } from '../storage/storage.service';
 import { CreateClaimDto } from './dto/create-claim.dto';
 import { Prisma, UserRole, ClaimStatus } from '@prisma/client';
 import { AuthUser } from '../auth/types/auth-user';
 
 @Injectable()
 export class ClaimsService {
+  private readonly ALLOWED_MIME = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly mlClient: MlClientService,
     private readonly emailService: EmailService,
+    private readonly storageService: StorageService,
   ) {}
 
   async findAll(user: AuthUser) {
@@ -263,5 +267,79 @@ export class ClaimsService {
     }
 
     return finalClaim;
+  }
+
+  async uploadDocument(claimId: string, file: Express.Multer.File, user: AuthUser) {
+    if (!file) {
+      throw new BadRequestException('No file provided');
+    }
+
+    if (!this.ALLOWED_MIME.includes(file.mimetype)) {
+      throw new BadRequestException(
+        `Unsupported file type: ${file.mimetype}. Allowed: ${this.ALLOWED_MIME.join(', ')}`,
+      );
+    }
+
+    // Scoping check: ensuring user has access to the claim
+    await this.findOne(claimId, user);
+
+    const { url } = await this.storageService.uploadFile(
+      file.buffer,
+      file.originalname,
+      file.mimetype,
+    );
+
+    return this.prisma.claimDocument.create({
+      data: {
+        claimId,
+        filename: file.originalname,
+        url,
+        mimeType: file.mimetype,
+        sizeBytes: file.size,
+        uploadedById: user.id,
+      },
+    });
+  }
+
+  async listDocuments(claimId: string, user: AuthUser) {
+    // Scoping check
+    await this.findOne(claimId, user);
+
+    return this.prisma.claimDocument.findMany({
+      where: { claimId },
+      orderBy: { uploadedAt: 'desc' },
+      include: {
+        uploadedBy: { select: safeUserSelect },
+      },
+    });
+  }
+
+  async deleteDocument(claimId: string, docId: string, user: AuthUser) {
+    const doc = await this.prisma.claimDocument.findUnique({
+      where: { id: docId },
+    });
+
+    if (!doc || doc.claimId !== claimId) {
+      throw new NotFoundException(`Document with ID ${docId} not found for this claim`);
+    }
+
+    // Authorization: only uploader or platform admin
+    if (doc.uploadedById !== user.id && user.role !== UserRole.PLATFORM_ADMIN) {
+      throw new ForbiddenException('You do not have permission to delete this document');
+    }
+
+    // Extract storage key from URL
+    const key = doc.url.split('/uploads/')[1];
+    if (key) {
+      await this.storageService.deleteFile(key).catch((err) => {
+        console.error(`Failed to delete physical file for document ${docId}`, err);
+      });
+    }
+
+    await this.prisma.claimDocument.delete({
+      where: { id: docId },
+    });
+
+    return { success: true, id: docId };
   }
 }

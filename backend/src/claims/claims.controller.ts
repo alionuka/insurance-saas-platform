@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Param, Patch, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, UseGuards, UseInterceptors, UploadedFile, Delete } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ClaimsService } from './claims.service';
 import { CreateClaimDto } from './dto/create-claim.dto';
 import { UpdateClaimStatusDto } from './dto/update-claim-status.dto';
@@ -40,5 +41,32 @@ export class ClaimsController {
     @CurrentUser() user: AuthUser,
   ) {
     return this.claimsService.updateStatus(id, updateClaimStatusDto.status, user);
+  }
+
+  @Post(':id/documents')
+  @Roles(UserRole.CUSTOMER, UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 10 * 1024 * 1024 } })) // 10MB
+  uploadDocument(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.claimsService.uploadDocument(id, file, user);
+  }
+
+  @Get(':id/documents')
+  @Roles(UserRole.CUSTOMER, UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
+  listDocuments(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.claimsService.listDocuments(id, user);
+  }
+
+  @Delete(':id/documents/:docId')
+  @Roles(UserRole.CUSTOMER, UserRole.PLATFORM_ADMIN)
+  deleteDocument(
+    @Param('id') id: string,
+    @Param('docId') docId: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.claimsService.deleteDocument(id, docId, user);
   }
 }

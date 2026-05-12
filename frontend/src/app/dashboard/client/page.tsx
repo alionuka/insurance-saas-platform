@@ -2,6 +2,7 @@ import { Shield, FileCheck, Activity, AlertCircle, TrendingUp, AlertTriangle, Sh
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import ClaimSubmissionForm from '@/components/ClaimSubmissionForm';
 import QuoteCalculator from '@/components/QuoteCalculator';
+import ClaimDocuments from '@/components/ClaimDocuments';
 import { cookies } from 'next/headers';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -296,6 +297,19 @@ export default async function ClientDashboard() {
                         </div>
                       </div>
                     )}
+
+                    {/* Documents Section */}
+                    <div className="px-5 pb-4 border-t border-zinc-800/50">
+                      <details className="group">
+                        <summary className="list-none cursor-pointer py-2 flex items-center gap-2 text-[10px] text-zinc-500 hover:text-indigo-400 uppercase font-bold tracking-tight transition-colors">
+                          <span className="group-open:rotate-90 transition-transform">▶</span>
+                          Supporting Documents
+                        </summary>
+                        <div className="pt-1">
+                          <ClaimDocuments claimId={claim.id} canUpload={true} />
+                        </div>
+                      </details>
+                    </div>
                   </div>
                 );
               })
