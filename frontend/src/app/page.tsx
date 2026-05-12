@@ -102,6 +102,11 @@ export default function Home() {
                 <p className="text-slate-400 leading-relaxed flex-grow">
                   {product.description || "No description provided."}
                 </p>
+                {product.basePremium > 0 ? (
+                  <p className="text-emerald-400 text-sm font-bold mt-3">From ${product.basePremium}/month</p>
+                ) : (
+                  <p className="text-zinc-500 text-sm font-medium mt-3 italic">Contact for pricing</p>
+                )}
                 <div className="mt-6 pt-6 border-t border-slate-800/50">
                   <Link 
                     href="/auth/sign-in"

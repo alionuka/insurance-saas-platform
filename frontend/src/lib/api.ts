@@ -13,6 +13,7 @@ export interface InsuranceProduct {
   description: string;
   companyId: string;
   company: Company;
+  basePremium: number;
 }
 
 export async function getProducts(): Promise<InsuranceProduct[]> {

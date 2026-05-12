@@ -2,6 +2,7 @@ import { Building2, Package, Briefcase, FileBarChart2, ShieldCheck, ShieldAlert,
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { cookies } from 'next/headers';
 import { logout } from '@/lib/auth';
+import Link from 'next/link';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -100,6 +101,24 @@ export default async function CompanyDashboard() {
             Authenticated Tenant
           </span>
         </div>
+      </div>
+
+      {/* Navigation Quick Links */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Link 
+          href="/dashboard/company/products"
+          className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 hover:border-zinc-700 transition-colors group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="h-10 w-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center group-hover:bg-indigo-500/20 transition-colors">
+              <Package className="h-5 w-5 text-indigo-400" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-white">Manage Products</p>
+              <p className="text-[10px] text-zinc-500 font-medium uppercase tracking-tight">Catalog & Pricing</p>
+            </div>
+          </div>
+        </Link>
       </div>
 
       {/* Overview Cards */}

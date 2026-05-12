@@ -104,6 +104,7 @@ async function main() {
       type: ProductType.AUTO,
       description: 'Comprehensive auto insurance for all vehicles.',
       companyId: company1.id,
+      basePremium: 120,
     },
   });
 
@@ -113,6 +114,7 @@ async function main() {
       type: ProductType.PROPERTY,
       description: 'Protect your home and belongings.',
       companyId: company1.id,
+      basePremium: 90,
     },
   });
 
@@ -122,6 +124,7 @@ async function main() {
       type: ProductType.HEALTH,
       description: 'Full coverage health insurance including dental and vision.',
       companyId: company2.id,
+      basePremium: 200,
     },
   });
 
@@ -131,6 +134,7 @@ async function main() {
       type: ProductType.LIFE,
       description: 'Affordable term life insurance for your family.',
       companyId: company2.id,
+      basePremium: 75,
     },
   });
 
