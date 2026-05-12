@@ -70,13 +70,24 @@ model User {
   companyId String?
   company   Company? @relation(fields: [companyId], references: [id])
 
-  applications    Application[]
-  claims          Claim[]
-  policies        Policy[]
-  recommendations Recommendation[]
+  applications        Application[]
+  claims              Claim[]
+  policies            Policy[]
+  recommendations     Recommendation[]
+  passwordResetTokens PasswordResetToken[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  token     String   @unique // TODO: hash before storing in v2
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
 }
 
 model Company {
