@@ -3,6 +3,7 @@ import * as crypto from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../prisma/safe-user-select';
 import { MlClientService } from '../ml-client/ml-client.service';
+import { EmailService } from '../email/email.service';
 import { CreateClaimDto } from './dto/create-claim.dto';
 import { Prisma, UserRole, ClaimStatus } from '@prisma/client';
 import { AuthUser } from '../auth/types/auth-user';
@@ -12,6 +13,7 @@ export class ClaimsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly mlClient: MlClientService,
+    private readonly emailService: EmailService,
   ) {}
 
   async findAll(user: AuthUser) {
@@ -204,8 +206,22 @@ export class ClaimsService {
       return newClaim;
     });
 
+    const finalClaim = await this._findOneOrThrow(claimId);
+
+    // Send notification
+    try {
+      await this.emailService.sendClaimFiled(finalClaim.user.email, {
+        claimId: finalClaim.id,
+        productName: finalClaim.application.product.name,
+        amount: finalClaim.amount,
+        fraudFlag: finalClaim.fraudAssessments[0]?.flag ?? 'PENDING',
+      });
+    } catch (error) {
+      console.error(`Failed to send claim filed email for claim ${claimId}`, error);
+    }
+
     // 6. Return fully populated Claim
-    return this._findOneOrThrow(claimId);
+    return finalClaim;
   }
 
   async updateStatus(id: string, status: ClaimStatus, user: AuthUser) {
@@ -226,6 +242,26 @@ export class ClaimsService {
       data: { status },
     });
 
-    return this._findOneOrThrow(id);
+    const finalClaim = await this._findOneOrThrow(id);
+
+    // Send notifications
+    try {
+      if (status === 'APPROVED') {
+        await this.emailService.sendClaimApproved(finalClaim.user.email, {
+          claimId: finalClaim.id,
+          productName: finalClaim.application.product.name,
+          amount: finalClaim.amount,
+        });
+      } else if (status === 'DENIED') {
+        await this.emailService.sendClaimDenied(finalClaim.user.email, {
+          claimId: finalClaim.id,
+          productName: finalClaim.application.product.name,
+        });
+      }
+    } catch (error) {
+      console.error(`Failed to send claim status email for claim ${id}`, error);
+    }
+
+    return finalClaim;
   }
 }

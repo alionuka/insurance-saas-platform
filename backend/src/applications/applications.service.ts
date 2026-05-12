@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/commo
 import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../prisma/safe-user-select';
 import { MlClientService } from '../ml-client/ml-client.service';
+import { EmailService } from '../email/email.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { Prisma, UserRole, ApplicationStatus } from '@prisma/client';
 import { AuthUser } from '../auth/types/auth-user';
@@ -11,6 +12,7 @@ export class ApplicationsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly mlClient: MlClientService,
+    private readonly emailService: EmailService,
   ) {}
 
   async findAll(user: AuthUser) {
@@ -167,6 +169,29 @@ export class ApplicationsService {
       });
     }
 
-    return this._findOneOrThrow(id);
+    const finalApplication = await this._findOneOrThrow(id);
+
+    // Send notifications
+    try {
+      if (status === 'APPROVED') {
+        await this.emailService.sendApplicationApproved(finalApplication.user.email, {
+          applicationId: id,
+          productName: finalApplication.product.name,
+          policyNumber: finalApplication.policy?.policyNumber,
+          startDate: finalApplication.policy?.startDate,
+          endDate: finalApplication.policy?.endDate,
+        });
+      } else if (status === 'REJECTED') {
+        await this.emailService.sendApplicationRejected(finalApplication.user.email, {
+          applicationId: id,
+          productName: finalApplication.product.name,
+        });
+      }
+    } catch (error) {
+      // Email is best-effort, don't fail the status update
+      console.error(`Failed to send application status email for application ${id}`, error);
+    }
+
+    return finalApplication;
   }
 }

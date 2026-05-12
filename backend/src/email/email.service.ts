@@ -50,4 +50,142 @@ export class EmailService {
       throw error;
     }
   }
+
+  async sendApplicationApproved(
+    to: string,
+    data: { applicationId: string; productName: string; policyNumber?: string; startDate?: Date; endDate?: Date }
+  ): Promise<void> {
+    const summary = `Application ${data.applicationId} approved. Product: ${data.productName}. Policy: ${data.policyNumber || 'N/A'}`;
+    if (!this.resend) {
+      this.logger.log(`[EmailService] Application Approved for ${to}: ${summary}`);
+      return;
+    }
+
+    await this.resend.emails.send({
+      from: this.fromEmail,
+      to,
+      subject: 'Your insurance application was approved',
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+          <h2 style="color: #6366f1;">Application Approved</h2>
+          <p>Great news! Your application for <strong>${data.productName}</strong> has been approved.</p>
+          <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <p style="margin: 0 0 10px 0;"><strong>Policy Number:</strong> ${data.policyNumber || 'Pending'}</p>
+            <p style="margin: 0 0 10px 0;"><strong>Application ID:</strong> ${data.applicationId}</p>
+            ${data.startDate ? `<p style="margin: 0 0 10px 0;"><strong>Coverage Starts:</strong> ${data.startDate.toLocaleDateString()}</p>` : ''}
+            ${data.endDate ? `<p style="margin: 0;"><strong>Coverage Ends:</strong> ${data.endDate.toLocaleDateString()}</p>` : ''}
+          </div>
+          <p>You can now view your active policy and manage your coverage in the client portal.</p>
+          <p>Thank you for choosing InsurSaaS.</p>
+        </div>
+      `,
+    });
+  }
+
+  async sendApplicationRejected(
+    to: string,
+    data: { applicationId: string; productName: string }
+  ): Promise<void> {
+    const summary = `Application ${data.applicationId} rejected. Product: ${data.productName}`;
+    if (!this.resend) {
+      this.logger.log(`[EmailService] Application Rejected for ${to}: ${summary}`);
+      return;
+    }
+
+    await this.resend.emails.send({
+      from: this.fromEmail,
+      to,
+      subject: 'Update on your insurance application',
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+          <h2 style="color: #6366f1;">Application Update</h2>
+          <p>Thank you for your interest in <strong>${data.productName}</strong>.</p>
+          <p>After a careful review of your application (ID: ${data.applicationId}), we regret to inform you that we are unable to approve your request at this time.</p>
+          <p>If you have any questions regarding this decision, please contact our support team.</p>
+        </div>
+      `,
+    });
+  }
+
+  async sendClaimFiled(
+    to: string,
+    data: { claimId: string; productName: string; amount: number; fraudFlag: string }
+  ): Promise<void> {
+    const summary = `Claim ${data.claimId} filed. Amount: $${data.amount}. Status: ${data.fraudFlag}`;
+    if (!this.resend) {
+      this.logger.log(`[EmailService] Claim Filed for ${to}: ${summary}`);
+      return;
+    }
+
+    await this.resend.emails.send({
+      from: this.fromEmail,
+      to,
+      subject: 'We received your claim',
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+          <h2 style="color: #6366f1;">Claim Received</h2>
+          <p>We have received your claim for <strong>${data.productName}</strong> and it is now being processed.</p>
+          <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <p style="margin: 0 0 10px 0;"><strong>Claim ID:</strong> ${data.claimId}</p>
+            <p style="margin: 0 0 10px 0;"><strong>Claimed Amount:</strong> $${data.amount.toFixed(2)}</p>
+            <p style="margin: 0;"><strong>Initial Status:</strong> ${data.fraudFlag}</p>
+          </div>
+          <p>Our adjusters will review the details and provide an update shortly. You can track the status of your claim in the dashboard.</p>
+        </div>
+      `,
+    });
+  }
+
+  async sendClaimApproved(
+    to: string,
+    data: { claimId: string; productName: string; amount: number }
+  ): Promise<void> {
+    const summary = `Claim ${data.claimId} approved. Amount: $${data.amount}`;
+    if (!this.resend) {
+      this.logger.log(`[EmailService] Claim Approved for ${to}: ${summary}`);
+      return;
+    }
+
+    await this.resend.emails.send({
+      from: this.fromEmail,
+      to,
+      subject: 'Your claim has been approved',
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+          <h2 style="color: #6366f1;">Claim Approved</h2>
+          <p>Your claim (ID: ${data.claimId}) for <strong>${data.productName}</strong> has been approved for payment.</p>
+          <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <p style="margin: 0 0 10px 0;"><strong>Approved Amount:</strong> $${data.amount.toFixed(2)}</p>
+            <p style="margin: 0;"><strong>Product:</strong> ${data.productName}</p>
+          </div>
+          <p>The funds will be processed according to your account's preferred payment method. Please allow 3-5 business days for the transaction to complete.</p>
+        </div>
+      `,
+    });
+  }
+
+  async sendClaimDenied(
+    to: string,
+    data: { claimId: string; productName: string }
+  ): Promise<void> {
+    const summary = `Claim ${data.claimId} denied. Product: ${data.productName}`;
+    if (!this.resend) {
+      this.logger.log(`[EmailService] Claim Denied for ${to}: ${summary}`);
+      return;
+    }
+
+    await this.resend.emails.send({
+      from: this.fromEmail,
+      to,
+      subject: 'Update on your claim',
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+          <h2 style="color: #6366f1;">Claim Update</h2>
+          <p>We have completed the review of your claim (ID: ${data.claimId}) for <strong>${data.productName}</strong>.</p>
+          <p>We regret to inform you that we are unable to approve your claim at this time based on the documentation provided.</p>
+          <p>You can view more details regarding this decision in the client portal. If you have additional information to provide, you may file an appeal through the dashboard.</p>
+        </div>
+      `,
+    });
+  }
 }
