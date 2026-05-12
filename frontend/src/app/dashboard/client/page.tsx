@@ -1,6 +1,7 @@
-import { Shield, FileCheck, Activity, AlertCircle, TrendingUp, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Shield, FileCheck, Activity, AlertCircle, TrendingUp, AlertTriangle, ShieldCheck, Calculator } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import ClaimSubmissionForm from '@/components/ClaimSubmissionForm';
+import QuoteCalculator from '@/components/QuoteCalculator';
 import { cookies } from 'next/headers';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -11,7 +12,7 @@ async function getClientData() {
     const token = cookieStore.get('access_token')?.value ?? '';
     const authHeader: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
 
-    const [appsRes, claimsRes, policiesRes] = await Promise.all([
+    const [appsRes, claimsRes, policiesRes, productsRes] = await Promise.all([
       fetch(`${API_URL}/applications`, { 
         cache: 'no-store',
         headers: authHeader,
@@ -24,20 +25,22 @@ async function getClientData() {
         cache: 'no-store',
         headers: authHeader,
       }).catch(() => null),
+      fetch(`${API_URL}/products`, { cache: 'no-store' }).catch(() => null),
     ]);
 
     const applications = appsRes && appsRes.ok ? await appsRes.json() : [];
     const claims = claimsRes && claimsRes.ok ? await claimsRes.json() : [];
     const policies = policiesRes && policiesRes.ok ? await policiesRes.json() : [];
+    const products = productsRes && productsRes.ok ? await productsRes.json() : [];
 
-    return { applications, claims, policies };
+    return { applications, claims, policies, products };
   } catch (error) {
-    return { applications: [], claims: [], policies: [] };
+    return { applications: [], claims: [], policies: [], products: [] };
   }
 }
 
 export default async function ClientDashboard() {
-  const { applications, claims, policies } = await getClientData();
+  const { applications, claims, policies, products } = await getClientData();
 
   return (
     <div className="space-y-8">
@@ -82,6 +85,9 @@ export default async function ClientDashboard() {
       <div className="space-y-12">
         {/* Claim Submission Form */}
         <ClaimSubmissionForm policies={policies} />
+
+        {/* Personalized Quote Calculator */}
+        <QuoteCalculator products={products} />
 
         {/* My Policies Section */}
         <section>
