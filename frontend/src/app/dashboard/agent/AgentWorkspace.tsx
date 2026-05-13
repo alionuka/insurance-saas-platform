@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import {
   ShieldAlert,
@@ -388,9 +388,8 @@ export default function AgentWorkspace({
                 const company = product?.company ?? null;
 
                 return (
-                  <>
+                  <Fragment key={claim.id}>
                     <tr
-                      key={claim.id}
                       className={`transition-colors ${
                         successClaimId === claim.id
                           ? 'bg-emerald-500/5'
@@ -498,7 +497,7 @@ export default function AgentWorkspace({
                       </details>
                     </td>
                   </tr>
-                </>
+                </Fragment>
                 );
               })}
               {claims.length === 0 && (
