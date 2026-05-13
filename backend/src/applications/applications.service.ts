@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../prisma/safe-user-select';
 import { MlClientService } from '../ml-client/ml-client.service';
 import { EmailService } from '../email/email.service';
+import { AuditService } from '../audit/audit.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { Prisma, UserRole, ApplicationStatus } from '@prisma/client';
 import { AuthUser } from '../auth/types/auth-user';
@@ -13,6 +14,7 @@ export class ApplicationsService {
     private readonly prisma: PrismaService,
     private readonly mlClient: MlClientService,
     private readonly emailService: EmailService,
+    private readonly auditService: AuditService,
   ) {}
 
   async findAll(user: AuthUser) {
@@ -127,7 +129,16 @@ export class ApplicationsService {
       },
     });
 
-    // 6. Return fully populated Application
+    // 6. Record Audit
+    await this.auditService.record({
+      action: 'APPLICATION_CREATED',
+      actor: { id: user.id, email: user.email, role: user.role },
+      resourceType: 'Application',
+      resourceId: application.id,
+      metadata: { productId, productName: product.name },
+    });
+
+    // 7. Return fully populated Application
     return this._findOneOrThrow(application.id);
   }
 
@@ -149,6 +160,14 @@ export class ApplicationsService {
       data: { status },
     });
 
+    await this.auditService.record({
+      action: 'APPLICATION_STATUS_CHANGED',
+      actor: { id: user.id, role: user.role },
+      resourceType: 'Application',
+      resourceId: id,
+      metadata: { from: application.status, to: status },
+    });
+
     // Auto-create policy when application is approved (idempotent)
     if (status === 'APPROVED' && !application.policy) {
       const policyNumber = `POL-${id.slice(0, 8).toUpperCase()}`;
@@ -156,7 +175,7 @@ export class ApplicationsService {
       const endDate = new Date(startDate);
       endDate.setFullYear(endDate.getFullYear() + 1);
 
-      await this.prisma.policy.create({
+      const newPolicy = await this.prisma.policy.create({
         data: {
           policyNumber,
           userId: application.userId,
@@ -167,6 +186,14 @@ export class ApplicationsService {
           endDate,
           premiumAmount: application.product.basePremium * 12,
         },
+      });
+
+      await this.auditService.record({
+        action: 'POLICY_CREATED',
+        actor: { id: user.id, role: user.role },
+        resourceType: 'Policy',
+        resourceId: newPolicy.id,
+        metadata: { applicationId: id, status: 'PENDING_PAYMENT', premiumAmount: application.product.basePremium * 12 },
       });
     }
 

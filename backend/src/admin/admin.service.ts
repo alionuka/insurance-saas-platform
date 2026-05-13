@@ -4,12 +4,17 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserRole } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { safeUserSelect } from '../prisma/safe-user-select';
+import { AuditService } from '../audit/audit.service';
+import { AuthUser } from '../auth/types/auth-user';
 
 @Injectable()
 export class AdminService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditService: AuditService,
+  ) {}
 
-  async createUser(dto: CreateUserDto) {
+  async createUser(dto: CreateUserDto, actor: AuthUser) {
     const { email, password, firstName, lastName, role, companyId } = dto;
 
     // 1. Validation: COMPANY_ADMIN requires companyId
@@ -45,7 +50,7 @@ export class AdminService {
     const passwordHash = await bcrypt.hash(password, 10);
 
     // 5. Create user
-    return this.prisma.user.create({
+    const newUser = await this.prisma.user.create({
       data: {
         email,
         passwordHash,
@@ -56,5 +61,15 @@ export class AdminService {
       },
       select: safeUserSelect,
     });
+
+    await this.auditService.record({
+      action: 'STAFF_USER_PROVISIONED',
+      actor: { id: actor.id, role: actor.role },
+      resourceType: 'User',
+      resourceId: newUser.id,
+      metadata: { email: dto.email, role: dto.role, companyId: finalCompanyId },
+    });
+
+    return newUser;
   }
 }

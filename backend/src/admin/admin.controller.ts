@@ -1,4 +1,6 @@
 import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { AuthUser } from '../auth/types/auth-user';
 import { AdminService } from './admin.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -13,7 +15,7 @@ export class AdminController {
 
   @Post('users')
   @Roles(UserRole.PLATFORM_ADMIN)
-  createUser(@Body() dto: CreateUserDto) {
-    return this.adminService.createUser(dto);
+  createUser(@Body() dto: CreateUserDto, @CurrentUser() actor: AuthUser) {
+    return this.adminService.createUser(dto, actor);
   }
 }

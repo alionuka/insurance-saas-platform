@@ -4,12 +4,14 @@ import { MlClientService } from '../ml-client/ml-client.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { AuthUser } from '../auth/types/auth-user';
 import { UserRole } from '@prisma/client';
+import { AuditService } from '../audit/audit.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     private prisma: PrismaService,
     private mlClient: MlClientService,
+    private auditService: AuditService,
   ) {}
 
   async findAll() {
@@ -58,7 +60,7 @@ export class ProductsService {
       throw new ForbiddenException('Insufficient permissions to create products');
     }
 
-    return this.prisma.insuranceProduct.create({
+    const product = await this.prisma.insuranceProduct.create({
       data: {
         name: dto.name,
         type: dto.type,
@@ -70,6 +72,16 @@ export class ProductsService {
         company: true,
       },
     });
+
+    await this.auditService.record({
+      action: 'PRODUCT_CREATED',
+      actor: { id: user.id, role: user.role },
+      resourceType: 'Product',
+      resourceId: product.id,
+      metadata: { name: dto.name, type: dto.type, basePremium: dto.basePremium, companyId: finalCompanyId },
+    });
+
+    return product;
   }
 
   async listMyCompany(user: AuthUser) {

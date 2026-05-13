@@ -11,6 +11,7 @@ import { EmailService } from '../email/email.service';
 import { AuthUser } from '../auth/types/auth-user';
 import { PolicyStatus, PaymentStatus } from '@prisma/client';
 import Stripe from 'stripe';
+import { AuditService } from '../audit/audit.service';
 
 @Injectable()
 export class PaymentsService {
@@ -20,6 +21,7 @@ export class PaymentsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly emailService: EmailService,
+    private readonly auditService: AuditService,
   ) {
     const apiKey = process.env.STRIPE_SECRET_KEY;
     if (apiKey) {
@@ -80,7 +82,7 @@ export class PaymentsService {
     });
 
     // Create a pending payment record
-    await this.prisma.payment.create({
+    const payment = await this.prisma.payment.create({
       data: {
         policyId: policy.id,
         userId: user.id,
@@ -88,6 +90,14 @@ export class PaymentsService {
         stripeSessionId: session.id,
         status: PaymentStatus.PENDING,
       },
+    });
+
+    await this.auditService.record({
+      action: 'PAYMENT_INITIATED',
+      actor: { id: user.id, role: user.role },
+      resourceType: 'Payment',
+      resourceId: payment.id,
+      metadata: { policyId, amount: policy.premiumAmount, stripeSessionId: session.id },
     });
 
     return { url: session.url };
@@ -168,6 +178,22 @@ export class PaymentsService {
       });
     });
 
+    await this.auditService.record({
+      action: 'PAYMENT_SUCCEEDED',
+      actor: null,
+      resourceType: 'Payment',
+      resourceId: payment.id,
+      metadata: { policyId, stripePaymentId, sessionId: session.id },
+    });
+
+    await this.auditService.record({
+      action: 'POLICY_ACTIVATED',
+      actor: null,
+      resourceType: 'Policy',
+      resourceId: policyId,
+      metadata: { paymentId: payment.id },
+    });
+
     // 3. Fetch full policy data for email
     const policy = await this.prisma.policy.findUnique({
       where: { id: policyId },
@@ -201,6 +227,15 @@ export class PaymentsService {
           status: PaymentStatus.FAILED,
         },
       });
+
+      await this.auditService.record({
+        action: 'PAYMENT_FAILED',
+        actor: null,
+        resourceType: 'Payment',
+        resourceId: payment.id,
+        metadata: { sessionId: session.id, reason: 'expired or async failure' },
+      });
+
       this.logger.log(`Payment failed/expired for session ${session.id}`);
     }
   }

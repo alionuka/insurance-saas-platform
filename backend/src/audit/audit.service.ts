@@ -10,7 +10,7 @@ export class AuditService {
 
   async record(entry: {
     action: string;
-    actor?: { id: string; email: string; role: UserRole } | null;
+    actor?: { id: string; email?: string | null; role: UserRole } | null;
     resourceType?: string;
     resourceId?: string;
     metadata?: Record<string, unknown>;

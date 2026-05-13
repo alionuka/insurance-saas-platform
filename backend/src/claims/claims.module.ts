@@ -4,9 +4,10 @@ import { ClaimsService } from './claims.service';
 import { MlClientModule } from '../ml-client/ml-client.module';
 import { EmailModule } from '../email/email.module';
 import { StorageModule } from '../storage/storage.module';
+import { AuditModule } from '../audit/audit.module';
 
 @Module({
-  imports: [MlClientModule, EmailModule, StorageModule],
+  imports: [MlClientModule, EmailModule, StorageModule, AuditModule],
   controllers: [ClaimsController],
   providers: [ClaimsService],
 })

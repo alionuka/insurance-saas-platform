@@ -5,6 +5,7 @@ import { safeUserSelect } from '../prisma/safe-user-select';
 import { MlClientService } from '../ml-client/ml-client.service';
 import { EmailService } from '../email/email.service';
 import { StorageService } from '../storage/storage.service';
+import { AuditService } from '../audit/audit.service';
 import { CreateClaimDto } from './dto/create-claim.dto';
 import { Prisma, UserRole, ClaimStatus } from '@prisma/client';
 import { AuthUser } from '../auth/types/auth-user';
@@ -18,6 +19,7 @@ export class ClaimsService {
     private readonly mlClient: MlClientService,
     private readonly emailService: EmailService,
     private readonly storageService: StorageService,
+    private readonly auditService: AuditService,
   ) {}
 
   async findAll(user: AuthUser) {
@@ -224,6 +226,14 @@ export class ClaimsService {
       console.error(`Failed to send claim filed email for claim ${claimId}`, error);
     }
 
+    await this.auditService.record({
+      action: 'CLAIM_FILED',
+      actor: { id: finalClaim.user.id, email: finalClaim.user.email, role: finalClaim.user.role },
+      resourceType: 'Claim',
+      resourceId: finalClaim.id,
+      metadata: { amount: finalClaim.amount, productName: finalClaim.application.product.name, fraudFlag: finalClaim.fraudAssessments[0]?.flag ?? 'PENDING' },
+    });
+
     // 6. Return fully populated Claim
     return finalClaim;
   }
@@ -247,6 +257,14 @@ export class ClaimsService {
     });
 
     const finalClaim = await this._findOneOrThrow(id);
+
+    await this.auditService.record({
+      action: 'CLAIM_STATUS_CHANGED',
+      actor: { id: user.id, role: user.role },
+      resourceType: 'Claim',
+      resourceId: id,
+      metadata: { from: claim.status, to: status },
+    });
 
     // Send notifications
     try {
@@ -289,7 +307,7 @@ export class ClaimsService {
       file.mimetype,
     );
 
-    return this.prisma.claimDocument.create({
+    const document = await this.prisma.claimDocument.create({
       data: {
         claimId,
         filename: file.originalname,
@@ -299,6 +317,16 @@ export class ClaimsService {
         uploadedById: user.id,
       },
     });
+
+    await this.auditService.record({
+      action: 'CLAIM_DOCUMENT_UPLOADED',
+      actor: { id: user.id, role: user.role },
+      resourceType: 'Claim',
+      resourceId: claimId,
+      metadata: { filename: file.originalname, mimeType: file.mimetype, sizeBytes: file.size, documentId: document.id },
+    });
+
+    return document;
   }
 
   async listDocuments(claimId: string, user: AuthUser) {
@@ -338,6 +366,14 @@ export class ClaimsService {
 
     await this.prisma.claimDocument.delete({
       where: { id: docId },
+    });
+
+    await this.auditService.record({
+      action: 'CLAIM_DOCUMENT_DELETED',
+      actor: { id: user.id, role: user.role },
+      resourceType: 'Claim',
+      resourceId: claimId,
+      metadata: { documentId: docId, filename: doc.filename },
     });
 
     return { success: true, id: docId };
