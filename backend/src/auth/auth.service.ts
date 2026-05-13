@@ -8,6 +8,8 @@ import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
+import { AuditService } from '../audit/audit.service';
+import { UserRole } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +17,7 @@ export class AuthService {
     private prisma: PrismaService,
     private jwtService: JwtService,
     private emailService: EmailService,
+    private auditService: AuditService,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -39,6 +42,14 @@ export class AuthService {
       },
     });
 
+    await this.auditService.record({
+      action: 'USER_REGISTERED',
+      actor: { id: user.id, email: user.email, role: user.role as UserRole },
+      resourceType: 'User',
+      resourceId: user.id,
+      metadata: { email: user.email, role: user.role },
+    });
+
     const { passwordHash: _, ...result } = user;
     return result;
   }
@@ -49,14 +60,34 @@ export class AuthService {
     });
 
     if (!user || !user.passwordHash) {
+      await this.auditService.record({
+        action: 'USER_LOGIN_FAILED',
+        actor: null,
+        resourceType: 'User',
+        metadata: { email: dto.email },
+      });
       throw new UnauthorizedException('Invalid credentials');
     }
 
     const isPasswordValid = await bcrypt.compare(dto.password, user.passwordHash);
 
     if (!isPasswordValid) {
+      await this.auditService.record({
+        action: 'USER_LOGIN_FAILED',
+        actor: null,
+        resourceType: 'User',
+        resourceId: user.id,
+        metadata: { email: dto.email },
+      });
       throw new UnauthorizedException('Invalid credentials');
     }
+
+    await this.auditService.record({
+      action: 'USER_LOGIN_SUCCESS',
+      actor: { id: user.id, email: user.email, role: user.role as UserRole },
+      resourceType: 'User',
+      resourceId: user.id,
+    });
 
     const payload = { email: user.email, sub: user.id, role: user.role };
     return {
@@ -98,6 +129,13 @@ export class AuthService {
       },
     });
 
+    await this.auditService.record({
+      action: 'PASSWORD_RESET_REQUESTED',
+      actor: { id: user.id, email: user.email, role: user.role as UserRole },
+      resourceType: 'User',
+      resourceId: user.id,
+    });
+
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
     const resetUrl = `${frontendUrl}/auth/reset-password?token=${token}`;
 
@@ -131,6 +169,13 @@ export class AuthService {
         data: { used: true },
       }),
     ]);
+
+    await this.auditService.record({
+      action: 'PASSWORD_RESET_COMPLETED',
+      actor: { id: resetToken.userId, email: resetToken.user.email, role: resetToken.user.role as UserRole },
+      resourceType: 'User',
+      resourceId: resetToken.userId,
+    });
   }
 
   async getMe(userId: string) {

@@ -1,4 +1,4 @@
-import { Users, Server, Activity, Database, Zap, Shield, TrendingUp, Package, ShieldCheck, ShieldAlert, AlertTriangle, UserPlus, ShieldX } from 'lucide-react';
+import { Users, Server, Activity, Database, Zap, Shield, TrendingUp, Package, ShieldCheck, ShieldAlert, AlertTriangle, UserPlus, ShieldX, ScrollText } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
@@ -115,6 +115,21 @@ export default async function AdminDashboard() {
             <div>
               <p className="text-sm font-bold text-white">Manage Users</p>
               <p className="text-[10px] text-zinc-500 font-medium uppercase tracking-tight">Create new staff accounts</p>
+            </div>
+          </div>
+        </Link>
+
+        <Link 
+          href="/dashboard/admin/audit-logs"
+          className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 hover:border-zinc-700 transition-colors group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="h-10 w-10 rounded-lg bg-zinc-500/10 border border-zinc-500/20 flex items-center justify-center group-hover:bg-zinc-500/20 transition-colors">
+              <ScrollText className="h-5 w-5 text-zinc-400" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-white">Audit Log</p>
+              <p className="text-[10px] text-zinc-500 font-medium uppercase tracking-tight">Compliance event history</p>
             </div>
           </div>
         </Link>

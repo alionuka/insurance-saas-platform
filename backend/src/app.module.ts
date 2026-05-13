@@ -13,6 +13,7 @@ import { MlClientModule } from './ml-client/ml-client.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AdminModule } from './admin/admin.module';
 import { PaymentsModule } from './payments/payments.module';
+import { AuditModule } from './audit/audit.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { PaymentsModule } from './payments/payments.module';
     PrismaModule,
     AdminModule,
     PaymentsModule,
+    AuditModule,
   ],
   controllers: [AppController],
   providers: [AppService],
