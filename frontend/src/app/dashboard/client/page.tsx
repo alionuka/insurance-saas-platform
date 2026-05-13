@@ -1,8 +1,9 @@
-import { Shield, FileCheck, Activity, AlertCircle, TrendingUp, AlertTriangle, ShieldCheck, Calculator } from 'lucide-react';
+import { Shield, FileCheck, Activity, AlertCircle, TrendingUp, AlertTriangle, ShieldCheck, Calculator, CreditCard, CheckCircle2, XCircle } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import ClaimSubmissionForm from '@/components/ClaimSubmissionForm';
 import QuoteCalculator from '@/components/QuoteCalculator';
 import ClaimDocuments from '@/components/ClaimDocuments';
+import PolicyPaymentButton from '@/components/PolicyPaymentButton';
 import { cookies } from 'next/headers';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -40,8 +41,13 @@ async function getClientData() {
   }
 }
 
-export default async function ClientDashboard() {
+export default async function ClientDashboard({ 
+  searchParams 
+}: { 
+  searchParams: Promise<{ payment?: string; policy?: string }> 
+}) {
   const { applications, claims, policies, products } = await getClientData();
+  const { payment } = await searchParams;
 
   return (
     <div className="space-y-8">
@@ -51,6 +57,31 @@ export default async function ClientDashboard() {
           <p className="text-zinc-400 mt-1">Manage your active policies, applications, and claims.</p>
         </div>
       </div>
+
+      {/* Payment Feedback Banners */}
+      {payment === 'success' && (
+        <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+          <div className="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+            <CheckCircle2 className="h-6 w-6 text-emerald-400" />
+          </div>
+          <div>
+            <p className="text-emerald-400 font-bold uppercase text-xs tracking-wider">Payment Successful!</p>
+            <p className="text-zinc-400 text-sm mt-0.5">Your policy will be activated shortly. Refresh in a few seconds if the status hasn't updated.</p>
+          </div>
+        </div>
+      )}
+
+      {payment === 'cancelled' && (
+        <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+          <div className="h-10 w-10 rounded-full bg-amber-500/20 flex items-center justify-center">
+            <XCircle className="h-6 w-6 text-amber-400" />
+          </div>
+          <div>
+            <p className="text-amber-400 font-bold uppercase text-xs tracking-wider">Payment Cancelled</p>
+            <p className="text-zinc-400 text-sm mt-0.5">Your payment was not completed. You can try again whenever you're ready.</p>
+          </div>
+        </div>
+      )}
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -101,6 +132,16 @@ export default async function ClientDashboard() {
             {policies.length > 0 ? (
               policies.map((policy: any) => (
                 <div key={policy.id} className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-700 transition-colors">
+                  {policy.status === 'PENDING_PAYMENT' && (
+                    <div className="bg-amber-500/5 border-b border-amber-500/10 px-5 py-2.5 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-2">
+                        <CreditCard className="h-4 w-4 text-amber-400" />
+                        <p className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Action Required: Payment Pending</p>
+                      </div>
+                      <PolicyPaymentButton policyId={policy.id} amount={policy.premiumAmount} />
+                    </div>
+                  )}
+                  
                   <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex items-start gap-4">
                       <div className="h-12 w-12 rounded-xl bg-zinc-800 flex items-center justify-center border border-zinc-700 flex-shrink-0">
@@ -125,9 +166,10 @@ export default async function ClientDashboard() {
                       </div>
                       <span className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider border ${
                         policy.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
+                        policy.status === 'PENDING_PAYMENT' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
                         'bg-zinc-500/10 text-zinc-400 border-zinc-500/20'
                       }`}>
-                        {policy.status}
+                        {policy.status.replace('_', ' ')}
                       </span>
                     </div>
                   </div>
@@ -135,7 +177,7 @@ export default async function ClientDashboard() {
                   {/* Footer info */}
                   <div className="px-5 py-3 border-t border-zinc-800/50 bg-zinc-950/30 flex items-center justify-between">
                     <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-tight">
-                      Linked Application: <span className="text-zinc-400 ml-1">{policy.applicationId.substring(0, 8)}... ({policy.application?.status})</span>
+                      Linked Application: <span className="text-zinc-400 ml-1">{policy.applicationId.substring(0, 8)}...</span>
                     </p>
                     <button className="text-[10px] text-blue-400 hover:text-blue-300 font-bold uppercase tracking-tight transition-colors">
                       View Details →

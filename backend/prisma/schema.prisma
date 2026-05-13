@@ -49,9 +49,16 @@ enum FraudFlag {
 }
 
 enum PolicyStatus {
+  PENDING_PAYMENT
   ACTIVE
   EXPIRED
   CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
 }
 
 // --- Models ---
@@ -76,6 +83,7 @@ model User {
   recommendations     Recommendation[]
   passwordResetTokens PasswordResetToken[]
   uploadedDocuments   ClaimDocument[]    @relation("UploadedDocuments")
+  payments            Payment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -211,9 +219,26 @@ model Policy {
   status        PolicyStatus     @default(ACTIVE)
   startDate     DateTime
   endDate       DateTime
+  premiumAmount Float            @default(0)
 
-  claims Claim[]
+  claims   Claim[]
+  payments Payment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Payment {
+  id              String        @id @default(uuid())
+  policyId        String
+  policy          Policy        @relation(fields: [policyId], references: [id])
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  amount          Float
+  currency        String        @default("usd")
+  stripeSessionId String?       @unique
+  stripePaymentId String?       @unique
+  status          PaymentStatus @default(PENDING)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }

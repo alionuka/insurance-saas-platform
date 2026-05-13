@@ -162,9 +162,10 @@ export class ApplicationsService {
           userId: application.userId,
           productId: application.productId,
           applicationId: id,
-          status: 'ACTIVE',
+          status: 'PENDING_PAYMENT',
           startDate,
           endDate,
+          premiumAmount: application.product.basePremium * 12,
         },
       });
     }

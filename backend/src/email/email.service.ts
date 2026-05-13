@@ -188,4 +188,35 @@ export class EmailService {
       `,
     });
   }
+
+  async sendPolicyActivated(
+    to: string,
+    data: { policyNumber: string; productName: string; startDate: Date; endDate: Date; amount: number }
+  ): Promise<void> {
+    const summary = `Policy ${data.policyNumber} activated. Paid $${data.amount} for ${data.productName}`;
+    if (!this.resend) {
+      this.logger.log(`[EmailService] Policy Activated for ${to}: ${summary}`);
+      return;
+    }
+
+    const formatDate = (d: Date) => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    await this.resend.emails.send({
+      from: this.fromEmail,
+      to,
+      subject: 'Your insurance policy is now active',
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+          <h2 style="color: #6366f1;">Your policy is active</h2>
+          <p>Payment received. Your <strong>${data.productName}</strong> policy is now active.</p>
+          <div style="background: #f4f4f5; border-radius: 8px; padding: 16px; margin: 20px 0;">
+            <p style="margin: 4px 0;"><strong>Policy number:</strong> ${data.policyNumber}</p>
+            <p style="margin: 4px 0;"><strong>Coverage period:</strong> ${formatDate(data.startDate)} – ${formatDate(data.endDate)}</p>
+            <p style="margin: 4px 0;"><strong>Amount paid:</strong> $${data.amount.toFixed(2)}</p>
+          </div>
+          <p>You can now file claims under this policy from your dashboard.</p>
+        </div>
+      `,
+    });
+  }
 }
