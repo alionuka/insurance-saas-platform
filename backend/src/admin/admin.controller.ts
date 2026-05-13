@@ -1,4 +1,5 @@
 import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
 import { AdminService } from './admin.service';
@@ -13,6 +14,7 @@ import { UserRole } from '@prisma/client';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
   @Post('users')
   @Roles(UserRole.PLATFORM_ADMIN)
   createUser(@Body() dto: CreateUserDto, @CurrentUser() actor: AuthUser) {

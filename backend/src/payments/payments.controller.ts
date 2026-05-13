@@ -8,6 +8,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { SkipThrottle } from '@nestjs/throttler';
 import { PaymentsService } from './payments.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -30,6 +31,7 @@ export class PaymentsController {
     return this.paymentsService.createCheckoutSession(id, user);
   }
 
+  @SkipThrottle()
   @Post('webhooks/stripe')
   @HttpCode(HttpStatus.OK)
   async handleWebhook(
