@@ -5,12 +5,20 @@ import { PrismaService } from '../prisma/prisma.service';
 export class CompaniesService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
-    return this.prisma.company.findMany({
-      include: {
-        products: true,
-      },
-    });
+  async findAll(pagination: { limit: number; offset: number }) {
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.company.findMany({
+        include: {
+          products: true,
+        },
+        orderBy: { createdAt: 'desc' },
+        take: pagination.limit,
+        skip: pagination.offset,
+      }),
+      this.prisma.company.count(),
+    ]);
+
+    return { items, total };
   }
 
   async findOne(id: string) {

@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Query } from '@nestjs/common';
+import { PaginationDto } from '../common/dto/pagination.dto';
 import { ProductsService } from './products.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -14,15 +15,21 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  findAll() {
-    return this.productsService.findAll();
+  findAll(@Query() pagination: PaginationDto) {
+    return this.productsService.findAll({
+      limit: pagination.limit ?? 50,
+      offset: pagination.offset ?? 0,
+    });
   }
 
   @Get('my-company')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.COMPANY_ADMIN)
-  listMyCompany(@CurrentUser() user: AuthUser) {
-    return this.productsService.listMyCompany(user);
+  listMyCompany(@CurrentUser() user: AuthUser, @Query() pagination: PaginationDto) {
+    return this.productsService.listMyCompany(user, {
+      limit: pagination.limit ?? 50,
+      offset: pagination.offset ?? 0,
+    });
   }
 
   @Get(':id')

@@ -26,7 +26,8 @@ async function getCompaniesData() {
       return { companies: [], forbidden: false };
     }
 
-    const companies = await response.json();
+    const companiesJson = await response.json();
+    const companies = companiesJson.items ?? [];
     return { companies, forbidden: false };
   } catch (error) {
     return { companies: [], forbidden: false };

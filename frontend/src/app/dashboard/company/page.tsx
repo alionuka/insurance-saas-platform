@@ -38,10 +38,15 @@ async function getCompanyData() {
       return { status: 403 };
     }
 
-    const products = productsRes && productsRes.ok ? await productsRes.json() : [];
-    const applications = appsRes && appsRes.ok ? await appsRes.json() : [];
-    const claims = claimsRes && claimsRes.ok ? await claimsRes.json() : [];
-    const policies = policiesRes && policiesRes.ok ? await policiesRes.json() : [];
+    const productsJson = productsRes && productsRes.ok ? await productsRes.json() : { items: [] };
+    const appsJson = appsRes && appsRes.ok ? await appsRes.json() : { items: [] };
+    const claimsJson = claimsRes && claimsRes.ok ? await claimsRes.json() : { items: [] };
+    const policiesJson = policiesRes && policiesRes.ok ? await policiesRes.json() : { items: [] };
+
+    const products = productsJson.items ?? [];
+    const applications = appsJson.items ?? [];
+    const claims = claimsJson.items ?? [];
+    const policies = policiesJson.items ?? [];
 
     return { products, applications, claims, policies, status: 200 };
   } catch (error) {

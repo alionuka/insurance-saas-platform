@@ -29,7 +29,7 @@ export class PoliciesService {
     return policy;
   }
 
-  async findAll(user: AuthUser) {
+  async findAll(user: AuthUser, pagination: { limit: number; offset: number }) {
     let where: Prisma.PolicyWhereInput = {};
 
     if (user.role === UserRole.CUSTOMER) {
@@ -41,18 +41,26 @@ export class PoliciesService {
       where = { product: { companyId: user.companyId } };
     }
 
-    return this.prisma.policy.findMany({
-      where,
-      include: {
-        user: { select: safeUserSelect },
-        product: {
-          include: {
-            company: true,
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.policy.findMany({
+        where,
+        include: {
+          user: { select: safeUserSelect },
+          product: {
+            include: {
+              company: true,
+            },
           },
+          application: true,
         },
-        application: true,
-      },
-    });
+        orderBy: { createdAt: 'desc' },
+        take: pagination.limit,
+        skip: pagination.offset,
+      }),
+      this.prisma.policy.count({ where }),
+    ]);
+
+    return { items, total };
   }
 
   async findOne(id: string, user: AuthUser) {

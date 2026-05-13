@@ -22,7 +22,7 @@ export class ClaimsService {
     private readonly auditService: AuditService,
   ) {}
 
-  async findAll(user: AuthUser) {
+  async findAll(user: AuthUser, pagination: { limit: number; offset: number }) {
     let where: Prisma.ClaimWhereInput = {};
 
     if (user.role === UserRole.CUSTOMER) {
@@ -34,23 +34,31 @@ export class ClaimsService {
       where = { application: { product: { companyId: user.companyId } } };
     }
 
-    return this.prisma.claim.findMany({
-      where,
-      include: {
-        user: { select: safeUserSelect },
-        application: {
-          include: {
-            product: {
-              include: {
-                company: true,
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.claim.findMany({
+        where,
+        include: {
+          user: { select: safeUserSelect },
+          application: {
+            include: {
+              product: {
+                include: {
+                  company: true,
+                },
               },
             },
           },
+          policy: true,
+          fraudAssessments: true,
         },
-        policy: true,
-        fraudAssessments: true,
-      },
-    });
+        orderBy: { createdAt: 'desc' },
+        take: pagination.limit,
+        skip: pagination.offset,
+      }),
+      this.prisma.claim.count({ where }),
+    ]);
+
+    return { items, total };
   }
 
   private async _findOneOrThrow(id: string) {

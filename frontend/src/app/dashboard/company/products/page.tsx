@@ -24,7 +24,8 @@ async function getMyProducts() {
       return { products: [], status: response.status };
     }
 
-    const products = await response.json();
+    const productsJson = await response.json();
+    const products = productsJson.items ?? [];
     return { products, status: 200 };
   } catch (error) {
     return { products: [], status: 500 };

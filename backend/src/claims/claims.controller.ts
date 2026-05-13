@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Param, Patch, UseGuards, UseInterceptors, UploadedFile, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, UseGuards, UseInterceptors, UploadedFile, Delete, Query } from '@nestjs/common';
+import { PaginationDto } from '../common/dto/pagination.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ClaimsService } from './claims.service';
 import { CreateClaimDto } from './dto/create-claim.dto';
@@ -17,8 +18,11 @@ export class ClaimsController {
 
   @Get()
   @Roles(UserRole.CUSTOMER, UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
-  findAll(@CurrentUser() user: AuthUser) {
-    return this.claimsService.findAll(user);
+  findAll(@CurrentUser() user: AuthUser, @Query() pagination: PaginationDto) {
+    return this.claimsService.findAll(user, {
+      limit: pagination.limit ?? 50,
+      offset: pagination.offset ?? 0,
+    });
   }
 
   @Get(':id')

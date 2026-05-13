@@ -14,12 +14,20 @@ export class ProductsService {
     private auditService: AuditService,
   ) {}
 
-  async findAll() {
-    return this.prisma.insuranceProduct.findMany({
-      include: {
-        company: true,
-      },
-    });
+  async findAll(pagination: { limit: number; offset: number }) {
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.insuranceProduct.findMany({
+        include: {
+          company: true,
+        },
+        orderBy: { createdAt: 'desc' },
+        take: pagination.limit,
+        skip: pagination.offset,
+      }),
+      this.prisma.insuranceProduct.count(),
+    ]);
+
+    return { items, total };
   }
 
   async findOne(id: string) {
@@ -84,17 +92,27 @@ export class ProductsService {
     return product;
   }
 
-  async listMyCompany(user: AuthUser) {
+  async listMyCompany(user: AuthUser, pagination: { limit: number; offset: number }) {
     if (!user.companyId) {
       throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
     }
 
-    return this.prisma.insuranceProduct.findMany({
-      where: { companyId: user.companyId },
-      include: {
-        company: true,
-      },
-    });
+    const where = { companyId: user.companyId };
+
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.insuranceProduct.findMany({
+        where,
+        include: {
+          company: true,
+        },
+        orderBy: { createdAt: 'desc' },
+        take: pagination.limit,
+        skip: pagination.offset,
+      }),
+      this.prisma.insuranceProduct.count({ where }),
+    ]);
+
+    return { items, total };
   }
 
   async quote(productId: string, user: AuthUser) {

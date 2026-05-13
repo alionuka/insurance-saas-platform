@@ -30,10 +30,15 @@ async function getClientData() {
       fetch(`${API_URL}/products`, { cache: 'no-store' }).catch(() => null),
     ]);
 
-    const applications = appsRes && appsRes.ok ? await appsRes.json() : [];
-    const claims = claimsRes && claimsRes.ok ? await claimsRes.json() : [];
-    const policies = policiesRes && policiesRes.ok ? await policiesRes.json() : [];
-    const products = productsRes && productsRes.ok ? await productsRes.json() : [];
+    const appsJson = appsRes && appsRes.ok ? await appsRes.json() : { items: [] };
+    const claimsJson = claimsRes && claimsRes.ok ? await claimsRes.json() : { items: [] };
+    const policiesJson = policiesRes && policiesRes.ok ? await policiesRes.json() : { items: [] };
+    const productsJson = productsRes && productsRes.ok ? await productsRes.json() : { items: [] };
+
+    const applications = appsJson.items ?? [];
+    const claims = claimsJson.items ?? [];
+    const policies = policiesJson.items ?? [];
+    const products = productsJson.items ?? [];
 
     return { applications, claims, policies, products };
   } catch (error) {

@@ -1,4 +1,5 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards, Query } from '@nestjs/common';
+import { PaginationDto } from '../common/dto/pagination.dto';
 import { PoliciesService } from './policies.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -14,8 +15,11 @@ export class PoliciesController {
 
   @Get()
   @Roles(UserRole.CUSTOMER, UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
-  async findAll(@CurrentUser() user: AuthUser) {
-    return this.policiesService.findAll(user);
+  async findAll(@CurrentUser() user: AuthUser, @Query() pagination: PaginationDto) {
+    return this.policiesService.findAll(user, {
+      limit: pagination.limit ?? 50,
+      offset: pagination.offset ?? 0,
+    });
   }
 
   @Get(':id')

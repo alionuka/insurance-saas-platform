@@ -21,5 +21,6 @@ export async function getProducts(): Promise<InsuranceProduct[]> {
   if (!response.ok) {
     throw new Error('Failed to fetch products');
   }
-  return response.json();
+  const data = await response.json();
+  return data.items ?? [];
 }

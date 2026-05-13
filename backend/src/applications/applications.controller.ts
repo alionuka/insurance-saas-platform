@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Param, Patch, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, UseGuards, Query } from '@nestjs/common';
+import { PaginationDto } from '../common/dto/pagination.dto';
 import { ApplicationsService } from './applications.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationStatusDto } from './dto/update-application-status.dto';
@@ -16,8 +17,11 @@ export class ApplicationsController {
 
   @Get()
   @Roles(UserRole.CUSTOMER, UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
-  findAll(@CurrentUser() user: AuthUser) {
-    return this.applicationsService.findAll(user);
+  findAll(@CurrentUser() user: AuthUser, @Query() pagination: PaginationDto) {
+    return this.applicationsService.findAll(user, {
+      limit: pagination.limit ?? 50,
+      offset: pagination.offset ?? 0,
+    });
   }
 
   @Get(':id')

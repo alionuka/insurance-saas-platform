@@ -20,8 +20,11 @@ async function getAgentData() {
       }).catch(() => null),
     ]);
 
-    const applications = appsRes && appsRes.ok ? await appsRes.json() : [];
-    const claims = claimsRes && claimsRes.ok ? await claimsRes.json() : [];
+    const appsJson = appsRes && appsRes.ok ? await appsRes.json() : { items: [] };
+    const claimsJson = claimsRes && claimsRes.ok ? await claimsRes.json() : { items: [] };
+
+    const applications = appsJson.items ?? [];
+    const claims = claimsJson.items ?? [];
 
     return { applications, claims };
   } catch {
