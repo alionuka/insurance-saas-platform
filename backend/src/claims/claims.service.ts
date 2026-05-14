@@ -77,6 +77,7 @@ export class ClaimsService {
         },
         policy: true,
         fraudAssessments: true,
+        documents: { orderBy: { uploadedAt: 'desc' } },
       },
     });
 

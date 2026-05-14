@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { logout } from '@/lib/auth';
 import ClaimDocuments from '@/components/ClaimDocuments';
+import Link from 'next/link';
 
 /* ─── Constants ─────────────────────────────────────────────────────────────── */
 
@@ -398,24 +399,26 @@ export default function AgentWorkspace({
                     >
                     {/* Customer / Description */}
                     <td className="px-6 py-4 min-w-[250px]">
-                      <div className="flex items-start gap-2">
-                        <div className="h-8 w-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center shrink-0 mt-0.5">
-                          <User className="h-4 w-4 text-zinc-400" />
+                      <Link href={`/dashboard/agent/claims/${claim.id}`} className="block group">
+                        <div className="flex items-start gap-2 group-hover:bg-zinc-800/50 p-2 -m-2 rounded-lg transition-colors">
+                          <div className="h-8 w-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center shrink-0 mt-0.5 group-hover:border-zinc-600 transition-colors">
+                            <User className="h-4 w-4 text-zinc-400 group-hover:text-zinc-300" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium text-white group-hover:text-indigo-400 transition-colors">
+                              {claim.user
+                                ? `${claim.user.firstName} ${claim.user.lastName}`
+                                : `#${claim.id.substring(0, 8)}`}
+                            </div>
+                            <div className="text-[11px] text-zinc-400 mt-1 line-clamp-2 italic leading-relaxed">
+                              "{claim.description}"
+                            </div>
+                            <div className="text-[10px] text-zinc-500 mt-1 uppercase tracking-tighter">
+                              Filed: {formatDate(claim.createdAt)}
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <div className="text-sm font-medium text-white">
-                            {claim.user
-                              ? `${claim.user.firstName} ${claim.user.lastName}`
-                              : `#${claim.id.substring(0, 8)}`}
-                          </div>
-                          <div className="text-[11px] text-zinc-400 mt-1 line-clamp-2 italic leading-relaxed">
-                            "{claim.description}"
-                          </div>
-                          <div className="text-[10px] text-zinc-500 mt-1 uppercase tracking-tighter">
-                            Filed: {formatDate(claim.createdAt)}
-                          </div>
-                        </div>
-                      </div>
+                      </Link>
                     </td>
 
                     {/* Policy / Product */}

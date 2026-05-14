@@ -295,12 +295,13 @@ export default async function ClientDashboard({
               claims.map((claim: any) => {
                 const fraud = claim.fraudAssessments?.[0];
                 return (
-                  <div key={claim.id} className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-700 transition-colors">
-                    <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <div className="flex items-start gap-4">
-                        <div className="h-12 w-12 rounded-xl bg-zinc-800 flex items-center justify-center border border-zinc-700 flex-shrink-0">
-                          <Activity className="h-6 w-6 text-emerald-400" />
-                        </div>
+                  <Link key={claim.id} href={`/dashboard/client/claims/${claim.id}`} className="block group">
+                    <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden group-hover:border-zinc-700 transition-colors">
+                      <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div className="flex items-start gap-4">
+                          <div className="h-12 w-12 rounded-xl bg-zinc-800 flex items-center justify-center border border-zinc-700 flex-shrink-0">
+                            <Activity className="h-6 w-6 text-emerald-400" />
+                          </div>
                         <div className="flex-grow">
                           <h3 className="font-bold text-white text-lg">{claim.application?.product?.name || 'Claim'}</h3>
                           <p className="text-sm text-zinc-300 mt-1 font-medium">{claim.description}</p>
@@ -351,7 +352,7 @@ export default async function ClientDashboard({
                     )}
 
                     {/* Documents Section */}
-                    <div className="px-5 pb-4 border-t border-zinc-800/50">
+                    <div className="px-5 pb-4 border-t border-zinc-800/50" onClick={(e) => e.stopPropagation()}>
                       <details className="group">
                         <summary className="list-none cursor-pointer py-2 flex items-center gap-2 text-[10px] text-zinc-500 hover:text-indigo-400 uppercase font-bold tracking-tight transition-colors">
                           <span className="group-open:rotate-90 transition-transform">▶</span>
@@ -363,6 +364,7 @@ export default async function ClientDashboard({
                       </details>
                     </div>
                   </div>
+                  </Link>
                 );
               })
             ) : (
