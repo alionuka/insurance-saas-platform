@@ -4,6 +4,7 @@ import ClaimSubmissionForm from '@/components/ClaimSubmissionForm';
 import QuoteCalculator from '@/components/QuoteCalculator';
 import ClaimDocuments from '@/components/ClaimDocuments';
 import PolicyPaymentButton from '@/components/PolicyPaymentButton';
+import StopClickPropagation from '@/components/StopClickPropagation';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 
@@ -145,9 +146,9 @@ export default async function ClientDashboard({
                           <CreditCard className="h-4 w-4 text-amber-400" />
                           <p className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Action Required: Payment Pending</p>
                         </div>
-                        <div onClick={(e) => e.stopPropagation()}>
+                        <StopClickPropagation>
                           <PolicyPaymentButton policyId={policy.id} amount={policy.premiumAmount} />
-                        </div>
+                        </StopClickPropagation>
                       </div>
                     )}
                     
@@ -352,7 +353,8 @@ export default async function ClientDashboard({
                     )}
 
                     {/* Documents Section */}
-                    <div className="px-5 pb-4 border-t border-zinc-800/50" onClick={(e) => e.stopPropagation()}>
+                    <StopClickPropagation>
+                    <div className="px-5 pb-4 border-t border-zinc-800/50">
                       <details className="group">
                         <summary className="list-none cursor-pointer py-2 flex items-center gap-2 text-[10px] text-zinc-500 hover:text-indigo-400 uppercase font-bold tracking-tight transition-colors">
                           <span className="group-open:rotate-90 transition-transform">▶</span>
@@ -363,6 +365,7 @@ export default async function ClientDashboard({
                         </div>
                       </details>
                     </div>
+                    </StopClickPropagation>
                   </div>
                   </Link>
                 );
