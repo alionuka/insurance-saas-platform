@@ -19,6 +19,16 @@ export class PoliciesService {
           },
         },
         application: true,
+        payments: {
+          orderBy: { createdAt: 'desc' },
+        },
+        claims: {
+          orderBy: { createdAt: 'desc' },
+          include: {
+            fraudAssessments: true,
+            documents: { orderBy: { uploadedAt: 'desc' } },
+          },
+        },
       },
     });
 
