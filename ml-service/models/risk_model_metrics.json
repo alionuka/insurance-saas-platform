@@ -1,0 +1,51 @@
+{
+  "best_model": "Logistic Regression",
+  "comparison": {
+    "Logistic Regression": {
+      "model": "Logistic Regression",
+      "precision": 0.3606102635228849,
+      "recall": 0.6896551724137931,
+      "f1": 0.47358834244080145,
+      "roc_auc": 0.7737447926115145
+    },
+    "Random Forest": {
+      "model": "Random Forest",
+      "precision": 0.4307692307692308,
+      "recall": 0.519893899204244,
+      "f1": 0.47115384615384615,
+      "roc_auc": 0.7597745276373615
+    },
+    "Gradient Boosting": {
+      "model": "Gradient Boosting",
+      "precision": 0.3996447602131439,
+      "recall": 0.596816976127321,
+      "f1": 0.4787234042553192,
+      "roc_auc": 0.7593406126454759
+    }
+  },
+  "best_confusion_matrix": [
+    [
+      1162,
+      461
+    ],
+    [
+      117,
+      260
+    ]
+  ],
+  "feature_set": {
+    "numeric": [
+      "age",
+      "annual_income",
+      "credit_score",
+      "years_customer",
+      "prior_claims"
+    ],
+    "categorical": [
+      "region"
+    ]
+  },
+  "n_train": 8000,
+  "n_test": 2000,
+  "positive_class_rate": 0.1886
+}
