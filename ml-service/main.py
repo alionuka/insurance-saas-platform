@@ -2,18 +2,19 @@
 Insurance SaaS ML Service.
 
 FastAPI application exposing risk prediction, fraud detection, and product
-recommendation endpoints.
+recommendation endpoints. All three are backed by trained scikit-learn
+models loaded from disk at startup.
 
-  - Risk prediction: trained scikit-learn classifier (logistic regression
-    over standardized numeric + one-hot region features).
-  - Fraud detection: trained scikit-learn classifier combining numeric
-    claim features with TF-IDF features extracted from the claim description
-    (bag-of-words + bigrams).
-  - Recommendations: rule-based stub (future ML integration planned).
+  - Risk prediction: logistic regression over standardized numeric +
+    one-hot encoded categorical features.
+  - Fraud detection: logistic regression combining numeric claim features
+    with TF-IDF text features (bag-of-words + bigrams) on the description.
+  - Recommendations: content-based filtering — TF-IDF over the product
+    catalog with cosine similarity ranking against a customer interest
+    query derived from demographics and life events.
 
-Models are loaded from disk at startup. If a model file is missing, the
-endpoint falls back to a simple rule-based prediction with a clear marker
-in the response explanation.
+If a model file is missing, the endpoint falls back to a simple rule-based
+prediction with a clear marker in the response explanation.
 """
 
 from contextlib import asynccontextmanager
@@ -30,6 +31,7 @@ from pydantic import BaseModel, Field
 
 RISK_MODEL_PATH = Path(__file__).parent / "models" / "risk_model.joblib"
 FRAUD_MODEL_PATH = Path(__file__).parent / "models" / "fraud_model.joblib"
+RECS_MODEL_PATH = Path(__file__).parent / "models" / "recommendations_model.joblib"
 
 # Feature columns the trained risk pipeline expects.
 RISK_NUMERIC_FEATURES = ["age", "annual_income", "credit_score", "years_customer", "prior_claims"]
@@ -62,6 +64,7 @@ async def lifespan(app: FastAPI):
     """Load all models once at startup; release on shutdown."""
     _try_load("risk", RISK_MODEL_PATH)
     _try_load("fraud", FRAUD_MODEL_PATH)
+    _try_load("recommendations", RECS_MODEL_PATH)
     yield
     ml_models.clear()
 
@@ -121,10 +124,20 @@ class RecommendationRequest(BaseModel):
     clientId: str
     age: int
     lifeEvents: List[str]
+    annualIncome: Optional[float] = Field(default=50000, ge=0, description="Annual income in USD; default $50k if not provided")
+    topK: Optional[int] = Field(default=3, ge=1, le=10, description="Number of recommendations to return")
+
+
+class RecommendedProduct(BaseModel):
+    productId: str
+    name: str
+    type: str
+    similarity: float = Field(..., description="Cosine similarity score, 0..1, higher = better match")
 
 
 class RecommendationResponse(BaseModel):
-    recommendedProducts: List[str]
+    recommendedProducts: List[str]  # backward-compat: list of product names
+    rankedProducts: List[RecommendedProduct]
     explanation: str
 
 
@@ -192,9 +205,10 @@ def health_check():
     return {
         "status": "ok",
         "service": "ml-service",
-        "version": "0.3.0",
+        "version": "0.4.0",
         "risk_model_loaded": ml_models.get("risk") is not None,
         "fraud_model_loaded": ml_models.get("fraud") is not None,
+        "recommendations_model_loaded": ml_models.get("recommendations") is not None,
     }
 
 
@@ -305,26 +319,99 @@ def detect_fraud(request: FraudRequest):
     return FraudResponse(fraudScore=score, flag=flag, explanation=explanation)
 
 
-@app.post("/recommendations", response_model=RecommendationResponse)
-def get_recommendations(request: RecommendationRequest):
-    # Rule-based stub.
-    products = ["Basic Health Insurance"]
+def _build_recs_query(age: int, annual_income: float, life_events: List[str]) -> str:
+    """
+    Translate a customer profile into the same TF-IDF query string the
+    recommendations training script uses. Kept in sync with
+    training/train_recommendations_model.py:build_query_keywords().
+    """
+    parts: List[str] = []
 
+    if age < 30:
+        parts.extend(["young", "affordable", "basic"])
+    if 30 <= age < 50:
+        parts.append("comprehensive")
+    if age >= 50:
+        parts.extend(["retirement", "security"])
+
+    if annual_income < 35000:
+        parts.extend(["affordable", "budget"])
+    if annual_income > 100000:
+        parts.extend(["premium", "luxury"])
+
+    def boost(*keywords: str):
+        for kw in keywords:
+            parts.extend([kw] * 3)
+
+    for event in life_events or []:
+        ev = event.lower()
+        if ev in ("new_car", "vehicle"):
+            boost("auto", "vehicle", "driving")
+        if ev in ("marriage", "child", "children"):
+            boost("family", "dependents", "health", "life")
+        if ev in ("new_home", "homeowner", "house"):
+            boost("home", "property", "homeowner", "house", "residence")
+        if ev in ("retirement_planning", "retirement"):
+            boost("retirement", "legacy", "estate", "whole", "life")
+        if ev in ("rental", "apartment", "renter"):
+            boost("renter", "apartment", "tenant")
+
+    if not parts:
+        parts = ["basic", "essential", "coverage"]
+
+    return " ".join(parts)
+
+
+def _rule_based_recs_fallback(request: RecommendationRequest) -> RecommendationResponse:
+    """Used only when the trained recommendations model is missing on disk."""
+    products = ["Basic Health Insurance"]
     if "marriage" in request.lifeEvents or "child" in request.lifeEvents:
         products.extend(["Family Health Plan", "Life Insurance"])
-
     if request.age > 45:
         products.append("Retirement Security Plan")
-
     if "new_car" in request.lifeEvents:
         products.append("Comprehensive Auto Insurance")
+    return RecommendationResponse(
+        recommendedProducts=list(set(products)),
+        rankedProducts=[],
+        explanation="Rule-based fallback (trained recommender model not available).",
+    )
 
+
+@app.post("/recommendations", response_model=RecommendationResponse)
+def get_recommendations(request: RecommendationRequest):
+    bundle = ml_models.get("recommendations")
+
+    if bundle is None:
+        return _rule_based_recs_fallback(request)
+
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    query = _build_recs_query(request.age, request.annualIncome or 50000, request.lifeEvents)
+    query_vec = bundle["vectorizer"].transform([query])
+    similarities = cosine_similarity(query_vec, bundle["product_matrix"])[0]
+    ranked_idx = np.argsort(similarities)[::-1][: request.topK]
+
+    products = bundle["products"]
+    ranked_products = [
+        RecommendedProduct(
+            productId=products[i]["product_id"],
+            name=products[i]["name"],
+            type=products[i]["type"],
+            similarity=round(float(similarities[i]), 3),
+        )
+        for i in ranked_idx
+    ]
+
+    top_types = list(dict.fromkeys(rp.type for rp in ranked_products))  # preserve order, dedupe
     explanation = (
-        f"Recommended {len(products)} products based on age {request.age} "
-        f"and reported life events."
+        f"Content-based ranking over {len(products)} catalog products using "
+        f"TF-IDF + cosine similarity. Top match: {ranked_products[0].name} "
+        f"(similarity {ranked_products[0].similarity:.2f}). Recommended product types: {', '.join(top_types)}."
     )
 
     return RecommendationResponse(
-        recommendedProducts=list(set(products)),
+        recommendedProducts=[rp.name for rp in ranked_products],
+        rankedProducts=ranked_products,
         explanation=explanation,
     )

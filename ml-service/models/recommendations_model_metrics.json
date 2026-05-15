@@ -1,0 +1,139 @@
+{
+  "approach": "Content-based filtering with TF-IDF + cosine similarity",
+  "n_products_in_catalog": 8,
+  "n_product_types": 4,
+  "tfidf_vocabulary_size": 200,
+  "tfidf_max_features": 200,
+  "tfidf_ngram_range": [
+    1,
+    2
+  ],
+  "demographic_profile_match_accuracy": 1.0,
+  "profile_results": {
+    "young_low_income": {
+      "query": "young affordable basic affordable budget",
+      "top_3": [
+        {
+          "product_id": "auto-basic",
+          "name": "SafeDrive Basic",
+          "type": "AUTO",
+          "similarity": 0.314
+        },
+        {
+          "product_id": "health-basic",
+          "name": "Essential Health Plan",
+          "type": "HEALTH",
+          "similarity": 0.18
+        },
+        {
+          "product_id": "property-renter",
+          "name": "RentSafe Renters Insurance",
+          "type": "PROPERTY",
+          "similarity": 0.123
+        }
+      ],
+      "expected_top_type": "AUTO",
+      "matched_expectation": true
+    },
+    "young_with_car": {
+      "query": "young affordable basic auto auto auto vehicle vehicle vehicle driving driving driving",
+      "top_3": [
+        {
+          "product_id": "auto-basic",
+          "name": "SafeDrive Basic",
+          "type": "AUTO",
+          "similarity": 0.306
+        },
+        {
+          "product_id": "auto-premium",
+          "name": "SafeDrive Premium Plus",
+          "type": "AUTO",
+          "similarity": 0.127
+        },
+        {
+          "product_id": "health-basic",
+          "name": "Essential Health Plan",
+          "type": "HEALTH",
+          "similarity": 0.077
+        }
+      ],
+      "expected_top_type": "AUTO",
+      "matched_expectation": true
+    },
+    "family_with_children": {
+      "query": "comprehensive family family family dependents dependents dependents health health health life life life family family family dependents dependents dependents health health health life life life",
+      "top_3": [
+        {
+          "product_id": "health-family",
+          "name": "Family Comprehensive Health",
+          "type": "HEALTH",
+          "similarity": 0.433
+        },
+        {
+          "product_id": "life-whole",
+          "name": "LegacyShield Whole Life",
+          "type": "LIFE",
+          "similarity": 0.26
+        },
+        {
+          "product_id": "health-basic",
+          "name": "Essential Health Plan",
+          "type": "HEALTH",
+          "similarity": 0.249
+        }
+      ],
+      "expected_top_type": "HEALTH",
+      "matched_expectation": true
+    },
+    "high_income_homeowner": {
+      "query": "comprehensive premium luxury home home home property property property homeowner homeowner homeowner house house house residence residence residence",
+      "top_3": [
+        {
+          "product_id": "property-home",
+          "name": "HomeShield Homeowners",
+          "type": "PROPERTY",
+          "similarity": 0.42
+        },
+        {
+          "product_id": "property-renter",
+          "name": "RentSafe Renters Insurance",
+          "type": "PROPERTY",
+          "similarity": 0.087
+        },
+        {
+          "product_id": "auto-premium",
+          "name": "SafeDrive Premium Plus",
+          "type": "AUTO",
+          "similarity": 0.073
+        }
+      ],
+      "expected_top_type": "PROPERTY",
+      "matched_expectation": true
+    },
+    "near_retirement": {
+      "query": "retirement security retirement retirement retirement legacy legacy legacy estate estate estate whole whole whole life life life",
+      "top_3": [
+        {
+          "product_id": "life-whole",
+          "name": "LegacyShield Whole Life",
+          "type": "LIFE",
+          "similarity": 0.481
+        },
+        {
+          "product_id": "life-term",
+          "name": "SecureFuture Term Life",
+          "type": "LIFE",
+          "similarity": 0.199
+        },
+        {
+          "product_id": "property-home",
+          "name": "HomeShield Homeowners",
+          "type": "PROPERTY",
+          "similarity": 0.048
+        }
+      ],
+      "expected_top_type": "LIFE",
+      "matched_expectation": true
+    }
+  }
+}

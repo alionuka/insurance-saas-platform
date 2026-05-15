@@ -264,19 +264,129 @@ than a manual review.
 
 ---
 
-## 5. Recommendations
+## 5. Product recommendations
 
-The product recommendation endpoint remains rule-based in the current
-version. A future iteration would replace it with a content-based filter
-using TF-IDF on product descriptions and cosine similarity to a customer
-profile vector, or with collaborative filtering once enough
-customer-product interaction data exists.
+### 5.1 Approach
 
-This is documented as **future work** rather than a current limitation
-because the use case (suggesting products on a marketing surface) tolerates
-a rule-based heuristic far better than risk pricing or fraud
-adjudication, and a meaningful collaborative-filtering model requires
-real interaction data we do not yet have.
+The recommendation endpoint implements **content-based filtering** using
+TF-IDF vectorization of the product catalog and **cosine similarity**
+ranking against a query vector derived from a customer's demographic
+profile and reported life events. This is the canonical content-based
+recommender pattern (Aggarwal 2016, *Recommender Systems: The Textbook*,
+ch. 4). It was chosen over collaborative filtering because:
+
+  - Collaborative filtering requires a sufficiently dense
+    user-item interaction matrix, which a newly launched platform does
+    not have. Content-based filtering works from the first session.
+  - The cold-start problem (new customer or new product) is solved
+    natively — recommendations require only the product description and
+    the customer profile.
+  - The catalog is small (8 products) so cosine similarity runs in
+    constant time per query.
+  - The output is interpretable: matched terms can be surfaced as part
+    of the explanation, which is required by the platform's UI.
+
+### 5.2 Catalog
+
+The product catalog (`data/products_catalog.csv`) contains **8 synthetic
+insurance products** spanning the four product types declared in the
+Prisma schema:
+
+| Type | Products |
+| --- | --- |
+| AUTO | SafeDrive Basic, SafeDrive Premium Plus |
+| HEALTH | Essential Health Plan, Family Comprehensive Health |
+| LIFE | SecureFuture Term Life, LegacyShield Whole Life |
+| PROPERTY | RentSafe Renters Insurance, HomeShield Homeowners |
+
+Each entry carries a `product_id`, `name`, `type`, and an extended free-text
+`description` written to include domain-specific keywords (e.g.
+*homeowners*, *retirement*, *family*, *premium*) so that TF-IDF matching
+discriminates effectively across types.
+
+### 5.3 Feature engineering
+
+Per product, the feature text concatenates `name + type + description`. A
+single `TfidfVectorizer` is fit over the eight concatenated documents
+with the following parameters:
+
+  - `max_features=200`
+  - `ngram_range=(1, 2)`
+  - `stop_words="english"`
+  - `min_df=1` (small catalog — keep all terms)
+
+This produces an 8 × 200 sparse term-document matrix.
+
+At inference, the customer profile is translated to a free-text query
+string by `build_query_keywords(age, income, life_events)`. The mapping
+is deterministic and documented in
+`training/train_recommendations_model.py`:
+
+  - **Age brackets** contribute mild background terms (e.g. `young
+    affordable basic` for under-30, `comprehensive` for 30–50,
+    `retirement security` for 50+).
+  - **Income brackets** add `affordable budget` for under-$35k or
+    `premium luxury` for over-$100k.
+  - **Life events** are the strong signal: each event contributes a
+    fixed set of three keywords, repeated three times so that TF-IDF
+    term frequency dominates the weaker age/income background. For
+    example, `new_home` adds `home property homeowner house residence`
+    each tripled.
+
+The query string is then transformed by the same `TfidfVectorizer` and
+cosine similarity is computed against every row of the product matrix.
+The top-K (default K = 3) products by similarity are returned, together
+with an explanation citing the highest-similarity match and the set of
+recommended product types.
+
+### 5.4 Evaluation
+
+The model is evaluated on a panel of five canonical demographic profiles
+designed to span the catalog's four product types. Each profile has a
+manually annotated *expected top-1 type* derived from domain reasoning
+(e.g. a 22-year-old with a $28k income should be top-recommended an AUTO
+product; a 58-year-old planning retirement should see LIFE).
+
+| Profile | Age | Income | Life events | Expected | Top-1 |
+| --- | --- | --- | --- | --- | --- |
+| young_low_income | 22 | 28 000 | – | AUTO | SafeDrive Basic ✓ |
+| young_with_car | 26 | 45 000 | new_car | AUTO | SafeDrive Basic ✓ |
+| family_with_children | 35 | 75 000 | marriage, child | HEALTH | Family Comprehensive Health ✓ |
+| high_income_homeowner | 48 | 150 000 | new_home | PROPERTY | HomeShield Homeowners ✓ |
+| near_retirement | 58 | 95 000 | retirement_planning | LIFE | LegacyShield Whole Life ✓ |
+
+**Profile-match accuracy: 5/5 = 100%.** Reported similarity scores
+range 0.31–0.49, well above the noise floor of 0.05–0.10 produced by
+unrelated profile-product pairings.
+
+This metric is an offline sanity check rather than a fully scientific
+evaluation: the panel is small and was authored alongside the keyword
+mapping. A more rigorous evaluation would require a labelled hold-out of
+real customer–product preferences, which is on the roadmap once the
+platform accumulates production interaction data.
+
+### 5.5 Discussion
+
+Content-based filtering is well-suited to this stage of the platform's
+lifecycle. Two specific properties matter:
+
+  - **Determinism and explainability.** The top-K ranking is reproducible
+    and the matched terms can be surfaced in the response. For an
+    insurance product, a customer rejecting a recommendation can be
+    given a concrete reason ("we suggested *HomeShield Homeowners*
+    because you reported a new home"), which is harder to provide with
+    matrix-factorization recommenders that operate on latent factors.
+  - **No cold-start gap.** Both new customers and new products are
+    handled — the customer's first session produces real recommendations
+    and a newly added product becomes available for ranking immediately
+    after the catalog is re-vectorized at next service start.
+
+The main limitation is that the recommender does not yet learn from
+behaviour. A customer who dismisses health products and applies only for
+auto policies still receives the same demographic-driven ranking. A
+hybrid model that blends content similarity with implicit feedback
+counts (applications, clicks) is the natural next iteration once
+production data exists. This is recorded in §8 Future work.
 
 ---
 
@@ -357,8 +467,10 @@ In rough priority order:
    public source like the Texas Department of Insurance fraud reports).
 2. Add SHAP-based per-prediction explanations and surface them in the
    admin and agent dashboards.
-3. Implement a collaborative-filtering recommendation model, replacing
-   the current rule-based stub.
+3. Extend the recommender from pure content-based to a hybrid model that
+   blends cosine similarity with implicit-feedback signals (applications,
+   policy purchases, claim history) once enough production interaction
+   data accumulates.
 4. Add periodic retraining triggered by drift detection on incoming
    production traffic.
 5. Replace the joblib model files with a model registry (e.g. MLflow)
@@ -379,6 +491,7 @@ python training/generate_risk_dataset.py     # writes data/risk_dataset.csv
 python training/train_risk_model.py          # writes models/risk_model.joblib + metrics + plots
 python training/generate_fraud_dataset.py    # writes data/fraud_dataset.csv
 python training/train_fraud_model.py         # writes models/fraud_model.joblib + metrics + plots
+python training/train_recommendations_model.py  # writes models/recommendations_model.joblib + metrics
 ```
 
 All scripts use a fixed random seed (`42`). Re-running them on any
@@ -402,18 +515,22 @@ matplotlib>=3.7.0
 ```
 ml-service/
 ├── data/
-│   ├── risk_dataset.csv          (10 000 rows, 7 columns)
-│   └── fraud_dataset.csv         (5 000 rows, 7 columns)
+│   ├── risk_dataset.csv               (10 000 rows, 7 columns)
+│   ├── fraud_dataset.csv              (5 000 rows, 7 columns)
+│   └── products_catalog.csv           (8 products, 4 columns)
 ├── models/
-│   ├── risk_model.joblib         (sklearn Pipeline, ~30 KB)
+│   ├── risk_model.joblib              (sklearn Pipeline, ~30 KB)
 │   ├── risk_model_metrics.json
-│   ├── fraud_model.joblib        (sklearn Pipeline, ~120 KB)
-│   └── fraud_model_metrics.json
+│   ├── fraud_model.joblib             (sklearn Pipeline, ~120 KB)
+│   ├── fraud_model_metrics.json
+│   ├── recommendations_model.joblib   (TfidfVectorizer + product matrix + metadata)
+│   └── recommendations_model_metrics.json
 └── training/
     ├── generate_risk_dataset.py
     ├── train_risk_model.py
     ├── generate_fraud_dataset.py
     ├── train_fraud_model.py
+    ├── train_recommendations_model.py
     └── plots/
         ├── risk_roc_curves.png
         ├── risk_confusion_matrix.png
