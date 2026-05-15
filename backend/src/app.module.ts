@@ -16,6 +16,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AdminModule } from './admin/admin.module';
 import { PaymentsModule } from './payments/payments.module';
 import { AuditModule } from './audit/audit.module';
+import { RecommendationsModule } from './recommendations/recommendations.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { AuditModule } from './audit/audit.module';
     AdminModule,
     PaymentsModule,
     AuditModule,
+    RecommendationsModule,
     ThrottlerModule.forRoot([
       { name: 'default', ttl: 60000, limit: 100 },
     ]),

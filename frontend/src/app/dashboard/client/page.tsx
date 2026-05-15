@@ -2,6 +2,7 @@ import { Shield, FileCheck, Activity, AlertCircle, TrendingUp, AlertTriangle, Sh
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import ClaimSubmissionForm from '@/components/ClaimSubmissionForm';
 import QuoteCalculator from '@/components/QuoteCalculator';
+import RecommendedProducts from '@/components/RecommendedProducts';
 import ClaimDocuments from '@/components/ClaimDocuments';
 import PolicyPaymentButton from '@/components/PolicyPaymentButton';
 import StopClickPropagation from '@/components/StopClickPropagation';
@@ -127,6 +128,9 @@ export default async function ClientDashboard({
 
         {/* Personalized Quote Calculator */}
         <QuoteCalculator products={products} />
+
+        {/* ML-driven Product Recommendations */}
+        <RecommendedProducts />
 
         {/* My Policies Section */}
         <section>
