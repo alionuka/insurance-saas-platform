@@ -1,0 +1,140 @@
+import { cookies } from 'next/headers';
+import Link from 'next/link';
+import { Activity, TrendingUp, AlertCircle, AlertTriangle } from 'lucide-react';
+import { formatDate, formatCurrency } from '@/lib/formatDate';
+import ClaimSubmissionForm from '@/components/ClaimSubmissionForm';
+import ClaimDocuments from '@/components/ClaimDocuments';
+import StopClickPropagation from '@/components/StopClickPropagation';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
+async function getClaimsAndPolicies() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('access_token')?.value ?? '';
+    const authHeader: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+
+    const [claimsRes, policiesRes] = await Promise.all([
+      fetch(`${API_URL}/claims`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
+      fetch(`${API_URL}/policies`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
+    ]);
+
+    const claimsJson = claimsRes && claimsRes.ok ? await claimsRes.json() : { items: [] };
+    const policiesJson = policiesRes && policiesRes.ok ? await policiesRes.json() : { items: [] };
+
+    return {
+      claims: claimsJson.items ?? [],
+      policies: policiesJson.items ?? [],
+    };
+  } catch (error) {
+    return { claims: [], policies: [] };
+  }
+}
+
+export default async function ClientClaimsPage() {
+  const { claims, policies } = await getClaimsAndPolicies();
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight text-white">Your Claims</h1>
+        <p className="text-zinc-400 mt-1 text-sm">File a new claim or track existing ones.</p>
+      </div>
+
+      <ClaimSubmissionForm policies={policies} />
+
+      <div className="grid gap-4 mt-8">
+        {claims.length > 0 ? (
+          claims.map((claim: any) => {
+            const fraud = claim.fraudAssessments?.[0];
+            return (
+              <Link key={claim.id} href={`/dashboard/client/claims/${claim.id}`} className="block group">
+                <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden group-hover:border-zinc-700 transition-colors">
+                  <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex items-start gap-4">
+                      <div className="h-12 w-12 rounded-xl bg-zinc-800 flex items-center justify-center border border-zinc-700 flex-shrink-0">
+                        <Activity className="h-6 w-6 text-emerald-400" />
+                      </div>
+                    <div className="flex-grow">
+                      <h3 className="font-bold text-white text-lg">{claim.application?.product?.name || 'Claim'}</h3>
+                      <p className="text-sm text-zinc-300 mt-1 font-medium">{claim.description}</p>
+                      <p className="text-xs text-zinc-500 mt-1 italic">Claim ID: {claim.id.substring(0, 8)} • Amount: {formatCurrency(claim.amount)} • Filed: {formatDate(claim.createdAt)}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                      <span className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider border ${
+                      claim.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
+                      claim.status === 'DENIED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 
+                      'bg-zinc-500/10 text-zinc-400 border-zinc-500/20'
+                    }`}>
+                      {claim.status}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Fraud Assessment Info */}
+                {fraud && (
+                  <div className="px-5 pb-5 pt-0 border-t border-zinc-800/50 bg-zinc-950/30">
+                    <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <div className="md:col-span-1 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
+                        <div className="flex items-center gap-2 mb-1">
+                          <TrendingUp className="h-3 w-3 text-zinc-500" />
+                          <span className="text-[10px] text-zinc-500 uppercase font-bold">Fraud Score</span>
+                        </div>
+                        <p className="text-lg font-mono font-bold text-white">{fraud.fraudScore.toFixed(1)}<span className="text-xs text-zinc-500 ml-1">/ 100</span></p>
+                      </div>
+                      <div className="md:col-span-1 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
+                        <div className="flex items-center gap-2 mb-1">
+                          <AlertCircle className="h-3 w-3 text-zinc-500" />
+                          <span className="text-[10px] text-zinc-500 uppercase font-bold">Fraud Flag</span>
+                        </div>
+                        <p className={`text-lg font-bold ${
+                          fraud.flag === 'NORMAL' ? 'text-emerald-400' : 'text-rose-400 animate-pulse'
+                        }`}>{fraud.flag}</p>
+                      </div>
+                      <div className="md:col-span-2 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
+                        <div className="flex items-center gap-2 mb-1">
+                          <AlertTriangle className="h-3 w-3 text-zinc-500" />
+                          <span className="text-[10px] text-zinc-500 uppercase font-bold">ML Assessment</span>
+                        </div>
+                        <p className="text-xs text-zinc-400 italic leading-relaxed">"{fraud.explanation}"</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Documents Section */}
+                <StopClickPropagation>
+                <div className="px-5 pb-4 border-t border-zinc-800/50">
+                  <details className="group">
+                    <summary className="list-none cursor-pointer py-2 flex items-center gap-2 text-[10px] text-zinc-500 hover:text-indigo-400 uppercase font-bold tracking-tight transition-colors">
+                      <span className="group-open:rotate-90 transition-transform">▶</span>
+                      Supporting Documents
+                    </summary>
+                    <div className="pt-1">
+                      <ClaimDocuments claimId={claim.id} canUpload={true} />
+                    </div>
+                  </details>
+                </div>
+                </StopClickPropagation>
+              </div>
+              </Link>
+            );
+          })
+        ) : (
+          <div className="bg-zinc-900/50 border border-zinc-800 border-dashed rounded-xl p-12 text-center">
+            <Activity className="h-12 w-12 text-zinc-700 mx-auto mb-4" />
+            <p className="text-zinc-500">No claims yet.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
