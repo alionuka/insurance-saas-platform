@@ -229,7 +229,7 @@ def predict_risk(request: RiskRequest):
             "prior_claims": request.priorClaims,
             "region": request.region,
         }],
-        columns=NUMERIC_FEATURES + CATEGORICAL_FEATURES,
+        columns=RISK_NUMERIC_FEATURES + RISK_CATEGORICAL_FEATURES,
     )
 
     try:

@@ -1,43 +1,137 @@
 {
-  "best_label": "[Numeric + TF-IDF] Logistic Regression",
+  "methodology": {
+    "cv_strategy": "StratifiedKFold(n_splits=5, shuffle=True)",
+    "scoring": "roc_auc",
+    "hyperparameter_search": "GridSearchCV (refit on full training fold)",
+    "best_pipeline_selection_criterion": "highest mean cross-validated ROC-AUC",
+    "ablation_design": "Two configurations compared (Numeric only vs Numeric + TF-IDF) to isolate the contribution of the text channel."
+  },
+  "best_pipeline": "[Numeric + TF-IDF] Logistic Regression",
   "best_model": "Logistic Regression",
   "best_config": "Numeric + TF-IDF",
-  "comparison": {
+  "best_params": {
+    "C": 0.1,
+    "penalty": "l2",
+    "solver": "lbfgs"
+  },
+  "cv_summary": {
+    "[Numeric only] Logistic Regression": {
+      "cv_mean_roc_auc": 0.6050979185294965,
+      "cv_std_roc_auc": 0.0191840454728027,
+      "cv_scores_per_fold": [
+        0.5880235910384202,
+        0.5825780558120254,
+        0.6367359094631821,
+        0.6069726751544933,
+        0.6111793611793612
+      ],
+      "best_params": {
+        "C": 0.1,
+        "penalty": "l2",
+        "solver": "lbfgs"
+      }
+    },
+    "[Numeric only] Random Forest": {
+      "cv_mean_roc_auc": 0.5583146263487865,
+      "cv_std_roc_auc": 0.018574723298390217,
+      "cv_scores_per_fold": [
+        0.5490098170375535,
+        0.5382412240206516,
+        0.5631375176829723,
+        0.5492517310699129,
+        0.5919328419328419
+      ],
+      "best_params": {
+        "max_depth": 10,
+        "min_samples_leaf": 5,
+        "n_estimators": 300
+      }
+    },
+    "[Numeric only] Gradient Boosting": {
+      "cv_mean_roc_auc": 0.5814876902029448,
+      "cv_std_roc_auc": 0.011291293355642789,
+      "cv_scores_per_fold": [
+        0.5926871549433778,
+        0.5753424657534246,
+        0.5970422902241084,
+        0.5743429379793016,
+        0.5680236021145113
+      ],
+      "best_params": {
+        "learning_rate": 0.05,
+        "max_depth": 3,
+        "max_iter": 100
+      }
+    },
+    "[Numeric + TF-IDF] Logistic Regression": {
+      "cv_mean_roc_auc": 0.8903982472133027,
+      "cv_std_roc_auc": 0.01755784641384279,
+      "cv_scores_per_fold": [
+        0.8957999660831715,
+        0.890995082059882,
+        0.9067083612538158,
+        0.9015709924800834,
+        0.8569168341895613
+      ],
+      "best_params": {
+        "C": 0.1,
+        "penalty": "l2",
+        "solver": "lbfgs"
+      }
+    },
+    "[Numeric + TF-IDF] Random Forest": {
+      "cv_mean_roc_auc": 0.8831683787027487,
+      "cv_std_roc_auc": 0.017632827994776598,
+      "cv_scores_per_fold": [
+        0.8917864747225416,
+        0.867309830227431,
+        0.8902445834264017,
+        0.9075273620728166,
+        0.858973643064552
+      ],
+      "best_params": {
+        "max_depth": null,
+        "min_samples_leaf": 5,
+        "n_estimators": 100
+      }
+    }
+  },
+  "test_metrics": {
     "[Numeric only] Logistic Regression": {
       "precision": 0.11274509803921569,
       "recall": 0.5,
       "f1": 0.184,
-      "roc_auc": 0.5937918981038115
+      "roc_auc": 0.5934327714997127
     },
     "[Numeric only] Random Forest": {
-      "precision": 0.13333333333333333,
-      "recall": 0.021739130434782608,
-      "f1": 0.037383177570093455,
-      "roc_auc": 0.5561255027772458
+      "precision": 0.1574074074074074,
+      "recall": 0.18478260869565216,
+      "f1": 0.17,
+      "roc_auc": 0.5852446849262594
     },
     "[Numeric only] Gradient Boosting": {
-      "precision": 0.13043478260869565,
-      "recall": 0.2608695652173913,
-      "f1": 0.17391304347826086,
-      "roc_auc": 0.5392106397241907
+      "precision": 0.119533527696793,
+      "recall": 0.44565217391304346,
+      "f1": 0.18850574712643678,
+      "roc_auc": 0.5833712411415437
     },
     "[Numeric + TF-IDF] Logistic Regression": {
-      "precision": 0.5714285714285714,
+      "precision": 0.5757575757575758,
       "recall": 0.8260869565217391,
-      "f1": 0.6755555555555556,
-      "roc_auc": 0.9053821107067611
+      "f1": 0.6785714285714286,
+      "roc_auc": 0.902975962459299
     },
     "[Numeric + TF-IDF] Random Forest": {
-      "precision": 0.5909090909090909,
-      "recall": 0.7065217391304348,
-      "f1": 0.6435643564356436,
-      "roc_auc": 0.8760713943688948
+      "precision": 0.6031746031746031,
+      "recall": 0.8260869565217391,
+      "f1": 0.6972477064220184,
+      "roc_auc": 0.885552336717104
     }
   },
   "best_confusion_matrix": [
     [
-      851,
-      57
+      852,
+      56
     ],
     [
       16,

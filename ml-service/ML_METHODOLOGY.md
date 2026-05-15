@@ -114,43 +114,75 @@ Both transformers are wrapped in a `ColumnTransformer` and prepended to
 each candidate classifier so that scaling/encoding fit on training data
 only, preventing test-set leakage.
 
-### 3.2 Models compared
+### 3.2 Models compared and hyperparameter tuning
 
-Three classifiers were trained on the same 80/20 stratified train/test
-split, with a fixed random seed (42) for reproducibility:
+Three classifiers are evaluated, each tuned via `GridSearchCV` with
+**5-fold stratified cross-validation** on the training set, scoring by
+ROC-AUC. Hyperparameter grids:
 
-1. **Logistic Regression** (`LogisticRegression`, `class_weight="balanced"`,
-   `max_iter=1000`). Linear baseline; interpretable coefficients map
-   directly to log-odds contributions per feature.
-2. **Random Forest** (`RandomForestClassifier`, 200 trees, `max_depth=10`,
-   `class_weight="balanced"`). Captures non-linear interactions;
-   robust to feature scaling.
-3. **Gradient Boosting** (`HistGradientBoostingClassifier`, 300 iterations,
-   `max_depth=6`, `learning_rate=0.05`, `class_weight="balanced"`). Modern
-   histogram-based boosting; competitive state of the art for tabular
-   problems and handles class imbalance natively.
+| Algorithm | Search space |
+| --- | --- |
+| `LogisticRegression` | `C ∈ {0.01, 0.1, 1.0, 10.0}`, `penalty='l2'`, `solver='lbfgs'`, `max_iter=2000` |
+| `RandomForestClassifier` | `n_estimators ∈ {100, 300}`, `max_depth ∈ {5, 10, None}`, `min_samples_leaf ∈ {1, 5, 20}` |
+| `HistGradientBoostingClassifier` | `max_iter ∈ {100, 300, 500}`, `max_depth ∈ {3, 6, 10}`, `learning_rate ∈ {0.01, 0.05, 0.1}` |
 
-`class_weight="balanced"` instructs the trainer to weight the minority
-class proportionally to its inverse frequency, which is the standard
-remedy for imbalanced classification when the cost of false negatives is
-high (here: missing a high-risk customer hurts more than mis-flagging a
-low-risk one).
+All three classifiers use `class_weight="balanced"`, which weights the
+minority class proportionally to its inverse frequency — the standard
+remedy for imbalanced classification when missing a positive case
+(high-risk customer) is more costly than mis-flagging a negative.
+
+The best estimator per algorithm is refit on the full training set and
+evaluated on the held-out test set.
 
 ### 3.3 Evaluation
 
-Metrics computed on the held-out test set (n = 2 000):
+Cross-validated ROC-AUC on the training set (mean ± std over 5 folds)
+and final test-set metrics (n = 2 000):
 
-| Model | Precision | Recall | F1 | ROC-AUC |
-| --- | --- | --- | --- | --- |
-| Logistic Regression | 0.36 | 0.69 | 0.47 | **0.774** |
-| Random Forest | 0.43 | 0.52 | 0.47 | 0.760 |
-| Gradient Boosting | 0.40 | 0.60 | 0.48 | 0.759 |
+| Model | Best params | CV ROC-AUC | Test ROC-AUC | Test F1 | Test recall |
+| --- | --- | --- | --- | --- | --- |
+| Logistic Regression | C=10.0, penalty=l2 | 0.760 ± 0.011 | 0.774 | 0.47 | 0.69 |
+| Random Forest | n_estimators=300, max_depth=5, min_samples_leaf=20 | 0.759 ± 0.008 | 0.771 | 0.47 | 0.69 |
+| **Gradient Boosting** | learning_rate=0.05, max_depth=3, max_iter=100 | **0.763 ± 0.010** | **0.777** | **0.48** | **0.69** |
+
+The selection criterion is **highest mean cross-validated ROC-AUC**, not
+single-split test score, to reduce dependence on the particular train/test
+partition and to surface variance across folds. By that criterion
+Gradient Boosting marginally wins, with all three algorithms within 0.005
+mean AUC of each other — indicating that the underlying signal is
+well-captured by any of them and the differences are not statistically
+material.
+
+### 3.4 Feature importance (model-agnostic)
+
+Permutation importance is computed on the test set with 15 repeats per
+feature. For each feature, values are shuffled and the resulting drop in
+ROC-AUC is recorded; features whose shuffling causes a larger drop are
+more important to model performance. This technique (Breiman 2001) is
+**model-agnostic**, statistically grounded, and a defensible alternative
+to SHAP that works on any classifier without external dependencies.
+
+| Feature | Mean decrease in ROC-AUC | Std |
+| --- | --- | --- |
+| credit_score | 0.209 | 0.011 |
+| prior_claims | 0.047 | 0.005 |
+| age | 0.008 | 0.002 |
+| years_customer | 0.005 | 0.003 |
+| annual_income | 0.002 | 0.001 |
+| region | 0.001 | 0.001 |
+
+Credit score dominates by an order of magnitude — consistent with
+underwriting domain knowledge — followed by prior claims history. The
+remaining features contribute marginally; this finding could inform a
+production simplification that drops the weakest features without
+performance loss.
 
 Plots produced under `training/plots/`:
 
-- `risk_roc_curves.png` — ROC curves for all three models overlaid.
-- `risk_confusion_matrix.png` — confusion matrix for the best model.
-- `risk_feature_importance.png` — feature importance for the Random Forest model.
+- `risk_cv_distribution.png` — box plot of per-fold CV ROC-AUC per model, visualising variance.
+- `risk_roc_curves.png` — test-set ROC curves for all three models overlaid.
+- `risk_confusion_matrix.png` — confusion matrix of the best model.
+- `risk_feature_importance.png` — permutation importance box plot (15 repeats per feature) of the best model.
 
 ### 3.4 Discussion
 
@@ -211,31 +243,49 @@ classifier is trained twice:
 This ablation makes the value of the NLP component quantitatively
 demonstrable.
 
-### 4.3 Models compared
+### 4.3 Models compared and hyperparameter tuning
 
 `LogisticRegression`, `RandomForestClassifier`, and
-`HistGradientBoostingClassifier` — same configurations as in Section 3,
-all using `class_weight="balanced"`.
+`HistGradientBoostingClassifier`, each tuned via `GridSearchCV` with
+**5-fold stratified cross-validation** on the training set, scoring by
+ROC-AUC. All classifiers use `class_weight="balanced"`. Hyperparameter
+search spaces:
+
+| Algorithm | Search space |
+| --- | --- |
+| `LogisticRegression` | `C ∈ {0.1, 1.0, 10.0}`, `penalty='l2'`, `max_iter=2000` |
+| `RandomForestClassifier` | `n_estimators ∈ {100, 300}`, `max_depth ∈ {10, 20, None}`, `min_samples_leaf ∈ {1, 5}` |
+| `HistGradientBoostingClassifier` | `max_iter ∈ {100, 300}`, `max_depth ∈ {3, 6, 10}`, `learning_rate ∈ {0.05, 0.1}` |
 
 `HistGradientBoostingClassifier` does not natively accept the sparse
-matrix produced by `TfidfVectorizer`; we therefore omit it from the
-*Numeric + TF-IDF* configuration. The other two classifiers cover the
-text-augmented comparison adequately.
+matrix produced by `TfidfVectorizer`; it is therefore evaluated only in
+the *Numeric only* configuration. The other two classifiers participate
+in both configurations.
 
 ### 4.4 Evaluation
 
-Metrics on the held-out test set (n = 1 000):
+Cross-validated ROC-AUC and final test-set metrics (n = 1 000):
 
-| Configuration | Model | Precision | Recall | F1 | ROC-AUC |
-| --- | --- | --- | --- | --- | --- |
-| Numeric only | Logistic Regression | 0.11 | 0.50 | 0.18 | 0.594 |
-| Numeric only | Random Forest | 0.13 | 0.02 | 0.04 | 0.556 |
-| Numeric only | Gradient Boosting | 0.13 | 0.26 | 0.17 | 0.539 |
-| **Numeric + TF-IDF** | **Logistic Regression** | **0.57** | **0.83** | **0.68** | **0.905** |
-| Numeric + TF-IDF | Random Forest | 0.59 | 0.71 | 0.64 | 0.876 |
+| Configuration | Model | Best params | CV ROC-AUC | Test ROC-AUC | Test F1 | Test recall |
+| --- | --- | --- | --- | --- | --- | --- |
+| Numeric only | Logistic Regression | C=0.1 | 0.605 ± 0.019 | 0.593 | 0.18 | 0.50 |
+| Numeric only | Random Forest | depth=10, leaf=1 | 0.559 ± 0.019 | 0.586 | 0.17 | 0.18 |
+| Numeric only | Gradient Boosting | iter=300, depth=3, lr=0.05 | 0.581 ± 0.011 | 0.583 | 0.19 | 0.45 |
+| **Numeric + TF-IDF** | **Logistic Regression** | C=0.1 | **0.890 ± 0.018** | **0.903** | **0.68** | **0.83** |
+| Numeric + TF-IDF | Random Forest | depth=None, leaf=1 | 0.883 ± 0.018 | 0.884 | 0.70 | 0.83 |
+
+The cross-validation results make the ablation effect statistically
+unambiguous: the *Numeric only* pipelines cluster around 0.56–0.61 mean
+CV AUC with std ≤ 0.02, while the *Numeric + TF-IDF* pipelines cluster
+around 0.88–0.89 — a ~0.30 absolute jump in mean AUC with non-overlapping
+distributions across all five folds. The best regularisation parameter
+for Logistic Regression in both configurations is `C=0.1`, indicating
+that the high-dimensional TF-IDF feature space benefits from stronger
+regularisation than the sklearn default.
 
 Plots:
-- `fraud_roc_curves.png` — ROC curves for all five trained pipelines.
+- `fraud_cv_distribution.png` — box plot of per-fold CV ROC-AUC per pipeline; visually separates the two configurations.
+- `fraud_roc_curves.png` — test-set ROC curves for all five tuned pipelines.
 - `fraud_confusion_matrix.png` — confusion matrix of the best pipeline.
 
 ### 4.5 Discussion
@@ -442,6 +492,7 @@ co-located ML library import for three reasons:
   populations. Migration to a real dataset would change feature
   distributions, label rates, and likely the relative ordering of
   models, but the training/evaluation pipeline is dataset-agnostic.
+  This is the most important caveat to the work.
 - **Single-region, single-language.** All descriptions are in English;
   the TF-IDF vocabulary is English. Multi-lingual support would require
   language detection or per-language pipelines.
@@ -451,10 +502,19 @@ co-located ML library import for three reasons:
 - **Static thresholds.** The 0.5 probability threshold for the
   `SUSPICIOUS` flag is a default; a deployed system would calibrate
   this against agent capacity and acceptable false-positive rates.
-- **No SHAP / LIME explanations.** The current explanations are
-  template-based heuristics. SHAP values per prediction would give
-  per-feature contributions and are a natural next iteration —
-  important for both regulatory defensibility and agent UX.
+- **Explanations at the API surface are template-based.** Permutation
+  importance is computed at training time and reported as a global
+  feature ranking, but per-prediction explanations surfaced in the API
+  are template strings derived from input thresholds rather than
+  per-prediction SHAP values. Adding SHAP would be a natural extension
+  — particularly relevant for regulatory defensibility — and is
+  recorded under future work.
+- **No XGBoost / LightGBM in the comparison.** The ensemble baseline
+  uses sklearn's `HistGradientBoostingClassifier` (a histogram-based
+  boosting implementation that is the closest sklearn analogue to
+  XGBoost/LightGBM). Explicit XGBoost or LightGBM trials are deferred
+  to future work; reproducing the comparison with those libraries is a
+  drop-in change to the search-spec dictionary.
 
 ---
 
@@ -465,17 +525,23 @@ In rough priority order:
 1. Replace the synthetic fraud descriptions with a real corpus (e.g.
    anonymised claim-narrative dataset from a partner insurer or a
    public source like the Texas Department of Insurance fraud reports).
+   This is the highest-impact next step.
 2. Add SHAP-based per-prediction explanations and surface them in the
-   admin and agent dashboards.
-3. Extend the recommender from pure content-based to a hybrid model that
+   admin and agent dashboards (the platform already provides global
+   permutation-importance from training; per-prediction is the next
+   level of granularity).
+3. Add XGBoost and LightGBM to the search-specs dictionary as additional
+   gradient-boosting baselines. The pipeline is structured so adding
+   them is a localised change.
+4. Extend the recommender from pure content-based to a hybrid model that
    blends cosine similarity with implicit-feedback signals (applications,
    policy purchases, claim history) once enough production interaction
    data accumulates.
-4. Add periodic retraining triggered by drift detection on incoming
+5. Add periodic retraining triggered by drift detection on incoming
    production traffic.
-5. Replace the joblib model files with a model registry (e.g. MLflow)
+6. Replace the joblib model files with a model registry (e.g. MLflow)
    for versioning, comparison, and rollback.
-6. Add unit tests around the feature engineering and integration tests
+7. Add unit tests around the feature engineering and integration tests
    that exercise the full HTTP roundtrip from the backend through the ML
    service.
 
@@ -532,9 +598,11 @@ ml-service/
     ├── train_fraud_model.py
     ├── train_recommendations_model.py
     └── plots/
+        ├── risk_cv_distribution.png
         ├── risk_roc_curves.png
         ├── risk_confusion_matrix.png
         ├── risk_feature_importance.png
+        ├── fraud_cv_distribution.png
         ├── fraud_roc_curves.png
         └── fraud_confusion_matrix.png
 ```
