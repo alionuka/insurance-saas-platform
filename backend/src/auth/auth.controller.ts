@@ -5,7 +5,10 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { AuthUser } from './types/auth-user';
 
 @Controller('auth')
 export class AuthController {
@@ -25,8 +28,16 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  async getMe(@Request() req) {
-    return this.authService.getMe(req.user.id);
+  async getMe(@CurrentUser() user: AuthUser) {
+    return this.authService.getMe(user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
+  @Post('change-password')
+  async changePassword(@Body() dto: ChangePasswordDto, @CurrentUser() user: AuthUser) {
+    await this.authService.changePassword(user.id, dto);
+    return { message: 'Password updated successfully' };
   }
 
   @Throttle({ default: { limit: 3, ttl: 3600000 } })

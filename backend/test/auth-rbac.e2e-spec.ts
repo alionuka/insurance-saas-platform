@@ -242,8 +242,8 @@ describe('Auth & RBAC (e2e)', () => {
         .get('/applications')
         .set('Authorization', `Bearer ${tokens.customer1}`);
       expect(res.status).toBe(200);
-      expect(res.body).toHaveLength(1);
-      expect(res.body[0].id).toBe(ids.appA);
+      expect(res.body.items).toHaveLength(1);
+      expect(res.body.items[0].id).toBe(ids.appA);
     });
 
     it('should let customer2 see only their own application', async () => {
@@ -251,8 +251,8 @@ describe('Auth & RBAC (e2e)', () => {
         .get('/applications')
         .set('Authorization', `Bearer ${tokens.customer2}`);
       expect(res.status).toBe(200);
-      expect(res.body).toHaveLength(1);
-      expect(res.body[0].id).toBe(ids.appB);
+      expect(res.body.items).toHaveLength(1);
+      expect(res.body.items[0].id).toBe(ids.appB);
     });
 
     it('should let agent see all applications', async () => {
@@ -260,7 +260,7 @@ describe('Auth & RBAC (e2e)', () => {
         .get('/applications')
         .set('Authorization', `Bearer ${tokens.agent}`);
       expect(res.status).toBe(200);
-      expect(res.body.length).toBeGreaterThanOrEqual(2);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(2);
     });
 
     it('should let platformAdmin see all applications', async () => {
@@ -268,7 +268,7 @@ describe('Auth & RBAC (e2e)', () => {
         .get('/applications')
         .set('Authorization', `Bearer ${tokens.platformAdmin}`);
       expect(res.status).toBe(200);
-      expect(res.body.length).toBeGreaterThanOrEqual(2);
+      expect(res.body.items.length).toBeGreaterThanOrEqual(2);
     });
 
     it('should let companyAdminA see only apps from companyA', async () => {
@@ -276,7 +276,7 @@ describe('Auth & RBAC (e2e)', () => {
         .get('/applications')
         .set('Authorization', `Bearer ${tokens.companyAdminA}`);
       expect(res.status).toBe(200);
-      const allCompanyA = res.body.every((app: any) => app.product.companyId === ids.companyA);
+      const allCompanyA = res.body.items.every((app: any) => app.product.companyId === ids.companyA);
       expect(allCompanyA).toBe(true);
     });
 
@@ -285,7 +285,7 @@ describe('Auth & RBAC (e2e)', () => {
         .get('/applications')
         .set('Authorization', `Bearer ${tokens.companyAdminB}`);
       expect(res.status).toBe(200);
-      const allCompanyB = res.body.every((app: any) => app.product.companyId === ids.companyB);
+      const allCompanyB = res.body.items.every((app: any) => app.product.companyId === ids.companyB);
       expect(allCompanyB).toBe(true);
     });
   });

@@ -79,4 +79,19 @@ export class AuditService {
 
     return { items, total };
   }
+
+  async listForUser(userId: string, pagination: { limit: number; offset: number }) {
+    const where = { actorId: userId };
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.auditLog.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        take: pagination.limit,
+        skip: pagination.offset,
+      }),
+      this.prisma.auditLog.count({ where }),
+    ]);
+
+    return { items, total };
+  }
 }

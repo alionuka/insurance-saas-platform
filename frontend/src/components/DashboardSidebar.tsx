@@ -15,6 +15,7 @@ import {
   Users,
   ScrollText,
   LogOut,
+  UserCircle,
 } from 'lucide-react';
 import { logout } from '@/lib/auth';
 
@@ -31,21 +32,25 @@ const CUSTOMER_NAV: NavItem[] = [
   { href: '/dashboard/client/claims', label: 'Claims', icon: Activity },
   { href: '/dashboard/client/quote', label: 'Get a Quote', icon: Calculator },
   { href: '/dashboard/client/recommendations', label: 'For You', icon: Sparkles },
+  { href: '/dashboard/profile', label: 'Profile', icon: UserCircle },
 ];
 
 const AGENT_NAV: NavItem[] = [
   { href: '/dashboard/agent', label: 'Workspace', icon: LayoutDashboard },
+  { href: '/dashboard/profile', label: 'Profile', icon: UserCircle },
 ];
 
 const COMPANY_ADMIN_NAV: NavItem[] = [
   { href: '/dashboard/company', label: 'Analytics', icon: BarChart3 },
   { href: '/dashboard/company/products', label: 'Products', icon: Package },
+  { href: '/dashboard/profile', label: 'Profile', icon: UserCircle },
 ];
 
 const PLATFORM_ADMIN_NAV: NavItem[] = [
   { href: '/dashboard/admin', label: 'Overview', icon: LayoutDashboard },
   { href: '/dashboard/admin/users', label: 'Users', icon: Users },
   { href: '/dashboard/admin/audit-logs', label: 'Audit Log', icon: ScrollText },
+  { href: '/dashboard/profile', label: 'Profile', icon: UserCircle },
 ];
 
 export default function DashboardSidebar() {

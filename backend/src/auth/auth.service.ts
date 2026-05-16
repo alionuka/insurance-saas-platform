@@ -6,6 +6,7 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { AuditService } from '../audit/audit.service';
@@ -181,6 +182,7 @@ export class AuthService {
   async getMe(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
+      include: { company: true },
     });
 
     if (!user) {
@@ -189,5 +191,34 @@ export class AuthService {
 
     const { passwordHash, ...result } = user;
     return result;
+  }
+
+  async changePassword(userId: string, dto: ChangePasswordDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user || !user.passwordHash) {
+      throw new UnauthorizedException('Current password is incorrect');
+    }
+
+    const isPasswordValid = await bcrypt.compare(dto.currentPassword, user.passwordHash);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Current password is incorrect');
+    }
+
+    const newPasswordHash = await bcrypt.hash(dto.newPassword, 10);
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash: newPasswordHash },
+    });
+
+    await this.auditService.record({
+      action: 'PASSWORD_CHANGED',
+      actor: { id: user.id, email: user.email, role: user.role as UserRole },
+      resourceType: 'User',
+      resourceId: user.id,
+    });
   }
 }
