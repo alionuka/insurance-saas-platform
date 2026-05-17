@@ -17,9 +17,12 @@ import {
   LogOut,
   UserCircle,
   Building2,
+  Menu,
+  Search,
 } from 'lucide-react';
 import { logout } from '@/lib/auth';
 import NotificationsBell from '@/components/NotificationsBell';
+import GlobalSearch from '@/components/GlobalSearch';
 
 type NavItem = {
   href: string;
@@ -63,6 +66,7 @@ const PLATFORM_ADMIN_NAV: NavItem[] = [
 export default function DashboardSidebar() {
   const pathname = usePathname();
   const [user, setUser] = useState<{ firstName: string; lastName: string; email: string; role: string } | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -73,6 +77,14 @@ export default function DashboardSidebar() {
     } catch (e) {
       console.error('Failed to parse user from localStorage', e);
     }
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const getInitials = () => {
@@ -87,75 +99,117 @@ export default function DashboardSidebar() {
                  : [];
 
   return (
-    <aside className="fixed left-0 top-0 bottom-0 w-60 flex flex-col bg-zinc-950 border-r border-zinc-800 z-50">
-      {/* Brand */}
-      <div className="h-16 flex items-center justify-between px-6 border-b border-zinc-800 shrink-0">
-        <div className="flex items-center">
-          <ShieldCheck className="h-6 w-6 text-indigo-500 mr-2 shrink-0" />
-          <span className="text-xl font-semibold tracking-tight text-white">InsurSaaS</span>
-        </div>
-        <NotificationsBell />
-      </div>
-      
-      {/* Navigation */}
-      <div className="flex-1 overflow-y-auto py-6">
-        <nav className="px-3 space-y-1.5">
-          {navItems.map((item) => {
-            const isActive = item.href === '/dashboard/client' || item.href === '/dashboard/agent' || item.href === '/dashboard/company' || item.href === '/dashboard/admin' 
-              ? pathname === item.href
-              : pathname.startsWith(item.href);
+    <>
+      {/* Mobile Hamburger Button */}
+      <button 
+        onClick={() => setIsOpen(true)}
+        className="md:hidden fixed top-4 left-4 z-40 bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-zinc-400 hover:text-white hover:bg-zinc-800/50 shadow-lg"
+        aria-label="Open sidebar"
+      >
+        <Menu className="h-5 w-5" />
+      </button>
 
-            const Icon = item.icon;
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
 
-            return (
-              <Link 
-                key={item.href}
-                href={item.href} 
-                className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors relative ${
-                  isActive 
-                    ? 'bg-indigo-500/10 text-indigo-400' 
-                    : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200'
-                }`}
-              >
-                {isActive && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-indigo-500 rounded-r-full" />
-                )}
-                <Icon className={`mr-3 h-5 w-5 shrink-0 ${isActive ? 'text-indigo-400' : 'text-zinc-500'}`} />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-      </div>
-      
-      {/* User Info & Logout */}
-      <div className="p-4 border-t border-zinc-800 shrink-0">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center min-w-0 pr-3">
-            <div className="h-9 w-9 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-indigo-400 shrink-0">
-              {getInitials()}
-            </div>
-            <div className="ml-3 truncate">
-              <p className="text-sm font-medium text-white truncate">
-                {user ? `${user.firstName} ${user.lastName}` : 'Demo User'}
-              </p>
-              <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-tighter truncate">
-                {user ? user.role.replace('_', ' ') : 'Read-Only'}
-              </p>
-            </div>
+      {/* Sidebar Drawer */}
+      <aside 
+        className={`fixed inset-y-0 left-0 w-72 md:w-60 flex flex-col bg-zinc-950 border-r border-zinc-800 z-50 transform transition-transform duration-200 ease-in-out ${
+          isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        }`}
+      >
+        {/* Brand */}
+        <div className="h-16 flex items-center justify-between px-4 border-b border-zinc-800 shrink-0">
+          <div className="flex items-center">
+            <ShieldCheck className="h-6 w-6 text-indigo-500 mr-2 shrink-0" />
+            <span className="text-xl font-semibold tracking-tight text-white hidden md:block">InsurSaaS</span>
           </div>
-          <button 
-            onClick={() => {
-              logout();
-              window.location.href = '/auth/sign-in';
-            }}
-            className="text-zinc-500 hover:text-rose-400 transition-colors p-1.5 rounded-md hover:bg-rose-500/10 shrink-0"
-            title="Sign Out"
-          >
-            <LogOut className="h-4 w-4" />
-          </button>
+          
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => {
+                const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true });
+                window.dispatchEvent(event);
+              }}
+              className="flex items-center gap-2 text-xs text-zinc-500 hover:text-white border border-zinc-800 rounded-md px-2 py-1 transition-colors"
+              title="Search (⌘K)"
+            >
+              <Search className="h-3.5 w-3.5" />
+              <span className="hidden md:inline">Search</span>
+              <kbd className="font-mono bg-zinc-800 px-1 rounded text-[9px] font-bold hidden xl:inline">⌘K</kbd>
+            </button>
+            <NotificationsBell />
+          </div>
         </div>
-      </div>
-    </aside>
+        
+        {/* Navigation */}
+        <div className="flex-1 overflow-y-auto py-6">
+          <nav className="px-3 space-y-1.5">
+            {navItems.map((item) => {
+              const isActive = item.href === '/dashboard/client' || item.href === '/dashboard/agent' || item.href === '/dashboard/company' || item.href === '/dashboard/admin' 
+                ? pathname === item.href
+                : pathname.startsWith(item.href);
+
+              const Icon = item.icon;
+
+              return (
+                <Link 
+                  key={item.href}
+                  href={item.href} 
+                  onClick={() => setIsOpen(false)}
+                  className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors relative ${
+                    isActive 
+                      ? 'bg-indigo-500/10 text-indigo-400' 
+                      : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200'
+                  }`}
+                >
+                  {isActive && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-indigo-500 rounded-r-full" />
+                  )}
+                  <Icon className={`mr-3 h-5 w-5 shrink-0 ${isActive ? 'text-indigo-400' : 'text-zinc-500'}`} />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+        
+        {/* User Info & Logout */}
+        <div className="p-4 border-t border-zinc-800 shrink-0">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center min-w-0 pr-3">
+              <div className="h-9 w-9 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-indigo-400 shrink-0">
+                {getInitials()}
+              </div>
+              <div className="ml-3 truncate">
+                <p className="text-sm font-medium text-white truncate">
+                  {user ? `${user.firstName} ${user.lastName}` : 'Demo User'}
+                </p>
+                <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-tighter truncate">
+                  {user ? user.role.replace('_', ' ') : 'Read-Only'}
+                </p>
+              </div>
+            </div>
+            <button 
+              onClick={() => {
+                logout();
+                window.location.href = '/auth/sign-in';
+              }}
+              className="text-zinc-500 hover:text-rose-400 transition-colors p-1.5 rounded-md hover:bg-rose-500/10 shrink-0"
+              title="Sign Out"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </aside>
+      
+      <GlobalSearch />
+    </>
   );
 }
