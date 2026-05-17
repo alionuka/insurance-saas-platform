@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { UserCircle, Shield, Activity, AlertCircle } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import ChangePasswordForm from './ChangePasswordForm';
+import EditProfileForm from './EditProfileForm';
 import RestartTourButton from '@/components/onboarding/RestartTourButton';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -114,18 +115,10 @@ export default async function ProfilePage() {
               Account Information
             </h2>
             
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-4 mb-6 pb-6 border-b border-zinc-800/60">
               <div>
-                <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">First Name</p>
-                <p className="text-white font-medium">{user.firstName}</p>
-              </div>
-              <div>
-                <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">Last Name</p>
-                <p className="text-white font-medium">{user.lastName}</p>
-              </div>
-              <div className="col-span-2">
                 <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">Email Address</p>
-                <p className="text-white font-medium">{user.email}</p>
+                <p className="text-white font-medium break-all">{user.email}</p>
               </div>
               <div>
                 <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">Role</p>
@@ -135,32 +128,15 @@ export default async function ProfilePage() {
                 <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">Member Since</p>
                 <p className="text-white font-medium">{formatDate(user.createdAt)}</p>
               </div>
-
-              {/* Role-Specific Fields */}
-              {user.role === 'CUSTOMER' && (
-                <>
-                  <div>
-                    <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">Age</p>
-                    <p className="text-white font-medium">{user.age ?? 'Not specified'}</p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">Credit Score</p>
-                    <p className="text-white font-medium">{user.creditScore ?? 'Not specified'}</p>
-                  </div>
-                  <div className="col-span-2">
-                    <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">Annual Income</p>
-                    <p className="text-white font-medium">{user.annualIncome ? formatCurrency(user.annualIncome) : 'Not specified'}</p>
-                  </div>
-                </>
-              )}
-
               {user.role === 'COMPANY_ADMIN' && user.company && (
-                <div className="col-span-2">
+                <div>
                   <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">Company Affiliation</p>
                   <p className="text-white font-medium">{user.company.name}</p>
                 </div>
               )}
             </div>
+
+            <EditProfileForm initialValues={{...user}} isCustomer={user.role === 'CUSTOMER'} />
           </div>
 
           {/* Security */}

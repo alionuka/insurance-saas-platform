@@ -7,6 +7,7 @@ import { RegisterDto } from './dto/register.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { AuditService } from '../audit/audit.service';
@@ -220,5 +221,52 @@ export class AuthService {
       resourceType: 'User',
       resourceId: user.id,
     });
+  }
+
+  async updateProfile(userId: string, dto: UpdateProfileDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    const allowedKeys: (keyof UpdateProfileDto)[] = [
+      'firstName',
+      'lastName',
+      'age',
+      'annualIncome',
+      'creditScore',
+    ];
+
+    const dataToUpdate: any = {};
+    const changedFields: string[] = [];
+
+    for (const key of allowedKeys) {
+      if (dto[key] !== undefined) {
+        if (dto[key] !== user[key]) {
+          dataToUpdate[key] = dto[key];
+          changedFields.push(key);
+        }
+      }
+    }
+
+    if (changedFields.length > 0) {
+      await this.prisma.user.update({
+        where: { id: userId },
+        data: dataToUpdate,
+      });
+
+      await this.auditService.record({
+        action: 'PROFILE_UPDATED',
+        actor: { id: user.id, email: user.email, role: user.role as UserRole },
+        resourceType: 'User',
+        resourceId: user.id,
+        metadata: { changedFields },
+      });
+    }
+
+    return this.getMe(userId);
   }
 }

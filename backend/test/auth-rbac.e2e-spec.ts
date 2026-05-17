@@ -419,4 +419,63 @@ describe('Auth & RBAC (e2e)', () => {
       expect(res.status).toBe(400);
     });
   });
+
+  describe('PATCH /auth/me', () => {
+    it('should update profile name and demographics for customer1', async () => {
+      const res = await request(app.getHttpServer())
+        .patch('/auth/me')
+        .set('Authorization', `Bearer ${tokens.customer1}`)
+        .send({
+          firstName: 'UpdatedAlice',
+          lastName: 'UpdatedSmith',
+          age: 35,
+          annualIncome: 95000,
+          creditScore: 780,
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.firstName).toBe('UpdatedAlice');
+      expect(res.body.lastName).toBe('UpdatedSmith');
+      expect(res.body.age).toBe(35);
+      expect(res.body.annualIncome).toBe(95000);
+      expect(res.body.creditScore).toBe(780);
+
+      // Verify audit log exists
+      const logs = await prisma.auditLog.findMany({
+        where: {
+          action: 'PROFILE_UPDATED',
+          actorId: ids.customer1,
+        },
+      });
+      expect(logs.length).toBeGreaterThan(0);
+      expect(logs[0].metadata).toBeDefined();
+      const metadata = logs[0].metadata as any;
+      expect(metadata.changedFields).toContain('firstName');
+      expect(metadata.changedFields).toContain('lastName');
+      expect(metadata.changedFields).toContain('age');
+      expect(metadata.changedFields).toContain('annualIncome');
+      expect(metadata.changedFields).toContain('creditScore');
+    });
+
+    it('should return 400 for invalid inputs', async () => {
+      const res = await request(app.getHttpServer())
+        .patch('/auth/me')
+        .set('Authorization', `Bearer ${tokens.customer1}`)
+        .send({
+          age: 12, // too young (min 18)
+        });
+
+      expect(res.status).toBe(400);
+    });
+
+    it('should return 401 if unauthorized', async () => {
+      const res = await request(app.getHttpServer())
+        .patch('/auth/me')
+        .send({
+          firstName: 'NoToken',
+        });
+
+      expect(res.status).toBe(401);
+    });
+  });
 });
