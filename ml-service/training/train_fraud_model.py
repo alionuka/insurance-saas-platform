@@ -345,6 +345,11 @@ def main():
     joblib.dump(best["best_estimator"], MODEL_PATH)
     print(f"Saved model -> {MODEL_PATH}")
 
+    BACKGROUND_PATH = os.path.join(HERE, "..", "models", "fraud_shap_background.csv")
+    X_train_numeric = X_train[NUMERIC_FEATURES]
+    X_train_numeric.sample(n=min(100, len(X_train_numeric)), random_state=42).to_csv(BACKGROUND_PATH, index=False)
+    print(f"Saved SHAP background -> {BACKGROUND_PATH}")
+
     summary = {
         "methodology": {
             "cv_strategy": f"StratifiedKFold(n_splits={CV_FOLDS}, shuffle=True)",

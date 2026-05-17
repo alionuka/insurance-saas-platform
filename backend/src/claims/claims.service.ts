@@ -215,6 +215,7 @@ export class ClaimsService {
           fraudScore: fraudResponse.fraudScore,
           flag: fraudResponse.flag as any,
           explanation: fraudResponse.explanation,
+          featureContributions: fraudResponse.featureContributions ?? undefined,
         },
       });
 

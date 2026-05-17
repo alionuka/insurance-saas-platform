@@ -188,12 +188,13 @@ model RiskAssessment {
 }
 
 model FraudAssessment {
-  id          String    @id @default(uuid())
-  claimId     String
-  claim       Claim     @relation(fields: [claimId], references: [id])
-  fraudScore  Float
-  flag        FraudFlag
-  explanation String
+  id                   String            @id @default(uuid())
+  claimId              String
+  claim                Claim             @relation(fields: [claimId], references: [id])
+  fraudScore           Float
+  flag                 FraudFlag
+  explanation          String
+  featureContributions Json?
 
   createdAt DateTime @default(now())
 }

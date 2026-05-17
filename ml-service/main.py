@@ -17,6 +17,7 @@ If a model file is missing, the endpoint falls back to a simple rule-based
 prediction with a clear marker in the response explanation.
 """
 
+import contextvars
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import List, Literal, Optional, Union
@@ -54,6 +55,23 @@ RISK_FEATURE_LABELS = {
     "prior_claims": "Prior claims",
     "region": "Region",
 }
+
+FRAUD_FEATURE_LABELS = {
+    "amount": "Claim amount",
+    "days_since_policy_start": "Days since policy start",
+    "has_witnesses": "Has witnesses",
+    "prior_claims_count": "Prior claims count",
+}
+
+_fraud_context_claim_type = contextvars.ContextVar("fraud_context_claim_type", default="AUTO")
+_fraud_context_description = contextvars.ContextVar("fraud_context_description", default="")
+
+
+def fraud_predict_proba_numeric_only(numeric_data):
+    df = pd.DataFrame(numeric_data, columns=FRAUD_NUMERIC_FEATURES)
+    df["claim_type"] = _fraud_context_claim_type.get()
+    df["description"] = _fraud_context_description.get()
+    return ml_models["fraud"].predict_proba(df)
 
 
 def _try_load(label: str, path: Path):
@@ -96,6 +114,26 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         ml_models["risk_explainer"] = None
         print(f"[ml-service] WARNING: Failed to load risk SHAP explainer: {e}")
+
+    # Try loading Fraud SHAP background and explainer
+    try:
+        import shap
+        fraud_background_path = Path(__file__).parent / "models" / "fraud_shap_background.csv"
+        if fraud_background_path.exists() and ml_models.get("fraud") is not None:
+            fraud_background_df = pd.read_csv(fraud_background_path)
+            explainer = shap.Explainer(
+                fraud_predict_proba_numeric_only,
+                fraud_background_df,
+                feature_names=FRAUD_NUMERIC_FEATURES
+            )
+            ml_models["fraud_explainer"] = explainer
+            print("[ml-service] Loaded fraud SHAP explainer successfully.")
+        else:
+            ml_models["fraud_explainer"] = None
+            print("[ml-service] WARNING: fraud SHAP background file not found or fraud model not loaded.")
+    except Exception as e:
+        ml_models["fraud_explainer"] = None
+        print(f"[ml-service] WARNING: Failed to load fraud SHAP explainer: {e}")
 
     yield
     ml_models.clear()
@@ -162,6 +200,7 @@ class FraudResponse(BaseModel):
     fraudScore: float = Field(..., ge=0, le=100)
     flag: Literal["NORMAL", "SUSPICIOUS"]
     explanation: str
+    featureContributions: Optional[List[FeatureContribution]] = None
 
 
 class RecommendationRequest(BaseModel):
@@ -402,7 +441,60 @@ def detect_fraud(request: FraudRequest):
     flag = "SUSPICIOUS" if score >= 50 else "NORMAL"
     explanation = _build_fraud_explanation(score, flag, request)
 
-    return FraudResponse(fraudScore=score, flag=flag, explanation=explanation)
+    feature_contributions = None
+    explainer = ml_models.get("fraud_explainer")
+    if explainer is not None:
+        try:
+            # Set request context variables
+            _fraud_context_claim_type.set(request.claimType)
+            _fraud_context_description.set(request.description)
+            
+            # Form numeric row for explainer
+            numeric_row = pd.DataFrame(
+                [{
+                    "amount": request.amount,
+                    "days_since_policy_start": request.daysSincePolicyStart,
+                    "has_witnesses": request.hasWitnesses,
+                    "prior_claims_count": request.priorClaimsCount,
+                }],
+                columns=FRAUD_NUMERIC_FEATURES,
+            )
+            
+            res = explainer(numeric_row)
+            shap_vals = res.values[0]  # shape (4, 2)
+            
+            contrib_list = []
+            for i, feat_name in enumerate(FRAUD_NUMERIC_FEATURES):
+                contrib_val = float(shap_vals[i, 1]) * 100
+                raw_val = numeric_row.iloc[0][feat_name]
+                
+                # Coerce numpy values to python native type
+                if isinstance(raw_val, (np.integer, int)):
+                    val_display = int(raw_val)
+                elif isinstance(raw_val, (np.floating, float)):
+                    val_display = float(raw_val)
+                else:
+                    val_display = str(raw_val)
+                
+                contrib_list.append(FeatureContribution(
+                    feature=FRAUD_FEATURE_LABELS.get(feat_name, feat_name),
+                    value=val_display,
+                    contribution=round(contrib_val, 2)
+                ))
+            
+            # Sort by abs(contribution) DESC, keep top 3
+            contrib_list.sort(key=lambda x: abs(x.contribution), reverse=True)
+            feature_contributions = contrib_list[:3]
+        except Exception as e:
+            print(f"[ml-service] WARNING: SHAP fraud prediction failed: {e}")
+            feature_contributions = None
+
+    return FraudResponse(
+        fraudScore=score,
+        flag=flag,
+        explanation=explanation,
+        featureContributions=feature_contributions
+    )
 
 
 def _build_recs_query(age: int, annual_income: float, life_events: List[str]) -> str:

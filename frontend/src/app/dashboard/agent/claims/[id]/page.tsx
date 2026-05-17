@@ -4,6 +4,7 @@ import { ArrowLeft, Activity, ShieldCheck, ShieldAlert, AlertTriangle, TrendingU
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import ClaimDocuments from '@/components/ClaimDocuments';
 import StatusUpdateForm from './StatusUpdateForm';
+import FraudContributionsChart from '@/components/charts/FraudContributionsChart';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -204,6 +205,13 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
               </p>
             </div>
           </div>
+
+          {fraud.featureContributions && (fraud.featureContributions as any).length > 0 && (
+            <div className="mt-6 border-t border-zinc-800 pt-5">
+              <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold mb-3">Feature Contributions</p>
+              <FraudContributionsChart contributions={fraud.featureContributions as any} />
+            </div>
+          )}
         </div>
       )}
 
