@@ -36,6 +36,7 @@ const CUSTOMER_NAV: NavItem[] = [
   { href: '/dashboard/client/applications', label: 'Applications', icon: FileText },
   { href: '/dashboard/client/policies', label: 'Policies', icon: ShieldCheck },
   { href: '/dashboard/client/claims', label: 'Claims', icon: Activity },
+  { href: '/dashboard/client/products', label: 'Browse Products', icon: Package },
   { href: '/dashboard/client/quote', label: 'Get a Quote', icon: Calculator },
   { href: '/dashboard/client/recommendations', label: 'For You', icon: Sparkles },
   { href: '/dashboard/profile', label: 'Profile', icon: UserCircle },
