@@ -167,7 +167,14 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
                 )}
               </div>
             </div>
-            {/* Note: agent views policy info inline above; no dedicated agent policy detail page in this build */}
+            {policy && (
+              <Link
+                href={`/dashboard/agent/policies/${policy.id}`}
+                className="inline-flex justify-center items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-indigo-500/20 shrink-0"
+              >
+                View Policy
+              </Link>
+            )}
           </div>
         </div>
 

@@ -56,6 +56,31 @@ export class RecommendationsService {
       topK: 3,
     };
 
-    return this.mlClient.getRecommendations(dto);
+    const mlResponse = await this.mlClient.getRecommendations(dto);
+
+    // The ML service ranks by the synthetic catalog it was trained on, so its
+    // productIds don't match real DB rows. Resolve each ranked product to a
+    // real DB UUID by name (case-insensitive). Drop entries we can't resolve so
+    // the frontend never gets a productId it can't POST /applications with.
+    const ranked = mlResponse.rankedProducts ?? [];
+    if (ranked.length > 0) {
+      const dbProducts = await this.prisma.insuranceProduct.findMany({
+        where: { name: { in: ranked.map((r) => r.name) } },
+        select: { id: true, name: true },
+      });
+      const nameToId = new Map(dbProducts.map((p) => [p.name.toLowerCase(), p.id]));
+
+      const resolved = ranked
+        .map((r) => {
+          const realId = nameToId.get(r.name.toLowerCase());
+          return realId ? { ...r, productId: realId } : null;
+        })
+        .filter((r): r is NonNullable<typeof r> => r !== null);
+
+      mlResponse.rankedProducts = resolved;
+      mlResponse.recommendedProducts = resolved.map((r) => r.name);
+    }
+
+    return mlResponse;
   }
 }
