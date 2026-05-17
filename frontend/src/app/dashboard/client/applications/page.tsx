@@ -3,6 +3,7 @@ import { FileCheck, TrendingUp, AlertCircle, AlertTriangle } from 'lucide-react'
 import { formatDate } from '@/lib/formatDate';
 import EmptyState from '@/components/ui/EmptyState';
 import ApplicationFilters from './ApplicationFilters';
+import Link from 'next/link';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -56,7 +57,7 @@ export default async function ClientApplicationsPage(props: Props) {
           applications.map((app: any) => {
             const risk = app.riskAssessments?.[0];
             return (
-              <div key={app.id} className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-700 transition-colors">
+              <Link href={`/dashboard/client/applications/${app.id}`} key={app.id} className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-700 transition-colors block group">
                 <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex items-start gap-4">
                     <div className="h-12 w-12 rounded-xl bg-zinc-800 flex items-center justify-center border border-zinc-700 flex-shrink-0">
@@ -111,7 +112,7 @@ export default async function ClientApplicationsPage(props: Props) {
                     </div>
                   </div>
                 )}
-              </div>
+              </Link>
             );
           })
         ) : (

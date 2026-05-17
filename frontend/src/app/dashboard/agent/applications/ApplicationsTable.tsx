@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { User, CheckCircle } from 'lucide-react';
 import { formatDate } from '@/lib/formatDate';
 import { logout } from '@/lib/auth';
+import Link from 'next/link';
 import {
   StatusBadge,
   RiskBadge,
@@ -129,22 +130,24 @@ export default function ApplicationsTable({
                     }`}
                   >
                     {/* Customer */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center shrink-0">
-                          <User className="h-4 w-4 text-zinc-400" />
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium text-white">
-                            {app.user
-                              ? `${app.user.firstName} ${app.user.lastName}`
-                              : `#${app.id.substring(0, 8)}`}
+                    <td className="px-6 py-4 whitespace-nowrap min-w-[250px]">
+                      <Link href={`/dashboard/agent/applications/${app.id}`} className="block group">
+                        <div className="flex items-center gap-2 group-hover:bg-zinc-800/50 p-2 -m-2 rounded-lg transition-colors">
+                          <div className="h-8 w-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center shrink-0 group-hover:border-zinc-600 transition-colors">
+                            <User className="h-4 w-4 text-zinc-400 group-hover:text-zinc-300" />
                           </div>
-                          <div className="text-xs text-zinc-500">
-                            {formatDate(app.createdAt)}
+                          <div>
+                            <div className="text-sm font-medium text-white group-hover:text-indigo-400 transition-colors">
+                              {app.user
+                                ? `${app.user.firstName} ${app.user.lastName}`
+                                : `#${app.id.substring(0, 8)}`}
+                            </div>
+                            <div className="text-xs text-zinc-500 mt-0.5">
+                              {formatDate(app.createdAt)}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     </td>
 
                     {/* Product / Company */}

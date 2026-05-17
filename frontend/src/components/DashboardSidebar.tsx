@@ -19,6 +19,7 @@ import {
   Building2,
 } from 'lucide-react';
 import { logout } from '@/lib/auth';
+import NotificationsBell from '@/components/NotificationsBell';
 
 type NavItem = {
   href: string;
@@ -88,9 +89,12 @@ export default function DashboardSidebar() {
   return (
     <aside className="fixed left-0 top-0 bottom-0 w-60 flex flex-col bg-zinc-950 border-r border-zinc-800 z-50">
       {/* Brand */}
-      <div className="h-16 flex items-center px-6 border-b border-zinc-800 shrink-0">
-        <ShieldCheck className="h-6 w-6 text-indigo-500 mr-2 shrink-0" />
-        <span className="text-xl font-semibold tracking-tight text-white">InsurSaaS</span>
+      <div className="h-16 flex items-center justify-between px-6 border-b border-zinc-800 shrink-0">
+        <div className="flex items-center">
+          <ShieldCheck className="h-6 w-6 text-indigo-500 mr-2 shrink-0" />
+          <span className="text-xl font-semibold tracking-tight text-white">InsurSaaS</span>
+        </div>
+        <NotificationsBell />
       </div>
       
       {/* Navigation */}
