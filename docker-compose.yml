@@ -1,20 +1,4 @@
-
 services:
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "3000:3000"
-
-  # backend:
-  #   build: ./backend
-  #   ports:
-  #     - "3001:3001"
-
-  # ml-service:
-  #   build: ./ml-service
-  #   ports:
-  #     - "8000:8000"
-
   db:
     image: postgres:15
     environment:
@@ -23,3 +7,35 @@ services:
       POSTGRES_DB: insurance_saas_db
     ports:
       - "5433:5432"
+
+  backend:
+    build: ./backend
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+      - ml-service
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/insurance_saas_db?schema=public
+      JWT_SECRET: super-secret-key
+      ML_SERVICE_URL: http://ml-service:8000
+      FRONTEND_URL: http://localhost:3000
+      NODE_ENV: production
+    restart: unless-stopped
+
+  ml-service:
+    build: ./ml-service
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+      JWT_SECRET: super-secret-key
+    restart: unless-stopped
