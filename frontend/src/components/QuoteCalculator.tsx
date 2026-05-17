@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Calculator, Loader2, AlertCircle, TrendingUp, ShieldCheck, DollarSign, ChevronRight, Info } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { Calculator, Loader2, AlertCircle, TrendingUp, ShieldCheck, DollarSign, ChevronRight, Info, FileCheck } from 'lucide-react';
 import { logout } from '@/lib/auth';
 
 interface Product {
@@ -27,8 +29,10 @@ interface QuoteCalculatorProps {
 }
 
 export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
+  const router = useRouter();
   const [selectedProductId, setSelectedProductId] = useState('');
   const [loading, setLoading] = useState(false);
+  const [applying, setApplying] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [quote, setQuote] = useState<QuoteResponse | null>(null);
 
@@ -36,6 +40,51 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
     setSelectedProductId(e.target.value);
     setQuote(null);
     setError(null);
+  };
+
+  const submitApplication = async () => {
+    if (!selectedProductId || applying) return;
+    setApplying(true);
+
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    if (!token) {
+      logout();
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/applications`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ productId: selectedProductId }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          logout();
+          return;
+        }
+        throw new Error(data.message || 'Failed to submit application');
+      }
+
+      toast.success('Application submitted', {
+        description: 'Redirecting you to your application details…',
+      });
+      router.push(`/dashboard/client/applications/${data.id}`);
+    } catch (err: any) {
+      toast.error('Could not submit application', {
+        description: err.message || 'Please try again in a moment.',
+      });
+      setApplying(false);
+    }
   };
 
   const calculateQuote = async () => {
@@ -188,6 +237,28 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
                 "{quote.explanation}"
               </p>
             </div>
+
+            <button
+              onClick={submitApplication}
+              disabled={applying}
+              className="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed font-bold text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/20 active:scale-[0.98]"
+            >
+              {applying ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <span>Submitting application…</span>
+                </>
+              ) : (
+                <>
+                  <FileCheck className="h-5 w-5" />
+                  <span>Apply for This Policy</span>
+                  <ChevronRight className="h-4 w-4" />
+                </>
+              )}
+            </button>
+            <p className="text-[10px] text-zinc-600 text-center -mt-3">
+              You can review and pay after the application is approved by an agent.
+            </p>
           </div>
         )}
       </div>

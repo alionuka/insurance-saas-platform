@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Sparkles, Loader2, AlertCircle, Package } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { Sparkles, Loader2, AlertCircle, Package, FileCheck } from 'lucide-react';
 import { logout } from '@/lib/auth';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
@@ -27,9 +29,51 @@ const TYPE_STYLES: Record<string, string> = {
 };
 
 export default function RecommendedProducts() {
+  const router = useRouter();
   const [data, setData] = useState<RecommendationsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [applyingProductId, setApplyingProductId] = useState<string | null>(null);
+
+  const submitApplication = async (productId: string) => {
+    if (applyingProductId) return;
+    setApplyingProductId(productId);
+
+    const token =
+      typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    if (!token) {
+      logout();
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE}/applications`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        if (res.status === 401) {
+          logout();
+          return;
+        }
+        throw new Error(json.message || 'Failed to submit application');
+      }
+      toast.success('Application submitted', {
+        description: 'Redirecting you to your application…',
+      });
+      router.push(`/dashboard/client/applications/${json.id}`);
+    } catch (err: any) {
+      toast.error('Could not submit application', {
+        description: err.message || 'Please try again in a moment.',
+      });
+      setApplyingProductId(null);
+    }
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -137,6 +181,23 @@ export default function RecommendedProducts() {
                       />
                     </div>
                   </div>
+                  <button
+                    onClick={() => submitApplication(product.productId)}
+                    disabled={applyingProductId !== null}
+                    className="mt-3 w-full py-2 px-3 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed text-xs font-bold text-white transition-colors flex items-center justify-center gap-1.5"
+                  >
+                    {applyingProductId === product.productId ? (
+                      <>
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        <span>Submitting…</span>
+                      </>
+                    ) : (
+                      <>
+                        <FileCheck className="h-3.5 w-3.5" />
+                        <span>Apply</span>
+                      </>
+                    )}
+                  </button>
                 </div>
               ))}
             </div>
