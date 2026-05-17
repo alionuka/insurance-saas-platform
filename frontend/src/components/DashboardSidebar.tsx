@@ -19,6 +19,7 @@ import {
   Building2,
   Menu,
   Search,
+  Brain,
 } from 'lucide-react';
 import { logout } from '@/lib/auth';
 import NotificationsBell from '@/components/NotificationsBell';
@@ -60,6 +61,7 @@ const PLATFORM_ADMIN_NAV: NavItem[] = [
   { href: '/dashboard/admin/companies', label: 'Companies', icon: Building2 },
   { href: '/dashboard/admin/users', label: 'Users', icon: Users },
   { href: '/dashboard/admin/audit-logs', label: 'Audit Log', icon: ScrollText },
+  { href: '/dashboard/admin/ml-models', label: 'ML Models', icon: Brain },
   { href: '/dashboard/profile', label: 'Profile', icon: UserCircle },
 ];
 

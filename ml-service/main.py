@@ -25,6 +25,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 # --- Model loading ---
@@ -109,6 +110,11 @@ app = FastAPI(
     version="0.2.0",
     lifespan=lifespan,
 )
+
+# Mount StaticFiles for training plots
+plots_dir = Path(__file__).parent / "training" / "plots"
+if plots_dir.exists():
+    app.mount("/plots", StaticFiles(directory=str(plots_dir)), name="plots")
 
 
 # --- Request & Response Models ---
@@ -495,3 +501,29 @@ def get_recommendations(request: RecommendationRequest):
         rankedProducts=ranked_products,
         explanation=explanation,
     )
+
+
+# --- Metrics Endpoints ---
+import json
+
+def _load_metrics(name: str):
+    metrics_path = Path(__file__).parent / "models" / f"{name}_model_metrics.json"
+    if not metrics_path.exists():
+        raise HTTPException(status_code=404, detail="metrics not available")
+    try:
+        with open(metrics_path, "r") as f:
+            return json.load(f)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to load metrics: {e}")
+
+@app.get("/metrics/risk")
+def get_risk_metrics():
+    return _load_metrics("risk")
+
+@app.get("/metrics/fraud")
+def get_fraud_metrics():
+    return _load_metrics("fraud")
+
+@app.get("/metrics/recommendations")
+def get_recommendation_metrics():
+    return _load_metrics("recommendations")
