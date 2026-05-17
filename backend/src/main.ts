@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { Logger } from 'nestjs-pino';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import * as path from 'path';
 
@@ -18,6 +19,33 @@ async function bootstrap() {
 
   // Enable global validation using class-validator decorators
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
+
+  // Configure Swagger documentation
+  const config = new DocumentBuilder()
+    .setTitle('InsurSaaS Platform API')
+    .setDescription('Multi-tenant insurance SaaS with ML-powered risk and fraud detection')
+    .setVersion('1.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header' },
+      'access_token'
+    )
+    .addTag('Auth', 'Registration, login, password management')
+    .addTag('Applications', 'Insurance application lifecycle')
+    .addTag('Policies', 'Issued policies and coverage')
+    .addTag('Claims', 'Claim filing and processing')
+    .addTag('Payments', 'Stripe checkout and webhooks')
+    .addTag('Products', 'Insurance product catalog')
+    .addTag('Companies', 'Insurance providers (tenants)')
+    .addTag('Recommendations', 'Personalised product recommendations')
+    .addTag('ML', 'Direct ML service proxy endpoints')
+    .addTag('Admin', 'Platform admin operations')
+    .addTag('Audit', 'Audit log access')
+    .addTag('Health', 'Liveness and readiness probes')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document, {
+    swaggerOptions: { persistAuthorization: true, tagsSorter: 'alpha', operationsSorter: 'alpha' },
+  });
 
   // Serve static assets (uploaded claim documents)
   app.useStaticAssets(path.join(process.cwd(), 'uploads'), {

@@ -1,10 +1,12 @@
 import { Controller, Get, Res } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import type { Response } from 'express';
 import { AppService } from './app.service';
 import { PrismaService } from './prisma/prisma.service';
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:8000';
 
+@ApiTags('Health')
 @Controller()
 export class AppController {
   constructor(
@@ -13,17 +15,23 @@ export class AppController {
   ) {}
 
   @Get()
+  @ApiOperation({ summary: 'Platform landing metadata (public)' })
+  @ApiResponse({ status: 200, description: 'Root metadata returned successfully' })
   getHello(): string {
     return this.appService.getHello();
   }
 
   /** Backward-compatible alias — forwards to /health/live */
   @Get('health')
+  @ApiOperation({ summary: 'Liveness probe alias' })
+  @ApiResponse({ status: 200, description: 'Liveness status returned' })
   healthAlias() {
     return this.healthLive();
   }
 
   @Get('health/live')
+  @ApiOperation({ summary: 'Liveness probe' })
+  @ApiResponse({ status: 200, description: 'Liveness status returned' })
   healthLive() {
     return {
       status: 'ok',
@@ -33,6 +41,9 @@ export class AppController {
   }
 
   @Get('health/ready')
+  @ApiOperation({ summary: 'Readiness probe checking database and ML service connections' })
+  @ApiResponse({ status: 200, description: 'Platform is healthy and fully operational' })
+  @ApiResponse({ status: 503, description: 'Platform is degraded (database or ML service unreachable)' })
   async healthReady(@Res() res: Response) {
     const checks: Record<string, 'ok' | 'fail'> = {
       database: 'fail',

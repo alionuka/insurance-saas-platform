@@ -1,4 +1,5 @@
 import { Controller, Post, Get, Body, Query, Param, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
@@ -9,6 +10,8 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
 
+@ApiTags('Admin')
+@ApiBearerAuth('access_token')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('admin')
 export class AdminController {
@@ -16,6 +19,10 @@ export class AdminController {
 
   @Get('users')
   @Roles(UserRole.PLATFORM_ADMIN)
+  @ApiOperation({ summary: 'List all users across companies (platform admin only)' })
+  @ApiResponse({ status: 200, description: 'Users listed successfully' })
+  @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
+  @ApiResponse({ status: 403, description: 'Forbidden — platform admin only' })
   listUsers(
     @Query('role') role?: string,
     @Query('companyId') companyId?: string,
@@ -34,6 +41,11 @@ export class AdminController {
 
   @Get('users/:id')
   @Roles(UserRole.PLATFORM_ADMIN)
+  @ApiOperation({ summary: 'Get user details by ID (platform admin only)' })
+  @ApiResponse({ status: 200, description: 'User details retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
+  @ApiResponse({ status: 403, description: 'Forbidden — platform admin only' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   getUserById(@Param('id') id: string) {
     return this.adminService.getUserById(id);
   }
@@ -41,6 +53,10 @@ export class AdminController {
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   @Post('users')
   @Roles(UserRole.PLATFORM_ADMIN)
+  @ApiOperation({ summary: 'Create a new user (platform admin only)' })
+  @ApiResponse({ status: 201, description: 'User successfully created' })
+  @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
+  @ApiResponse({ status: 403, description: 'Forbidden — platform admin only' })
   createUser(@Body() dto: CreateUserDto, @CurrentUser() actor: AuthUser) {
     return this.adminService.createUser(dto, actor);
   }
