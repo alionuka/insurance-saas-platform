@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Lock, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { Lock, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { logout } from '@/lib/auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -11,21 +12,16 @@ export default function ChangePasswordForm() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
-
     if (newPassword.length < 8) {
-      setError('New password must be at least 8 characters long');
+      toast.error('New password must be at least 8 characters long');
       return;
     }
     if (newPassword !== confirmPassword) {
-      setError('New passwords do not match');
+      toast.error('New passwords do not match');
       return;
     }
 
@@ -46,7 +42,7 @@ export default function ChangePasswordForm() {
       if (res.status === 401) {
         const data = await res.json().catch(() => null);
         if (data?.message === 'Current password is incorrect') {
-           setError('Current password is incorrect');
+           toast.error('Current password is incorrect');
            setIsLoading(false);
            return;
         } else {
@@ -58,15 +54,15 @@ export default function ChangePasswordForm() {
 
       const data = await res.json();
       if (!res.ok) {
-        setError(data.message || 'Failed to change password');
+        toast.error(data.message || 'Failed to change password');
       } else {
-        setSuccess('Password updated successfully');
+        toast.success('Password updated successfully');
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
       }
     } catch (err: any) {
-      setError('An unexpected error occurred. Please try again.');
+      toast.error('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -74,20 +70,6 @@ export default function ChangePasswordForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error && (
-        <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 p-3 rounded-lg flex items-start gap-3">
-          <AlertCircle className="h-5 w-5 shrink-0" />
-          <p className="text-sm font-medium">{error}</p>
-        </div>
-      )}
-      
-      {success && (
-        <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-3 rounded-lg flex items-start gap-3">
-          <CheckCircle2 className="h-5 w-5 shrink-0" />
-          <p className="text-sm font-medium">{success}</p>
-        </div>
-      )}
-
       <div>
         <label className="block text-sm font-medium text-zinc-300 mb-1">Current Password</label>
         <div className="relative">

@@ -4,6 +4,8 @@ import { ShieldCheck, CreditCard } from 'lucide-react';
 import { formatDate } from '@/lib/formatDate';
 import PolicyPaymentButton from '@/components/PolicyPaymentButton';
 import StopClickPropagation from '@/components/StopClickPropagation';
+import EmptyState from '@/components/ui/EmptyState';
+import PolicyFilters from './PolicyFilters';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -25,8 +27,23 @@ async function getPolicies() {
   }
 }
 
-export default async function ClientPoliciesPage() {
-  const policies = await getPolicies();
+type Props = { searchParams: Promise<{ [key: string]: string | string[] | undefined }> };
+
+export default async function ClientPoliciesPage(props: Props) {
+  const searchParams = await props.searchParams;
+  const statusFilter = typeof searchParams.status === 'string' ? searchParams.status : 'all';
+
+  const allPolicies = await getPolicies();
+  
+  const counts = allPolicies.reduce((acc: any, policy: any) => {
+    acc['all'] = (acc['all'] || 0) + 1;
+    acc[policy.status] = (acc[policy.status] || 0) + 1;
+    return acc;
+  }, { all: 0 });
+
+  const policies = statusFilter === 'all' 
+    ? allPolicies 
+    : allPolicies.filter((p: any) => p.status === statusFilter);
 
   return (
     <div className="space-y-8">
@@ -34,6 +51,8 @@ export default async function ClientPoliciesPage() {
         <h1 className="text-3xl font-bold tracking-tight text-white">Your Policies</h1>
         <p className="text-zinc-400 mt-1 text-sm">Manage your active policies and pending payments.</p>
       </div>
+
+      <PolicyFilters counts={counts} />
 
       <div className="grid gap-4">
         {policies.length > 0 ? (
@@ -97,10 +116,12 @@ export default async function ClientPoliciesPage() {
             </Link>
           ))
         ) : (
-          <div className="bg-zinc-900/50 border border-zinc-800 border-dashed rounded-xl p-12 text-center">
-            <ShieldCheck className="h-12 w-12 text-zinc-700 mx-auto mb-4" />
-            <p className="text-zinc-500">No policies yet. Approved applications become policies.</p>
-          </div>
+          <EmptyState 
+            icon={ShieldCheck} 
+            title="No active policies" 
+            description="Approved applications become policies. Start by applying for a product." 
+            action={{ label: 'View Applications', href: '/dashboard/client/applications' }} 
+          />
         )}
       </div>
     </div>

@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers';
 import { FileCheck, TrendingUp, AlertCircle, AlertTriangle } from 'lucide-react';
 import { formatDate } from '@/lib/formatDate';
+import EmptyState from '@/components/ui/EmptyState';
+import ApplicationFilters from './ApplicationFilters';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -22,8 +24,23 @@ async function getApplications() {
   }
 }
 
-export default async function ClientApplicationsPage() {
-  const applications = await getApplications();
+type Props = { searchParams: Promise<{ [key: string]: string | string[] | undefined }> };
+
+export default async function ClientApplicationsPage(props: Props) {
+  const searchParams = await props.searchParams;
+  const statusFilter = typeof searchParams.status === 'string' ? searchParams.status : 'all';
+
+  const allApplications = await getApplications();
+  
+  const counts = allApplications.reduce((acc: any, app: any) => {
+    acc['all'] = (acc['all'] || 0) + 1;
+    acc[app.status] = (acc[app.status] || 0) + 1;
+    return acc;
+  }, { all: 0 });
+
+  const applications = statusFilter === 'all' 
+    ? allApplications 
+    : allApplications.filter((a: any) => a.status === statusFilter);
 
   return (
     <div className="space-y-8">
@@ -31,6 +48,8 @@ export default async function ClientApplicationsPage() {
         <h1 className="text-3xl font-bold tracking-tight text-white">Your Applications</h1>
         <p className="text-zinc-400 mt-1 text-sm">Track the status of your submitted insurance applications.</p>
       </div>
+
+      <ApplicationFilters counts={counts} />
 
       <div className="grid gap-4">
         {applications.length > 0 ? (
@@ -96,10 +115,12 @@ export default async function ClientApplicationsPage() {
             );
           })
         ) : (
-          <div className="bg-zinc-900/50 border border-zinc-800 border-dashed rounded-xl p-12 text-center">
-            <FileCheck className="h-12 w-12 text-zinc-700 mx-auto mb-4" />
-            <p className="text-zinc-500">No applications yet. Apply for a product on the home page.</p>
-          </div>
+          <EmptyState 
+            icon={FileCheck} 
+            title="No applications yet" 
+            description="Browse our product catalog to apply for insurance." 
+            action={{ label: 'Browse Products', href: '/' }} 
+          />
         )}
       </div>
     </div>

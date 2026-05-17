@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Loader2, AlertCircle, CheckCircle } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { logout } from '@/lib/auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -12,20 +13,18 @@ export default function StatusUpdateForm({ claimId, currentStatus }: { claimId: 
   const router = useRouter();
   const [status, setStatus] = useState(currentStatus);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (status === currentStatus) return;
 
     setLoading(true);
-    setError(false);
-    setSuccess(false);
+
 
     const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
     if (!token) {
-      setError(true);
+      toast.error('Not authenticated');
       setLoading(false);
       return;
     }
@@ -47,11 +46,10 @@ export default function StatusUpdateForm({ claimId, currentStatus }: { claimId: 
 
       if (!res.ok) throw new Error('Failed to update status');
 
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
+      toast.success('Status updated successfully');
       router.refresh();
-    } catch (err) {
-      setError(true);
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to update claim status');
     } finally {
       setLoading(false);
     }
@@ -89,19 +87,6 @@ export default function StatusUpdateForm({ claimId, currentStatus }: { claimId: 
         </button>
       </div>
       
-      {error && (
-        <div className="mt-4 flex items-center gap-2 text-rose-400 text-sm bg-rose-500/10 border border-rose-500/20 p-3 rounded-lg">
-          <AlertCircle className="h-4 w-4" />
-          Failed to update claim status. Please try again.
-        </div>
-      )}
-      
-      {success && (
-        <div className="mt-4 flex items-center gap-2 text-emerald-400 text-sm bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-lg">
-          <CheckCircle className="h-4 w-4" />
-          Status updated successfully.
-        </div>
-      )}
     </form>
   );
 }

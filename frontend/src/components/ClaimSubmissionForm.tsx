@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Activity, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Activity, Loader2, AlertCircle } from 'lucide-react';
+import { toast } from 'sonner';
 import { logout } from '@/lib/auth';
 
 interface Policy {
@@ -27,19 +28,17 @@ export default function ClaimSubmissionForm({ policies }: ClaimSubmissionFormPro
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<any | null>(null);
+
 
   const activePolicies = policies.filter((p) => p.status === 'ACTIVE');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError(null);
-    setSuccess(null);
+
 
     if (!selectedPolicyId) {
-      setError('Please select a policy');
+      toast.error('Please select a policy');
       setIsLoading(false);
       return;
     }
@@ -47,7 +46,7 @@ export default function ClaimSubmissionForm({ policies }: ClaimSubmissionFormPro
     const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
 
     if (!token) {
-      setError('Not authenticated');
+      toast.error('Not authenticated');
       setIsLoading(false);
       return;
     }
@@ -76,7 +75,7 @@ export default function ClaimSubmissionForm({ policies }: ClaimSubmissionFormPro
       }
 
       const newClaim = await response.json();
-      setSuccess(newClaim);
+      toast.success('Claim submitted successfully');
       setAmount('');
       setDescription('');
       setSelectedPolicyId('');
@@ -84,7 +83,7 @@ export default function ClaimSubmissionForm({ policies }: ClaimSubmissionFormPro
       // Refresh the page data (Server Component will re-fetch)
       router.refresh();
     } catch (err: any) {
-      setError(err.message || 'An error occurred during submission');
+      toast.error(err.message || 'An error occurred during submission');
     } finally {
       setIsLoading(false);
     }
@@ -158,39 +157,6 @@ export default function ClaimSubmissionForm({ policies }: ClaimSubmissionFormPro
               required
             />
           </div>
-
-          {/* Messages */}
-          {error && (
-            <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-lg flex items-center gap-2 text-rose-400 text-sm">
-              <AlertCircle className="h-4 w-4" />
-              {error}
-            </div>
-          )}
-
-          {success && (
-            <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg space-y-3">
-              <div className="flex items-center gap-2 text-emerald-400 text-sm font-bold">
-                <CheckCircle2 className="h-4 w-4" />
-                Claim Submitted Successfully!
-              </div>
-              
-              {success.fraudAssessments?.[0] && (
-                <div className="p-3 bg-zinc-950/50 rounded border border-zinc-800/50">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] text-zinc-500 uppercase font-bold">ML Fraud Assessment</span>
-                    <span className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase border ${
-                      success.fraudAssessments[0].flag === 'NORMAL' 
-                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
-                        : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
-                    }`}>
-                      {success.fraudAssessments[0].flag}
-                    </span>
-                  </div>
-                  <p className="text-xs text-zinc-400 italic leading-relaxed">"{success.fraudAssessments[0].explanation}"</p>
-                </div>
-              )}
-            </div>
-          )}
 
           {/* Submit Button */}
           <button

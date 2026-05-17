@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Package, Plus, Loader2, AlertCircle, CheckCircle2, DollarSign, Type, FileText } from 'lucide-react';
+import { Package, Plus, Loader2, DollarSign, Type, FileText } from 'lucide-react';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/lib/auth';
 
@@ -14,8 +15,7 @@ export default function CreateProductForm() {
     basePremium: '',
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<{ name: string; type: string } | null>(null);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,17 +24,16 @@ export default function CreateProductForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    setSuccess(null);
+
 
     if (!formData.name) {
-      setError('Product name is required');
+      toast.error('Product name is required');
       setLoading(false);
       return;
     }
 
     if (parseFloat(formData.basePremium) < 0) {
-      setError('Base premium must be at least 0');
+      toast.error('Base premium must be at least 0');
       setLoading(false);
       return;
     }
@@ -68,7 +67,7 @@ export default function CreateProductForm() {
         throw new Error(data.message || 'Failed to create product');
       }
 
-      setSuccess({ name: data.name, type: data.type });
+      toast.success(`Product ${data.name} (${data.type}) registered successfully`);
       setFormData({
         name: '',
         type: 'LIFE',
@@ -77,7 +76,7 @@ export default function CreateProductForm() {
       });
       router.refresh();
     } catch (err: any) {
-      setError(err.message || 'An error occurred during submission');
+      toast.error(err.message || 'An error occurred during submission');
     } finally {
       setLoading(false);
     }
@@ -92,24 +91,7 @@ export default function CreateProductForm() {
 
       <div className="p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
-          {error && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center gap-3 text-sm text-red-400">
-              <AlertCircle className="h-5 w-5 shrink-0" />
-              <p className="font-medium">{error}</p>
-            </div>
-          )}
 
-          {success && (
-            <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex flex-col gap-1">
-              <div className="flex items-center gap-2 text-emerald-400 text-sm font-bold">
-                <CheckCircle2 className="h-5 w-5" />
-                Product Registered Successfully
-              </div>
-              <p className="text-xs text-emerald-500/80 ml-7">
-                <span className="font-bold text-emerald-400">{success.name}</span> ({success.type}) is now active in your catalog.
-              </p>
-            </div>
-          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>

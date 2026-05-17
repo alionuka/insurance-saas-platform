@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Mail, Lock, User, ShieldCheck, Loader2, AlertCircle, CheckCircle2, Building2 } from 'lucide-react';
+import { Mail, Lock, User, ShieldCheck, Loader2, Building2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { logout } from '@/lib/auth';
 
 interface Company {
@@ -23,8 +24,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
     companyId: '',
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<{ email: string; role: string } | null>(null);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -41,18 +41,17 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    setSuccess(null);
+
 
     // Client-side validation
     if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters');
+      toast.error('Password must be at least 8 characters');
       setLoading(false);
       return;
     }
 
     if (formData.role === 'COMPANY_ADMIN' && !formData.companyId) {
-      setError('Select a company for COMPANY_ADMIN');
+      toast.error('Select a company for COMPANY_ADMIN');
       setLoading(false);
       return;
     }
@@ -87,7 +86,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
         throw new Error(data.message || 'Failed to create user');
       }
 
-      setSuccess({ email: data.email, role: data.role });
+      toast.success(`Account ${data.email} provisioned as ${data.role}`);
       // Clear personal info but keep role and companyId
       setFormData((prev) => ({
         ...prev,
@@ -97,7 +96,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
         lastName: '',
       }));
     } catch (err: any) {
-      setError(err.message || 'An error occurred during submission');
+      toast.error(err.message || 'An error occurred during submission');
     } finally {
       setLoading(false);
     }
@@ -112,24 +111,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
 
       <div className="p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
-          {error && (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center gap-3 text-sm text-red-400">
-              <AlertCircle className="h-5 w-5 shrink-0" />
-              <p className="font-medium">{error}</p>
-            </div>
-          )}
 
-          {success && (
-            <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex flex-col gap-1">
-              <div className="flex items-center gap-2 text-emerald-400 text-sm font-bold">
-                <CheckCircle2 className="h-5 w-5" />
-                User Created Successfully
-              </div>
-              <p className="text-xs text-emerald-500/80 ml-7">
-                Account <span className="font-mono font-bold text-emerald-400">{success.email}</span> has been provisioned as <span className="font-bold">{success.role}</span>.
-              </p>
-            </div>
-          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>

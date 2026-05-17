@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { CreditCard, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { logout } from '@/lib/auth';
 
 interface PolicyPaymentButtonProps {
@@ -45,7 +46,7 @@ export default function PolicyPaymentButton({ policyId, amount }: PolicyPaymentB
       const { url } = await res.json();
       window.location.href = url;
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message);
       setLoading(false);
     }
   };

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { FileText, Upload, X, Loader2, Download, ExternalLink } from 'lucide-react';
+import { toast } from 'sonner';
 import { formatDate } from '@/lib/formatDate';
 import { logout } from '@/lib/auth';
 
@@ -30,7 +31,6 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
   const [documents, setDocuments] = useState<ClaimDocument[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
       const data = await res.json();
       setDocuments(data);
     } catch (err: any) {
-      setError(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }
@@ -77,7 +77,6 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
     if (!file) return;
 
     setUploading(true);
-    setError(null);
 
     const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
     const formData = new FormData();
@@ -104,37 +103,48 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
 
       const newDoc = await res.json();
       setDocuments((prev) => [newDoc, ...prev]);
+      toast.success('Document uploaded');
       // Reset input
       e.target.value = '';
     } catch (err: any) {
-      setError(err.message);
+      toast.error(err.message);
     } finally {
       setUploading(false);
     }
   };
 
   const handleDelete = async (docId: string) => {
-    if (!confirm('Are you sure you want to delete this document?')) return;
+    toast('Delete this document?', {
+      action: {
+        label: 'Delete',
+        onClick: async () => {
+          const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+          try {
+            const res = await fetch(`${API_BASE}/claims/${claimId}/documents/${docId}`, {
+              method: 'DELETE',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+              },
+            });
 
-    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
-    try {
-      const res = await fetch(`${API_BASE}/claims/${claimId}/documents/${docId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+            if (res.status === 401) {
+              logout();
+              return;
+            }
 
-      if (res.status === 401) {
-        logout();
-        return;
+            if (!res.ok) throw new Error('Delete failed');
+            setDocuments((prev) => prev.filter((d) => d.id !== docId));
+            toast.success('Document deleted');
+          } catch (err: any) {
+            toast.error(err.message);
+          }
+        }
+      },
+      cancel: {
+        label: 'Cancel',
+        onClick: () => {}
       }
-
-      if (!res.ok) throw new Error('Delete failed');
-      setDocuments((prev) => prev.filter((d) => d.id !== docId));
-    } catch (err: any) {
-      setError(err.message);
-    }
+    });
   };
 
   const formatSize = (bytes: number) => {
@@ -167,12 +177,7 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
         )}
       </div>
 
-      {error && (
-        <div className="p-2 bg-rose-500/10 border border-rose-500/20 rounded text-[11px] text-rose-400 flex items-center gap-2">
-          <X className="h-3 w-3" />
-          {error}
-        </div>
-      )}
+
 
       {loading ? (
         <div className="flex items-center justify-center py-6">

@@ -5,6 +5,8 @@ import { formatDate, formatCurrency } from '@/lib/formatDate';
 import ClaimSubmissionForm from '@/components/ClaimSubmissionForm';
 import ClaimDocuments from '@/components/ClaimDocuments';
 import StopClickPropagation from '@/components/StopClickPropagation';
+import EmptyState from '@/components/ui/EmptyState';
+import ClaimFilters from './ClaimFilters';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -37,8 +39,23 @@ async function getClaimsAndPolicies() {
   }
 }
 
-export default async function ClientClaimsPage() {
-  const { claims, policies } = await getClaimsAndPolicies();
+type Props = { searchParams: Promise<{ [key: string]: string | string[] | undefined }> };
+
+export default async function ClientClaimsPage(props: Props) {
+  const searchParams = await props.searchParams;
+  const statusFilter = typeof searchParams.status === 'string' ? searchParams.status : 'all';
+
+  const { claims: allClaims, policies } = await getClaimsAndPolicies();
+  
+  const counts = allClaims.reduce((acc: any, claim: any) => {
+    acc['all'] = (acc['all'] || 0) + 1;
+    acc[claim.status] = (acc[claim.status] || 0) + 1;
+    return acc;
+  }, { all: 0 });
+
+  const claims = statusFilter === 'all' 
+    ? allClaims 
+    : allClaims.filter((c: any) => c.status === statusFilter);
 
   return (
     <div className="space-y-8">
@@ -48,6 +65,8 @@ export default async function ClientClaimsPage() {
       </div>
 
       <ClaimSubmissionForm policies={policies} />
+
+      <ClaimFilters counts={counts} />
 
       <div className="grid gap-4 mt-8">
         {claims.length > 0 ? (
@@ -129,10 +148,11 @@ export default async function ClientClaimsPage() {
             );
           })
         ) : (
-          <div className="bg-zinc-900/50 border border-zinc-800 border-dashed rounded-xl p-12 text-center">
-            <Activity className="h-12 w-12 text-zinc-700 mx-auto mb-4" />
-            <p className="text-zinc-500">No claims yet.</p>
-          </div>
+          <EmptyState 
+            icon={Activity} 
+            title="No claims filed yet" 
+            description="When something happens, file a claim using the form above." 
+          />
         )}
       </div>
     </div>
