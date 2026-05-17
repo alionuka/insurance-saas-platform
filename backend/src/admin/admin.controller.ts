@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Body, Query, Param, UseGuards } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
@@ -13,6 +13,30 @@ import { UserRole } from '@prisma/client';
 @Controller('admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
+
+  @Get('users')
+  @Roles(UserRole.PLATFORM_ADMIN)
+  listUsers(
+    @Query('role') role?: string,
+    @Query('companyId') companyId?: string,
+    @Query('limit') limitStr?: string,
+    @Query('offset') offsetStr?: string,
+  ) {
+    const limit = Math.min(parseInt(limitStr || '50', 10) || 50, 200);
+    const offset = parseInt(offsetStr || '0', 10) || 0;
+    const filters: { role?: UserRole; companyId?: string } = {};
+    if (role && Object.values(UserRole).includes(role as UserRole)) {
+      filters.role = role as UserRole;
+    }
+    if (companyId) filters.companyId = companyId;
+    return this.adminService.listUsers(filters, { limit, offset });
+  }
+
+  @Get('users/:id')
+  @Roles(UserRole.PLATFORM_ADMIN)
+  getUserById(@Param('id') id: string) {
+    return this.adminService.getUserById(id);
+  }
 
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   @Post('users')

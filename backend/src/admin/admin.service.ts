@@ -72,4 +72,54 @@ export class AdminService {
 
     return newUser;
   }
+
+  async listUsers(
+    filters: { role?: UserRole; companyId?: string },
+    pagination: { limit: number; offset: number },
+  ) {
+    const where: any = {};
+    if (filters.role) where.role = filters.role;
+    if (filters.companyId) where.companyId = filters.companyId;
+
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.user.findMany({
+        where,
+        select: { ...safeUserSelect, company: true },
+        orderBy: { createdAt: 'desc' },
+        take: pagination.limit,
+        skip: pagination.offset,
+      }),
+      this.prisma.user.count({ where }),
+    ]);
+
+    return { items, total };
+  }
+
+  async getUserById(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        company: true,
+        applications: {
+          include: { product: true },
+          orderBy: { createdAt: 'desc' },
+        },
+        claims: {
+          orderBy: { createdAt: 'desc' },
+        },
+        policies: {
+          include: { product: true },
+          orderBy: { createdAt: 'desc' },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    // Strip passwordHash
+    const { passwordHash, ...safeUser } = user;
+    return safeUser;
+  }
 }

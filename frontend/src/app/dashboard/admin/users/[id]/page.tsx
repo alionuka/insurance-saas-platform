@@ -1,0 +1,312 @@
+import { cookies } from 'next/headers';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { ArrowLeft, UserCircle, Mail, Shield, Building2, Calendar, FileText, ShieldCheck, Activity, CreditCard, TrendingUp } from 'lucide-react';
+import { formatDate, formatCurrency } from '@/lib/formatDate';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
+const roleColors: Record<string, string> = {
+  CUSTOMER: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  AGENT: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  COMPANY_ADMIN: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  PLATFORM_ADMIN: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
+};
+
+async function getUser(id: string) {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('access_token')?.value ?? '';
+    if (!token) return { status: 401 };
+
+    const res = await fetch(`${API_URL}/admin/users/${id}`, {
+      cache: 'no-store',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (res.status === 401) return { status: 401 };
+    if (res.status === 403) return { status: 403 };
+    if (res.status === 404) return { status: 404 };
+    if (!res.ok) return { status: 500 };
+
+    const data = await res.json();
+    return { user: data, status: 200 };
+  } catch {
+    return { status: 500 };
+  }
+}
+
+export default async function AdminUserDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const { user, status } = await getUser(id);
+
+  if (status === 401) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+        <p className="mt-4 text-zinc-400">Session expired. Redirecting...</p>
+      </div>
+    );
+  }
+
+  if (status === 403 || status === 404) {
+    notFound();
+  }
+
+  if (status !== 200 || !user) {
+    return (
+      <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
+        <h2 className="text-lg font-semibold">Error Loading User</h2>
+        <p className="text-sm mt-1">We couldn&apos;t fetch the user details. Please try again later.</p>
+      </div>
+    );
+  }
+
+  const isCustomer = user.role === 'CUSTOMER';
+  const initials = `${(user.firstName?.[0] || '').toUpperCase()}${(user.lastName?.[0] || '').toUpperCase()}` || 'U';
+  const applications = user.applications || [];
+  const policies = user.policies || [];
+  const claims = user.claims || [];
+
+  const activePolicies = policies.filter((p: any) => p.status === 'ACTIVE');
+  const openClaims = claims.filter((c: any) => c.status === 'FILED' || c.status === 'IN_PROGRESS');
+
+  return (
+    <div className="max-w-5xl space-y-6">
+      <Link
+        href="/dashboard/admin/users"
+        className="inline-flex items-center text-sm font-medium text-zinc-400 hover:text-indigo-400 transition-colors"
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to Users
+      </Link>
+
+      {/* Hero */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 md:p-8 flex items-start gap-5 shadow-xl">
+        <div className="h-16 w-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-2xl font-bold text-indigo-400 shrink-0">
+          {initials}
+        </div>
+        <div className="flex-1 min-w-0">
+          <h1 className="text-2xl font-bold tracking-tight text-white">{user.firstName} {user.lastName}</h1>
+          <p className="text-zinc-400 mt-1 flex items-center gap-2">
+            <Mail className="h-4 w-4" />
+            {user.email}
+          </p>
+          <div className="mt-3">
+            <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border ${roleColors[user.role] || 'bg-zinc-800 text-zinc-400 border-zinc-700'}`}>
+              {user.role.replace('_', ' ')}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Account Info */}
+        <div className="lg:col-span-1">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-md">
+            <div className="flex items-center gap-2 mb-4 border-b border-zinc-800 pb-4">
+              <UserCircle className="h-5 w-5 text-zinc-400" />
+              <h2 className="text-lg font-bold text-white">Account Info</h2>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Email</p>
+                <p className="text-white font-mono text-sm mt-1">{user.email}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">First Name</p>
+                  <p className="text-white text-sm mt-1">{user.firstName}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Last Name</p>
+                  <p className="text-white text-sm mt-1">{user.lastName}</p>
+                </div>
+              </div>
+              <div>
+                <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Role</p>
+                <p className="text-white text-sm mt-1">{user.role.replace('_', ' ')}</p>
+              </div>
+              {user.age != null && (
+                <div>
+                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Age</p>
+                  <p className="text-white text-sm mt-1">{user.age}</p>
+                </div>
+              )}
+              {user.annualIncome != null && (
+                <div>
+                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Annual Income</p>
+                  <p className="text-white text-sm mt-1">{formatCurrency(user.annualIncome)}</p>
+                </div>
+              )}
+              {user.creditScore != null && (
+                <div>
+                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Credit Score</p>
+                  <p className="text-white text-sm mt-1">{user.creditScore}</p>
+                </div>
+              )}
+              {user.company && (
+                <div>
+                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Company</p>
+                  <p className="text-white text-sm mt-1 flex items-center gap-1.5">
+                    <Building2 className="h-3.5 w-3.5 text-zinc-500" />
+                    {user.company.name}
+                  </p>
+                </div>
+              )}
+              <div>
+                <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Member Since</p>
+                <p className="text-zinc-300 text-sm mt-1 flex items-center gap-1.5">
+                  <Calendar className="h-3.5 w-3.5 text-zinc-500" />
+                  {formatDate(user.createdAt)}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Resources */}
+        <div className="lg:col-span-2 space-y-6">
+          {isCustomer ? (
+            <>
+              {/* Stats Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
+                    <FileText className="h-5 w-5 text-indigo-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-zinc-400">Applications</p>
+                    <p className="text-2xl font-bold text-white">{applications.length}</p>
+                  </div>
+                </div>
+                <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                    <ShieldCheck className="h-5 w-5 text-emerald-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-zinc-400">Active Policies</p>
+                    <p className="text-2xl font-bold text-white">{activePolicies.length}</p>
+                  </div>
+                </div>
+                <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                    <Activity className="h-5 w-5 text-amber-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-zinc-400">Open Claims</p>
+                    <p className="text-2xl font-bold text-white">{openClaims.length}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Applications Summary */}
+              <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-md">
+                <div className="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
+                  <h3 className="text-md font-bold text-white">Recent Applications</h3>
+                  <span className="bg-indigo-500/10 text-indigo-400 text-xs px-2.5 py-1 rounded-full font-medium">
+                    {applications.length} Total
+                  </span>
+                </div>
+                {applications.length > 0 ? (
+                  <div className="divide-y divide-zinc-800">
+                    {applications.slice(0, 5).map((app: any) => (
+                      <div key={app.id} className="px-6 py-3 flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-white font-medium">{app.product?.name || 'Application'}</p>
+                          <p className="text-xs text-zinc-500 mt-0.5">{formatDate(app.createdAt)}</p>
+                        </div>
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
+                          app.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                          app.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' :
+                          'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                        }`}>
+                          {app.status}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="px-6 py-8 text-center text-zinc-500 text-sm italic">No applications</div>
+                )}
+              </div>
+
+              {/* Policies Summary */}
+              <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-md">
+                <div className="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
+                  <h3 className="text-md font-bold text-white">Policies</h3>
+                  <span className="bg-emerald-500/10 text-emerald-400 text-xs px-2.5 py-1 rounded-full font-medium">
+                    {policies.length} Total
+                  </span>
+                </div>
+                {policies.length > 0 ? (
+                  <div className="divide-y divide-zinc-800">
+                    {policies.slice(0, 5).map((pol: any) => (
+                      <div key={pol.id} className="px-6 py-3 flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-white font-medium">{pol.product?.name || 'Policy'}</p>
+                          <p className="text-xs text-zinc-500 mt-0.5 font-mono">{pol.policyNumber}</p>
+                        </div>
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
+                          pol.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                          pol.status === 'CANCELLED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' :
+                          'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                        }`}>
+                          {pol.status.replace('_', ' ')}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="px-6 py-8 text-center text-zinc-500 text-sm italic">No policies</div>
+                )}
+              </div>
+
+              {/* Claims Summary */}
+              <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-md">
+                <div className="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
+                  <h3 className="text-md font-bold text-white">Claims</h3>
+                  <span className="bg-rose-500/10 text-rose-400 text-xs px-2.5 py-1 rounded-full font-medium">
+                    {claims.length} Total
+                  </span>
+                </div>
+                {claims.length > 0 ? (
+                  <div className="divide-y divide-zinc-800">
+                    {claims.slice(0, 5).map((claim: any) => (
+                      <div key={claim.id} className="px-6 py-3 flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-white font-medium truncate max-w-xs">{claim.description || 'Claim'}</p>
+                          <p className="text-xs text-zinc-500 mt-0.5">{formatDate(claim.createdAt)} · {formatCurrency(claim.amount)}</p>
+                        </div>
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
+                          claim.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                          claim.status === 'DENIED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' :
+                          'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                        }`}>
+                          {claim.status.replace('_', ' ')}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="px-6 py-8 text-center text-zinc-500 text-sm italic">No claims</div>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-8 text-center shadow-md">
+              <div className="h-16 w-16 rounded-2xl bg-zinc-800 border border-zinc-700 flex items-center justify-center mx-auto mb-4">
+                <Shield className="h-8 w-8 text-zinc-500" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">Staff Account</h3>
+              <p className="text-zinc-400 text-sm max-w-md mx-auto leading-relaxed">
+                This is a <span className="font-semibold text-white">{user.role.replace('_', ' ')}</span> account.
+                Staff accounts manage platform resources but do not have personal applications, policies, or claims.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

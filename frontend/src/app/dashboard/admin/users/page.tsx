@@ -1,41 +1,71 @@
 import { cookies } from 'next/headers';
 import { ShieldAlert, Users } from 'lucide-react';
+import Link from 'next/link';
 import CreateUserForm from './CreateUserForm';
+import UsersFilters from './UsersFilters';
+import EmptyState from '@/components/ui/EmptyState';
+import { formatDate } from '@/lib/formatDate';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
-async function getCompaniesData() {
+const roleColors: Record<string, string> = {
+  CUSTOMER: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  AGENT: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  COMPANY_ADMIN: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  PLATFORM_ADMIN: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
+};
+
+async function getPageData(roleFilter?: string) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('access_token')?.value;
-    
-    if (!token) return { companies: [], forbidden: true };
+    if (!token) return { users: [], companies: [], forbidden: true, counts: {} };
 
-    const response = await fetch(`${API_URL}/companies`, {
-      cache: 'no-store',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
+    const authHeader: HeadersInit = { Authorization: `Bearer ${token}` };
 
-    if (response.status === 403) {
-      return { companies: [], forbidden: true };
-    }
+    const usersUrl = roleFilter && roleFilter !== 'all'
+      ? `${API_URL}/admin/users?limit=200&role=${roleFilter}`
+      : `${API_URL}/admin/users?limit=200`;
 
-    if (!response.ok) {
-      return { companies: [], forbidden: false };
-    }
+    const [usersRes, allUsersRes, companiesRes] = await Promise.all([
+      fetch(usersUrl, { cache: 'no-store', headers: authHeader }).catch(() => null),
+      // Fetch all users (unfiltered) for counts
+      roleFilter && roleFilter !== 'all'
+        ? fetch(`${API_URL}/admin/users?limit=200`, { cache: 'no-store', headers: authHeader }).catch(() => null)
+        : null,
+      fetch(`${API_URL}/companies`, { cache: 'no-store', headers: authHeader }).catch(() => null),
+    ]);
 
-    const companiesJson = await response.json();
+    if (usersRes?.status === 403) return { users: [], companies: [], forbidden: true, counts: {} };
+
+    const usersJson = usersRes && usersRes.ok ? await usersRes.json() : { items: [] };
+    const allUsersJson = allUsersRes && allUsersRes.ok ? await allUsersRes.json() : null;
+    const companiesJson = companiesRes && companiesRes.ok ? await companiesRes.json() : { items: [] };
+
+    const users = usersJson.items ?? [];
     const companies = companiesJson.items ?? [];
-    return { companies, forbidden: false };
-  } catch (error) {
-    return { companies: [], forbidden: false };
+
+    // Compute counts from the full user list
+    const allUsers = allUsersJson ? (allUsersJson.items ?? []) : users;
+    const counts: Record<string, number> = { all: 0 };
+    for (const u of allUsers) {
+      counts['all']++;
+      counts[u.role] = (counts[u.role] || 0) + 1;
+    }
+
+    return { users, companies, forbidden: false, counts };
+  } catch {
+    return { users: [], companies: [], forbidden: false, counts: {} };
   }
 }
 
-export default async function ManageUsersPage() {
-  const { companies, forbidden } = await getCompaniesData();
+type Props = { searchParams: Promise<{ [key: string]: string | string[] | undefined }> };
+
+export default async function ManageUsersPage(props: Props) {
+  const searchParams = await props.searchParams;
+  const roleFilter = typeof searchParams.role === 'string' ? searchParams.role : undefined;
+
+  const { users, companies, forbidden, counts } = await getPageData(roleFilter);
 
   if (forbidden) {
     return (
@@ -58,13 +88,73 @@ export default async function ManageUsersPage() {
           <Users className="h-6 w-6 text-indigo-500" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Manage Users</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-white">User Management</h1>
           <p className="text-zinc-400 mt-1">
-            Create staff accounts (Agents, Company Admins, Platform Admins).
+            View all platform users and create new staff accounts.
           </p>
         </div>
       </div>
 
+      {/* Users Table */}
+      <div className="space-y-4">
+        <UsersFilters counts={counts} />
+
+        {users.length > 0 ? (
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm min-w-[800px]">
+                <thead className="bg-zinc-950 text-zinc-500 uppercase text-[10px] font-bold tracking-wider">
+                  <tr>
+                    <th className="px-6 py-3">Name</th>
+                    <th className="px-6 py-3">Email</th>
+                    <th className="px-6 py-3">Role</th>
+                    <th className="px-6 py-3">Company</th>
+                    <th className="px-6 py-3 text-right">Joined</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-800">
+                  {users.map((user: any) => (
+                    <tr key={user.id} className="hover:bg-zinc-800/30 transition-colors group">
+                      <td className="px-6 py-4">
+                        <Link href={`/dashboard/admin/users/${user.id}`} className="flex items-center gap-3 group-hover:text-indigo-400 transition-colors">
+                          <div className="h-8 w-8 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-xs font-bold text-indigo-400 shrink-0">
+                            {(user.firstName?.[0] || '').toUpperCase()}{(user.lastName?.[0] || '').toUpperCase()}
+                          </div>
+                          <span className="font-medium text-white group-hover:text-indigo-400 transition-colors">
+                            {user.firstName} {user.lastName}
+                          </span>
+                        </Link>
+                      </td>
+                      <td className="px-6 py-4 text-zinc-400 font-mono text-xs">
+                        {user.email}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${roleColors[user.role] || 'bg-zinc-800 text-zinc-400 border-zinc-700'}`}>
+                          {user.role.replace('_', ' ')}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-zinc-400 text-xs">
+                        {user.company?.name || '—'}
+                      </td>
+                      <td className="px-6 py-4 text-right text-zinc-500 font-mono text-xs">
+                        {formatDate(user.createdAt)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : (
+          <EmptyState
+            icon={Users}
+            title="No users found"
+            description="No users match the current filter."
+          />
+        )}
+      </div>
+
+      {/* Create User Form */}
       <div className="max-w-4xl">
         <CreateUserForm companies={companies} />
       </div>
