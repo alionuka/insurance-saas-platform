@@ -20,17 +20,23 @@ interface Policy {
 
 interface ClaimSubmissionFormProps {
   policies: any[];
+  preselectPolicyId?: string;
 }
 
-export default function ClaimSubmissionForm({ policies }: ClaimSubmissionFormProps) {
+export default function ClaimSubmissionForm({ policies, preselectPolicyId }: ClaimSubmissionFormProps) {
   const router = useRouter();
-  const [selectedPolicyId, setSelectedPolicyId] = useState('');
+
+  const activePolicies = policies.filter((p) => p.status === 'ACTIVE');
+
+  // If preselectPolicyId matches an active policy, use it as the default
+  const initialPolicyId = preselectPolicyId && activePolicies.some(p => p.id === preselectPolicyId)
+    ? preselectPolicyId
+    : '';
+
+  const [selectedPolicyId, setSelectedPolicyId] = useState(initialPolicyId);
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
-
-  const activePolicies = policies.filter((p) => p.status === 'ACTIVE');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

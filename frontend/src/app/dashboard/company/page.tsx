@@ -3,6 +3,9 @@ import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { cookies } from 'next/headers';
 import { logout } from '@/lib/auth';
 import Link from 'next/link';
+import StatusPieChart from '@/components/charts/StatusPieChart';
+import ActivityLineChart from '@/components/charts/ActivityLineChart';
+import CountUpNumber from '@/components/charts/CountUpNumber';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -91,6 +94,36 @@ export default async function CompanyDashboard() {
     ? appsWithRisk.reduce((acc: number, a: any) => acc + a.riskAssessments[0].riskScore, 0) / appsWithRisk.length 
     : 0;
 
+  // Chart data: Policies by Status
+  const policyStatusCounts = policies.reduce((acc: any, p: any) => { acc[p.status] = (acc[p.status] || 0) + 1; return acc; }, {});
+  const policiesPieData = [
+    { name: 'Active', value: policyStatusCounts['ACTIVE'] || 0, color: '#34d399' },
+    { name: 'Pending Payment', value: policyStatusCounts['PENDING_PAYMENT'] || 0, color: '#fbbf24' },
+    { name: 'Expired', value: policyStatusCounts['EXPIRED'] || 0, color: '#71717a' },
+    { name: 'Cancelled', value: policyStatusCounts['CANCELLED'] || 0, color: '#fb7185' },
+  ];
+
+  // Chart data: Claims by Status
+  const claimStatusCounts = claims.reduce((acc: any, c: any) => { acc[c.status] = (acc[c.status] || 0) + 1; return acc; }, {});
+  const claimsPieData = [
+    { name: 'Filed', value: claimStatusCounts['FILED'] || 0, color: '#60a5fa' },
+    { name: 'In Progress', value: claimStatusCounts['IN_PROGRESS'] || 0, color: '#fbbf24' },
+    { name: 'Approved', value: claimStatusCounts['APPROVED'] || 0, color: '#34d399' },
+    { name: 'Denied', value: claimStatusCounts['DENIED'] || 0, color: '#fb7185' },
+  ];
+
+  // Chart data: Monthly Premium Revenue (last 6 months)
+  const now = new Date();
+  const revenueData: { date: string; count: number }[] = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const monthKey = d.toISOString().slice(0, 7); // 'YYYY-MM'
+    const label = d.toLocaleDateString('en-US', { month: 'short' });
+    const monthPolicies = policies.filter((p: any) => p.createdAt?.slice(0, 7) === monthKey);
+    const total = monthPolicies.reduce((sum: number, p: any) => sum + (p.premiumAmount || 0), 0);
+    revenueData.push({ date: label, count: Math.round(total) });
+  }
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -135,7 +168,7 @@ export default async function CompanyDashboard() {
             </div>
             <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Portfolio</span>
           </div>
-          <p className="text-2xl font-bold text-white">{totalApps}</p>
+          <p className="text-2xl font-bold text-white"><CountUpNumber value={totalApps} /></p>
           <p className="text-xs text-zinc-500 mt-1">Total Applications</p>
         </div>
 
@@ -146,7 +179,7 @@ export default async function CompanyDashboard() {
             </div>
             <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Active</span>
           </div>
-          <p className="text-2xl font-bold text-white">{activePolicies}</p>
+          <p className="text-2xl font-bold text-white"><CountUpNumber value={activePolicies} /></p>
           <p className="text-xs text-zinc-500 mt-1">In-Force Policies</p>
         </div>
 
@@ -159,7 +192,7 @@ export default async function CompanyDashboard() {
               {suspiciousClaims} Flagged
             </span>
           </div>
-          <p className="text-2xl font-bold text-white">{totalClaims}</p>
+          <p className="text-2xl font-bold text-white"><CountUpNumber value={totalClaims} /></p>
           <p className="text-xs text-zinc-500 mt-1">Total Claims Filed</p>
         </div>
 
@@ -294,6 +327,13 @@ export default async function CompanyDashboard() {
         </section>
 
 
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <StatusPieChart data={policiesPieData} title="Policies by Status" />
+        <StatusPieChart data={claimsPieData} title="Claims by Status" />
+        <ActivityLineChart data={revenueData} title="Monthly Premium Revenue" color="emerald" />
       </div>
     </div>
   );

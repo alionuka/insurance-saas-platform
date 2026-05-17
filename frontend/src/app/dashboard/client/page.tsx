@@ -2,6 +2,7 @@ import { ShieldCheck, FileCheck, Activity, CreditCard, Clock, ChevronRight } fro
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
+import CountUpNumber from '@/components/charts/CountUpNumber';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -88,7 +89,7 @@ export default async function ClientDashboardOverview() {
           </div>
           <div>
             <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Applications</p>
-            <p className="text-2xl font-bold text-white">{applications.length}</p>
+            <p className="text-2xl font-bold text-white"><CountUpNumber value={applications.length} /></p>
           </div>
         </div>
         
@@ -98,7 +99,7 @@ export default async function ClientDashboardOverview() {
           </div>
           <div>
             <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Active Policies</p>
-            <p className="text-2xl font-bold text-white">{activePolicies.length}</p>
+            <p className="text-2xl font-bold text-white"><CountUpNumber value={activePolicies.length} /></p>
           </div>
         </div>
         
@@ -108,7 +109,7 @@ export default async function ClientDashboardOverview() {
           </div>
           <div>
             <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Open Claims</p>
-            <p className="text-2xl font-bold text-white">{openClaims.length}</p>
+            <p className="text-2xl font-bold text-white"><CountUpNumber value={openClaims.length} /></p>
           </div>
         </div>
 
@@ -118,7 +119,7 @@ export default async function ClientDashboardOverview() {
           </div>
           <div>
             <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Total Premium</p>
-            <p className="text-2xl font-bold text-white">{formatCurrency(totalPremium)}</p>
+            <p className="text-2xl font-bold text-white"><CountUpNumber value={Math.round(totalPremium)} prefix="$" /></p>
           </div>
         </div>
       </div>

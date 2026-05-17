@@ -44,6 +44,7 @@ type Props = { searchParams: Promise<{ [key: string]: string | string[] | undefi
 export default async function ClientClaimsPage(props: Props) {
   const searchParams = await props.searchParams;
   const statusFilter = typeof searchParams.status === 'string' ? searchParams.status : 'all';
+  const preselectPolicyId = typeof searchParams.policyId === 'string' ? searchParams.policyId : undefined;
 
   const { claims: allClaims, policies } = await getClaimsAndPolicies();
   
@@ -64,7 +65,7 @@ export default async function ClientClaimsPage(props: Props) {
         <p className="text-zinc-400 mt-1 text-sm">File a new claim or track existing ones.</p>
       </div>
 
-      <ClaimSubmissionForm policies={policies} />
+      <ClaimSubmissionForm policies={policies} preselectPolicyId={preselectPolicyId} />
 
       <ClaimFilters counts={counts} />
 

@@ -110,9 +110,20 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
             </div>
           </div>
           
-          <div className="text-left md:text-right">
-            <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-1">Annual Premium</p>
-            <p className="text-3xl font-bold text-emerald-400">{formatCurrency(policy.premiumAmount)}</p>
+          <div className="text-left md:text-right space-y-3">
+            <div>
+              <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-1">Annual Premium</p>
+              <p className="text-3xl font-bold text-emerald-400">{formatCurrency(policy.premiumAmount)}</p>
+            </div>
+            {policy.status === 'ACTIVE' && (
+              <Link
+                href={`/dashboard/client/claims?policyId=${policy.id}`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-indigo-500/20"
+              >
+                <Activity className="h-4 w-4" />
+                File a Claim
+              </Link>
+            )}
           </div>
         </div>
       </div>

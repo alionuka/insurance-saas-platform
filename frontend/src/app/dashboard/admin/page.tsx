@@ -2,6 +2,9 @@ import { Users, Server, Activity, Database, Zap, Shield, TrendingUp, Package, Sh
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
+import StatusPieChart from '@/components/charts/StatusPieChart';
+import ActivityLineChart from '@/components/charts/ActivityLineChart';
+import CountUpNumber from '@/components/charts/CountUpNumber';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -13,7 +16,7 @@ async function getAdminData() {
 
     const authHeader: HeadersInit = { Authorization: `Bearer ${token}` };
 
-    const [companiesRes, productsRes, appsRes, claimsRes, policiesRes] = await Promise.all([
+    const [companiesRes, productsRes, appsRes, claimsRes, policiesRes, auditRes] = await Promise.all([
       fetch(`${API_URL}/companies`, { 
         cache: 'no-store',
         headers: authHeader,
@@ -28,6 +31,10 @@ async function getAdminData() {
         headers: authHeader,
       }).catch(() => null),
       fetch(`${API_URL}/policies`, { 
+        cache: 'no-store',
+        headers: authHeader,
+      }).catch(() => null),
+      fetch(`${API_URL}/audit-logs?limit=500`, { 
         cache: 'no-store',
         headers: authHeader,
       }).catch(() => null),
@@ -46,16 +53,18 @@ async function getAdminData() {
     const appsJson = appsRes && appsRes.ok ? await appsRes.json() : { items: [] };
     const claimsJson = claimsRes && claimsRes.ok ? await claimsRes.json() : { items: [] };
     const policiesJson = policiesRes && policiesRes.ok ? await policiesRes.json() : { items: [] };
+    const auditJson = auditRes && auditRes.ok ? await auditRes.json() : { items: [] };
 
     const companies = companiesJson.items ?? [];
     const products = productsJson.items ?? [];
     const applications = appsJson.items ?? [];
     const claims = claimsJson.items ?? [];
     const policies = policiesJson.items ?? [];
+    const auditLogs = auditJson.items ?? [];
 
-    return { companies, products, applications, claims, policies, status: 200 };
+    return { companies, products, applications, claims, policies, auditLogs, status: 200 };
   } catch (error) {
-    return { companies: [], products: [], applications: [], claims: [], policies: [], status: 500 };
+    return { companies: [], products: [], applications: [], claims: [], policies: [], auditLogs: [], status: 500 };
   }
 }
 
@@ -81,7 +90,7 @@ export default async function AdminDashboard() {
     );
   }
 
-  const { companies, products, applications, claims, policies } = data;
+  const { companies, products, applications, claims, policies, auditLogs } = data;
 
   // Aggregate Metrics
   const totalCompanies = companies.length;
@@ -98,6 +107,45 @@ export default async function AdminDashboard() {
   const avgRiskScore = appsWithRisk.length > 0 
     ? appsWithRisk.reduce((acc: number, a: any) => acc + a.riskAssessments[0].riskScore, 0) / appsWithRisk.length 
     : 0;
+
+  // Chart data: Applications by Status
+  const appStatusCounts = applications.reduce((acc: any, a: any) => { acc[a.status] = (acc[a.status] || 0) + 1; return acc; }, {});
+  const appsPieData = [
+    { name: 'Pending', value: appStatusCounts['PENDING'] || 0, color: '#fbbf24' },
+    { name: 'Approved', value: appStatusCounts['APPROVED'] || 0, color: '#34d399' },
+    { name: 'Rejected', value: appStatusCounts['REJECTED'] || 0, color: '#fb7185' },
+    { name: 'Under Review', value: appStatusCounts['UNDER_REVIEW'] || 0, color: '#818cf8' },
+  ];
+
+  // Chart data: Claims by Status
+  const claimStatusCounts = claims.reduce((acc: any, c: any) => { acc[c.status] = (acc[c.status] || 0) + 1; return acc; }, {});
+  const claimsPieData = [
+    { name: 'Filed', value: claimStatusCounts['FILED'] || 0, color: '#60a5fa' },
+    { name: 'In Progress', value: claimStatusCounts['IN_PROGRESS'] || 0, color: '#fbbf24' },
+    { name: 'Approved', value: claimStatusCounts['APPROVED'] || 0, color: '#34d399' },
+    { name: 'Denied', value: claimStatusCounts['DENIED'] || 0, color: '#fb7185' },
+  ];
+
+  // Chart data: Policies by Status
+  const policyStatusCounts = policies.reduce((acc: any, p: any) => { acc[p.status] = (acc[p.status] || 0) + 1; return acc; }, {});
+  const policiesPieData = [
+    { name: 'Active', value: policyStatusCounts['ACTIVE'] || 0, color: '#34d399' },
+    { name: 'Pending Payment', value: policyStatusCounts['PENDING_PAYMENT'] || 0, color: '#fbbf24' },
+    { name: 'Expired', value: policyStatusCounts['EXPIRED'] || 0, color: '#71717a' },
+    { name: 'Cancelled', value: policyStatusCounts['CANCELLED'] || 0, color: '#fb7185' },
+  ];
+
+  // Chart data: Activity over last 30 days
+  const now = new Date();
+  const activityData: { date: string; count: number }[] = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().slice(0, 10);
+    const label = `${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
+    const count = (auditLogs || []).filter((l: any) => l.createdAt?.slice(0, 10) === key).length;
+    activityData.push({ date: label, count });
+  }
 
   return (
     <div className="space-y-8">
@@ -148,7 +196,7 @@ export default async function AdminDashboard() {
             <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Tenants</span>
             <Database className="h-4 w-4 text-indigo-500" />
           </div>
-          <p className="text-xl font-bold text-white">{totalCompanies}</p>
+          <p className="text-xl font-bold text-white"><CountUpNumber value={totalCompanies} /></p>
         </div>
         
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
@@ -156,7 +204,7 @@ export default async function AdminDashboard() {
             <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Users</span>
             <Users className="h-4 w-4 text-emerald-500" />
           </div>
-          <p className="text-xl font-bold text-white">{totalApplicants}</p>
+          <p className="text-xl font-bold text-white"><CountUpNumber value={totalApplicants} /></p>
         </div>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
@@ -164,7 +212,7 @@ export default async function AdminDashboard() {
             <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Products</span>
             <Package className="h-4 w-4 text-blue-500" />
           </div>
-          <p className="text-xl font-bold text-white">{totalProducts}</p>
+          <p className="text-xl font-bold text-white"><CountUpNumber value={totalProducts} /></p>
         </div>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
@@ -172,7 +220,7 @@ export default async function AdminDashboard() {
             <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Apps</span>
             <ShieldCheck className="h-4 w-4 text-emerald-500" />
           </div>
-          <p className="text-xl font-bold text-white">{totalApps}</p>
+          <p className="text-xl font-bold text-white"><CountUpNumber value={totalApps} /></p>
         </div>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
@@ -180,7 +228,7 @@ export default async function AdminDashboard() {
             <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Policies</span>
             <ShieldCheck className="h-4 w-4 text-indigo-400" />
           </div>
-          <p className="text-xl font-bold text-white">{totalPolicies}</p>
+          <p className="text-xl font-bold text-white"><CountUpNumber value={totalPolicies} /></p>
         </div>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
@@ -188,7 +236,7 @@ export default async function AdminDashboard() {
             <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Claims</span>
             <Activity className="h-4 w-4 text-rose-500" />
           </div>
-          <p className="text-xl font-bold text-white">{totalClaims}</p>
+          <p className="text-xl font-bold text-white"><CountUpNumber value={totalClaims} /></p>
         </div>
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
@@ -196,9 +244,19 @@ export default async function AdminDashboard() {
             <span className="text-[10px] uppercase font-bold text-rose-400 tracking-wider">Flagged</span>
             <AlertTriangle className="h-4 w-4 text-rose-500" />
           </div>
-          <p className="text-xl font-bold text-rose-400">{suspiciousClaims}</p>
+          <p className="text-xl font-bold text-rose-400"><CountUpNumber value={suspiciousClaims} /></p>
         </div>
       </div>
+
+      {/* Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <StatusPieChart data={appsPieData} title="Applications by Status" />
+        <StatusPieChart data={claimsPieData} title="Claims by Status" />
+        <StatusPieChart data={policiesPieData} title="Policies by Status" />
+      </div>
+
+      {/* Activity Line Chart */}
+      <ActivityLineChart data={activityData} title="Platform Activity — Last 30 Days" />
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {/* Companies Section */}
