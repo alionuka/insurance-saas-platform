@@ -16,6 +16,7 @@ import {
   ScrollText,
   LogOut,
   UserCircle,
+  Building2,
 } from 'lucide-react';
 import { logout } from '@/lib/auth';
 
@@ -36,18 +37,23 @@ const CUSTOMER_NAV: NavItem[] = [
 ];
 
 const AGENT_NAV: NavItem[] = [
-  { href: '/dashboard/agent', label: 'Workspace', icon: LayoutDashboard },
+  { href: '/dashboard/agent', label: 'Overview', icon: LayoutDashboard },
+  { href: '/dashboard/agent/applications', label: 'Applications', icon: FileText },
+  { href: '/dashboard/agent/claims', label: 'Claims', icon: Activity },
   { href: '/dashboard/profile', label: 'Profile', icon: UserCircle },
 ];
 
 const COMPANY_ADMIN_NAV: NavItem[] = [
   { href: '/dashboard/company', label: 'Analytics', icon: BarChart3 },
   { href: '/dashboard/company/products', label: 'Products', icon: Package },
+  { href: '/dashboard/company/policies', label: 'Policies', icon: ShieldCheck },
+  { href: '/dashboard/company/claims', label: 'Claims', icon: Activity },
   { href: '/dashboard/profile', label: 'Profile', icon: UserCircle },
 ];
 
 const PLATFORM_ADMIN_NAV: NavItem[] = [
   { href: '/dashboard/admin', label: 'Overview', icon: LayoutDashboard },
+  { href: '/dashboard/admin/companies', label: 'Companies', icon: Building2 },
   { href: '/dashboard/admin/users', label: 'Users', icon: Users },
   { href: '/dashboard/admin/audit-logs', label: 'Audit Log', icon: ScrollText },
   { href: '/dashboard/profile', label: 'Profile', icon: UserCircle },

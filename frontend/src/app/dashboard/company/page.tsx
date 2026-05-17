@@ -293,57 +293,7 @@ export default async function CompanyDashboard() {
           </div>
         </section>
 
-        {/* Policy Portfolio Section */}
-        <section className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl xl:col-span-2">
-          <div className="px-6 py-4 border-b border-zinc-800 bg-zinc-900/50 flex items-center gap-2">
-            <ShieldCheck className="h-5 w-5 text-indigo-400" />
-            <h2 className="text-lg font-bold text-white">Active Policy Portfolio</h2>
-          </div>
-          <div className="p-0 overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-zinc-950 text-zinc-500 uppercase text-[10px] font-bold tracking-wider">
-                <tr>
-                  <th className="px-6 py-3">Policy Number</th>
-                  <th className="px-6 py-3">Customer</th>
-                  <th className="px-6 py-3">Product</th>
-                  <th className="px-6 py-3 text-center">Status</th>
-                  <th className="px-6 py-3 text-right">Effective Date</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-zinc-800">
-                {policies.map((policy: any) => (
-                  <tr key={policy.id} className="hover:bg-zinc-800/30 transition-colors">
-                    <td className="px-6 py-4 font-mono font-bold text-white uppercase">
-                      {policy.policyNumber}
-                    </td>
-                    <td className="px-6 py-4 text-zinc-300 font-medium">
-                      {policy.user?.firstName} {policy.user?.lastName}
-                    </td>
-                    <td className="px-6 py-4 text-zinc-400">
-                      {policy.product?.name}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase border ${
-                        policy.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
-                        'bg-zinc-800 text-zinc-500 border-zinc-700'
-                      }`}>
-                        {policy.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right text-zinc-500 font-mono text-xs">
-                      {formatDate(policy.startDate)}
-                    </td>
-                  </tr>
-                ))}
-                {policies.length === 0 && (
-                  <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-zinc-500 italic">No active policies in portfolio.</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </section>
+
       </div>
     </div>
   );
