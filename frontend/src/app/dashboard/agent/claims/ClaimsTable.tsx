@@ -2,10 +2,11 @@
 
 import { useState, Fragment } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { User, CheckCircle, ChevronRight } from 'lucide-react';
+import { User, CheckCircle, XCircle, ChevronRight, Clock } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { logout } from '@/lib/auth';
 import Link from 'next/link';
+import { toast } from 'sonner';
 import ClaimDocuments from '@/components/ClaimDocuments';
 import {
   StatusBadge,
@@ -16,6 +17,7 @@ import {
   ClaimStatus,
 } from '@/components/agent/AgentSharedBadges';
 import FilterPills from '@/components/ui/FilterPills';
+import BulkActionBar from '@/components/BulkActionBar';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
@@ -33,6 +35,10 @@ export default function ClaimsTable({
   const [loadingClaimId, setLoadingClaimId] = useState<string | null>(null);
   const [errorClaimIds, setErrorClaimIds] = useState<Set<string>>(new Set());
   const [successClaimId, setSuccessClaimId] = useState<string | null>(null);
+
+  // Multi-select state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [isBulkProcessing, setIsBulkProcessing] = useState(false);
 
   async function updateClaimStatus(id: string, status: ClaimStatus) {
     setLoadingClaimId(id);
@@ -70,6 +76,68 @@ export default function ClaimsTable({
     }
   }
 
+  async function bulkUpdateStatus(status: ClaimStatus) {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    if (!token) {
+      toast.error('Not authenticated');
+      return;
+    }
+
+    setIsBulkProcessing(true);
+    const ids = Array.from(selectedIds);
+
+    const results = await Promise.allSettled(
+      ids.map((id) =>
+        fetch(`${API_BASE}/claims/${id}/status`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({ status }),
+        }).then((res) => {
+          if (res.status === 401) {
+            logout();
+            throw new Error('Unauthorized');
+          }
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
+        })
+      )
+    );
+
+    const succeeded = results.filter((r) => r.status === 'fulfilled').length;
+    const failed = results.filter((r) => r.status === 'rejected').length;
+    const label = status === 'APPROVED' ? 'approved' : status === 'DENIED' ? 'denied' : 'marked in progress';
+
+    if (failed === 0) {
+      toast.success(`${succeeded} claim${succeeded !== 1 ? 's' : ''} ${label}`);
+    } else {
+      toast.warning(`${succeeded} succeeded, ${failed} failed`);
+    }
+
+    setSelectedIds(new Set());
+    setIsBulkProcessing(false);
+    router.refresh();
+  }
+
+  function toggleSelection(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    if (selectedIds.size === filteredClaims.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(filteredClaims.map((c: any) => c.id)));
+    }
+  }
+
   // Calculate counts for filters
   const statusCounts = claims.reduce((acc: any, claim: any) => {
     acc['all'] = (acc['all'] || 0) + 1;
@@ -99,6 +167,7 @@ export default function ClaimsTable({
   ];
 
   const handleFilterChange = (key: string, val: string) => {
+    setSelectedIds(new Set());
     const params = new URLSearchParams(searchParams.toString());
     if (val === 'all') {
       params.delete(key);
@@ -116,6 +185,8 @@ export default function ClaimsTable({
     return matchesStatus && matchesFraud;
   });
 
+  const allSelected = filteredClaims.length > 0 && selectedIds.size === filteredClaims.length;
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-3">
@@ -131,9 +202,17 @@ export default function ClaimsTable({
           </span>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[1000px]">
+          <table className="w-full text-left border-collapse min-w-[1050px]">
             <thead>
               <tr className="bg-zinc-950/50 border-b border-zinc-800 text-xs uppercase text-zinc-500 tracking-wider">
+                <th className="px-4 py-3 w-10">
+                  <input
+                    type="checkbox"
+                    checked={allSelected}
+                    onChange={toggleSelectAll}
+                    className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-indigo-500/20 focus:ring-offset-0 cursor-pointer accent-indigo-500"
+                  />
+                </th>
                 <th className="px-6 py-3 font-medium">Customer / Description</th>
                 <th className="px-6 py-3 font-medium">Policy / Product</th>
                 <th className="px-6 py-3 font-medium">Amount</th>
@@ -148,16 +227,29 @@ export default function ClaimsTable({
                 const policy = claim.policy ?? null;
                 const product = claim.application?.product ?? null;
                 const company = product?.company ?? null;
+                const isSelected = selectedIds.has(claim.id);
 
                 return (
                   <Fragment key={claim.id}>
                     <tr
                       className={`transition-colors ${
-                        successClaimId === claim.id
+                        isSelected
+                          ? 'bg-indigo-500/5'
+                          : successClaimId === claim.id
                           ? 'bg-emerald-500/5'
                           : 'hover:bg-zinc-800/50'
                       }`}
                     >
+                    {/* Checkbox */}
+                    <td className="px-4 py-4">
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleSelection(claim.id)}
+                        className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-indigo-500/20 focus:ring-offset-0 cursor-pointer accent-indigo-500"
+                      />
+                    </td>
+
                     {/* Customer / Description */}
                     <td className="px-6 py-4 min-w-[250px]">
                       <Link href={`/dashboard/agent/claims/${claim.id}`} className="block group">
@@ -172,7 +264,7 @@ export default function ClaimsTable({
                                 : `#${claim.id.substring(0, 8)}`}
                             </div>
                             <div className="text-[11px] text-zinc-400 mt-1 line-clamp-2 italic leading-relaxed">
-                              "{claim.description}"
+                              &quot;{claim.description}&quot;
                             </div>
                             <div className="text-[10px] text-zinc-500 mt-1 uppercase tracking-tighter">
                               Filed: {formatDate(claim.createdAt)}
@@ -249,7 +341,7 @@ export default function ClaimsTable({
                   </tr>
                   {/* Documents Sub-row */}
                   <tr key={`${claim.id}-docs`} className="bg-zinc-950/20">
-                    <td colSpan={6} className="px-6 py-0 border-b border-zinc-800">
+                    <td colSpan={7} className="px-6 py-0 border-b border-zinc-800">
                       <details className="group">
                         <summary className="list-none cursor-pointer py-3 flex items-center gap-2 text-[10px] text-zinc-500 hover:text-indigo-400 uppercase font-bold tracking-tight transition-colors">
                           <ChevronRight className="h-3 w-3 group-open:rotate-90 transition-transform" />
@@ -266,7 +358,7 @@ export default function ClaimsTable({
               })}
               {filteredClaims.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-10 text-center text-zinc-500 text-sm">
+                  <td colSpan={7} className="px-6 py-10 text-center text-zinc-500 text-sm">
                     No claims found.
                   </td>
                 </tr>
@@ -275,6 +367,32 @@ export default function ClaimsTable({
           </table>
         </div>
       </div>
+
+      <BulkActionBar
+        selectedCount={selectedIds.size}
+        onClearSelection={() => setSelectedIds(new Set())}
+        isProcessing={isBulkProcessing}
+        actions={[
+          {
+            label: 'Approve All',
+            variant: 'success',
+            icon: CheckCircle,
+            onClick: () => bulkUpdateStatus('APPROVED'),
+          },
+          {
+            label: 'Deny All',
+            variant: 'danger',
+            icon: XCircle,
+            onClick: () => bulkUpdateStatus('DENIED'),
+          },
+          {
+            label: 'Mark In Progress',
+            variant: 'warning',
+            icon: Clock,
+            onClick: () => bulkUpdateStatus('IN_PROGRESS'),
+          },
+        ]}
+      />
     </div>
   );
 }
