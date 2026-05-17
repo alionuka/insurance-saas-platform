@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowLeft, FileText, ShieldAlert, CheckCircle, ShieldCheck, Box, Calendar, User as UserIcon } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import ApplicationStatusUpdateForm from './ApplicationStatusUpdateForm';
+import RiskContributionsChart from '@/components/charts/RiskContributionsChart';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -166,14 +167,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
                 )}
               </div>
             </div>
-            {policy && (
-              <Link
-                href={`/dashboard/agent/policies/${policy.id}`}
-                className="inline-flex justify-center items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-indigo-500/20 shrink-0"
-              >
-                View Policy
-              </Link>
-            )}
+            {/* Note: agent views policy info inline above; no dedicated agent policy detail page in this build */}
           </div>
         </div>
 
@@ -198,11 +192,19 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
                     {risk.riskLevel}
                   </span>
                 </div>
-                <div className="flex-1">
-                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold mb-2">ML Analysis</p>
-                  <p className="text-sm text-zinc-300 leading-relaxed italic bg-zinc-950/50 p-4 rounded-lg border border-zinc-800">
-                    "{risk.explanation}"
-                  </p>
+                <div className="flex-1 flex flex-col justify-between">
+                  <div>
+                    <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold mb-2">ML Analysis</p>
+                    <p className="text-sm text-zinc-300 leading-relaxed italic bg-zinc-950/50 p-4 rounded-lg border border-zinc-800">
+                      "{risk.explanation}"
+                    </p>
+                  </div>
+                  {risk.featureContributions && risk.featureContributions.length > 0 && (
+                    <div className="mt-6 border-t border-zinc-800 pt-5">
+                      <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold mb-3">Feature Contributions</p>
+                      <RiskContributionsChart contributions={risk.featureContributions} />
+                    </div>
+                  )}
                 </div>
               </div>
             ) : (

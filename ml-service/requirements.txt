@@ -10,3 +10,6 @@ joblib>=1.3.0
 
 # Visualization (training only — required by training/train_*.py scripts)
 matplotlib>=3.7.0
+
+# SHAP explanations
+shap>=0.42.0

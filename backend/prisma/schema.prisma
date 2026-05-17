@@ -182,6 +182,7 @@ model RiskAssessment {
   riskScore     Float
   riskLevel     RiskLevel
   explanation   String
+  featureContributions Json?
 
   createdAt DateTime @default(now())
 }

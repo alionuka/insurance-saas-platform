@@ -19,7 +19,7 @@ prediction with a clear marker in the response explanation.
 
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, Union
 
 import joblib
 import numpy as np
@@ -45,6 +45,15 @@ FRAUD_TEXT_FEATURE = "description"
 # Container for loaded models — populated in lifespan startup.
 ml_models: dict = {}
 
+RISK_FEATURE_LABELS = {
+    "age": "Age",
+    "annual_income": "Annual income",
+    "credit_score": "Credit score",
+    "years_customer": "Years a customer",
+    "prior_claims": "Prior claims",
+    "region": "Region",
+}
+
 
 def _try_load(label: str, path: Path):
     if path.exists():
@@ -65,6 +74,28 @@ async def lifespan(app: FastAPI):
     _try_load("risk", RISK_MODEL_PATH)
     _try_load("fraud", FRAUD_MODEL_PATH)
     _try_load("recommendations", RECS_MODEL_PATH)
+    
+    # Try loading SHAP background and explainer
+    try:
+        import shap
+        background_path = Path(__file__).parent / "models" / "risk_shap_background.csv"
+        if background_path.exists() and ml_models.get("risk") is not None:
+            background_df = pd.read_csv(background_path)
+            feature_names = RISK_NUMERIC_FEATURES + RISK_CATEGORICAL_FEATURES
+            explainer = shap.Explainer(
+                ml_models["risk"].predict_proba,
+                background_df,
+                feature_names=feature_names
+            )
+            ml_models["risk_explainer"] = explainer
+            print("[ml-service] Loaded risk SHAP explainer successfully.")
+        else:
+            ml_models["risk_explainer"] = None
+            print("[ml-service] WARNING: risk SHAP background file not found or risk model not loaded.")
+    except Exception as e:
+        ml_models["risk_explainer"] = None
+        print(f"[ml-service] WARNING: Failed to load risk SHAP explainer: {e}")
+
     yield
     ml_models.clear()
 
@@ -96,10 +127,17 @@ class RiskRequest(BaseModel):
     region: Optional[int] = Field(default=1, ge=0, le=2, description="0=urban, 1=suburban, 2=rural")
 
 
+class FeatureContribution(BaseModel):
+    feature: str
+    value: Union[float, str]
+    contribution: float
+
+
 class RiskResponse(BaseModel):
     riskScore: float = Field(..., ge=0, le=100)
     riskLevel: Literal["LOW", "MEDIUM", "HIGH"]
     explanation: str
+    featureContributions: Optional[List[FeatureContribution]] = None
 
 
 class FraudRequest(BaseModel):
@@ -241,7 +279,49 @@ def predict_risk(request: RiskRequest):
     level = _risk_level(score)
     explanation = _build_explanation(score, request, _identify_top_factors(request))
 
-    return RiskResponse(riskScore=score, riskLevel=level, explanation=explanation)
+    feature_contributions = None
+    explainer = ml_models.get("risk_explainer")
+    if explainer is not None:
+        try:
+            import numpy as np
+            res = explainer(row)
+            shap_vals = res.values[0] # shape (6, 2)
+            feature_names = RISK_NUMERIC_FEATURES + RISK_CATEGORICAL_FEATURES
+            
+            contrib_list = []
+            for i, feat_name in enumerate(feature_names):
+                contrib_val = float(shap_vals[i, 1]) * 100
+                raw_val = row.iloc[0][feat_name]
+                
+                # Coerce numpy values to python native type
+                if feat_name == "region":
+                    val_display = {0: "Urban", 1: "Suburban", 2: "Rural"}.get(int(raw_val), str(raw_val))
+                elif isinstance(raw_val, (np.integer, int)):
+                    val_display = int(raw_val)
+                elif isinstance(raw_val, (np.floating, float)):
+                    val_display = float(raw_val)
+                else:
+                    val_display = str(raw_val)
+                
+                contrib_list.append(FeatureContribution(
+                    feature=RISK_FEATURE_LABELS.get(feat_name, feat_name),
+                    value=val_display,
+                    contribution=round(contrib_val, 2)
+                ))
+            
+            # Sort by abs(contribution) DESC, keep top 5
+            contrib_list.sort(key=lambda x: abs(x.contribution), reverse=True)
+            feature_contributions = contrib_list[:5]
+        except Exception as e:
+            print(f"[ml-service] WARNING: SHAP prediction failed: {e}")
+            feature_contributions = None
+
+    return RiskResponse(
+        riskScore=score,
+        riskLevel=level,
+        explanation=explanation,
+        featureContributions=feature_contributions,
+    )
 
 
 def _rule_based_fraud_fallback(request: FraudRequest) -> FraudResponse:

@@ -134,6 +134,7 @@ export class ApplicationsService {
         riskScore: mlRiskResponse.riskScore,
         riskLevel: mlRiskResponse.riskLevel as any, // Enum mapping if needed, assuming they match exactly
         explanation: mlRiskResponse.explanation,
+        featureContributions: mlRiskResponse.featureContributions ?? undefined,
       },
     });
 

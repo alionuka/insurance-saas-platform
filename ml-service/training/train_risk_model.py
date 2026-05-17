@@ -69,6 +69,7 @@ from sklearn.metrics import (
 HERE = os.path.dirname(__file__)
 DATA_PATH = os.path.join(HERE, "..", "data", "risk_dataset.csv")
 MODEL_PATH = os.path.join(HERE, "..", "models", "risk_model.joblib")
+BACKGROUND_PATH = os.path.join(HERE, "..", "models", "risk_shap_background.csv")
 METRICS_PATH = os.path.join(HERE, "..", "models", "risk_model_metrics.json")
 PLOTS_DIR = os.path.join(HERE, "plots")
 
@@ -392,6 +393,8 @@ def main():
     os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
     joblib.dump(best["best_estimator"], MODEL_PATH)
     print(f"\nSaved model -> {MODEL_PATH}")
+    X_train.sample(n=min(100, len(X_train)), random_state=42).to_csv(BACKGROUND_PATH, index=False)
+    print(f"Saved SHAP background -> {BACKGROUND_PATH}")
 
     summary = {
         "methodology": {

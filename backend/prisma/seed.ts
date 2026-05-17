@@ -8,7 +8,9 @@ async function main() {
   await prisma.recommendation.deleteMany();
   await prisma.fraudAssessment.deleteMany();
   await prisma.riskAssessment.deleteMany();
+  await prisma.payment.deleteMany();
   await prisma.policy.deleteMany();
+  await prisma.claimDocument.deleteMany();
   await prisma.claim.deleteMany();
   await prisma.application.deleteMany();
   await prisma.insuranceProduct.deleteMany();
