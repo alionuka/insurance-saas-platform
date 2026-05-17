@@ -1,5 +1,6 @@
 import DashboardSidebar from '@/components/DashboardSidebar';
 import PageTransition from '@/components/PageTransition';
+import OnboardingTour from '@/components/onboarding/OnboardingTour';
 
 export default function DashboardLayout({
   children,
@@ -16,6 +17,7 @@ export default function DashboardLayout({
           </PageTransition>
         </div>
       </main>
+      <OnboardingTour />
     </div>
   );
 }

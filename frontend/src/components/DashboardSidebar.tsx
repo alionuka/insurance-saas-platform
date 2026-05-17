@@ -131,7 +131,8 @@ export default function DashboardSidebar() {
           </div>
           
           <div className="flex items-center gap-2">
-            <button 
+            <button
+              data-tour="global-search"
               onClick={() => {
                 const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true });
                 window.dispatchEvent(event);
@@ -143,13 +144,15 @@ export default function DashboardSidebar() {
               <span className="hidden md:inline">Search</span>
               <kbd className="font-mono bg-zinc-800 px-1 rounded text-[9px] font-bold hidden xl:inline">⌘K</kbd>
             </button>
-            <NotificationsBell />
+            <div data-tour="notifications">
+              <NotificationsBell />
+            </div>
           </div>
         </div>
         
         {/* Navigation */}
         <div className="flex-1 overflow-y-auto py-6">
-          <nav className="px-3 space-y-1.5">
+          <nav data-tour="sidebar-nav" className="px-3 space-y-1.5">
             {navItems.map((item) => {
               const isActive = item.href === '/dashboard/client' || item.href === '/dashboard/agent' || item.href === '/dashboard/company' || item.href === '/dashboard/admin' 
                 ? pathname === item.href

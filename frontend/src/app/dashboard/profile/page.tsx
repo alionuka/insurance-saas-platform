@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { UserCircle, Shield, Activity, AlertCircle } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import ChangePasswordForm from './ChangePasswordForm';
+import RestartTourButton from '@/components/onboarding/RestartTourButton';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -85,12 +86,12 @@ export default async function ProfilePage() {
   return (
     <div className="max-w-4xl space-y-8 pb-12">
       {/* Hero Section */}
-      <div className="flex items-center gap-6 bg-zinc-900 border border-zinc-800 p-8 rounded-xl relative overflow-hidden">
+      <div className="flex flex-col md:flex-row md:items-center gap-6 bg-zinc-900 border border-zinc-800 p-8 rounded-xl relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-2 bg-indigo-500" />
         <div className="h-24 w-24 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center shrink-0">
           <span className="text-3xl font-bold text-indigo-400">{getInitials()}</span>
         </div>
-        <div>
+        <div className="flex-1">
           <h1 className="text-3xl font-bold text-white tracking-tight">{user.firstName} {user.lastName}</h1>
           <p className="text-zinc-400 mt-1">{user.email}</p>
           <div className="mt-3">
@@ -98,6 +99,9 @@ export default async function ProfilePage() {
               {user.role.replace('_', ' ')}
             </span>
           </div>
+        </div>
+        <div className="shrink-0 md:self-start md:pt-1">
+          <RestartTourButton />
         </div>
       </div>
 
