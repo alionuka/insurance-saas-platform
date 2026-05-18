@@ -60,15 +60,19 @@ async function bootstrap() {
     prefix: '/uploads/',
   });
 
-  // Enable CORS for the Next.js frontend
+  // Enable CORS for the Next.js frontend(s). Accepts a comma-separated list
+  // in CORS_ORIGINS, falling back to FRONTEND_URL, then localhost for local dev.
+  const corsEnv = process.env.CORS_ORIGINS ?? process.env.FRONTEND_URL ?? 'http://localhost:3000';
+  const allowedOrigins = corsEnv.split(',').map((o) => o.trim()).filter(Boolean);
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: allowedOrigins.length === 1 ? allowedOrigins[0] : allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
+  logger.log(`CORS allowed origins: ${allowedOrigins.join(', ')}`);
 
   const port = process.env.PORT || 3001;
-  await app.listen(port);
-  logger.log(`Backend application is running on: http://localhost:${port}`);
+  await app.listen(port, '0.0.0.0');
+  logger.log(`Backend application is running on port ${port}`);
 }
 void bootstrap();
