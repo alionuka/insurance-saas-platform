@@ -6,6 +6,8 @@ import Link from 'next/link';
 import StatusPieChart from '@/components/charts/StatusPieChart';
 import ActivityLineChart from '@/components/charts/ActivityLineChart';
 import CountUpNumber from '@/components/charts/CountUpNumber';
+import TopRiskDriversChart, { RiskDriver } from '@/components/charts/TopRiskDriversChart';
+import ProductPerformanceTable, { ProductRow } from '@/components/charts/ProductPerformanceTable';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -123,6 +125,62 @@ export default async function CompanyDashboard() {
     const total = monthPolicies.reduce((sum: number, p: any) => sum + (p.premiumAmount || 0), 0);
     revenueData.push({ date: label, count: Math.round(total) });
   }
+
+  // BI: Risk Level Distribution across all assessed apps
+  const riskLevelCounts = appsWithRisk.reduce((acc: any, a: any) => {
+    const lvl = a.riskAssessments[0].riskLevel;
+    acc[lvl] = (acc[lvl] || 0) + 1;
+    return acc;
+  }, {});
+  const riskLevelPieData = [
+    { name: 'Low', value: riskLevelCounts['LOW'] || 0, color: '#34d399' },
+    { name: 'Medium', value: riskLevelCounts['MEDIUM'] || 0, color: '#fbbf24' },
+    { name: 'High', value: riskLevelCounts['HIGH'] || 0, color: '#fb7185' },
+  ];
+
+  // BI: Top Risk Drivers — aggregate SHAP feature contributions across all assessed apps
+  const driverMap = new Map<string, { totalImpact: number; occurrences: number }>();
+  for (const app of applications) {
+    const fc = app.riskAssessments?.[0]?.featureContributions;
+    if (!Array.isArray(fc)) continue;
+    for (const f of fc) {
+      const cur = driverMap.get(f.feature) ?? { totalImpact: 0, occurrences: 0 };
+      cur.totalImpact += Math.abs(f.contribution ?? 0);
+      cur.occurrences += 1;
+      driverMap.set(f.feature, cur);
+    }
+  }
+  const topRiskDrivers: RiskDriver[] = Array.from(driverMap.entries())
+    .map(([feature, stats]) => ({ feature, ...stats }))
+    .sort((a, b) => b.totalImpact - a.totalImpact)
+    .slice(0, 5);
+
+  // BI: Performance per Product — only this company's products
+  const myCompanyProducts = products.filter((p: any) =>
+    applications.some((a: any) => a.productId === p.id) ||
+    policies.some((pol: any) => pol.productId === p.id)
+  );
+  const productPerformance: ProductRow[] = myCompanyProducts.map((p: any) => {
+    const productApps = applications.filter((a: any) => a.productId === p.id);
+    const productPolicies = policies.filter((pol: any) => pol.productId === p.id);
+    const activePol = productPolicies.filter((pol: any) => pol.status === 'ACTIVE');
+    const productClaims = claims.filter((c: any) =>
+      c.application?.productId === p.id || c.policy?.productId === p.id
+    );
+    const approvedClaims = productClaims.filter((c: any) => c.status === 'APPROVED');
+    const premiumRevenue = activePol.reduce((sum: number, pol: any) => sum + (pol.premiumAmount || 0), 0);
+    return {
+      productId: p.id,
+      productName: p.name,
+      productType: p.type,
+      appsCount: productApps.length,
+      policiesActive: activePol.length,
+      premiumRevenue,
+      claimsCount: productClaims.length,
+      approvedClaims: approvedClaims.length,
+      claimsRatio: activePol.length > 0 ? approvedClaims.length / activePol.length : 0,
+    };
+  });
 
   return (
     <div className="space-y-8">
@@ -334,6 +392,23 @@ export default async function CompanyDashboard() {
         <StatusPieChart data={policiesPieData} title="Policies by Status" />
         <StatusPieChart data={claimsPieData} title="Claims by Status" />
         <ActivityLineChart data={revenueData} title="Monthly Premium Revenue" color="emerald" />
+      </div>
+
+      {/* Business Intelligence Section */}
+      <div>
+        <h2 className="text-xl font-bold text-white tracking-tight mb-1">Business Intelligence</h2>
+        <p className="text-zinc-500 text-sm mb-6">
+          ML-powered insights derived from your portfolio
+        </p>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          <StatusPieChart data={riskLevelPieData} title="Risk Level Distribution" />
+          <div className="lg:col-span-2">
+            <TopRiskDriversChart drivers={topRiskDrivers} />
+          </div>
+        </div>
+
+        <ProductPerformanceTable rows={productPerformance} />
       </div>
     </div>
   );
