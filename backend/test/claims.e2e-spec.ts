@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from './../src/app.module';
+import { MlClientService } from './../src/ml-client/ml-client.service';
 import { PrismaClient, UserRole, PolicyStatus, ClaimStatus } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
@@ -40,7 +41,31 @@ describe('Claims (e2e)', () => {
     prisma = new PrismaClient();
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      // CI doesn't run the ML service. Mock the client so claim creation
+      // produces a deterministic FraudAssessment without an outbound HTTP call.
+      .overrideProvider(MlClientService)
+      .useValue({
+        detectFraud: jest.fn().mockResolvedValue({
+          fraudScore: 25.0,
+          flag: 'NORMAL',
+          explanation: 'Mocked fraud assessment for e2e test (no ML service in CI).',
+          featureContributions: null,
+        }),
+        predictRisk: jest.fn().mockResolvedValue({
+          riskScore: 30.0,
+          riskLevel: 'LOW',
+          explanation: 'Mocked risk assessment for e2e test.',
+          featureContributions: null,
+        }),
+        getRecommendations: jest.fn().mockResolvedValue({
+          recommendedProducts: [],
+          rankedProducts: [],
+          explanation: 'Mocked recommendations for e2e test.',
+        }),
+        getHealth: jest.fn().mockResolvedValue({ status: 'ok' }),
+      })
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }));
