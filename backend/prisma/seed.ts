@@ -3,6 +3,15 @@ import { PrismaClient, UserRole, ProductType, ApplicationStatus, ClaimStatus, Ri
 const prisma = new PrismaClient();
 
 async function main() {
+  // Non-destructive guard: skip seeding entirely if the DB already has rich data.
+  // This prevents `prisma migrate dev` (which auto-runs seed.ts) from wiping
+  // demo data created by scripts/seed-demo.ts.
+  const userCount = await prisma.user.count();
+  if (userCount >= 5) {
+    console.log(`Seed skipped — DB already has ${userCount} users. To reset, run prisma migrate reset.`);
+    return;
+  }
+
   console.log('Clearing existing data...');
   // Delete in reverse order to avoid foreign key constraints
   await prisma.recommendation.deleteMany();

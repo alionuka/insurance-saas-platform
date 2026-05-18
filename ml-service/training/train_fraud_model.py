@@ -184,7 +184,7 @@ def plot_cv_distribution(results: dict, save_path: str):
     scores = [results[n]["cv_scores"] for n in names]
 
     plt.figure(figsize=(10, 5))
-    bp = plt.boxplot(scores, labels=names, patch_artist=True, widths=0.6)
+    bp = plt.boxplot(scores, tick_labels=names, patch_artist=True, widths=0.6)
     # Color numeric-only configs differently from numeric+TF-IDF
     for patch, name in zip(bp["boxes"], names):
         if "Numeric only" in name:
