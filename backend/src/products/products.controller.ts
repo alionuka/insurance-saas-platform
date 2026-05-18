@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Query, Patch, Delete, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { ProductsService } from './products.service';
@@ -7,6 +7,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
 import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
 
@@ -71,5 +72,34 @@ export class ProductsController {
   @ApiResponse({ status: 403, description: 'Forbidden — customer role only' })
   quote(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.productsService.quote(id, user);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
+  @ApiBearerAuth('access_token')
+  @ApiOperation({ summary: 'Update an insurance product' })
+  @ApiResponse({ status: 200, description: 'Product updated' })
+  @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
+  @ApiResponse({ status: 403, description: 'Forbidden — company admin or platform admin only' })
+  @ApiResponse({ status: 404, description: 'Product not found' })
+  update(@Param('id') id: string, @Body() dto: UpdateProductDto, @CurrentUser() user: AuthUser) {
+    return this.productsService.update(id, dto, user);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
+  @ApiBearerAuth('access_token')
+  @ApiOperation({ summary: 'Delete an insurance product' })
+  @ApiResponse({ status: 200, description: 'Product deleted' })
+  @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
+  @ApiResponse({ status: 403, description: 'Forbidden — company admin or platform admin only' })
+  @ApiResponse({ status: 404, description: 'Product not found' })
+  @ApiResponse({ status: 409, description: 'Conflict — product has linked applications or policies' })
+  @HttpCode(HttpStatus.OK)
+  remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.productsService.remove(id, user);
   }
 }

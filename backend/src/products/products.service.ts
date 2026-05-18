@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, BadRequestException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { MlClientService } from '../ml-client/ml-client.service';
 import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { AuthUser } from '../auth/types/auth-user';
 import { UserRole } from '@prisma/client';
 import { AuditService } from '../audit/audit.service';
@@ -169,5 +170,94 @@ export class ProductsService {
       monthlyPremium,
       explanation,
     };
+  }
+
+  async update(id: string, dto: UpdateProductDto, user: AuthUser) {
+    const product = await this.prisma.insuranceProduct.findUnique({
+      where: { id },
+    });
+
+    if (!product) {
+      throw new NotFoundException(`Product with ID ${id} not found`);
+    }
+
+    if (user.role === UserRole.COMPANY_ADMIN) {
+      if (product.companyId !== user.companyId) {
+        throw new ForbiddenException('You do not have permission to update this product');
+      }
+    } else if (user.role !== UserRole.PLATFORM_ADMIN) {
+      throw new ForbiddenException('Insufficient permissions to update products');
+    }
+
+    const dataToUpdate: any = {};
+    const allowedKeys: (keyof UpdateProductDto)[] = ['name', 'description', 'basePremium', 'type'];
+
+    for (const key of allowedKeys) {
+      if (dto[key] !== undefined) {
+        dataToUpdate[key] = dto[key];
+      }
+    }
+
+    const updatedProduct = await this.prisma.insuranceProduct.update({
+      where: { id },
+      data: dataToUpdate,
+      include: {
+        company: true,
+      },
+    });
+
+    await this.auditService.record({
+      action: 'PRODUCT_UPDATED',
+      actor: { id: user.id, role: user.role },
+      resourceType: 'InsuranceProduct',
+      resourceId: id,
+      metadata: { changedFields: Object.keys(dataToUpdate) },
+    });
+
+    return updatedProduct;
+  }
+
+  async remove(id: string, user: AuthUser) {
+    const product = await this.prisma.insuranceProduct.findUnique({
+      where: { id },
+    });
+
+    if (!product) {
+      throw new NotFoundException(`Product with ID ${id} not found`);
+    }
+
+    if (user.role === UserRole.COMPANY_ADMIN) {
+      if (product.companyId !== user.companyId) {
+        throw new ForbiddenException('You do not have permission to delete this product');
+      }
+    } else if (user.role !== UserRole.PLATFORM_ADMIN) {
+      throw new ForbiddenException('Insufficient permissions to delete products');
+    }
+
+    // Count related applications and policies
+    const [appCount, policyCount] = await Promise.all([
+      this.prisma.application.count({ where: { productId: id } }),
+      this.prisma.policy.count({ where: { productId: id } }),
+    ]);
+
+    if (appCount > 0 || policyCount > 0) {
+      throw new ConflictException(
+        `Cannot delete: product has ${appCount} applications and ${policyCount} policies linked to it`,
+      );
+    }
+
+    await this.prisma.insuranceProduct.delete({
+      where: { id },
+    });
+
+    await this.auditService.record({
+      action: 'PRODUCT_DELETED',
+      actor: { id: user.id, role: user.role },
+      resourceType: 'InsuranceProduct',
+      resourceId: id,
+      metadata: { name: product.name },
+    });
+
+    return { success: true };
   }
 }
