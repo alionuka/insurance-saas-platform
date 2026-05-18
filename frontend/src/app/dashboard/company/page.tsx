@@ -7,6 +7,7 @@ import StatusPieChart from '@/components/charts/StatusPieChart';
 import ActivityLineChart from '@/components/charts/ActivityLineChart';
 import CountUpNumber from '@/components/charts/CountUpNumber';
 import TopRiskDriversChart, { RiskDriver } from '@/components/charts/TopRiskDriversChart';
+import TopFraudDriversChart, { FraudDriver } from '@/components/charts/TopFraudDriversChart';
 import ProductPerformanceTable, { ProductRow } from '@/components/charts/ProductPerformanceTable';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -151,6 +152,23 @@ export default async function CompanyDashboard() {
     }
   }
   const topRiskDrivers: RiskDriver[] = Array.from(driverMap.entries())
+    .map(([feature, stats]) => ({ feature, ...stats }))
+    .sort((a, b) => b.totalImpact - a.totalImpact)
+    .slice(0, 5);
+
+  // BI: Top Fraud Drivers — aggregate SHAP feature contributions across fraud assessments
+  const fraudDriverMap = new Map<string, { totalImpact: number; occurrences: number }>();
+  for (const claim of claims) {
+    const fc = claim.fraudAssessments?.[0]?.featureContributions;
+    if (!Array.isArray(fc)) continue;
+    for (const f of fc) {
+      const cur = fraudDriverMap.get(f.feature) ?? { totalImpact: 0, occurrences: 0 };
+      cur.totalImpact += Math.abs(f.contribution ?? 0);
+      cur.occurrences += 1;
+      fraudDriverMap.set(f.feature, cur);
+    }
+  }
+  const topFraudDrivers: FraudDriver[] = Array.from(fraudDriverMap.entries())
     .map(([feature, stats]) => ({ feature, ...stats }))
     .sort((a, b) => b.totalImpact - a.totalImpact)
     .slice(0, 5);
@@ -405,6 +423,20 @@ export default async function CompanyDashboard() {
           <StatusPieChart data={riskLevelPieData} title="Risk Level Distribution" />
           <div className="lg:col-span-2">
             <TopRiskDriversChart drivers={topRiskDrivers} />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <TopFraudDriversChart drivers={topFraudDrivers} />
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 flex flex-col justify-center">
+            <p className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold mb-2">ML Explainability Coverage</p>
+            <p className="text-3xl font-bold text-white">
+              <CountUpNumber value={appsWithRisk.length} /> + <CountUpNumber value={claims.filter((c: any) => c.fraudAssessments?.[0]).length} />
+            </p>
+            <p className="text-xs text-zinc-500 mt-1">
+              Predictions with SHAP feature contributions
+              <span className="block text-[10px] text-zinc-600 mt-1">Risk model + Fraud model</span>
+            </p>
           </div>
         </div>
 

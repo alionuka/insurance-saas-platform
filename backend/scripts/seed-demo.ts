@@ -323,10 +323,22 @@ async function main() {
              auditLogs.push({ actorId: customer.id, actorEmail: customer.email, actorRole: customer.role, action: 'CLAIM_STATUS_CHANGED', resourceType: 'Claim', resourceId: claim.id, createdAt: claimCreatedAt });
           }
 
+          // Synthesize SHAP-like fraud feature contributions for BI dashboard.
+          // SUSPICIOUS → positive contributions push toward fraud. NORMAL → negative.
+          const fSign = fFlag === FraudFlag.SUSPICIOUS ? 1 : -1;
+          const fJitter = () => 0.5 + Math.random();
+          const fraudContributions = [
+            { feature: 'Claim amount', value: claimAmount, contribution: +(fSign * 20 * fJitter()).toFixed(2) },
+            { feature: 'Prior claims count', value: Math.floor(Math.random() * 4), contribution: +(fSign * 8 * fJitter()).toFixed(2) },
+            { feature: 'Has witnesses', value: Math.random() < 0.6 ? 1 : 0, contribution: +(fSign * 6 * fJitter() * -1).toFixed(2) },
+            { feature: 'Days since policy start', value: Math.floor(30 + Math.random() * 300), contribution: +(fSign * 4 * fJitter() * (Math.random() < 0.5 ? -1 : 1)).toFixed(2) },
+          ];
+
           await prisma.fraudAssessment.create({
             data: {
               claimId: claim.id, fraudScore: fScore, flag: fFlag,
               explanation: isSuspicious || isHighFraud ? "Suspicious patterns detected." : "Claim appears normal.",
+              featureContributions: fraudContributions,
               createdAt: claimCreatedAt
             }
           });
