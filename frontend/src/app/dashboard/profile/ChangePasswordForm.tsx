@@ -3,9 +3,7 @@
 import { useState } from 'react';
 import { Lock, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { logout } from '@/lib/auth';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+import apiClient from '@/lib/api-client';
 
 export default function ChangePasswordForm() {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -28,41 +26,18 @@ export default function ChangePasswordForm() {
     setIsLoading(true);
 
     try {
-      // Need to read from localStorage client-side
-      const token = localStorage.getItem('access_token');
-      const res = await fetch(`${API_URL}/auth/change-password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify({ currentPassword, newPassword }),
-      });
-
-      if (res.status === 401) {
-        const data = await res.json().catch(() => null);
-        if (data?.message === 'Current password is incorrect') {
-           toast.error('Current password is incorrect');
-           setIsLoading(false);
-           return;
-        } else {
-           logout();
-           window.location.href = '/auth/sign-in';
-           return;
-        }
-      }
-
-      const data = await res.json();
-      if (!res.ok) {
-        toast.error(data.message || 'Failed to change password');
-      } else {
-        toast.success('Password updated successfully');
-        setCurrentPassword('');
-        setNewPassword('');
-        setConfirmPassword('');
-      }
+      await apiClient.post('/auth/change-password', { currentPassword, newPassword });
+      toast.success('Password updated successfully');
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
     } catch (err: any) {
-      toast.error('An unexpected error occurred. Please try again.');
+      const message = err.response?.data?.message || 'An unexpected error occurred. Please try again.';
+      if (err.response?.status === 401 && message === 'Current password is incorrect') {
+        toast.error('Current password is incorrect');
+      } else {
+        toast.error(message);
+      }
     } finally {
       setIsLoading(false);
     }

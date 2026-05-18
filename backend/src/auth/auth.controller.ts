@@ -11,6 +11,7 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthUser } from './types/auth-user';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -86,5 +87,22 @@ export class AuthController {
   async resetPassword(@Body() dto: ResetPasswordDto) {
     await this.authService.resetPassword(dto);
     return { message: 'Password reset successful' };
+  }
+
+  @Post('refresh')
+  @ApiOperation({ summary: 'Exchange refresh token for new token pair' })
+  @ApiResponse({ status: 201, description: 'New token pair issued' })
+  @ApiResponse({ status: 401, description: 'Refresh token invalid, expired, or already used' })
+  async refresh(@Body() dto: RefreshTokenDto) {
+    return this.authService.refreshAccessToken(dto.refresh_token);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  @ApiBearerAuth('access_token')
+  @ApiOperation({ summary: 'Revoke all refresh tokens for current user' })
+  async logout(@CurrentUser() user: AuthUser) {
+    await this.authService.revokeAllForUser(user.id);
+    return { success: true };
   }
 }

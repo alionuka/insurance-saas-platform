@@ -36,7 +36,7 @@ function SignInPageContent() {
         throw new Error(data.message || 'Failed to sign in');
       }
 
-      setAuthData(data.access_token, data.user);
+      setAuthData(data.access_token, data.refresh_token, data.user);
       router.push(getDashboardRedirect(data.user.role as UserRole));
     } catch (err: any) {
       setError(err.message);

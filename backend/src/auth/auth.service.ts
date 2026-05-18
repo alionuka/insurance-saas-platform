@@ -52,8 +52,13 @@ export class AuthService {
       metadata: { email: user.email, role: user.role },
     });
 
+    const tokens = await this.issueTokens(user);
     const { passwordHash: _, ...result } = user;
-    return result;
+    return {
+      ...tokens,
+      ...result,
+      user: result,
+    };
   }
 
   async login(dto: LoginDto) {
@@ -91,9 +96,9 @@ export class AuthService {
       resourceId: user.id,
     });
 
-    const payload = { email: user.email, sub: user.id, role: user.role };
+    const tokens = await this.issueTokens(user);
     return {
-      access_token: this.jwtService.sign(payload),
+      ...tokens,
       user: {
         id: user.id,
         email: user.email,
@@ -268,5 +273,74 @@ export class AuthService {
     }
 
     return this.getMe(userId);
+  }
+
+  private async issueTokens(user: { id: string; email: string; role: string }) {
+    const accessTokenTtl = '15m';
+    const refreshTokenTtl = 7 * 24 * 60 * 60 * 1000; // 7 days
+    const access_token = this.jwtService.sign(
+      { email: user.email, sub: user.id, role: user.role },
+      { expiresIn: accessTokenTtl },
+    );
+    const refresh_token = crypto.randomBytes(40).toString('hex');
+    const tokenHash = await bcrypt.hash(refresh_token, 10);
+    await this.prisma.refreshToken.create({
+      data: { userId: user.id, tokenHash, expiresAt: new Date(Date.now() + refreshTokenTtl) }
+    });
+    return { access_token, refresh_token };
+  }
+
+  async refreshAccessToken(refresh_token: string) {
+    // Find all non-revoked, non-expired refresh tokens
+    const tokensInDb = await this.prisma.refreshToken.findMany({
+      where: {
+        revokedAt: null,
+        expiresAt: { gt: new Date() },
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    // Compare via bcrypt.compare against tokenHash
+    let matchedToken: any = null;
+    for (const tokenRecord of tokensInDb) {
+      const isMatch = await bcrypt.compare(refresh_token, tokenRecord.tokenHash);
+      if (isMatch) {
+        matchedToken = tokenRecord;
+        break;
+      }
+    }
+
+    if (!matchedToken) {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+
+    // REVOKE the matched token (set revokedAt=now)
+    await this.prisma.refreshToken.update({
+      where: { id: matchedToken.id },
+      data: { revokedAt: new Date() },
+    });
+
+    // Issue a NEW pair via issueTokens (rotation)
+    const newTokens = await this.issueTokens(matchedToken.user);
+
+    return {
+      ...newTokens,
+      user: {
+        id: matchedToken.user.id,
+        email: matchedToken.user.email,
+        firstName: matchedToken.user.firstName,
+        lastName: matchedToken.user.lastName,
+        role: matchedToken.user.role,
+      },
+    };
+  }
+
+  async revokeAllForUser(userId: string) {
+    await this.prisma.refreshToken.updateMany({
+      where: { userId, revokedAt: null },
+      data: { revokedAt: new Date() },
+    });
   }
 }

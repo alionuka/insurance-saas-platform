@@ -7,6 +7,8 @@ import { toast } from 'sonner';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
+import apiClient from '@/lib/api-client';
+
 interface EditProfileFormProps {
   initialValues: {
     firstName: string;
@@ -84,26 +86,12 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
     setIsLoading(true);
 
     try {
-      const token = localStorage.getItem('access_token');
-      const res = await fetch(`${API_URL}/auth/me`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.message || 'Failed to update profile');
-      } else {
-        toast.success('Profile updated successfully');
-        router.refresh();
-      }
+      await apiClient.patch('/auth/me', payload);
+      toast.success('Profile updated successfully');
+      router.refresh();
     } catch (err: any) {
-      toast.error('An unexpected error occurred. Please try again.');
+      const message = err.response?.data?.message || 'An unexpected error occurred. Please try again.';
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

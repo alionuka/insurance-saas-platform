@@ -82,6 +82,7 @@ model User {
   policies            Policy[]
   recommendations     Recommendation[]
   passwordResetTokens PasswordResetToken[]
+  refreshTokens       RefreshToken[]
   uploadedDocuments   ClaimDocument[]    @relation("UploadedDocuments")
   payments            Payment[]
 
@@ -97,6 +98,18 @@ model PasswordResetToken {
   expiresAt DateTime
   used      Boolean  @default(false)
   createdAt DateTime @default(now())
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 model Company {

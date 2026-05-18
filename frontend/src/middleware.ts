@@ -24,9 +24,39 @@ export async function middleware(request: NextRequest) {
     await jwtVerify(token, JWT_SECRET, { algorithms: ['HS256'] });
     return NextResponse.next();
   } catch (err) {
+    const refreshToken = request.cookies.get('refresh_token')?.value;
+    if (refreshToken) {
+      try {
+        const refreshResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/auth/refresh`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refresh_token: refreshToken }),
+          }
+        );
+
+        if (refreshResponse.ok) {
+          const data = await refreshResponse.json();
+          const { access_token, refresh_token: new_refresh_token } = data;
+
+          // Verify new access token is valid
+          await jwtVerify(access_token, JWT_SECRET, { algorithms: ['HS256'] });
+
+          const response = NextResponse.next();
+          response.cookies.set('access_token', access_token, { path: '/', maxAge: 86400, sameSite: 'lax' });
+          response.cookies.set('refresh_token', new_refresh_token, { path: '/', maxAge: 604800, sameSite: 'lax' });
+          return response;
+        }
+      } catch (refreshErr) {
+        console.error('Middleware token refresh failed:', refreshErr);
+      }
+    }
+
     // Invalid signature, expired token, or malformed JWT
     const response = redirectToSignIn(request, pathname);
     response.cookies.set('access_token', '', { path: '/', maxAge: 0 });
+    response.cookies.set('refresh_token', '', { path: '/', maxAge: 0 });
     return response;
   }
 }

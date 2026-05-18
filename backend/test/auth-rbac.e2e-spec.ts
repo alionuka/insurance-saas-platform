@@ -231,6 +231,69 @@ describe('Auth & RBAC (e2e)', () => {
     });
   });
 
+  describe('Refresh Token Rotation', () => {
+    it('should issue a refresh token on login and allow rotation', async () => {
+      // 1. Login to get access & refresh tokens
+      const loginRes = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: `e2e-customer1-${suffix}@test.local`,
+          password: passwords.default,
+        });
+      expect(loginRes.status).toBe(201);
+      expect(loginRes.body.access_token).toBeDefined();
+      expect(loginRes.body.refresh_token).toBeDefined();
+
+      const firstRefreshToken = loginRes.body.refresh_token;
+
+      // 2. Rotate refresh token once
+      const refreshRes1 = await request(app.getHttpServer())
+        .post('/auth/refresh')
+        .send({ refresh_token: firstRefreshToken });
+      expect(refreshRes1.status).toBe(201);
+      expect(refreshRes1.body.access_token).toBeDefined();
+      expect(refreshRes1.body.refresh_token).toBeDefined();
+
+      const secondRefreshToken = refreshRes1.body.refresh_token;
+      expect(secondRefreshToken).not.toBe(firstRefreshToken);
+
+      // 3. Attempting to reuse the first refresh token should fail (one-time-use)
+      const reuseRes = await request(app.getHttpServer())
+        .post('/auth/refresh')
+        .send({ refresh_token: firstRefreshToken });
+      expect(reuseRes.status).toBe(401);
+
+      // 4. Using the second refresh token should succeed
+      const refreshRes2 = await request(app.getHttpServer())
+        .post('/auth/refresh')
+        .send({ refresh_token: secondRefreshToken });
+      expect(refreshRes2.status).toBe(201);
+    });
+
+    it('should revoke all tokens on logout', async () => {
+      // 1. Login to get tokens
+      const loginRes = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          email: `e2e-customer2-${suffix}@test.local`,
+          password: passwords.default,
+        });
+      const { access_token, refresh_token } = loginRes.body;
+
+      // 2. Logout using access_token
+      const logoutRes = await request(app.getHttpServer())
+        .post('/auth/logout')
+        .set('Authorization', `Bearer ${access_token}`);
+      expect(logoutRes.status).toBe(201);
+
+      // 3. Attempting to refresh should fail as tokens are revoked
+      const refreshRes = await request(app.getHttpServer())
+        .post('/auth/refresh')
+        .send({ refresh_token });
+      expect(refreshRes.status).toBe(401);
+    });
+  });
+
   describe('GET /applications RBAC', () => {
     it('should return 401 for missing token', async () => {
       const res = await request(app.getHttpServer()).get('/applications');
