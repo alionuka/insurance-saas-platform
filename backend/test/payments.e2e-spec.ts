@@ -145,8 +145,9 @@ describe('Payments (e2e)', () => {
       expect(res.body.url).toBe('https://checkout.stripe.com/test_session_url');
 
       // Assert StripeService / Stripe API checkout sessions create was called once with amount = 800 * 100
-      expect(paymentsService['stripe'].checkout.sessions.create).toHaveBeenCalledTimes(1);
-      const mockCallArgs = (paymentsService['stripe'].checkout.sessions.create as jest.Mock).mock.calls[0][0];
+      const stripeMock = (paymentsService as any).stripe;
+      expect(stripeMock.checkout.sessions.create).toHaveBeenCalledTimes(1);
+      const mockCallArgs = (stripeMock.checkout.sessions.create as jest.Mock).mock.calls[0][0];
       expect(mockCallArgs.line_items[0].price_data.unit_amount).toBe(80000);
       expect(mockCallArgs.line_items[0].price_data.currency).toBe('usd');
     });

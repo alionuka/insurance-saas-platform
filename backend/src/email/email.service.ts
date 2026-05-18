@@ -14,13 +14,17 @@ export class EmailService {
     if (apiKey) {
       this.resend = new Resend(apiKey);
     } else {
-      this.logger.warn('RESEND_API_KEY not set; password reset emails will be logged to console only.');
+      this.logger.warn(
+        'RESEND_API_KEY not set; password reset emails will be logged to console only.',
+      );
     }
   }
 
   async sendPasswordResetEmail(to: string, resetUrl: string): Promise<void> {
     if (!this.resend) {
-      this.logger.log(`\n[EmailService] Password reset URL for ${to}: ${resetUrl}\n`);
+      this.logger.log(
+        `\n[EmailService] Password reset URL for ${to}: ${resetUrl}\n`,
+      );
       return;
     }
 
@@ -53,11 +57,19 @@ export class EmailService {
 
   async sendApplicationApproved(
     to: string,
-    data: { applicationId: string; productName: string; policyNumber?: string; startDate?: Date; endDate?: Date }
+    data: {
+      applicationId: string;
+      productName: string;
+      policyNumber?: string;
+      startDate?: Date;
+      endDate?: Date;
+    },
   ): Promise<void> {
     const summary = `Application ${data.applicationId} approved. Product: ${data.productName}. Policy: ${data.policyNumber || 'N/A'}`;
     if (!this.resend) {
-      this.logger.log(`[EmailService] Application Approved for ${to}: ${summary}`);
+      this.logger.log(
+        `[EmailService] Application Approved for ${to}: ${summary}`,
+      );
       return;
     }
 
@@ -84,11 +96,13 @@ export class EmailService {
 
   async sendApplicationRejected(
     to: string,
-    data: { applicationId: string; productName: string }
+    data: { applicationId: string; productName: string },
   ): Promise<void> {
     const summary = `Application ${data.applicationId} rejected. Product: ${data.productName}`;
     if (!this.resend) {
-      this.logger.log(`[EmailService] Application Rejected for ${to}: ${summary}`);
+      this.logger.log(
+        `[EmailService] Application Rejected for ${to}: ${summary}`,
+      );
       return;
     }
 
@@ -109,7 +123,12 @@ export class EmailService {
 
   async sendClaimFiled(
     to: string,
-    data: { claimId: string; productName: string; amount: number; fraudFlag: string }
+    data: {
+      claimId: string;
+      productName: string;
+      amount: number;
+      fraudFlag: string;
+    },
   ): Promise<void> {
     const summary = `Claim ${data.claimId} filed. Amount: $${data.amount}. Status: ${data.fraudFlag}`;
     if (!this.resend) {
@@ -138,7 +157,7 @@ export class EmailService {
 
   async sendClaimApproved(
     to: string,
-    data: { claimId: string; productName: string; amount: number }
+    data: { claimId: string; productName: string; amount: number },
   ): Promise<void> {
     const summary = `Claim ${data.claimId} approved. Amount: $${data.amount}`;
     if (!this.resend) {
@@ -166,7 +185,7 @@ export class EmailService {
 
   async sendClaimDenied(
     to: string,
-    data: { claimId: string; productName: string }
+    data: { claimId: string; productName: string },
   ): Promise<void> {
     const summary = `Claim ${data.claimId} denied. Product: ${data.productName}`;
     if (!this.resend) {
@@ -191,7 +210,13 @@ export class EmailService {
 
   async sendPolicyActivated(
     to: string,
-    data: { policyNumber: string; productName: string; startDate: Date; endDate: Date; amount: number }
+    data: {
+      policyNumber: string;
+      productName: string;
+      startDate: Date;
+      endDate: Date;
+      amount: number;
+    },
   ): Promise<void> {
     const summary = `Policy ${data.policyNumber} activated. Paid $${data.amount} for ${data.productName}`;
     if (!this.resend) {
@@ -199,7 +224,12 @@ export class EmailService {
       return;
     }
 
-    const formatDate = (d: Date) => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const formatDate = (d: Date) =>
+      new Date(d).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
 
     await this.resend.emails.send({
       from: this.fromEmail,

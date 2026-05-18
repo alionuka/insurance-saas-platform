@@ -1,6 +1,19 @@
-import { Controller, Post, Body, Get, UseGuards, Request, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  UseGuards,
+  Request,
+  Patch,
+} from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -22,7 +35,10 @@ export class AuthController {
   @Post('register')
   @ApiOperation({ summary: 'Register a new user' })
   @ApiResponse({ status: 201, description: 'User successfully registered' })
-  @ApiResponse({ status: 400, description: 'Invalid input data or email already taken' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid input data or email already taken',
+  })
   async register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
   }
@@ -30,7 +46,10 @@ export class AuthController {
   @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Post('login')
   @ApiOperation({ summary: 'Log in with credentials' })
-  @ApiResponse({ status: 201, description: 'User successfully logged in, returns JWT access token' })
+  @ApiResponse({
+    status: 201,
+    description: 'User successfully logged in, returns JWT access token',
+  })
   @ApiResponse({ status: 401, description: 'Invalid email or password' })
   async login(@Body() dto: LoginDto) {
     return this.authService.login(dto);
@@ -40,7 +59,10 @@ export class AuthController {
   @Get('me')
   @ApiBearerAuth('access_token')
   @ApiOperation({ summary: 'Get current user profile' })
-  @ApiResponse({ status: 200, description: 'Current user profile retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Current user profile retrieved successfully',
+  })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
   async getMe(@CurrentUser() user: AuthUser) {
     return this.authService.getMe(user.id);
@@ -63,9 +85,15 @@ export class AuthController {
   @ApiBearerAuth('access_token')
   @ApiOperation({ summary: 'Change current user password' })
   @ApiResponse({ status: 200, description: 'Password changed successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid current password or new password constraints failed' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid current password or new password constraints failed',
+  })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
-  async changePassword(@Body() dto: ChangePasswordDto, @CurrentUser() user: AuthUser) {
+  async changePassword(
+    @Body() dto: ChangePasswordDto,
+    @CurrentUser() user: AuthUser,
+  ) {
     await this.authService.changePassword(user.id, dto);
     return { message: 'Password updated successfully' };
   }
@@ -73,11 +101,17 @@ export class AuthController {
   @Throttle({ default: { limit: 3, ttl: 3600000 } })
   @Post('forgot-password')
   @ApiOperation({ summary: 'Request password reset email' })
-  @ApiResponse({ status: 201, description: 'Password reset link request processed' })
+  @ApiResponse({
+    status: 201,
+    description: 'Password reset link request processed',
+  })
   @ApiResponse({ status: 400, description: 'Invalid email format' })
   async forgotPassword(@Body() dto: ForgotPasswordDto) {
     await this.authService.forgotPassword(dto);
-    return { message: 'If an account exists with this email, a reset link has been sent.' };
+    return {
+      message:
+        'If an account exists with this email, a reset link has been sent.',
+    };
   }
 
   @Post('reset-password')
@@ -92,7 +126,10 @@ export class AuthController {
   @Post('refresh')
   @ApiOperation({ summary: 'Exchange refresh token for new token pair' })
   @ApiResponse({ status: 201, description: 'New token pair issued' })
-  @ApiResponse({ status: 401, description: 'Refresh token invalid, expired, or already used' })
+  @ApiResponse({
+    status: 401,
+    description: 'Refresh token invalid, expired, or already used',
+  })
   async refresh(@Body() dto: RefreshTokenDto) {
     return this.authService.refreshAccessToken(dto.refresh_token);
   }

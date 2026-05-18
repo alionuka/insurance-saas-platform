@@ -1,5 +1,10 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { RecommendationsService } from './recommendations.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -13,12 +18,19 @@ import { UserRole } from '@prisma/client';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('recommendations')
 export class RecommendationsController {
-  constructor(private readonly recommendationsService: RecommendationsService) {}
+  constructor(
+    private readonly recommendationsService: RecommendationsService,
+  ) {}
 
   @Get('me')
   @Roles(UserRole.CUSTOMER)
-  @ApiOperation({ summary: 'Get personalized product recommendations for active customer' })
-  @ApiResponse({ status: 200, description: 'Recommendations retrieved successfully' })
+  @ApiOperation({
+    summary: 'Get personalized product recommendations for active customer',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Recommendations retrieved successfully',
+  })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
   @ApiResponse({ status: 403, description: 'Forbidden — customer only' })
   getMyRecommendations(@CurrentUser() user: AuthUser) {

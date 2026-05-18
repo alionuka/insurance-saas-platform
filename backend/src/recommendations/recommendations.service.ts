@@ -68,7 +68,9 @@ export class RecommendationsService {
         where: { name: { in: ranked.map((r) => r.name) } },
         select: { id: true, name: true },
       });
-      const nameToId = new Map(dbProducts.map((p) => [p.name.toLowerCase(), p.id]));
+      const nameToId = new Map(
+        dbProducts.map((p) => [p.name.toLowerCase(), p.id]),
+      );
 
       const resolved = ranked
         .map((r) => {

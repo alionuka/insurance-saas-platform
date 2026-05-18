@@ -16,7 +16,10 @@ export class AppController {
 
   @Get()
   @ApiOperation({ summary: 'Platform landing metadata (public)' })
-  @ApiResponse({ status: 200, description: 'Root metadata returned successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Root metadata returned successfully',
+  })
   getHello(): string {
     return this.appService.getHello();
   }
@@ -41,9 +44,17 @@ export class AppController {
   }
 
   @Get('health/ready')
-  @ApiOperation({ summary: 'Readiness probe checking database and ML service connections' })
-  @ApiResponse({ status: 200, description: 'Platform is healthy and fully operational' })
-  @ApiResponse({ status: 503, description: 'Platform is degraded (database or ML service unreachable)' })
+  @ApiOperation({
+    summary: 'Readiness probe checking database and ML service connections',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Platform is healthy and fully operational',
+  })
+  @ApiResponse({
+    status: 503,
+    description: 'Platform is degraded (database or ML service unreachable)',
+  })
   async healthReady(@Res() res: Response) {
     const checks: Record<string, 'ok' | 'fail'> = {
       database: 'fail',

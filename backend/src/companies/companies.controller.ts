@@ -1,5 +1,10 @@
 import { Controller, Get, Param, UseGuards, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { CompaniesService } from './companies.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -29,8 +34,13 @@ export class CompaniesController {
 
   @Get(':id')
   @Roles(UserRole.PLATFORM_ADMIN)
-  @ApiOperation({ summary: 'Get details of a single company (platform admin only)' })
-  @ApiResponse({ status: 200, description: 'Company details retrieved successfully' })
+  @ApiOperation({
+    summary: 'Get details of a single company (platform admin only)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Company details retrieved successfully',
+  })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
   @ApiResponse({ status: 403, description: 'Forbidden — platform admin only' })
   @ApiResponse({ status: 404, description: 'Company not found' })

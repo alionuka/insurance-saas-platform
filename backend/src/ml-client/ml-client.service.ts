@@ -14,13 +14,16 @@ export class MlClientService {
     this.baseUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
   }
 
-  async getHealth() {
+  async getHealth(): Promise<Record<string, any>> {
     try {
       const response = await fetch(`${this.baseUrl}/health`);
       if (!response.ok) throw new Error('ML Service health check failed');
-      return await response.json();
-    } catch (error) {
-      throw new HttpException('ML Service unavailable', HttpStatus.SERVICE_UNAVAILABLE);
+      return (await response.json()) as Record<string, any>;
+    } catch {
+      throw new HttpException(
+        'ML Service unavailable',
+        HttpStatus.SERVICE_UNAVAILABLE,
+      );
     }
   }
 
@@ -32,9 +35,12 @@ export class MlClientService {
         body: JSON.stringify(data),
       });
       if (!response.ok) throw new Error('Failed to predict risk');
-      return await response.json();
-    } catch (error) {
-      throw new HttpException('Error communicating with ML Service', HttpStatus.INTERNAL_SERVER_ERROR);
+      return (await response.json()) as RiskResponseDto;
+    } catch {
+      throw new HttpException(
+        'Error communicating with ML Service',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -46,13 +52,18 @@ export class MlClientService {
         body: JSON.stringify(data),
       });
       if (!response.ok) throw new Error('Failed to detect fraud');
-      return await response.json();
-    } catch (error) {
-      throw new HttpException('Error communicating with ML Service', HttpStatus.INTERNAL_SERVER_ERROR);
+      return (await response.json()) as FraudResponseDto;
+    } catch {
+      throw new HttpException(
+        'Error communicating with ML Service',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
-  async getRecommendations(data: RecommendationsDto): Promise<RecommendationResponseDto> {
+  async getRecommendations(
+    data: RecommendationsDto,
+  ): Promise<RecommendationResponseDto> {
     try {
       const response = await fetch(`${this.baseUrl}/recommendations`, {
         method: 'POST',
@@ -60,9 +71,12 @@ export class MlClientService {
         body: JSON.stringify(data),
       });
       if (!response.ok) throw new Error('Failed to get recommendations');
-      return await response.json();
-    } catch (error) {
-      throw new HttpException('Error communicating with ML Service', HttpStatus.INTERNAL_SERVER_ERROR);
+      return (await response.json()) as RecommendationResponseDto;
+    } catch {
+      throw new HttpException(
+        'Error communicating with ML Service',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

@@ -1,5 +1,10 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { AuditService } from './audit.service';
 import { ListAuditLogsDto } from './dto/list-audit-logs.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -18,11 +23,21 @@ export class AuditController {
   constructor(private readonly auditService: AuditService) {}
 
   @Get('me')
-  @Roles(UserRole.CUSTOMER, UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
-  @ApiOperation({ summary: 'List audit logs relating to the current active user' })
+  @Roles(
+    UserRole.CUSTOMER,
+    UserRole.AGENT,
+    UserRole.COMPANY_ADMIN,
+    UserRole.PLATFORM_ADMIN,
+  )
+  @ApiOperation({
+    summary: 'List audit logs relating to the current active user',
+  })
   @ApiResponse({ status: 200, description: 'Audit logs listed successfully' })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
-  async getMe(@CurrentUser() user: AuthUser, @Query() pagination: PaginationDto) {
+  async getMe(
+    @CurrentUser() user: AuthUser,
+    @Query() pagination: PaginationDto,
+  ) {
     return this.auditService.listForUser(user.id, {
       limit: pagination.limit ?? 10,
       offset: pagination.offset ?? 0,
@@ -31,7 +46,10 @@ export class AuditController {
 
   @Get()
   @Roles(UserRole.PLATFORM_ADMIN)
-  @ApiOperation({ summary: 'List platform audit logs with custom filters (platform admin only)' })
+  @ApiOperation({
+    summary:
+      'List platform audit logs with custom filters (platform admin only)',
+  })
   @ApiResponse({ status: 200, description: 'Audit logs listed successfully' })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
   @ApiResponse({ status: 403, description: 'Forbidden — platform admin only' })

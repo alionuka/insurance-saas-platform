@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../prisma/safe-user-select';
 import { AuthUser } from '../auth/types/auth-user';
@@ -46,7 +50,9 @@ export class PoliciesService {
       where = { userId: user.id };
     } else if (user.role === UserRole.COMPANY_ADMIN) {
       if (!user.companyId) {
-        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+        throw new ForbiddenException(
+          'COMPANY_ADMIN account is missing companyId',
+        );
       }
       where = { product: { companyId: user.companyId } };
     }
@@ -78,16 +84,22 @@ export class PoliciesService {
 
     // Ownership check: CUSTOMER can only see their own policy
     if (user.role === UserRole.CUSTOMER && policy.userId !== user.id) {
-      throw new ForbiddenException('You do not have permission to view this policy');
+      throw new ForbiddenException(
+        'You do not have permission to view this policy',
+      );
     }
 
     // Scoping check: COMPANY_ADMIN can only see policies for their company
     if (user.role === UserRole.COMPANY_ADMIN) {
       if (!user.companyId) {
-        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+        throw new ForbiddenException(
+          'COMPANY_ADMIN account is missing companyId',
+        );
       }
       if (policy.product.companyId !== user.companyId) {
-        throw new ForbiddenException('You do not have permission to view this policy');
+        throw new ForbiddenException(
+          'You do not have permission to view this policy',
+        );
       }
     }
 

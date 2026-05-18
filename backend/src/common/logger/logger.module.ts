@@ -9,11 +9,16 @@ import { IncomingMessage } from 'http';
       pinoHttp: {
         genReqId: () => randomUUID(),
         serializers: {
-          req: (req: IncomingMessage & { id?: string; raw?: any }) => ({
+          req: (
+            req: IncomingMessage & {
+              id?: string;
+              raw?: { user?: { sub?: string } };
+            },
+          ) => ({
             method: req.method,
             url: req.url,
             requestId: req.id,
-            userId: (req.raw as any)?.user?.sub ?? undefined,
+            userId: req.raw?.user?.sub ?? undefined,
           }),
         },
         redact: {
@@ -27,7 +32,10 @@ import { IncomingMessage } from 'http';
         },
         transport:
           process.env.NODE_ENV !== 'production'
-            ? { target: 'pino-pretty', options: { colorize: true, singleLine: true } }
+            ? {
+                target: 'pino-pretty',
+                options: { colorize: true, singleLine: true },
+              }
             : undefined,
         level: process.env.LOG_LEVEL ?? 'info',
       },

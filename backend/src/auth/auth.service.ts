@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException, ConflictException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+  BadRequestException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { EmailService } from '../email/email.service';
@@ -11,7 +16,7 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { AuditService } from '../audit/audit.service';
-import { UserRole } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -46,7 +51,7 @@ export class AuthService {
 
     await this.auditService.record({
       action: 'USER_REGISTERED',
-      actor: { id: user.id, email: user.email, role: user.role as UserRole },
+      actor: { id: user.id, email: user.email, role: user.role },
       resourceType: 'User',
       resourceId: user.id,
       metadata: { email: user.email, role: user.role },
@@ -76,7 +81,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(dto.password, user.passwordHash);
+    const isPasswordValid = await bcrypt.compare(
+      dto.password,
+      user.passwordHash,
+    );
 
     if (!isPasswordValid) {
       await this.auditService.record({
@@ -91,7 +99,7 @@ export class AuthService {
 
     await this.auditService.record({
       action: 'USER_LOGIN_SUCCESS',
-      actor: { id: user.id, email: user.email, role: user.role as UserRole },
+      actor: { id: user.id, email: user.email, role: user.role },
       resourceType: 'User',
       resourceId: user.id,
     });
@@ -138,7 +146,7 @@ export class AuthService {
 
     await this.auditService.record({
       action: 'PASSWORD_RESET_REQUESTED',
-      actor: { id: user.id, email: user.email, role: user.role as UserRole },
+      actor: { id: user.id, email: user.email, role: user.role },
       resourceType: 'User',
       resourceId: user.id,
     });
@@ -179,7 +187,11 @@ export class AuthService {
 
     await this.auditService.record({
       action: 'PASSWORD_RESET_COMPLETED',
-      actor: { id: resetToken.userId, email: resetToken.user.email, role: resetToken.user.role as UserRole },
+      actor: {
+        id: resetToken.userId,
+        email: resetToken.user.email,
+        role: resetToken.user.role,
+      },
       resourceType: 'User',
       resourceId: resetToken.userId,
     });
@@ -195,7 +207,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const { passwordHash, ...result } = user;
+    const { passwordHash: _passwordHash, ...result } = user;
     return result;
   }
 
@@ -208,7 +220,10 @@ export class AuthService {
       throw new UnauthorizedException('Current password is incorrect');
     }
 
-    const isPasswordValid = await bcrypt.compare(dto.currentPassword, user.passwordHash);
+    const isPasswordValid = await bcrypt.compare(
+      dto.currentPassword,
+      user.passwordHash,
+    );
     if (!isPasswordValid) {
       throw new UnauthorizedException('Current password is incorrect');
     }
@@ -222,7 +237,7 @@ export class AuthService {
 
     await this.auditService.record({
       action: 'PASSWORD_CHANGED',
-      actor: { id: user.id, email: user.email, role: user.role as UserRole },
+      actor: { id: user.id, email: user.email, role: user.role },
       resourceType: 'User',
       resourceId: user.id,
     });
@@ -245,13 +260,22 @@ export class AuthService {
       'creditScore',
     ];
 
-    const dataToUpdate: any = {};
+    const dataToUpdate: Prisma.UserUpdateInput = {};
     const changedFields: string[] = [];
 
     for (const key of allowedKeys) {
       if (dto[key] !== undefined) {
         if (dto[key] !== user[key]) {
-          dataToUpdate[key] = dto[key];
+          const val = dto[key];
+          if (key === 'firstName' || key === 'lastName') {
+            dataToUpdate[key] = val as string;
+          } else if (
+            key === 'age' ||
+            key === 'creditScore' ||
+            key === 'annualIncome'
+          ) {
+            dataToUpdate[key] = val as number | null;
+          }
           changedFields.push(key);
         }
       }
@@ -265,7 +289,7 @@ export class AuthService {
 
       await this.auditService.record({
         action: 'PROFILE_UPDATED',
-        actor: { id: user.id, email: user.email, role: user.role as UserRole },
+        actor: { id: user.id, email: user.email, role: user.role },
         resourceType: 'User',
         resourceId: user.id,
         metadata: { changedFields },
@@ -285,7 +309,11 @@ export class AuthService {
     const refresh_token = crypto.randomBytes(40).toString('hex');
     const tokenHash = await bcrypt.hash(refresh_token, 10);
     await this.prisma.refreshToken.create({
-      data: { userId: user.id, tokenHash, expiresAt: new Date(Date.now() + refreshTokenTtl) }
+      data: {
+        userId: user.id,
+        tokenHash,
+        expiresAt: new Date(Date.now() + refreshTokenTtl),
+      },
     });
     return { access_token, refresh_token };
   }
@@ -303,9 +331,14 @@ export class AuthService {
     });
 
     // Compare via bcrypt.compare against tokenHash
-    let matchedToken: any = null;
+    let matchedToken: Prisma.RefreshTokenGetPayload<{
+      include: { user: true };
+    }> | null = null;
     for (const tokenRecord of tokensInDb) {
-      const isMatch = await bcrypt.compare(refresh_token, tokenRecord.tokenHash);
+      const isMatch = await bcrypt.compare(
+        refresh_token,
+        tokenRecord.tokenHash,
+      );
       if (isMatch) {
         matchedToken = tokenRecord;
         break;

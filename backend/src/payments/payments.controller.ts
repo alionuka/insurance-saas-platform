@@ -8,7 +8,12 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { SkipThrottle } from '@nestjs/throttler';
 import { PaymentsService } from './payments.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -27,8 +32,13 @@ export class PaymentsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.CUSTOMER)
   @ApiBearerAuth('access_token')
-  @ApiOperation({ summary: 'Create Stripe checkout session for policy premium payment' })
-  @ApiResponse({ status: 201, description: 'Checkout session successfully created' })
+  @ApiOperation({
+    summary: 'Create Stripe checkout session for policy premium payment',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Checkout session successfully created',
+  })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
   @ApiResponse({ status: 403, description: 'Forbidden — customer role only' })
   createCheckoutSession(
@@ -42,7 +52,10 @@ export class PaymentsController {
   @Post('webhooks/stripe')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Stripe payments webhook endpoint' })
-  @ApiResponse({ status: 200, description: 'Webhook event processed successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Webhook event processed successfully',
+  })
   @ApiResponse({ status: 400, description: 'Invalid stripe signature' })
   async handleWebhook(
     @RawBody() rawBody: Buffer,

@@ -39,9 +39,7 @@ import { RecommendationsModule } from './recommendations/recommendations.module'
     PaymentsModule,
     AuditModule,
     RecommendationsModule,
-    ThrottlerModule.forRoot([
-      { name: 'default', ttl: 60000, limit: 100 },
-    ]),
+    ThrottlerModule.forRoot([{ name: 'default', ttl: 60000, limit: 100 }]),
   ],
   controllers: [AppController],
   providers: [

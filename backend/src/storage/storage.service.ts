@@ -12,9 +12,14 @@ export interface UploadResult {
 export class StorageService {
   private readonly logger = new Logger(StorageService.name);
   private readonly uploadsDir = path.join(process.cwd(), 'uploads');
-  private readonly publicUrl = process.env.BACKEND_PUBLIC_URL || 'http://localhost:3001';
+  private readonly publicUrl =
+    process.env.BACKEND_PUBLIC_URL || 'http://localhost:3001';
 
-  async uploadFile(buffer: Buffer, originalFilename: string, mimeType: string): Promise<UploadResult> {
+  async uploadFile(
+    buffer: Buffer,
+    originalFilename: string,
+    _mimeType: string,
+  ): Promise<UploadResult> {
     try {
       // Ensure directory exists
       await fs.mkdir(this.uploadsDir, { recursive: true });
@@ -38,9 +43,16 @@ export class StorageService {
     try {
       const filePath = path.join(this.uploadsDir, key);
       await fs.unlink(filePath);
-    } catch (error: any) {
-      if (error.code === 'ENOENT') {
-        this.logger.warn(`File with key ${key} not found for deletion, skipping.`);
+    } catch (error: unknown) {
+      if (
+        error &&
+        typeof error === 'object' &&
+        'code' in error &&
+        (error as { code: string }).code === 'ENOENT'
+      ) {
+        this.logger.warn(
+          `File with key ${key} not found for deletion, skipping.`,
+        );
         return;
       }
       this.logger.error(`Failed to delete file with key ${key}`, error);

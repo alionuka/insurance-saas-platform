@@ -1,5 +1,22 @@
-import { Controller, Get, Post, Body, Param, UseGuards, Query, Patch, Delete, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+  Query,
+  Patch,
+  Delete,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { ProductsService } from './products.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -34,8 +51,14 @@ export class ProductsController {
   @ApiOperation({ summary: "List products belonging to admin's company" })
   @ApiResponse({ status: 200, description: 'Products listed successfully' })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
-  @ApiResponse({ status: 403, description: 'Forbidden — company admin role only' })
-  listMyCompany(@CurrentUser() user: AuthUser, @Query() pagination: PaginationDto) {
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden — company admin role only',
+  })
+  listMyCompany(
+    @CurrentUser() user: AuthUser,
+    @Query() pagination: PaginationDto,
+  ) {
     return this.productsService.listMyCompany(user, {
       limit: pagination.limit ?? 50,
       offset: pagination.offset ?? 0,
@@ -44,7 +67,10 @@ export class ProductsController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get details of a single product (public)' })
-  @ApiResponse({ status: 200, description: 'Product details retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Product details retrieved successfully',
+  })
   @ApiResponse({ status: 404, description: 'Product not found' })
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
@@ -67,7 +93,10 @@ export class ProductsController {
   @Roles(UserRole.CUSTOMER)
   @ApiBearerAuth('access_token')
   @ApiOperation({ summary: 'Request instant premium quote' })
-  @ApiResponse({ status: 201, description: 'Premium quote generated successfully' })
+  @ApiResponse({
+    status: 201,
+    description: 'Premium quote generated successfully',
+  })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
   @ApiResponse({ status: 403, description: 'Forbidden — customer role only' })
   quote(@Param('id') id: string, @CurrentUser() user: AuthUser) {
@@ -82,9 +111,16 @@ export class ProductsController {
   @ApiResponse({ status: 200, description: 'Product updated' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
-  @ApiResponse({ status: 403, description: 'Forbidden — company admin or platform admin only' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden — company admin or platform admin only',
+  })
   @ApiResponse({ status: 404, description: 'Product not found' })
-  update(@Param('id') id: string, @Body() dto: UpdateProductDto, @CurrentUser() user: AuthUser) {
+  update(
+    @Param('id') id: string,
+    @Body() dto: UpdateProductDto,
+    @CurrentUser() user: AuthUser,
+  ) {
     return this.productsService.update(id, dto, user);
   }
 
@@ -95,9 +131,15 @@ export class ProductsController {
   @ApiOperation({ summary: 'Delete an insurance product' })
   @ApiResponse({ status: 200, description: 'Product deleted' })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
-  @ApiResponse({ status: 403, description: 'Forbidden — company admin or platform admin only' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden — company admin or platform admin only',
+  })
   @ApiResponse({ status: 404, description: 'Product not found' })
-  @ApiResponse({ status: 409, description: 'Conflict — product has linked applications or policies' })
+  @ApiResponse({
+    status: 409,
+    description: 'Conflict — product has linked applications or policies',
+  })
   @HttpCode(HttpStatus.OK)
   remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.productsService.remove(id, user);

@@ -1,5 +1,18 @@
-import { Controller, Post, Get, Body, Query, Param, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Query,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { AuthUser } from '../auth/types/auth-user';
@@ -19,7 +32,9 @@ export class AdminController {
 
   @Get('users')
   @Roles(UserRole.PLATFORM_ADMIN)
-  @ApiOperation({ summary: 'List all users across companies (platform admin only)' })
+  @ApiOperation({
+    summary: 'List all users across companies (platform admin only)',
+  })
   @ApiResponse({ status: 200, description: 'Users listed successfully' })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
   @ApiResponse({ status: 403, description: 'Forbidden — platform admin only' })
@@ -42,7 +57,10 @@ export class AdminController {
   @Get('users/:id')
   @Roles(UserRole.PLATFORM_ADMIN)
   @ApiOperation({ summary: 'Get user details by ID (platform admin only)' })
-  @ApiResponse({ status: 200, description: 'User details retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'User details retrieved successfully',
+  })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
   @ApiResponse({ status: 403, description: 'Forbidden — platform admin only' })
   @ApiResponse({ status: 404, description: 'User not found' })

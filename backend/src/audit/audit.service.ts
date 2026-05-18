@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { UserRole, AuditLog } from '@prisma/client';
+import { UserRole, AuditLog, Prisma } from '@prisma/client';
 
 @Injectable()
 export class AuditService {
@@ -26,14 +26,16 @@ export class AuditService {
           actorRole: entry.actor?.role,
           resourceType: entry.resourceType,
           resourceId: entry.resourceId,
-          metadata: entry.metadata as any,
+          metadata: entry.metadata as Prisma.InputJsonValue,
           ipAddress: entry.ipAddress,
           userAgent: entry.userAgent,
         },
       });
-    } catch (error) {
+    } catch (error: unknown) {
       // An audit failure must NEVER break a business operation.
-      this.logger.error(`Failed to record audit log: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : String(error);
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Failed to record audit log: ${message}`, stack);
     }
   }
 
@@ -46,7 +48,7 @@ export class AuditService {
     limit: number;
     offset: number;
   }): Promise<{ items: AuditLog[]; total: number }> {
-    const where: any = {};
+    const where: Prisma.AuditLogWhereInput = {};
 
     if (filters.action) {
       where.action = filters.action;
@@ -58,13 +60,14 @@ export class AuditService {
       where.resourceType = filters.resourceType;
     }
     if (filters.from || filters.to) {
-      where.createdAt = {};
+      const createdAtFilter: Prisma.DateTimeFilter = {};
       if (filters.from) {
-        where.createdAt.gte = filters.from;
+        createdAtFilter.gte = filters.from;
       }
       if (filters.to) {
-        where.createdAt.lte = filters.to;
+        createdAtFilter.lte = filters.to;
       }
+      where.createdAt = createdAtFilter;
     }
 
     const [items, total] = await Promise.all([
@@ -80,7 +83,10 @@ export class AuditService {
     return { items, total };
   }
 
-  async listForUser(userId: string, pagination: { limit: number; offset: number }) {
+  async listForUser(
+    userId: string,
+    pagination: { limit: number; offset: number },
+  ) {
     const where = { actorId: userId };
     const [items, total] = await this.prisma.$transaction([
       this.prisma.auditLog.findMany({

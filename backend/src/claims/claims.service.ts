@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+  ForbiddenException,
+} from '@nestjs/common';
 import * as crypto from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../prisma/safe-user-select';
@@ -9,10 +14,16 @@ import { AuditService } from '../audit/audit.service';
 import { CreateClaimDto } from './dto/create-claim.dto';
 import { Prisma, UserRole, ClaimStatus } from '@prisma/client';
 import { AuthUser } from '../auth/types/auth-user';
+import { FraudResponseDto } from '../ml-client/dto/fraud-response.dto';
 
 @Injectable()
 export class ClaimsService {
-  private readonly ALLOWED_MIME = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
+  private readonly ALLOWED_MIME = [
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+    'application/pdf',
+  ];
 
   constructor(
     private readonly prisma: PrismaService,
@@ -29,7 +40,9 @@ export class ClaimsService {
       where = { userId: user.id };
     } else if (user.role === UserRole.COMPANY_ADMIN) {
       if (!user.companyId) {
-        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+        throw new ForbiddenException(
+          'COMPANY_ADMIN account is missing companyId',
+        );
       }
       where = { application: { product: { companyId: user.companyId } } };
     }
@@ -93,16 +106,22 @@ export class ClaimsService {
 
     // Ownership check: CUSTOMER can only see their own claim
     if (user.role === UserRole.CUSTOMER && claim.userId !== user.id) {
-      throw new ForbiddenException('You do not have permission to view this claim');
+      throw new ForbiddenException(
+        'You do not have permission to view this claim',
+      );
     }
 
     // Scoping check: COMPANY_ADMIN can only see claims for their company
     if (user.role === UserRole.COMPANY_ADMIN) {
       if (!user.companyId) {
-        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+        throw new ForbiddenException(
+          'COMPANY_ADMIN account is missing companyId',
+        );
       }
       if (claim.application.product.companyId !== user.companyId) {
-        throw new ForbiddenException('You do not have permission to view this claim');
+        throw new ForbiddenException(
+          'You do not have permission to view this claim',
+        );
       }
     }
 
@@ -119,7 +138,7 @@ export class ClaimsService {
     if (policyId) {
       const policy = await this.prisma.policy.findUnique({
         where: { id: policyId },
-        include: { application: { include: { product: true } } }
+        include: { application: { include: { product: true } } },
       });
 
       if (!policy) {
@@ -127,24 +146,32 @@ export class ClaimsService {
       }
 
       if (policy.status !== 'ACTIVE') {
-        throw new BadRequestException(`Claims can only be filed against ACTIVE policies. Current status: ${policy.status}`);
+        throw new BadRequestException(
+          `Claims can only be filed against ACTIVE policies. Current status: ${policy.status}`,
+        );
       }
 
       finalUserId = policy.userId;
       finalApplicationId = policy.applicationId;
-      
+
       // Safety check: ensure policy belongs to user
       if (finalUserId !== userId) {
-        throw new ForbiddenException('You can only file claims against your own policies');
+        throw new ForbiddenException(
+          'You can only file claims against your own policies',
+        );
       }
     } else {
       // Legacy path / Manual override (still requires applicationId)
       if (!finalApplicationId) {
-        throw new BadRequestException('Either policyId or applicationId must be provided');
+        throw new BadRequestException(
+          'Either policyId or applicationId must be provided',
+        );
       }
 
       // Verify User exists
-      const user = await this.prisma.user.findUnique({ where: { id: finalUserId } });
+      const user = await this.prisma.user.findUnique({
+        where: { id: finalUserId },
+      });
       if (!user) {
         throw new NotFoundException(`User with ID ${finalUserId} not found`);
       }
@@ -153,29 +180,37 @@ export class ClaimsService {
       const application = await this.prisma.application.findUnique({
         where: { id: finalApplicationId },
       });
-      
+
       if (!application) {
-        throw new NotFoundException(`Application with ID ${finalApplicationId} not found`);
+        throw new NotFoundException(
+          `Application with ID ${finalApplicationId} not found`,
+        );
       }
-      
+
       // FIX: Add ownership check in legacy path
       if (application.userId !== userId) {
-        throw new ForbiddenException('You can only file claims against your own applications');
+        throw new ForbiddenException(
+          'You can only file claims against your own applications',
+        );
       }
 
       if (application.userId !== finalUserId) {
-        throw new BadRequestException(`Application does not belong to the given user`);
+        throw new BadRequestException(
+          `Application does not belong to the given user`,
+        );
       }
     }
 
     // 2. Fetch full application for ML service and response
     const application = await this.prisma.application.findUnique({
       where: { id: finalApplicationId },
-      include: { product: true }
+      include: { product: true },
     });
 
     if (!application) {
-      throw new NotFoundException(`Application with ID ${finalApplicationId} not found`);
+      throw new NotFoundException(
+        `Application with ID ${finalApplicationId} not found`,
+      );
     }
 
     // 3. Pre-generate Claim ID for ML service
@@ -183,7 +218,7 @@ export class ClaimsService {
 
     // 4. Call ML Service for Fraud Detection BEFORE creating anything in DB
     // This ensures we don't have "orphan" claims without fraud assessments
-    let fraudResponse;
+    let fraudResponse: FraudResponseDto;
     try {
       fraudResponse = await this.mlClient.detectFraud({
         claimId: claimId,
@@ -191,8 +226,11 @@ export class ClaimsService {
         claimType: application.product.type,
         description,
       });
-    } catch (error) {
-      throw new BadRequestException(`Fraud detection failed: ${error.message}. Claim submission aborted to ensure data consistency.`);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      throw new BadRequestException(
+        `Fraud detection failed: ${message}. Claim submission aborted to ensure data consistency.`,
+      );
     }
 
     // 5. Atomic transaction to create Claim and FraudAssessment
@@ -213,9 +251,10 @@ export class ClaimsService {
         data: {
           claimId: newClaim.id,
           fraudScore: fraudResponse.fraudScore,
-          flag: fraudResponse.flag as any,
+          flag: fraudResponse.flag,
           explanation: fraudResponse.explanation,
-          featureContributions: fraudResponse.featureContributions ?? undefined,
+          featureContributions: (fraudResponse.featureContributions ??
+            undefined) as Prisma.InputJsonValue,
         },
       });
 
@@ -233,15 +272,26 @@ export class ClaimsService {
         fraudFlag: finalClaim.fraudAssessments[0]?.flag ?? 'PENDING',
       });
     } catch (error) {
-      console.error(`Failed to send claim filed email for claim ${claimId}`, error);
+      console.error(
+        `Failed to send claim filed email for claim ${claimId}`,
+        error,
+      );
     }
 
     await this.auditService.record({
       action: 'CLAIM_FILED',
-      actor: { id: finalClaim.user.id, email: finalClaim.user.email, role: finalClaim.user.role },
+      actor: {
+        id: finalClaim.user.id,
+        email: finalClaim.user.email,
+        role: finalClaim.user.role,
+      },
       resourceType: 'Claim',
       resourceId: finalClaim.id,
-      metadata: { amount: finalClaim.amount, productName: finalClaim.application.product.name, fraudFlag: finalClaim.fraudAssessments[0]?.flag ?? 'PENDING' },
+      metadata: {
+        amount: finalClaim.amount,
+        productName: finalClaim.application.product.name,
+        fraudFlag: finalClaim.fraudAssessments[0]?.flag ?? 'PENDING',
+      },
     });
 
     // 6. Return fully populated Claim
@@ -254,10 +304,14 @@ export class ClaimsService {
     // Scoping check: COMPANY_ADMIN can only update claims for their company
     if (user.role === UserRole.COMPANY_ADMIN) {
       if (!user.companyId) {
-        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+        throw new ForbiddenException(
+          'COMPANY_ADMIN account is missing companyId',
+        );
       }
       if (claim.application.product.companyId !== user.companyId) {
-        throw new ForbiddenException('You do not have permission to view this claim');
+        throw new ForbiddenException(
+          'You do not have permission to view this claim',
+        );
       }
     }
 
@@ -297,7 +351,11 @@ export class ClaimsService {
     return finalClaim;
   }
 
-  async uploadDocument(claimId: string, file: Express.Multer.File, user: AuthUser) {
+  async uploadDocument(
+    claimId: string,
+    file: Express.Multer.File,
+    user: AuthUser,
+  ) {
     if (!file) {
       throw new BadRequestException('No file provided');
     }
@@ -333,7 +391,12 @@ export class ClaimsService {
       actor: { id: user.id, role: user.role },
       resourceType: 'Claim',
       resourceId: claimId,
-      metadata: { filename: file.originalname, mimeType: file.mimetype, sizeBytes: file.size, documentId: document.id },
+      metadata: {
+        filename: file.originalname,
+        mimeType: file.mimetype,
+        sizeBytes: file.size,
+        documentId: document.id,
+      },
     });
 
     return document;
@@ -358,19 +421,26 @@ export class ClaimsService {
     });
 
     if (!doc || doc.claimId !== claimId) {
-      throw new NotFoundException(`Document with ID ${docId} not found for this claim`);
+      throw new NotFoundException(
+        `Document with ID ${docId} not found for this claim`,
+      );
     }
 
     // Authorization: only uploader or platform admin
     if (doc.uploadedById !== user.id && user.role !== UserRole.PLATFORM_ADMIN) {
-      throw new ForbiddenException('You do not have permission to delete this document');
+      throw new ForbiddenException(
+        'You do not have permission to delete this document',
+      );
     }
 
     // Extract storage key from URL
     const key = doc.url.split('/uploads/')[1];
     if (key) {
       await this.storageService.deleteFile(key).catch((err) => {
-        console.error(`Failed to delete physical file for document ${docId}`, err);
+        console.error(
+          `Failed to delete physical file for document ${docId}`,
+          err,
+        );
       });
     }
 

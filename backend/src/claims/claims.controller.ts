@@ -1,5 +1,22 @@
-import { Controller, Get, Post, Body, Param, Patch, UseGuards, UseInterceptors, UploadedFile, Delete, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Patch,
+  UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  Delete,
+  Query,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ClaimsService } from './claims.service';
@@ -20,7 +37,12 @@ export class ClaimsController {
   constructor(private readonly claimsService: ClaimsService) {}
 
   @Get()
-  @Roles(UserRole.CUSTOMER, UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
+  @Roles(
+    UserRole.CUSTOMER,
+    UserRole.AGENT,
+    UserRole.COMPANY_ADMIN,
+    UserRole.PLATFORM_ADMIN,
+  )
   @ApiOperation({ summary: 'List all claims' })
   @ApiResponse({ status: 200, description: 'Claims listed successfully' })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
@@ -32,9 +54,17 @@ export class ClaimsController {
   }
 
   @Get(':id')
-  @Roles(UserRole.CUSTOMER, UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
+  @Roles(
+    UserRole.CUSTOMER,
+    UserRole.AGENT,
+    UserRole.COMPANY_ADMIN,
+    UserRole.PLATFORM_ADMIN,
+  )
   @ApiOperation({ summary: 'Get claim details' })
-  @ApiResponse({ status: 200, description: 'Claim details retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Claim details retrieved successfully',
+  })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
   @ApiResponse({ status: 404, description: 'Claim not found' })
   findOne(@Param('id') id: string, @CurrentUser() user: AuthUser) {
@@ -47,28 +77,48 @@ export class ClaimsController {
   @ApiResponse({ status: 201, description: 'Claim successfully created' })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
   @ApiResponse({ status: 403, description: 'Forbidden — customer role only' })
-  create(@Body() createClaimDto: CreateClaimDto, @CurrentUser() user: AuthUser) {
+  create(
+    @Body() createClaimDto: CreateClaimDto,
+    @CurrentUser() user: AuthUser,
+  ) {
     return this.claimsService.create(createClaimDto, user.id);
   }
 
   @Patch(':id/status')
   @Roles(UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
   @ApiOperation({ summary: 'Update claim status' })
-  @ApiResponse({ status: 200, description: 'Claim status successfully updated' })
+  @ApiResponse({
+    status: 200,
+    description: 'Claim status successfully updated',
+  })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
-  @ApiResponse({ status: 403, description: 'Forbidden — admin/agent/company admin roles only' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden — admin/agent/company admin roles only',
+  })
   @ApiResponse({ status: 404, description: 'Claim not found' })
   updateStatus(
     @Param('id') id: string,
     @Body() updateClaimStatusDto: UpdateClaimStatusDto,
     @CurrentUser() user: AuthUser,
   ) {
-    return this.claimsService.updateStatus(id, updateClaimStatusDto.status, user);
+    return this.claimsService.updateStatus(
+      id,
+      updateClaimStatusDto.status,
+      user,
+    );
   }
 
   @Post(':id/documents')
-  @Roles(UserRole.CUSTOMER, UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
-  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 10 * 1024 * 1024 } })) // 10MB
+  @Roles(
+    UserRole.CUSTOMER,
+    UserRole.AGENT,
+    UserRole.COMPANY_ADMIN,
+    UserRole.PLATFORM_ADMIN,
+  )
+  @UseInterceptors(
+    FileInterceptor('file', { limits: { fileSize: 10 * 1024 * 1024 } }),
+  ) // 10MB
   @ApiOperation({ summary: 'Upload claim document' })
   @ApiResponse({ status: 201, description: 'Document uploaded successfully' })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
@@ -82,9 +132,17 @@ export class ClaimsController {
   }
 
   @Get(':id/documents')
-  @Roles(UserRole.CUSTOMER, UserRole.AGENT, UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
+  @Roles(
+    UserRole.CUSTOMER,
+    UserRole.AGENT,
+    UserRole.COMPANY_ADMIN,
+    UserRole.PLATFORM_ADMIN,
+  )
   @ApiOperation({ summary: 'List claim documents' })
-  @ApiResponse({ status: 200, description: 'Claim documents listed successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Claim documents listed successfully',
+  })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
   @ApiResponse({ status: 404, description: 'Claim not found' })
   listDocuments(@Param('id') id: string, @CurrentUser() user: AuthUser) {
@@ -96,7 +154,10 @@ export class ClaimsController {
   @ApiOperation({ summary: 'Delete claim document' })
   @ApiResponse({ status: 200, description: 'Document deleted successfully' })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
-  @ApiResponse({ status: 403, description: 'Forbidden — customer or platform admin role only' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden — customer or platform admin role only',
+  })
   @ApiResponse({ status: 404, description: 'Claim or document not found' })
   deleteDocument(
     @Param('id') id: string,

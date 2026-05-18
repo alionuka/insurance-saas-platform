@@ -18,16 +18,20 @@ async function bootstrap() {
   app.useLogger(logger);
 
   // Enable global validation using class-validator decorators
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
+  );
 
   // Configure Swagger documentation
   const config = new DocumentBuilder()
     .setTitle('InsurSaaS Platform API')
-    .setDescription('Multi-tenant insurance SaaS with ML-powered risk and fraud detection')
+    .setDescription(
+      'Multi-tenant insurance SaaS with ML-powered risk and fraud detection',
+    )
     .setVersion('1.0')
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header' },
-      'access_token'
+      'access_token',
     )
     .addTag('Auth', 'Registration, login, password management')
     .addTag('Applications', 'Insurance application lifecycle')
@@ -44,7 +48,11 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document, {
-    swaggerOptions: { persistAuthorization: true, tagsSorter: 'alpha', operationsSorter: 'alpha' },
+    swaggerOptions: {
+      persistAuthorization: true,
+      tagsSorter: 'alpha',
+      operationsSorter: 'alpha',
+    },
   });
 
   // Serve static assets (uploaded claim documents)
@@ -63,5 +71,4 @@ async function bootstrap() {
   await app.listen(port);
   logger.log(`Backend application is running on: http://localhost:${port}`);
 }
-bootstrap();
-
+void bootstrap();

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../prisma/safe-user-select';
 import { MlClientService } from '../ml-client/ml-client.service';
@@ -24,7 +28,9 @@ export class ApplicationsService {
       where = { userId: user.id };
     } else if (user.role === UserRole.COMPANY_ADMIN) {
       if (!user.companyId) {
-        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+        throw new ForbiddenException(
+          'COMPANY_ADMIN account is missing companyId',
+        );
       }
       where = { product: { companyId: user.companyId } };
     }
@@ -79,16 +85,22 @@ export class ApplicationsService {
 
     // Ownership check: CUSTOMER can only see their own application
     if (user.role === UserRole.CUSTOMER && application.userId !== user.id) {
-      throw new ForbiddenException('You do not have permission to view this application');
+      throw new ForbiddenException(
+        'You do not have permission to view this application',
+      );
     }
 
     // Scoping check: COMPANY_ADMIN can only see applications for their company
     if (user.role === UserRole.COMPANY_ADMIN) {
       if (!user.companyId) {
-        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+        throw new ForbiddenException(
+          'COMPANY_ADMIN account is missing companyId',
+        );
       }
       if (application.product.companyId !== user.companyId) {
-        throw new ForbiddenException('You do not have permission to view this application');
+        throw new ForbiddenException(
+          'You do not have permission to view this application',
+        );
       }
     }
 
@@ -105,7 +117,9 @@ export class ApplicationsService {
     }
 
     // 2. Verify Product exists
-    const product = await this.prisma.insuranceProduct.findUnique({ where: { id: productId } });
+    const product = await this.prisma.insuranceProduct.findUnique({
+      where: { id: productId },
+    });
     if (!product) {
       throw new NotFoundException(`Product with ID ${productId} not found`);
     }
@@ -132,7 +146,7 @@ export class ApplicationsService {
       data: {
         applicationId: application.id,
         riskScore: mlRiskResponse.riskScore,
-        riskLevel: mlRiskResponse.riskLevel as any, // Enum mapping if needed, assuming they match exactly
+        riskLevel: mlRiskResponse.riskLevel,
         explanation: mlRiskResponse.explanation,
         featureContributions: mlRiskResponse.featureContributions ?? undefined,
       },
@@ -157,10 +171,14 @@ export class ApplicationsService {
     // Scoping check: COMPANY_ADMIN can only update applications for their company
     if (user.role === UserRole.COMPANY_ADMIN) {
       if (!user.companyId) {
-        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+        throw new ForbiddenException(
+          'COMPANY_ADMIN account is missing companyId',
+        );
       }
       if (application.product.companyId !== user.companyId) {
-        throw new ForbiddenException('You do not have permission to view this application');
+        throw new ForbiddenException(
+          'You do not have permission to view this application',
+        );
       }
     }
 
@@ -202,7 +220,11 @@ export class ApplicationsService {
         actor: { id: user.id, role: user.role },
         resourceType: 'Policy',
         resourceId: newPolicy.id,
-        metadata: { applicationId: id, status: 'PENDING_PAYMENT', premiumAmount: application.product.basePremium * 12 },
+        metadata: {
+          applicationId: id,
+          status: 'PENDING_PAYMENT',
+          premiumAmount: application.product.basePremium * 12,
+        },
       });
     }
 
@@ -211,22 +233,31 @@ export class ApplicationsService {
     // Send notifications
     try {
       if (status === 'APPROVED') {
-        await this.emailService.sendApplicationApproved(finalApplication.user.email, {
-          applicationId: id,
-          productName: finalApplication.product.name,
-          policyNumber: finalApplication.policy?.policyNumber,
-          startDate: finalApplication.policy?.startDate,
-          endDate: finalApplication.policy?.endDate,
-        });
+        await this.emailService.sendApplicationApproved(
+          finalApplication.user.email,
+          {
+            applicationId: id,
+            productName: finalApplication.product.name,
+            policyNumber: finalApplication.policy?.policyNumber,
+            startDate: finalApplication.policy?.startDate,
+            endDate: finalApplication.policy?.endDate,
+          },
+        );
       } else if (status === 'REJECTED') {
-        await this.emailService.sendApplicationRejected(finalApplication.user.email, {
-          applicationId: id,
-          productName: finalApplication.product.name,
-        });
+        await this.emailService.sendApplicationRejected(
+          finalApplication.user.email,
+          {
+            applicationId: id,
+            productName: finalApplication.product.name,
+          },
+        );
       }
     } catch (error) {
       // Email is best-effort, don't fail the status update
-      console.error(`Failed to send application status email for application ${id}`, error);
+      console.error(
+        `Failed to send application status email for application ${id}`,
+        error,
+      );
     }
 
     return finalApplication;

@@ -1,10 +1,16 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+  BadRequestException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { MlClientService } from '../ml-client/ml-client.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { AuthUser } from '../auth/types/auth-user';
-import { UserRole } from '@prisma/client';
+import { UserRole, Prisma } from '@prisma/client';
 import { AuditService } from '../audit/audit.service';
 
 @Injectable()
@@ -51,22 +57,30 @@ export class ProductsService {
 
     if (user.role === UserRole.COMPANY_ADMIN) {
       if (!user.companyId) {
-        throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+        throw new ForbiddenException(
+          'COMPANY_ADMIN account is missing companyId',
+        );
       }
       finalCompanyId = user.companyId;
     } else if (user.role === UserRole.PLATFORM_ADMIN) {
       if (!dto.companyId) {
-        throw new BadRequestException('companyId is required for PLATFORM_ADMIN');
+        throw new BadRequestException(
+          'companyId is required for PLATFORM_ADMIN',
+        );
       }
       const company = await this.prisma.company.findUnique({
         where: { id: dto.companyId },
       });
       if (!company) {
-        throw new NotFoundException(`Company with ID ${dto.companyId} not found`);
+        throw new NotFoundException(
+          `Company with ID ${dto.companyId} not found`,
+        );
       }
       finalCompanyId = dto.companyId;
     } else {
-      throw new ForbiddenException('Insufficient permissions to create products');
+      throw new ForbiddenException(
+        'Insufficient permissions to create products',
+      );
     }
 
     const product = await this.prisma.insuranceProduct.create({
@@ -87,15 +101,25 @@ export class ProductsService {
       actor: { id: user.id, role: user.role },
       resourceType: 'Product',
       resourceId: product.id,
-      metadata: { name: dto.name, type: dto.type, basePremium: dto.basePremium, companyId: finalCompanyId },
+      metadata: {
+        name: dto.name,
+        type: dto.type,
+        basePremium: dto.basePremium,
+        companyId: finalCompanyId,
+      },
     });
 
     return product;
   }
 
-  async listMyCompany(user: AuthUser, pagination: { limit: number; offset: number }) {
+  async listMyCompany(
+    user: AuthUser,
+    pagination: { limit: number; offset: number },
+  ) {
     if (!user.companyId) {
-      throw new ForbiddenException('COMPANY_ADMIN account is missing companyId');
+      throw new ForbiddenException(
+        'COMPANY_ADMIN account is missing companyId',
+      );
     }
 
     const where = { companyId: user.companyId };
@@ -158,7 +182,8 @@ export class ProductsService {
       // Defaults already set
     }
 
-    const monthlyPremium = Math.round(product.basePremium * riskMultiplier * 100) / 100;
+    const monthlyPremium =
+      Math.round(product.basePremium * riskMultiplier * 100) / 100;
 
     return {
       productId,
@@ -183,18 +208,32 @@ export class ProductsService {
 
     if (user.role === UserRole.COMPANY_ADMIN) {
       if (product.companyId !== user.companyId) {
-        throw new ForbiddenException('You do not have permission to update this product');
+        throw new ForbiddenException(
+          'You do not have permission to update this product',
+        );
       }
     } else if (user.role !== UserRole.PLATFORM_ADMIN) {
-      throw new ForbiddenException('Insufficient permissions to update products');
+      throw new ForbiddenException(
+        'Insufficient permissions to update products',
+      );
     }
 
-    const dataToUpdate: any = {};
-    const allowedKeys: (keyof UpdateProductDto)[] = ['name', 'description', 'basePremium', 'type'];
+    const dataToUpdate: Prisma.InsuranceProductUpdateInput = {};
+    const allowedKeys: (keyof UpdateProductDto)[] = [
+      'name',
+      'description',
+      'basePremium',
+      'type',
+    ];
 
     for (const key of allowedKeys) {
       if (dto[key] !== undefined) {
-        dataToUpdate[key] = dto[key];
+        const val = dto[key];
+        if (key === 'name' || key === 'description' || key === 'type') {
+          dataToUpdate[key] = val as string;
+        } else if (key === 'basePremium') {
+          dataToUpdate[key] = val as number;
+        }
       }
     }
 
@@ -228,10 +267,14 @@ export class ProductsService {
 
     if (user.role === UserRole.COMPANY_ADMIN) {
       if (product.companyId !== user.companyId) {
-        throw new ForbiddenException('You do not have permission to delete this product');
+        throw new ForbiddenException(
+          'You do not have permission to delete this product',
+        );
       }
     } else if (user.role !== UserRole.PLATFORM_ADMIN) {
-      throw new ForbiddenException('Insufficient permissions to delete products');
+      throw new ForbiddenException(
+        'Insufficient permissions to delete products',
+      );
     }
 
     // Count related applications and policies

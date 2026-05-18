@@ -13,10 +13,61 @@ import { PolicyStatus, PaymentStatus } from '@prisma/client';
 import Stripe from 'stripe';
 import { AuditService } from '../audit/audit.service';
 
+interface StripeSession {
+  id: string;
+  metadata?: {
+    policyId?: string;
+    userId?: string;
+  };
+  payment_intent?: string | null;
+  url?: string | null;
+}
+
+interface StripeEvent {
+  type: string;
+  data: {
+    object: StripeSession;
+  };
+}
+
+interface StripeClient {
+  checkout: {
+    sessions: {
+      create(params: {
+        mode: 'payment' | 'setup' | 'subscription';
+        line_items: Array<{
+          price_data: {
+            currency: string;
+            product_data: {
+              name: string;
+              description?: string;
+            };
+            unit_amount: number;
+          };
+          quantity: number;
+        }>;
+        success_url: string;
+        cancel_url: string;
+        metadata: {
+          policyId: string;
+          userId: string;
+        };
+      }): Promise<StripeSession>;
+    };
+  };
+  webhooks: {
+    constructEvent(
+      rawBody: Buffer,
+      signature: string,
+      secret: string,
+    ): StripeEvent;
+  };
+}
+
 @Injectable()
 export class PaymentsService {
   private readonly logger = new Logger(PaymentsService.name);
-  private readonly stripe: any = null; // Using any to avoid version-mismatch type errors with old stripe library
+  private readonly stripe: StripeClient | null = null;
 
   constructor(
     private readonly prisma: PrismaService,
@@ -25,12 +76,17 @@ export class PaymentsService {
   ) {
     const apiKey = process.env.STRIPE_SECRET_KEY;
     if (apiKey) {
-      // @ts-ignore - Stripe version in package.json is very old, avoiding type conflicts
-      this.stripe = new Stripe(apiKey, {
-        apiVersion: '2022-11-15' as any, // Standard older version compatible with stripe 11+
-      });
+      const stripeConfig = {
+        apiVersion: '2022-11-15',
+      };
+      this.stripe = new Stripe(
+        apiKey,
+        stripeConfig as Record<string, unknown>,
+      ) as unknown as StripeClient;
     } else {
-      this.logger.warn('STRIPE_SECRET_KEY not set; payment endpoints will return 503');
+      this.logger.warn(
+        'STRIPE_SECRET_KEY not set; payment endpoints will return 503',
+      );
     }
   }
 
@@ -49,11 +105,15 @@ export class PaymentsService {
     }
 
     if (policy.userId !== user.id) {
-      throw new ForbiddenException('You do not have permission to pay for this policy');
+      throw new ForbiddenException(
+        'You do not have permission to pay for this policy',
+      );
     }
 
     if (policy.status !== PolicyStatus.PENDING_PAYMENT) {
-      throw new BadRequestException(`Policy is not in PENDING_PAYMENT status. Current status: ${policy.status}`);
+      throw new BadRequestException(
+        `Policy is not in PENDING_PAYMENT status. Current status: ${policy.status}`,
+      );
     }
 
     const amountCents = Math.round(policy.premiumAmount * 100);
@@ -97,7 +157,11 @@ export class PaymentsService {
       actor: { id: user.id, role: user.role },
       resourceType: 'Payment',
       resourceId: payment.id,
-      metadata: { policyId, amount: policy.premiumAmount, stripeSessionId: session.id },
+      metadata: {
+        policyId,
+        amount: policy.premiumAmount,
+        stripeSessionId: session.id,
+      },
     });
 
     return { url: session.url };
@@ -109,7 +173,7 @@ export class PaymentsService {
       throw new ServiceUnavailableException('Payments not configured');
     }
 
-    let event: any;
+    let event: StripeEvent;
 
     try {
       event = this.stripe.webhooks.constructEvent(
@@ -117,9 +181,10 @@ export class PaymentsService {
         signature,
         process.env.STRIPE_WEBHOOK_SECRET,
       );
-    } catch (err) {
-      this.logger.error(`Webhook signature verification failed: ${err.message}`);
-      throw new BadRequestException(`Invalid webhook signature: ${err.message}`);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      this.logger.error(`Webhook signature verification failed: ${message}`);
+      throw new BadRequestException(`Invalid webhook signature: ${message}`);
     }
 
     this.logger.log(`Received Stripe event: ${event.type}`);
@@ -141,7 +206,7 @@ export class PaymentsService {
     }
   }
 
-  private async handleCheckoutCompleted(session: any) {
+  private async handleCheckoutCompleted(session: StripeSession) {
     const policyId = session.metadata?.policyId;
     const stripePaymentId = session.payment_intent as string;
 
@@ -155,7 +220,9 @@ export class PaymentsService {
     });
 
     if (!payment || payment.status !== PaymentStatus.PENDING) {
-      this.logger.log(`Payment already processed or not found for session ${session.id}`);
+      this.logger.log(
+        `Payment already processed or not found for session ${session.id}`,
+      );
       return;
     }
 
@@ -210,12 +277,15 @@ export class PaymentsService {
           amount: policy.premiumAmount,
         });
       } catch (err) {
-        this.logger.error(`Failed to send activation email for policy ${policyId}`, err);
+        this.logger.error(
+          `Failed to send activation email for policy ${policyId}`,
+          err,
+        );
       }
     }
   }
 
-  private async handlePaymentFailed(session: any) {
+  private async handlePaymentFailed(session: StripeSession) {
     const payment = await this.prisma.payment.findUnique({
       where: { stripeSessionId: session.id },
     });

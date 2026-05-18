@@ -1,7 +1,11 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserRole } from '@prisma/client';
+import { UserRole, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { safeUserSelect } from '../prisma/safe-user-select';
 import { AuditService } from '../audit/audit.service';
@@ -31,7 +35,7 @@ export class AdminService {
       if (!company) {
         throw new NotFoundException(`Company with ID ${companyId} not found`);
       }
-      
+
       // Only COMPANY_ADMIN belongs to a single tenant
       if (role === UserRole.COMPANY_ADMIN) {
         finalCompanyId = companyId;
@@ -77,7 +81,7 @@ export class AdminService {
     filters: { role?: UserRole; companyId?: string },
     pagination: { limit: number; offset: number },
   ) {
-    const where: any = {};
+    const where: Prisma.UserWhereInput = {};
     if (filters.role) where.role = filters.role;
     if (filters.companyId) where.companyId = filters.companyId;
 
@@ -119,7 +123,7 @@ export class AdminService {
     }
 
     // Strip passwordHash
-    const { passwordHash, ...safeUser } = user;
+    const { passwordHash: _passwordHash, ...safeUser } = user;
     return safeUser;
   }
 }
