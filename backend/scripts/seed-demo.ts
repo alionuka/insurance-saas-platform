@@ -192,12 +192,26 @@ async function main() {
     else if (cScore < 600) { rScore = 70 + Math.random() * 25; rLevel = RiskLevel.HIGH; }
     else { rScore = 35 + Math.random() * 25; }
 
+    // Synthesize SHAP-like feature contributions so the BI dashboard has data.
+    // Sign depends on risk level: HIGH → positive contributions (pushed toward risk).
+    // Magnitudes echo the real model's permutation importance (credit_score dominant).
+    const sign = rLevel === RiskLevel.HIGH ? 1 : rLevel === RiskLevel.LOW ? -1 : (Math.random() < 0.5 ? 1 : -1);
+    const jitter = () => 0.5 + Math.random();
+    const featureContributions = [
+      { feature: 'Credit score', value: cScore, contribution: +(sign * 18 * jitter()).toFixed(2) },
+      { feature: 'Prior claims', value: Math.floor(Math.random() * 3), contribution: +(sign * 6 * jitter()).toFixed(2) },
+      { feature: 'Age', value: customer.age || 30, contribution: +(sign * 3 * jitter() * (Math.random() < 0.5 ? -1 : 1)).toFixed(2) },
+      { feature: 'Annual income', value: customer.annualIncome || 50000, contribution: +(sign * 2 * jitter() * -1).toFixed(2) },
+      { feature: 'Years a customer', value: Math.floor(Math.random() * 10), contribution: +(sign * 1.5 * jitter() * -1).toFixed(2) },
+    ];
+
     await prisma.riskAssessment.create({
       data: {
         applicationId: application.id,
         riskScore: rScore,
         riskLevel: rLevel,
         explanation: `Credit score is ${cScore}, indicating a ${rLevel} risk level.`,
+        featureContributions,
         createdAt: appCreatedAt
       }
     });
