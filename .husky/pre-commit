@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Run ESLint on staged TypeScript files before allowing the commit.
+# Failures block the commit; fix lint errors and re-stage.
+npx lint-staged

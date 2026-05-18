@@ -1,0 +1,21 @@
+{
+  "name": "insurance-saas-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Multi-tenant insurance SaaS with ML-powered risk scoring, fraud detection, and recommendations",
+  "scripts": {
+    "prepare": "husky",
+    "lint:backend": "cd backend && npx eslint src --max-warnings=200",
+    "lint:frontend": "cd frontend && npx eslint src --max-warnings=200",
+    "lint:all": "npm run lint:backend && npm run lint:frontend",
+    "test:e2e": "cd backend && npm run test:e2e"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2"
+  },
+  "lint-staged": {
+    "backend/src/**/*.ts": "cd backend && npx eslint --fix --no-warn-ignored",
+    "frontend/src/**/*.{ts,tsx}": "cd frontend && npx eslint --fix --no-warn-ignored"
+  }
+}
