@@ -219,6 +219,15 @@ function SignInPageInner() {
             {t('auth.needAccountPrompt')}
           </Link>
         </p>
+        <p className="mt-3 text-center text-xs text-zinc-500">
+          {t('auth.forCompaniesPrompt')}{' '}
+          <Link
+            href="/auth/register-company"
+            className="font-medium text-amber-400 hover:text-amber-300"
+          >
+            {t('auth.companySignUpHere')} →
+          </Link>
+        </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">

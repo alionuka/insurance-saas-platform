@@ -90,6 +90,17 @@ const en: Dictionary = {
     needAccountPrompt: 'create a new account',
     signUpLink: 'create a new account',
     // Forgot password
+    // Company self-service onboarding
+    registerCompanyTitle: 'Register your insurance company',
+    registerCompanySubtitle:
+      'Onboard your company onto the platform — create your admin account and start managing products, policies, and claims.',
+    companyNameLabel: 'Company name',
+    companyNamePlaceholder: 'Acme Insurance Co.',
+    registerCompanyButton: 'Create company account',
+    forCustomersPrompt: 'Are you a customer?',
+    customerSignUpHere: 'Sign up here instead',
+    forCompaniesPrompt: 'Represent an insurance company?',
+    companySignUpHere: 'Onboard your company',
     forgotTitle: 'Reset your password',
     forgotSubtitle:
       "Enter your email address and we'll send you a link to reset your password.",
@@ -367,6 +378,17 @@ const uk: Dictionary = {
     signInLink: 'увійти до існуючого акаунту',
     needAccountPrompt: 'створити новий акаунт',
     signUpLink: 'створити новий акаунт',
+    // Company self-service onboarding
+    registerCompanyTitle: 'Реєстрація страхової компанії',
+    registerCompanySubtitle:
+      'Підключіть свою компанію до платформи — створіть адміністративний акаунт і почніть керувати продуктами, полісами та виплатами.',
+    companyNameLabel: 'Назва компанії',
+    companyNamePlaceholder: 'ТОВ "Страхова Компанія"',
+    registerCompanyButton: 'Створити акаунт компанії',
+    forCustomersPrompt: 'Ви клієнт?',
+    customerSignUpHere: 'Зареєструйтеся тут',
+    forCompaniesPrompt: 'Представляєте страхову компанію?',
+    companySignUpHere: 'Зареєструвати компанію',
     forgotTitle: 'Скидання паролю',
     forgotSubtitle:
       'Введіть свою електронну адресу — ми надішлемо посилання для скидання паролю.',

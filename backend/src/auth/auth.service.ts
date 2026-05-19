@@ -9,6 +9,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { EmailService } from '../email/email.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { RegisterCompanyDto } from './dto/register-company.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
@@ -63,6 +64,80 @@ export class AuthService {
       ...tokens,
       ...result,
       user: result,
+    };
+  }
+
+  /**
+   * Self-service tenant onboarding. Atomically creates a Company together
+   * with its first COMPANY_ADMIN user, then issues tokens so the caller
+   * is automatically logged in. Production deployments would gate this
+   * behind a KYC / business-verification step; for the thesis project we
+   * keep it open and audit-logged.
+   */
+  async registerCompany(dto: RegisterCompanyDto) {
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+    if (existingUser) {
+      throw new ConflictException('User with this email already exists');
+    }
+
+    const existingCompany = await this.prisma.company.findFirst({
+      where: { name: dto.companyName },
+    });
+    if (existingCompany) {
+      throw new ConflictException(
+        `Company "${dto.companyName}" is already registered`,
+      );
+    }
+
+    const passwordHash = await bcrypt.hash(dto.password, 10);
+
+    // Single atomic transaction so we never end up with an orphaned Company
+    // (no admin) or orphaned admin (no company).
+    const { company, user } = await this.prisma.$transaction(
+      async (tx) => {
+        const company = await tx.company.create({
+          data: { name: dto.companyName },
+        });
+        const user = await tx.user.create({
+          data: {
+            email: dto.email,
+            passwordHash,
+            firstName: dto.firstName,
+            lastName: dto.lastName,
+            role: 'COMPANY_ADMIN',
+            companyId: company.id,
+          },
+        });
+        return { company, user };
+      },
+      { timeout: 15_000 },
+    );
+
+    await this.auditService.record({
+      action: 'COMPANY_REGISTERED',
+      actor: { id: user.id, email: user.email, role: user.role },
+      resourceType: 'Company',
+      resourceId: company.id,
+      metadata: { companyName: company.name, adminEmail: user.email },
+    });
+
+    const tokens = await this.issueTokens(user);
+    return {
+      ...tokens,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        companyId: company.id,
+      },
+      company: {
+        id: company.id,
+        name: company.name,
+      },
     };
   }
 

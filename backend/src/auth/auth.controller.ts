@@ -21,6 +21,7 @@ import {
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { RegisterCompanyDto } from './dto/register-company.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
@@ -46,6 +47,28 @@ export class AuthController {
   })
   async register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
+  }
+
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
+  @Post('register-company')
+  @ApiOperation({
+    summary:
+      'Self-service tenant onboarding — registers a new insurance company plus its first admin',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Company + admin created, returns tokens for immediate sign-in',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid input (validation errors)',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Email or company name already in use',
+  })
+  async registerCompany(@Body() dto: RegisterCompanyDto) {
+    return this.authService.registerCompany(dto);
   }
 
   @Throttle({ default: { limit: 5, ttl: 60000 } })
