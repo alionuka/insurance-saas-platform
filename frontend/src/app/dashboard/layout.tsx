@@ -2,6 +2,11 @@ import DashboardSidebar from '@/components/DashboardSidebar';
 import PageTransition from '@/components/PageTransition';
 import OnboardingTour from '@/components/onboarding/OnboardingTour';
 
+// All dashboard pages depend on the access_token cookie and the user's role,
+// so they must be dynamically rendered per-request (not cached/static).
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default function DashboardLayout({
   children,
 }: {
