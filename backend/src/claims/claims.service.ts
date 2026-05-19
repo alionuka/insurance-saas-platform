@@ -233,33 +233,44 @@ export class ClaimsService {
       );
     }
 
-    // 5. Atomic transaction to create Claim and FraudAssessment
-    await this.prisma.$transaction(async (tx) => {
-      const newClaim = await tx.claim.create({
-        data: {
-          id: claimId,
-          userId: finalUserId,
-          applicationId: finalApplicationId,
-          policyId,
-          amount,
-          description,
-          status: 'FILED',
-        },
-      });
+    // 5. Atomic transaction to create Claim and FraudAssessment.
+    //
+    // Timeout raised to 15s from the 5s default. Under load on Railway's
+    // Postgres tier we've seen the transaction trip the 5s deadline while
+    // waiting on a free connection from the pool (we cap at connection_limit=10).
+    // The actual SQL inside is two INSERTs — sub-100ms work. The extra budget
+    // covers pool acquisition + cold-start re-connect, not heavy DB work.
+    // Sentry caught a real instance of this in production: see
+    // PrismaClientKnownRequestError "Transaction already closed" on POST /claims.
+    await this.prisma.$transaction(
+      async (tx) => {
+        const newClaim = await tx.claim.create({
+          data: {
+            id: claimId,
+            userId: finalUserId,
+            applicationId: finalApplicationId,
+            policyId,
+            amount,
+            description,
+            status: 'FILED',
+          },
+        });
 
-      await tx.fraudAssessment.create({
-        data: {
-          claimId: newClaim.id,
-          fraudScore: fraudResponse.fraudScore,
-          flag: fraudResponse.flag,
-          explanation: fraudResponse.explanation,
-          featureContributions: (fraudResponse.featureContributions ??
-            undefined) as Prisma.InputJsonValue,
-        },
-      });
+        await tx.fraudAssessment.create({
+          data: {
+            claimId: newClaim.id,
+            fraudScore: fraudResponse.fraudScore,
+            flag: fraudResponse.flag,
+            explanation: fraudResponse.explanation,
+            featureContributions: (fraudResponse.featureContributions ??
+              undefined) as Prisma.InputJsonValue,
+          },
+        });
 
-      return newClaim;
-    });
+        return newClaim;
+      },
+      { timeout: 15_000 },
+    );
 
     const finalClaim = await this._findOneOrThrow(claimId);
 

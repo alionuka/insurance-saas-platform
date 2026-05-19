@@ -226,24 +226,30 @@ export class PaymentsService {
       return;
     }
 
-    await this.prisma.$transaction(async (tx) => {
-      // 1. Update Payment status
-      await tx.payment.update({
-        where: { id: payment.id },
-        data: {
-          status: PaymentStatus.SUCCEEDED,
-          stripePaymentId,
-        },
-      });
+    // Stripe webhook critical path. Timeout raised to 15s from default 5s to
+    // survive transient pool wait on Railway's small Postgres tier — see
+    // ClaimsService.create for the same pattern and root-cause notes.
+    await this.prisma.$transaction(
+      async (tx) => {
+        // 1. Update Payment status
+        await tx.payment.update({
+          where: { id: payment.id },
+          data: {
+            status: PaymentStatus.SUCCEEDED,
+            stripePaymentId,
+          },
+        });
 
-      // 2. Update Policy status
-      await tx.policy.update({
-        where: { id: policyId },
-        data: {
-          status: PolicyStatus.ACTIVE,
-        },
-      });
-    });
+        // 2. Update Policy status
+        await tx.policy.update({
+          where: { id: policyId },
+          data: {
+            status: PolicyStatus.ACTIVE,
+          },
+        });
+      },
+      { timeout: 15_000 },
+    );
 
     await this.auditService.record({
       action: 'PAYMENT_SUCCEEDED',

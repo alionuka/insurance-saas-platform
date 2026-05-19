@@ -466,26 +466,33 @@ export class AuthService {
     // tokens and password reset tokens automatically. Applications, claims and
     // policies are intentionally cascaded here via explicit deletes so the
     // user has full erasure of their personal data.
-    await this.prisma.$transaction(async (tx) => {
-      // Delete claim documents first (FK to claims)
-      await tx.claimDocument.deleteMany({
-        where: { claim: { userId } },
-      });
-      // Fraud + risk assessments cascade via their parent claim/application
-      await tx.fraudAssessment.deleteMany({
-        where: { claim: { userId } },
-      });
-      await tx.claim.deleteMany({ where: { userId } });
-      await tx.riskAssessment.deleteMany({
-        where: { application: { userId } },
-      });
-      await tx.payment.deleteMany({ where: { userId } });
-      await tx.policy.deleteMany({ where: { userId } });
-      await tx.application.deleteMany({ where: { userId } });
-      await tx.recommendation.deleteMany({ where: { userId } });
-      // Finally, the user row itself — refresh & password reset tokens cascade
-      await tx.user.delete({ where: { id: userId } });
-    });
+    //
+    // 30s timeout (vs Prisma's 5s default) so long-tenured accounts with many
+    // claims/policies/documents still erase atomically. If any delete fails
+    // the whole transaction rolls back — never half-deleted data.
+    await this.prisma.$transaction(
+      async (tx) => {
+        // Delete claim documents first (FK to claims)
+        await tx.claimDocument.deleteMany({
+          where: { claim: { userId } },
+        });
+        // Fraud + risk assessments cascade via their parent claim/application
+        await tx.fraudAssessment.deleteMany({
+          where: { claim: { userId } },
+        });
+        await tx.claim.deleteMany({ where: { userId } });
+        await tx.riskAssessment.deleteMany({
+          where: { application: { userId } },
+        });
+        await tx.payment.deleteMany({ where: { userId } });
+        await tx.policy.deleteMany({ where: { userId } });
+        await tx.application.deleteMany({ where: { userId } });
+        await tx.recommendation.deleteMany({ where: { userId } });
+        // Finally, the user row itself — refresh & password reset tokens cascade
+        await tx.user.delete({ where: { id: userId } });
+      },
+      { timeout: 30_000 },
+    );
 
     return { success: true, deletedAt: new Date().toISOString() };
   }
