@@ -20,6 +20,7 @@ import {
   Menu,
   Search,
   Brain,
+  Palette,
 } from 'lucide-react';
 import { logout } from '@/lib/auth';
 import NotificationsBell from '@/components/NotificationsBell';
@@ -56,6 +57,7 @@ const COMPANY_ADMIN_NAV: NavItem[] = [
   { href: '/dashboard/company/products', labelKey: 'sidebar.nav.products', icon: Package },
   { href: '/dashboard/company/policies', labelKey: 'sidebar.nav.policies', icon: ShieldCheck },
   { href: '/dashboard/company/claims', labelKey: 'sidebar.nav.claims', icon: Activity },
+  { href: '/dashboard/company/settings', labelKey: 'sidebar.nav.settings', icon: Palette },
   { href: '/dashboard/profile', labelKey: 'sidebar.nav.profile', icon: UserCircle },
 ];
 

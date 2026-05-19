@@ -1,12 +1,27 @@
-import { Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
+  ApiConsumes,
+  ApiBody,
 } from '@nestjs/swagger';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { CompaniesService } from './companies.service';
+import { UpdateCompanyDto } from './dto/update-company.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -32,6 +47,63 @@ export class CompaniesController {
       limit: pagination.limit ?? 50,
       offset: pagination.offset ?? 0,
     });
+  }
+
+  @Get('me')
+  @Roles(UserRole.COMPANY_ADMIN, UserRole.PLATFORM_ADMIN)
+  @ApiOperation({
+    summary: "Get the calling company-admin's own tenant (branding settings)",
+  })
+  @ApiResponse({ status: 200, description: 'Company returned' })
+  @ApiResponse({ status: 403, description: 'No company on this account' })
+  findMyCompany(@CurrentUser() user: AuthUser) {
+    return this.companiesService.findMyCompany(user);
+  }
+
+  @Patch('me')
+  @Roles(UserRole.COMPANY_ADMIN)
+  @ApiOperation({
+    summary:
+      "Update the calling company-admin's tenant — name, description, primary color",
+  })
+  @ApiResponse({ status: 200, description: 'Company updated' })
+  @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiResponse({ status: 403, description: 'Tenant scope violation' })
+  updateMyCompany(
+    @Body() dto: UpdateCompanyDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    if (!user.companyId) {
+      throw new Error('COMPANY_ADMIN without companyId');
+    }
+    return this.companiesService.updateCompany(user.companyId, dto, user);
+  }
+
+  @Post('me/logo')
+  @Roles(UserRole.COMPANY_ADMIN)
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', format: 'binary' },
+      },
+    },
+  })
+  @ApiOperation({
+    summary: 'Upload a logo for the calling company-admin tenant',
+  })
+  @ApiResponse({ status: 201, description: 'Logo uploaded' })
+  @ApiResponse({ status: 400, description: 'Invalid file (type/size)' })
+  uploadLogo(
+    @UploadedFile() file: Express.Multer.File,
+    @CurrentUser() user: AuthUser,
+  ) {
+    if (!user.companyId) {
+      throw new Error('COMPANY_ADMIN without companyId');
+    }
+    return this.companiesService.uploadLogo(user.companyId, file, user);
   }
 
   @Get(':id')

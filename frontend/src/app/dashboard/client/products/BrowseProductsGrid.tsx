@@ -14,7 +14,12 @@ type Product = {
   name: string;
   type: string;
   basePremium: number;
-  company?: { id: string; name: string } | null;
+  company?: {
+    id: string;
+    name: string;
+    logoUrl?: string | null;
+    primaryColor?: string | null;
+  } | null;
 };
 
 const TYPE_STYLES: Record<string, string> = {
@@ -106,14 +111,40 @@ export default function BrowseProductsGrid({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {products.map((product) => (
+              {products.map((product) => {
+                const brandColor = product.company?.primaryColor ?? null;
+                return (
                 <div
                   key={product.id}
-                  className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 hover:border-zinc-700 transition-colors flex flex-col gap-4"
+                  className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 hover:border-zinc-700 transition-colors flex flex-col gap-4 relative overflow-hidden"
                 >
+                  {brandColor && (
+                    <div
+                      className="absolute top-0 left-0 w-full h-1"
+                      style={{ backgroundColor: brandColor }}
+                      aria-hidden
+                    />
+                  )}
                   <div className="flex items-start justify-between gap-2">
-                    <div className="h-10 w-10 rounded-lg bg-zinc-950 border border-zinc-800 flex items-center justify-center shrink-0">
-                      <Package className="h-5 w-5 text-indigo-400" />
+                    <div
+                      className="h-10 w-10 rounded-lg border border-zinc-800 flex items-center justify-center shrink-0 overflow-hidden"
+                      style={{
+                        backgroundColor: brandColor ? brandColor + '15' : '#09090b',
+                      }}
+                    >
+                      {product.company?.logoUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={product.company.logoUrl}
+                          alt={`${product.company.name} logo`}
+                          className="h-full w-full object-contain"
+                        />
+                      ) : (
+                        <Package
+                          className="h-5 w-5"
+                          style={{ color: brandColor ?? '#818cf8' }}
+                        />
+                      )}
                     </div>
                     <span
                       className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded border ${
@@ -153,7 +184,10 @@ export default function BrowseProductsGrid({
                       onClick={() => submitApplication(product.id)}
                       disabled={applyingProductId !== null}
                       data-testid="apply-product"
-                      className="w-full py-2 px-3 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed text-xs font-bold text-white transition-colors flex items-center justify-center gap-1.5"
+                      className="w-full py-2 px-3 rounded-xl disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed text-xs font-bold text-white transition-colors flex items-center justify-center gap-1.5 hover:opacity-90"
+                      style={{
+                        backgroundColor: brandColor ?? '#059669',
+                      }}
                     >
                       {applyingProductId === product.id ? (
                         <>
@@ -169,7 +203,8 @@ export default function BrowseProductsGrid({
                     </button>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </section>
         );

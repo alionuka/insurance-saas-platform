@@ -129,6 +129,13 @@ model Company {
   approvedAt DateTime?
   approvedBy String? // PLATFORM_ADMIN user id who flipped the switch
 
+  // Tenant branding — visible to end-customers on product cards, application
+  // details, payment receipts. logoUrl points to an R2 (or local fs) URL
+  // uploaded via POST /companies/me/logo. primaryColor is a hex string used
+  // by the frontend to tint CTAs and headers.
+  logoUrl      String?
+  primaryColor String? // hex (#6366f1) — validated by the frontend before submit
+
   users    User[]
   products InsuranceProduct[]
 
