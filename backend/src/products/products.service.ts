@@ -12,6 +12,10 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { AuthUser } from '../auth/types/auth-user';
 import { UserRole, Prisma } from '@prisma/client';
 import { AuditService } from '../audit/audit.service';
+import { CacheService } from '../common/cache.service';
+
+const PRODUCTS_CACHE_PREFIX = 'products:list:';
+const PRODUCTS_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 @Injectable()
 export class ProductsService {
@@ -19,22 +23,27 @@ export class ProductsService {
     private prisma: PrismaService,
     private mlClient: MlClientService,
     private auditService: AuditService,
+    private cache: CacheService,
   ) {}
 
   async findAll(pagination: { limit: number; offset: number }) {
-    const [items, total] = await this.prisma.$transaction([
-      this.prisma.insuranceProduct.findMany({
-        include: {
-          company: true,
-        },
-        orderBy: { createdAt: 'desc' },
-        take: pagination.limit,
-        skip: pagination.offset,
-      }),
-      this.prisma.insuranceProduct.count(),
-    ]);
-
-    return { items, total };
+    // Cache catalog listings — product data rarely changes between requests
+    // and the same pagination is hit by every visitor on the landing page.
+    const cacheKey = `${PRODUCTS_CACHE_PREFIX}${pagination.limit}:${pagination.offset}`;
+    return this.cache.wrap(cacheKey, PRODUCTS_CACHE_TTL_MS, async () => {
+      const [items, total] = await this.prisma.$transaction([
+        this.prisma.insuranceProduct.findMany({
+          include: {
+            company: true,
+          },
+          orderBy: { createdAt: 'desc' },
+          take: pagination.limit,
+          skip: pagination.offset,
+        }),
+        this.prisma.insuranceProduct.count(),
+      ]);
+      return { items, total };
+    });
   }
 
   async findOne(id: string) {
@@ -109,6 +118,7 @@ export class ProductsService {
       },
     });
 
+    this.cache.invalidatePrefix(PRODUCTS_CACHE_PREFIX);
     return product;
   }
 
@@ -253,6 +263,7 @@ export class ProductsService {
       metadata: { changedFields: Object.keys(dataToUpdate) },
     });
 
+    this.cache.invalidatePrefix(PRODUCTS_CACHE_PREFIX);
     return updatedProduct;
   }
 
@@ -301,6 +312,7 @@ export class ProductsService {
       metadata: { name: product.name },
     });
 
+    this.cache.invalidatePrefix(PRODUCTS_CACHE_PREFIX);
     return { success: true };
   }
 }

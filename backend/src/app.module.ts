@@ -3,6 +3,7 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { SentryModule } from '@sentry/nestjs/setup';
 import { LoggerModule } from './common/logger/logger.module';
+import { CacheModule } from './common/cache.module';
 import { SentryExceptionFilter } from './common/filters/sentry-exception.filter';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -24,6 +25,7 @@ import { RecommendationsModule } from './recommendations/recommendations.module'
 @Module({
   imports: [
     LoggerModule,
+    CacheModule,
     SentryModule.forRoot(),
     AuthModule,
     UsersModule,

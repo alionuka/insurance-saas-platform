@@ -12,12 +12,57 @@ export class EmailService {
     this.fromEmail = process.env.EMAIL_FROM || 'onboarding@resend.dev';
 
     if (apiKey) {
-      this.resend = new Resend(apiKey);
+      // Wrap Resend's emails.send to dispatch asynchronously with retry.
+      // This way every existing call site stays the same — `await this.resend!.emails.send(...)`
+      // returns immediately, while the actual network call runs in the
+      // background with exponential-backoff retries. No BullMQ / Redis needed.
+      const raw = new Resend(apiKey);
+      const originalSend = raw.emails.send.bind(raw.emails);
+      const dispatchAsync = this.dispatchAsync.bind(this);
+      raw.emails.send = ((args: any) => {
+        dispatchAsync('emails.send', () => originalSend(args));
+        // Return a resolved promise so call sites that `await` don't block.
+        return Promise.resolve({ data: null, error: null } as any);
+      }) as typeof raw.emails.send;
+      this.resend = raw;
     } else {
       this.logger.warn(
         'RESEND_API_KEY not set; password reset emails will be logged to console only.',
       );
     }
+  }
+
+  /**
+   * Detach an email send from the request lifecycle. Retries up to 3 times
+   * with exponential backoff (500ms → 1s → 2s). Failures are logged but
+   * never thrown — email is best-effort.
+   */
+  private dispatchAsync(label: string, fn: () => Promise<unknown>): void {
+    setImmediate(async () => {
+      const maxAttempts = 3;
+      let attempt = 0;
+      let delayMs = 500;
+      while (attempt < maxAttempts) {
+        try {
+          await fn();
+          return;
+        } catch (err) {
+          attempt++;
+          const msg = err instanceof Error ? err.message : String(err);
+          this.logger.warn(
+            `${label} attempt ${attempt}/${maxAttempts} failed: ${msg}`,
+          );
+          if (attempt >= maxAttempts) {
+            this.logger.error(
+              `${label} permanently failed after ${maxAttempts} attempts`,
+            );
+            return;
+          }
+          await new Promise((r) => setTimeout(r, delayMs));
+          delayMs *= 2;
+        }
+      }
+    });
   }
 
   async sendPasswordResetEmail(to: string, resetUrl: string): Promise<void> {

@@ -9,13 +9,27 @@ import { RecommendationResponseDto } from './dto/recommendation-response.dto';
 @Injectable()
 export class MlClientService {
   private readonly baseUrl: string;
+  private readonly apiKey: string | undefined;
 
   constructor() {
     this.baseUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+    // Shared secret with ml-service. When unset (local dev) no auth header
+    // is sent; ml-service also disables auth when its own env var is unset.
+    this.apiKey = process.env.ML_INTERNAL_API_KEY;
+  }
+
+  /** Build headers for an internal ML request — adds API key when configured. */
+  private headers(): Record<string, string> {
+    const h: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (this.apiKey) {
+      h['X-Internal-API-Key'] = this.apiKey;
+    }
+    return h;
   }
 
   async getHealth(): Promise<Record<string, any>> {
     try {
+      // /health is intentionally public — no API key needed
       const response = await fetch(`${this.baseUrl}/health`);
       if (!response.ok) throw new Error('ML Service health check failed');
       return (await response.json()) as Record<string, any>;
@@ -31,7 +45,7 @@ export class MlClientService {
     try {
       const response = await fetch(`${this.baseUrl}/risk/predict`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.headers(),
         body: JSON.stringify(data),
       });
       if (!response.ok) throw new Error('Failed to predict risk');
@@ -48,7 +62,7 @@ export class MlClientService {
     try {
       const response = await fetch(`${this.baseUrl}/fraud/detect`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.headers(),
         body: JSON.stringify(data),
       });
       if (!response.ok) throw new Error('Failed to detect fraud');
@@ -67,7 +81,7 @@ export class MlClientService {
     try {
       const response = await fetch(`${this.baseUrl}/recommendations`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.headers(),
         body: JSON.stringify(data),
       });
       if (!response.ok) throw new Error('Failed to get recommendations');

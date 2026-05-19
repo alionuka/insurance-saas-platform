@@ -18,6 +18,7 @@ prediction with a clear marker in the response explanation.
 """
 
 import contextvars
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import List, Literal, Optional, Union
@@ -25,9 +26,24 @@ from typing import List, Literal, Optional, Union
 import joblib
 import numpy as np
 import pandas as pd
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
+
+
+# --- API key auth ---
+# Protects /risk/predict, /fraud/detect, /recommendations from arbitrary
+# external callers. Backend must include X-Internal-API-Key header matching
+# ML_INTERNAL_API_KEY env var. When the env var is unset (local dev),
+# authentication is skipped to keep the dev flow frictionless.
+INTERNAL_API_KEY = os.environ.get("ML_INTERNAL_API_KEY")
+
+
+def require_api_key(x_internal_api_key: Optional[str] = Header(default=None)) -> None:
+    if INTERNAL_API_KEY is None:
+        return  # no key configured → auth disabled (dev mode)
+    if not x_internal_api_key or x_internal_api_key != INTERNAL_API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid or missing X-Internal-API-Key header")
 
 # --- Model loading ---
 
@@ -295,7 +311,7 @@ def health_check():
     }
 
 
-@app.post("/risk/predict", response_model=RiskResponse)
+@app.post("/risk/predict", response_model=RiskResponse, dependencies=[Depends(require_api_key)])
 def predict_risk(request: RiskRequest):
     model = ml_models.get("risk")
 
@@ -411,7 +427,7 @@ def _build_fraud_explanation(score: float, flag: str, request: FraudRequest) -> 
     return f"ML model classifies as {flag} (fraud score {score:.0f}/100). Notable signals: {signal_text}."
 
 
-@app.post("/fraud/detect", response_model=FraudResponse)
+@app.post("/fraud/detect", response_model=FraudResponse, dependencies=[Depends(require_api_key)])
 def detect_fraud(request: FraudRequest):
     model = ml_models.get("fraud")
 
@@ -556,7 +572,7 @@ def _rule_based_recs_fallback(request: RecommendationRequest) -> RecommendationR
     )
 
 
-@app.post("/recommendations", response_model=RecommendationResponse)
+@app.post("/recommendations", response_model=RecommendationResponse, dependencies=[Depends(require_api_key)])
 def get_recommendations(request: RecommendationRequest):
     bundle = ml_models.get("recommendations")
 
