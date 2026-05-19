@@ -1,6 +1,7 @@
 import { Package } from 'lucide-react';
 import { cookies } from 'next/headers';
 import BrowseProductsGrid from './BrowseProductsGrid';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -32,6 +33,7 @@ async function getAllProducts(): Promise<Product[]> {
 
 export default async function BrowseProductsPage() {
   const products = await getAllProducts();
+  const { t } = await getT();
 
   // Group by type so the catalog feels organized at a glance
   const grouped = products.reduce<Record<string, Product[]>>((acc, p) => {
@@ -50,17 +52,17 @@ export default async function BrowseProductsPage() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
           <Package className="h-7 w-7 text-indigo-400" />
-          Browse Insurance Products
+          {t('clientProducts.title')}
         </h1>
         <p className="text-zinc-400 mt-1 text-sm">
-          The full catalog from all of our insurance partners. Apply directly from any card.
+          {t('clientProducts.subtitle')}
         </p>
       </div>
 
       {products.length === 0 ? (
         <div className="bg-zinc-900 border border-zinc-800 border-dashed rounded-2xl p-12 text-center">
           <Package className="h-10 w-10 text-zinc-700 mx-auto mb-3" />
-          <p className="text-zinc-500">No products available right now. Please check back later.</p>
+          <p className="text-zinc-500">{t('clientProducts.empty')}</p>
         </div>
       ) : (
         <BrowseProductsGrid groupedProducts={grouped} typeOrder={sortedTypes} />

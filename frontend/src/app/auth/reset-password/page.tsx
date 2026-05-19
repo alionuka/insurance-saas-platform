@@ -4,6 +4,8 @@ import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ShieldCheck, Lock, Loader2, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react';
+import { useT } from '@/i18n/LocaleProvider';
+import LocaleSwitcher from '@/i18n/LocaleSwitcher';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -11,6 +13,7 @@ function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
+  const { t } = useT();
 
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -24,13 +27,13 @@ function ResetPasswordForm() {
     setError(null);
 
     if (newPassword !== confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('auth.passwordsDontMatch'));
       setLoading(false);
       return;
     }
 
     if (newPassword.length < 8) {
-      setError('Password must be at least 8 characters');
+      setError(t('auth.passwordTooShort'));
       setLoading(false);
       return;
     }
@@ -45,15 +48,15 @@ function ResetPasswordForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to reset password');
+        throw new Error(data.message || t('auth.failedReset'));
       }
 
       setSuccess(true);
       setTimeout(() => {
         router.push('/auth/sign-in?reset=true');
       }, 2000);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('auth.failedReset'));
     } finally {
       setLoading(false);
     }
@@ -68,17 +71,17 @@ function ResetPasswordForm() {
           </div>
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-white">Invalid link</h3>
+          <h3 className="text-xl font-bold text-white">{t('auth.invalidLink')}</h3>
           <p className="text-sm text-zinc-400 max-w-xs mx-auto leading-relaxed">
-            The reset link is missing or malformed. Please request a new one.
+            {t('auth.invalidLinkHint')}
           </p>
         </div>
         <div className="pt-4">
-          <Link 
-            href="/auth/forgot-password" 
+          <Link
+            href="/auth/forgot-password"
             className="w-full flex justify-center py-3 px-4 border border-zinc-800 rounded-lg text-sm font-semibold text-white bg-zinc-950 hover:bg-zinc-900 transition-all"
           >
-            Request new link
+            {t('auth.requestNewLink')}
           </Link>
         </div>
       </div>
@@ -94,9 +97,9 @@ function ResetPasswordForm() {
           </div>
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-white">Password updated</h3>
+          <h3 className="text-xl font-bold text-white">{t('auth.passwordUpdated')}</h3>
           <p className="text-sm text-zinc-400">
-            Redirecting you to the sign in page...
+            {t('auth.redirectingToSignIn')}
           </p>
         </div>
         <div className="pt-4 flex justify-center">
@@ -118,7 +121,7 @@ function ResetPasswordForm() {
       <div className="space-y-4">
         <div>
           <label htmlFor="newPassword" className="block text-sm font-medium text-zinc-300">
-            New password
+            {t('auth.newPasswordLabel')}
           </label>
           <div className="mt-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -133,14 +136,14 @@ function ResetPasswordForm() {
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent sm:text-sm transition-all"
-              placeholder="••••••••"
+              placeholder={t('auth.passwordPlaceholder')}
             />
           </div>
         </div>
 
         <div>
           <label htmlFor="confirmPassword" className="block text-sm font-medium text-zinc-300">
-            Confirm new password
+            {t('auth.confirmNewPasswordLabel')}
           </label>
           <div className="mt-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -155,7 +158,7 @@ function ResetPasswordForm() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent sm:text-sm transition-all"
-              placeholder="••••••••"
+              placeholder={t('auth.passwordPlaceholder')}
             />
           </div>
         </div>
@@ -171,7 +174,7 @@ function ResetPasswordForm() {
             <Loader2 className="h-5 w-5 animate-spin" />
           ) : (
             <span className="flex items-center gap-2">
-              Update password
+              {t('auth.updatePassword')}
               <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
             </span>
           )}
@@ -181,9 +184,13 @@ function ResetPasswordForm() {
   );
 }
 
-export default function ResetPasswordPage() {
+function ResetPasswordInner() {
+  const { t } = useT();
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-zinc-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
+      <div className="absolute top-4 right-4">
+        <LocaleSwitcher variant="nav" />
+      </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <div className="h-12 w-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
@@ -191,10 +198,10 @@ export default function ResetPasswordPage() {
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
-          Set a new password
+          {t('auth.resetTitle')}
         </h2>
         <p className="mt-2 text-center text-sm text-zinc-400">
-          Please enter your new password below.
+          {t('auth.resetSubtitle')}
         </p>
       </div>
 
@@ -211,4 +218,8 @@ export default function ResetPasswordPage() {
       </div>
     </div>
   );
+}
+
+export default function ResetPasswordPage() {
+  return <ResetPasswordInner />;
 }

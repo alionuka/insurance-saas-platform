@@ -7,6 +7,7 @@ import ClaimDocuments from '@/components/ClaimDocuments';
 import StopClickPropagation from '@/components/StopClickPropagation';
 import EmptyState from '@/components/ui/EmptyState';
 import ClaimFilters from './ClaimFilters';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -47,6 +48,7 @@ export default async function ClientClaimsPage(props: Props) {
   const preselectPolicyId = typeof searchParams.policyId === 'string' ? searchParams.policyId : undefined;
 
   const { claims: allClaims, policies } = await getClaimsAndPolicies();
+  const { t } = await getT();
   
   const counts = allClaims.reduce((acc: any, claim: any) => {
     acc['all'] = (acc['all'] || 0) + 1;
@@ -61,8 +63,8 @@ export default async function ClientClaimsPage(props: Props) {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">Your Claims</h1>
-        <p className="text-zinc-400 mt-1 text-sm">File a new claim or track existing ones.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-white">{t('clientClaims.title')}</h1>
+        <p className="text-zinc-400 mt-1 text-sm">{t('clientClaims.subtitle')}</p>
       </div>
 
       <ClaimSubmissionForm policies={policies} preselectPolicyId={preselectPolicyId} />
@@ -82,9 +84,9 @@ export default async function ClientClaimsPage(props: Props) {
                         <Activity className="h-6 w-6 text-emerald-400" />
                       </div>
                     <div className="flex-grow">
-                      <h3 className="font-bold text-white text-lg">{claim.application?.product?.name || 'Claim'}</h3>
+                      <h3 className="font-bold text-white text-lg">{claim.application?.product?.name || t('sidebar.nav.claims')}</h3>
                       <p className="text-sm text-zinc-300 mt-1 font-medium">{claim.description}</p>
-                      <p className="text-xs text-zinc-500 mt-1 italic">Claim ID: {claim.id.substring(0, 8)} • Amount: {formatCurrency(claim.amount)} • Filed: {formatDate(claim.createdAt)}</p>
+                      <p className="text-xs text-zinc-500 mt-1 italic">{t('clientClaims.claimId')}: {claim.id.substring(0, 8)} • {t('clientClaims.amount')}: {formatCurrency(claim.amount)} • {t('clientClaims.filed')}: {formatDate(claim.createdAt)}</p>
                     </div>
                   </div>
 
@@ -106,14 +108,14 @@ export default async function ClientClaimsPage(props: Props) {
                       <div className="md:col-span-1 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
                         <div className="flex items-center gap-2 mb-1">
                           <TrendingUp className="h-3 w-3 text-zinc-500" />
-                          <span className="text-[10px] text-zinc-500 uppercase font-bold">Fraud Score</span>
+                          <span className="text-[10px] text-zinc-500 uppercase font-bold">{t('clientClaims.fraudScore')}</span>
                         </div>
                         <p className="text-lg font-mono font-bold text-white">{fraud.fraudScore.toFixed(1)}<span className="text-xs text-zinc-500 ml-1">/ 100</span></p>
                       </div>
                       <div className="md:col-span-1 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
                         <div className="flex items-center gap-2 mb-1">
                           <AlertCircle className="h-3 w-3 text-zinc-500" />
-                          <span className="text-[10px] text-zinc-500 uppercase font-bold">Fraud Flag</span>
+                          <span className="text-[10px] text-zinc-500 uppercase font-bold">{t('clientClaims.fraudFlag')}</span>
                         </div>
                         <p className={`text-lg font-bold ${
                           fraud.flag === 'NORMAL' ? 'text-emerald-400' : 'text-rose-400 animate-pulse'
@@ -122,7 +124,7 @@ export default async function ClientClaimsPage(props: Props) {
                       <div className="md:col-span-2 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
                         <div className="flex items-center gap-2 mb-1">
                           <AlertTriangle className="h-3 w-3 text-zinc-500" />
-                          <span className="text-[10px] text-zinc-500 uppercase font-bold">ML Assessment</span>
+                          <span className="text-[10px] text-zinc-500 uppercase font-bold">{t('clientClaims.mlAssessment')}</span>
                         </div>
                         <p className="text-xs text-zinc-400 italic leading-relaxed">"{fraud.explanation}"</p>
                       </div>
@@ -136,7 +138,7 @@ export default async function ClientClaimsPage(props: Props) {
                   <details className="group">
                     <summary className="list-none cursor-pointer py-2 flex items-center gap-2 text-[10px] text-zinc-500 hover:text-indigo-400 uppercase font-bold tracking-tight transition-colors">
                       <span className="group-open:rotate-90 transition-transform">▶</span>
-                      Supporting Documents
+                      {t('clientClaims.supportingDocuments')}
                     </summary>
                     <div className="pt-1">
                       <ClaimDocuments claimId={claim.id} canUpload={true} />
@@ -149,10 +151,10 @@ export default async function ClientClaimsPage(props: Props) {
             );
           })
         ) : (
-          <EmptyState 
-            icon={Activity} 
-            title="No claims filed yet" 
-            description="When something happens, file a claim using the form above." 
+          <EmptyState
+            icon={Activity}
+            title={t('clientClaims.emptyTitle')}
+            description={t('clientClaims.emptyHint')}
           />
         )}
       </div>

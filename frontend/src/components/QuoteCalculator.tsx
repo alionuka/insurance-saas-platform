@@ -3,8 +3,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Calculator, Loader2, AlertCircle, TrendingUp, ShieldCheck, DollarSign, ChevronRight, Info, FileCheck } from 'lucide-react';
+import { Calculator, Loader2, AlertCircle, TrendingUp, ChevronRight, Info, FileCheck } from 'lucide-react';
 import { logout } from '@/lib/auth';
+import { useT } from '@/i18n/LocaleProvider';
 
 interface Product {
   id: string;
@@ -30,6 +31,7 @@ interface QuoteCalculatorProps {
 
 export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
   const router = useRouter();
+  const { t } = useT();
   const [selectedProductId, setSelectedProductId] = useState('');
   const [loading, setLoading] = useState(false);
   const [applying, setApplying] = useState(false);
@@ -72,16 +74,16 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
           logout();
           return;
         }
-        throw new Error(data.message || 'Failed to submit application');
+        throw new Error(data.message || t('clientQuote.failedApp'));
       }
 
-      toast.success('Application submitted', {
-        description: 'Redirecting you to your application details…',
+      toast.success(t('clientQuote.appSubmitted'), {
+        description: t('clientQuote.redirecting'),
       });
       router.push(`/dashboard/client/applications/${data.id}`);
-    } catch (err: any) {
-      toast.error('Could not submit application', {
-        description: err.message || 'Please try again in a moment.',
+    } catch (err) {
+      toast.error(t('clientQuote.appFailed'), {
+        description: err instanceof Error ? err.message : t('clientQuote.appFailedHint'),
       });
       setApplying(false);
     }
@@ -119,12 +121,12 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
           logout();
           return;
         }
-        throw new Error(data.message || 'Failed to calculate quote');
+        throw new Error(data.message || t('clientQuote.failedCalc'));
       }
 
       setQuote(data);
-    } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred during calculation');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('clientQuote.unexpectedError'));
     } finally {
       setLoading(false);
     }
@@ -151,8 +153,8 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
             <Calculator className="h-5 w-5 text-indigo-400" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white leading-tight">Personalized Quote</h2>
-            <p className="text-xs text-zinc-500 mt-0.5 font-medium">Compare insurance pricing based on your profile</p>
+            <h2 className="text-lg font-bold text-white leading-tight">{t('clientQuote.personalizedQuote')}</h2>
+            <p className="text-xs text-zinc-500 mt-0.5 font-medium">{t('clientQuote.comparePricing')}</p>
           </div>
         </div>
       </div>
@@ -161,7 +163,7 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
         <div className="space-y-4">
           <div>
             <label htmlFor="product-select" className="block text-sm font-semibold text-zinc-400 mb-2">
-              Insurance Product
+              {t('clientQuote.insuranceProduct')}
             </label>
             <select
               id="product-select"
@@ -169,7 +171,7 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
               onChange={handleProductChange}
               className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all cursor-pointer appearance-none"
             >
-              <option value="">-- Select a product --</option>
+              <option value="">{t('clientQuote.selectProduct')}</option>
               {products.map((product) => (
                 <option key={product.id} value={product.id}>
                   {product.name} ({product.type}) — from ${product.basePremium}/mo
@@ -186,12 +188,12 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
             {loading ? (
               <>
                 <Loader2 className="h-5 w-5 animate-spin" />
-                <span>Calculating...</span>
+                <span>{t('clientQuote.calculating')}</span>
               </>
             ) : (
               <>
                 <Calculator className="h-5 w-5" />
-                <span>Calculate My Premium</span>
+                <span>{t('clientQuote.calculateButton')}</span>
               </>
             )}
           </button>
@@ -208,25 +210,25 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
           <div className="p-6 rounded-3xl bg-zinc-950 border border-zinc-800 space-y-6 animate-in zoom-in-95 fade-in duration-500">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
-                <p className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider mb-1">Your Monthly Premium</p>
+                <p className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider mb-1">{t('clientQuote.monthlyPremium')}</p>
                 <div className="flex items-baseline gap-2">
                   <span className="text-4xl font-black text-emerald-400 tracking-tight">
                     ${quote.monthlyPremium.toFixed(2)}
                   </span>
-                  <span className="text-zinc-500 font-bold text-sm">/ month</span>
+                  <span className="text-zinc-500 font-bold text-sm">{t('clientQuote.perMonth')}</span>
                 </div>
                 <p className="text-[10px] text-zinc-500 mt-2 font-medium bg-zinc-900 px-2 py-1 rounded-md inline-block">
-                  Base ${quote.basePremium} × {quote.riskMultiplier.toFixed(2)} risk multiplier
+                  {t('clientQuote.base')} ${quote.basePremium} × {quote.riskMultiplier.toFixed(2)} {t('clientQuote.riskMultiplierLabel')}
                 </p>
               </div>
               
               <div className="flex flex-col items-start sm:items-end gap-2">
                 <span className={`px-3 py-1 rounded-full text-[10px] font-bold border ${getRiskStyles(quote.riskLevel)}`}>
-                  {quote.riskLevel} RISK
+                  {quote.riskLevel} {t('clientQuote.riskLabel')}
                 </span>
                 <div className="flex items-center gap-1.5 text-xs text-zinc-400 font-bold">
                   <TrendingUp className="h-3 w-3" />
-                  Risk score: {quote.riskScore}/100
+                  {t('clientQuote.riskScoreLabel')}: {quote.riskScore}/100
                 </div>
               </div>
             </div>
@@ -246,18 +248,18 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
               {applying ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
-                  <span>Submitting application…</span>
+                  <span>{t('clientQuote.submittingApp')}</span>
                 </>
               ) : (
                 <>
                   <FileCheck className="h-5 w-5" />
-                  <span>Apply for This Policy</span>
+                  <span>{t('clientQuote.applyForPolicy')}</span>
                   <ChevronRight className="h-4 w-4" />
                 </>
               )}
             </button>
             <p className="text-[10px] text-zinc-600 text-center -mt-3">
-              You can review and pay after the application is approved by an agent.
+              {t('clientQuote.reviewAfterApproval')}
             </p>
           </div>
         )}

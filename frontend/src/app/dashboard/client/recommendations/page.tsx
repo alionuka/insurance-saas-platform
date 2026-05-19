@@ -1,11 +1,13 @@
 import RecommendedProducts from '@/components/RecommendedProducts';
+import { getT } from '@/i18n/getT';
 
-export default function ClientRecommendationsPage() {
+export default async function ClientRecommendationsPage() {
+  const { t } = await getT();
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">Recommended for You</h1>
-        <p className="text-zinc-400 mt-1 text-sm">Discover insurance products tailored to your needs using our ML-driven engine.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-white">{t('clientRecs.title')}</h1>
+        <p className="text-zinc-400 mt-1 text-sm">{t('clientRecs.subtitle')}</p>
       </div>
 
       <RecommendedProducts />

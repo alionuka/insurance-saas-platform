@@ -4,6 +4,7 @@ import { formatDate } from '@/lib/formatDate';
 import EmptyState from '@/components/ui/EmptyState';
 import ApplicationFilters from './ApplicationFilters';
 import Link from 'next/link';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -32,6 +33,7 @@ export default async function ClientApplicationsPage(props: Props) {
   const statusFilter = typeof searchParams.status === 'string' ? searchParams.status : 'all';
 
   const allApplications = await getApplications();
+  const { t } = await getT();
   
   const counts = allApplications.reduce((acc: any, app: any) => {
     acc['all'] = (acc['all'] || 0) + 1;
@@ -46,8 +48,8 @@ export default async function ClientApplicationsPage(props: Props) {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">Your Applications</h1>
-        <p className="text-zinc-400 mt-1 text-sm">Track the status of your submitted insurance applications.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-white">{t('clientApps.title')}</h1>
+        <p className="text-zinc-400 mt-1 text-sm">{t('clientApps.subtitle')}</p>
       </div>
 
       <ApplicationFilters counts={counts} />
@@ -64,9 +66,9 @@ export default async function ClientApplicationsPage(props: Props) {
                       <FileCheck className="h-6 w-6 text-indigo-400" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-white text-lg">{app.product?.name || 'Unknown Product'}</h3>
-                      <p className="text-sm text-emerald-400 font-medium">{app.product?.company?.name || 'Unknown Company'}</p>
-                      <p className="text-xs text-zinc-500 mt-1 italic">Application ID: {app.id.substring(0, 8)} • Submitted: {formatDate(app.createdAt)}</p>
+                      <h3 className="font-bold text-white text-lg">{app.product?.name || t('clientApps.unknownProduct')}</h3>
+                      <p className="text-sm text-emerald-400 font-medium">{app.product?.company?.name || t('clientApps.unknownCompany')}</p>
+                      <p className="text-xs text-zinc-500 mt-1 italic">{t('clientApps.applicationId')}: {app.id.substring(0, 8)} • {t('clientApps.submitted')}: {formatDate(app.createdAt)}</p>
                     </div>
                   </div>
                   
@@ -88,14 +90,14 @@ export default async function ClientApplicationsPage(props: Props) {
                       <div className="md:col-span-1 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
                         <div className="flex items-center gap-2 mb-1">
                           <TrendingUp className="h-3 w-3 text-zinc-500" />
-                          <span className="text-[10px] text-zinc-500 uppercase font-bold">Risk Score</span>
+                          <span className="text-[10px] text-zinc-500 uppercase font-bold">{t('clientApps.riskScore')}</span>
                         </div>
                         <p className="text-lg font-mono font-bold text-white">{risk.riskScore.toFixed(1)}<span className="text-xs text-zinc-500 ml-1">/ 100</span></p>
                       </div>
                       <div className="md:col-span-1 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
                         <div className="flex items-center gap-2 mb-1">
                           <AlertCircle className="h-3 w-3 text-zinc-500" />
-                          <span className="text-[10px] text-zinc-500 uppercase font-bold">Risk Level</span>
+                          <span className="text-[10px] text-zinc-500 uppercase font-bold">{t('clientApps.riskLevel')}</span>
                         </div>
                         <p className={`text-lg font-bold ${
                           risk.riskLevel === 'LOW' ? 'text-emerald-400' : 
@@ -105,7 +107,7 @@ export default async function ClientApplicationsPage(props: Props) {
                       <div className="md:col-span-2 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
                         <div className="flex items-center gap-2 mb-1">
                           <AlertTriangle className="h-3 w-3 text-zinc-500" />
-                          <span className="text-[10px] text-zinc-500 uppercase font-bold">ML Explanation</span>
+                          <span className="text-[10px] text-zinc-500 uppercase font-bold">{t('clientApps.mlExplanation')}</span>
                         </div>
                         <p className="text-xs text-zinc-400 italic leading-relaxed">"{risk.explanation}"</p>
                       </div>
@@ -116,11 +118,11 @@ export default async function ClientApplicationsPage(props: Props) {
             );
           })
         ) : (
-          <EmptyState 
-            icon={FileCheck} 
-            title="No applications yet" 
-            description="Browse our product catalog to apply for insurance." 
-            action={{ label: 'Browse Products', href: '/' }} 
+          <EmptyState
+            icon={FileCheck}
+            title={t('clientApps.emptyTitle')}
+            description={t('clientApps.emptyHint')}
+            action={{ label: t('clientApps.emptyAction'), href: '/' }}
           />
         )}
       </div>

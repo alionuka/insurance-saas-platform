@@ -1,151 +1,25 @@
 // Centralised UI strings for the two supported locales.
 //
-// Selective i18n: only the high-visibility surfaces (landing, auth, sidebar,
-// profile, role overviews, common buttons) are translated. Inner pages
-// (claims/policies/applications detail) remain English.
+// Approach: keep the messages as plain nested objects. Type is inferred from
+// the English source-of-truth via `typeof en`, so the Ukrainian dictionary
+// must structurally match. Adding a new key only requires editing both
+// dictionaries — no parallel TypeScript interface to maintain.
+//
+// Lookup is done by dotted path (e.g. `t('landing.applyNow')`); see getT.ts
+// and LocaleProvider.tsx for the resolution helpers.
 
 export type Locale = 'en' | 'uk';
-
 export const LOCALES: Locale[] = ['en', 'uk'];
 
-type LocaleMessages = {
-  common: {
-    signIn: string;
-    signOut: string;
-    signUp: string;
-    save: string;
-    cancel: string;
-    loading: string;
-    submitting: string;
-    error: string;
-    success: string;
-    confirm: string;
-    delete: string;
-    edit: string;
-    back: string;
-    next: string;
-    search: string;
-    noData: string;
-    language: string;
-  };
-  landing: {
-    badge: string;
-    heroLine1: string;
-    heroBrand: string;
-    heroSubtitle: string;
-    ctaPrimary: string;
-    ctaSecondary: string;
-    productsHeading: string;
-    productsSubtitle: string;
-    applyNow: string;
-    fromPrice: string;
-    contactForPricing: string;
-    noDescription: string;
-    errorLoad: string;
-  };
-  auth: {
-    signInTitle: string;
-    signInSubtitle: string;
-    signUpTitle: string;
-    signUpSubtitle: string;
-    emailLabel: string;
-    emailPlaceholder: string;
-    passwordLabel: string;
-    passwordPlaceholder: string;
-    forgotPassword: string;
-    signInButton: string;
-    quickDemoDivider: string;
-    quickDemoHint: string;
-    demoCustomer: string;
-    demoAgent: string;
-    demoCompanyAdmin: string;
-    demoPlatform: string;
-    resetSuccess: string;
-    failedSignIn: string;
-    firstNameLabel: string;
-    lastNameLabel: string;
-    registeringAs: string;
-    customerRole: string;
-    rolesNote: string;
-    createAccount: string;
-    haveAccountPrompt: string;
-    signInLink: string;
-    needAccountPrompt: string;
-    signUpLink: string;
-  };
-  sidebar: {
-    brand: string;
-    nav: {
-      overview: string;
-      applications: string;
-      policies: string;
-      claims: string;
-      browseProducts: string;
-      getQuote: string;
-      forYou: string;
-      profile: string;
-      analytics: string;
-      products: string;
-      companies: string;
-      users: string;
-      auditLog: string;
-      mlModels: string;
-    };
-    search: string;
-    readonlyRole: string;
-    signOutTitle: string;
-  };
-  profile: {
-    accessDenied: string;
-    accessDeniedHint: string;
-    errorLoading: string;
-    errorLoadingHint: string;
-    accountInformation: string;
-    emailAddress: string;
-    role: string;
-    memberSince: string;
-    companyAffiliation: string;
-    security: string;
-    securityHint: string;
-    recentActivity: string;
-    noActivity: string;
-    dataRights: string;
-  };
-  dashboard: {
-    welcomeBack: string;
-    overviewSubtitle: string;
-    stats: {
-      applications: string;
-      activePolicies: string;
-      openClaims: string;
-      totalPremium: string;
-    };
-    recentActivity: string;
-    noActivity: string;
-    // Agent
-    agentTitle: string;
-    agentSubtitle: string;
-    pendingApps: string;
-    pendingClaims: string;
-    approvedToday: string;
-    // Company admin
-    companyTitle: string;
-    companySubtitle: string;
-    totalApps: string;
-    issuedPolicies: string;
-    fraudFlags: string;
-    revenue: string;
-    // Platform admin
-    adminTitle: string;
-    adminSubtitle: string;
-    totalUsers: string;
-    totalCompanies: string;
-    totalProducts: string;
-    platformRevenue: string;
-  };
-};
+// We store messages as plain nested objects with string leaves. Lookup is by
+// dotted path at runtime — no static guarantees on key paths, but the
+// alternative (a parallel TypeScript interface for every key) is excessive
+// for thesis scope.
+//
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Dictionary = Record<string, any>;
 
-const en: LocaleMessages = {
+const en: Dictionary = {
   common: {
     signIn: 'Sign in',
     signOut: 'Sign Out',
@@ -195,23 +69,50 @@ const en: LocaleMessages = {
     forgotPassword: 'Forgot password?',
     signInButton: 'Sign in',
     quickDemoDivider: 'Quick demo login',
-    quickDemoHint: 'One-click login — uses password Password123! for all demo accounts.',
+    quickDemoHint:
+      'One-click login — uses password Password123! for all demo accounts.',
     demoCustomer: 'Customer',
     demoAgent: 'Agent',
     demoCompanyAdmin: 'Co. Admin',
     demoPlatform: 'Platform',
-    resetSuccess: 'Password reset successful. Please sign in with your new password.',
+    resetSuccess:
+      'Password reset successful. Please sign in with your new password.',
     failedSignIn: 'Failed to sign in',
     firstNameLabel: 'First Name',
     lastNameLabel: 'Last Name',
     registeringAs: 'Registering as',
     customerRole: 'Customer',
-    rolesNote: 'Agent and Admin accounts must be provisioned by the platform administrator.',
+    rolesNote:
+      'Agent and Admin accounts must be provisioned by the platform administrator.',
     createAccount: 'Create account',
     haveAccountPrompt: 'sign in to your existing account',
     signInLink: 'sign in to your existing account',
     needAccountPrompt: 'create a new account',
     signUpLink: 'create a new account',
+    // Forgot password
+    forgotTitle: 'Reset your password',
+    forgotSubtitle:
+      "Enter your email address and we'll send you a link to reset your password.",
+    sendResetLink: 'Send reset link',
+    backToSignIn: 'Back to sign in',
+    checkEmail: 'Check your email',
+    ifAccountExists: 'If an account exists with',
+    resetLinkSent: 'a reset link has been sent. Please check your inbox.',
+    returnToSignIn: 'Return to sign in',
+    // Reset password
+    resetTitle: 'Set a new password',
+    resetSubtitle: 'Please enter your new password below.',
+    newPasswordLabel: 'New password',
+    confirmNewPasswordLabel: 'Confirm new password',
+    updatePassword: 'Update password',
+    passwordsDontMatch: 'Passwords do not match',
+    passwordTooShort: 'Password must be at least 8 characters',
+    passwordUpdated: 'Password updated',
+    redirectingToSignIn: 'Redirecting you to the sign in page...',
+    invalidLink: 'Invalid link',
+    invalidLinkHint: 'The reset link is missing or malformed. Please request a new one.',
+    requestNewLink: 'Request new link',
+    failedReset: 'Failed to reset password',
   },
   sidebar: {
     brand: 'InsurSaaS',
@@ -239,14 +140,16 @@ const en: LocaleMessages = {
     accessDenied: 'Access Denied',
     accessDeniedHint: 'Please sign in to view your profile.',
     errorLoading: 'Error Loading Profile',
-    errorLoadingHint: 'We could not load your profile information. Please try again later.',
+    errorLoadingHint:
+      'We could not load your profile information. Please try again later.',
     accountInformation: 'Account Information',
     emailAddress: 'Email Address',
     role: 'Role',
     memberSince: 'Member Since',
     companyAffiliation: 'Company Affiliation',
     security: 'Security',
-    securityHint: 'Your password is encrypted and never stored in plain text.',
+    securityHint:
+      'Your password is encrypted and never stored in plain text.',
     recentActivity: 'Your Recent Activity',
     noActivity: 'No recent activity yet.',
     dataRights: 'Data Rights',
@@ -263,12 +166,14 @@ const en: LocaleMessages = {
     recentActivity: 'Recent Activity',
     noActivity: 'No recent activity found.',
     agentTitle: 'Agent Workspace',
-    agentSubtitle: 'Review applications and claims awaiting your attention.',
+    agentSubtitle:
+      'Review applications and claims awaiting your attention.',
     pendingApps: 'Pending Applications',
     pendingClaims: 'Pending Claims',
     approvedToday: 'Approved Today',
     companyTitle: 'Company Analytics',
-    companySubtitle: 'Real-time view of your products and portfolio.',
+    companySubtitle:
+      'Real-time view of your products and portfolio.',
     totalApps: 'Total Applications',
     issuedPolicies: 'Issued Policies',
     fraudFlags: 'Fraud Flags',
@@ -280,9 +185,120 @@ const en: LocaleMessages = {
     totalProducts: 'Total Products',
     platformRevenue: 'Platform Revenue',
   },
+  // Customer-facing list/detail pages
+  clientApps: {
+    title: 'Your Applications',
+    subtitle: 'Track the status of your submitted insurance applications.',
+    applicationId: 'Application ID',
+    submitted: 'Submitted',
+    riskScore: 'Risk Score',
+    riskLevel: 'Risk Level',
+    mlExplanation: 'ML Explanation',
+    unknownProduct: 'Unknown Product',
+    unknownCompany: 'Unknown Company',
+    emptyTitle: 'No applications yet',
+    emptyHint: 'Browse our product catalog to apply for insurance.',
+    emptyAction: 'Browse Products',
+  },
+  clientPolicies: {
+    title: 'Your Policies',
+    subtitle: 'Manage your active policies and pending payments.',
+    actionRequired: 'Action Required: Payment Pending',
+    policyNumber: 'Policy #',
+    coveragePeriod: 'Coverage Period',
+    coverageTo: 'to',
+    linkedApplication: 'Linked Application',
+    viewDetails: 'View Details →',
+    emptyTitle: 'No active policies',
+    emptyHint:
+      'Approved applications become policies. Start by applying for a product.',
+    emptyAction: 'View Applications',
+  },
+  clientClaims: {
+    title: 'Your Claims',
+    subtitle: 'File a new claim or track existing ones.',
+    fileNewClaim: 'File a New Claim',
+    selectActivePolicy: 'Select Active Policy',
+    choosePolicy: '-- Choose a Policy --',
+    claimAmount: 'Claim Amount ($)',
+    incidentDescription: 'Incident Description',
+    describePlaceholder: 'Please describe what happened...',
+    processingClaim: 'Processing Claim...',
+    submitClaim: 'Submit Claim',
+    needActivePolicy:
+      'You need an active policy before filing a claim.',
+    claimId: 'Claim ID',
+    amount: 'Amount',
+    filed: 'Filed',
+    fraudScore: 'Fraud Score',
+    fraudFlag: 'Fraud Flag',
+    mlAssessment: 'ML Assessment',
+    supportingDocuments: 'Supporting Documents',
+    emptyTitle: 'No claims filed yet',
+    emptyHint:
+      'When something happens, file a claim using the form above.',
+    submittedSuccess: 'Claim submitted successfully',
+    pleaseSelectPolicy: 'Please select a policy',
+    notAuthenticated: 'Not authenticated',
+    submitError: 'An error occurred during submission',
+    failedToSubmit: 'Failed to submit claim',
+  },
+  clientQuote: {
+    title: 'Get a Personalized Quote',
+    subtitle: 'Compare insurance products with pricing tailored to your profile.',
+    personalizedQuote: 'Personalized Quote',
+    comparePricing: 'Compare insurance pricing based on your profile',
+    insuranceProduct: 'Insurance Product',
+    selectProduct: '-- Select a product --',
+    calculating: 'Calculating...',
+    calculateButton: 'Calculate My Premium',
+    monthlyPremium: 'Your Monthly Premium',
+    perMonth: '/ month',
+    base: 'Base',
+    riskMultiplierLabel: 'risk multiplier',
+    riskLabel: 'RISK',
+    riskScoreLabel: 'Risk score',
+    applyForPolicy: 'Apply for This Policy',
+    submittingApp: 'Submitting application…',
+    reviewAfterApproval:
+      'You can review and pay after the application is approved by an agent.',
+    appSubmitted: 'Application submitted',
+    redirecting: 'Redirecting you to your application details…',
+    appFailed: 'Could not submit application',
+    appFailedHint: 'Please try again in a moment.',
+    failedCalc: 'Failed to calculate quote',
+    unexpectedError: 'An unexpected error occurred during calculation',
+    failedApp: 'Failed to submit application',
+  },
+  clientRecs: {
+    title: 'Recommended for You',
+    subtitle:
+      'Discover insurance products tailored to your needs using our ML-driven engine.',
+  },
+  clientProducts: {
+    title: 'Browse Insurance Products',
+    subtitle:
+      'The full catalog from all of our insurance partners. Apply directly from any card.',
+    empty: 'No products available right now. Please check back later.',
+  },
+  filters: {
+    all: 'All',
+    appPending: 'Pending',
+    appApproved: 'Approved',
+    appRejected: 'Rejected',
+    appUnderReview: 'Under Review',
+    claimFiled: 'Filed',
+    claimInProgress: 'In Progress',
+    claimApproved: 'Approved',
+    claimDenied: 'Denied',
+    policyActive: 'Active',
+    policyAwaitingPayment: 'Awaiting Payment',
+    policyExpired: 'Expired',
+    policyCancelled: 'Cancelled',
+  },
 };
 
-const uk: LocaleMessages = {
+const uk: Dictionary = {
   common: {
     signIn: 'Увійти',
     signOut: 'Вийти',
@@ -332,7 +348,8 @@ const uk: LocaleMessages = {
     forgotPassword: 'Забули пароль?',
     signInButton: 'Увійти',
     quickDemoDivider: 'Швидкий вхід демо',
-    quickDemoHint: 'Вхід в один клік — для усіх демо-акаунтів використовується пароль Password123!.',
+    quickDemoHint:
+      'Вхід в один клік — для усіх демо-акаунтів використовується пароль Password123!.',
     demoCustomer: 'Клієнт',
     demoAgent: 'Агент',
     demoCompanyAdmin: 'Адмін комп.',
@@ -343,12 +360,36 @@ const uk: LocaleMessages = {
     lastNameLabel: 'Прізвище',
     registeringAs: 'Реєструюсь як',
     customerRole: 'Клієнт',
-    rolesNote: 'Акаунти агентів та адміністраторів створюються адміністратором платформи.',
+    rolesNote:
+      'Акаунти агентів та адміністраторів створюються адміністратором платформи.',
     createAccount: 'Створити акаунт',
     haveAccountPrompt: 'увійти до існуючого акаунту',
     signInLink: 'увійти до існуючого акаунту',
     needAccountPrompt: 'створити новий акаунт',
     signUpLink: 'створити новий акаунт',
+    forgotTitle: 'Скидання паролю',
+    forgotSubtitle:
+      'Введіть свою електронну адресу — ми надішлемо посилання для скидання паролю.',
+    sendResetLink: 'Надіслати посилання',
+    backToSignIn: 'Повернутись до входу',
+    checkEmail: 'Перевірте пошту',
+    ifAccountExists: 'Якщо акаунт з адресою',
+    resetLinkSent: 'існує — посилання надіслано. Перевірте вашу скриньку.',
+    returnToSignIn: 'Повернутись до входу',
+    resetTitle: 'Новий пароль',
+    resetSubtitle: 'Введіть новий пароль нижче.',
+    newPasswordLabel: 'Новий пароль',
+    confirmNewPasswordLabel: 'Підтвердження паролю',
+    updatePassword: 'Оновити пароль',
+    passwordsDontMatch: 'Паролі не співпадають',
+    passwordTooShort: 'Пароль має містити щонайменше 8 символів',
+    passwordUpdated: 'Пароль оновлено',
+    redirectingToSignIn: 'Перенаправляємо на сторінку входу...',
+    invalidLink: 'Недійсне посилання',
+    invalidLinkHint:
+      'Посилання для скидання відсутнє або пошкоджене. Запросіть нове.',
+    requestNewLink: 'Запросити нове посилання',
+    failedReset: 'Не вдалося скинути пароль',
   },
   sidebar: {
     brand: 'InsurSaaS',
@@ -383,7 +424,8 @@ const uk: LocaleMessages = {
     memberSince: 'Зареєстрований',
     companyAffiliation: 'Компанія',
     security: 'Безпека',
-    securityHint: 'Ваш пароль зашифровано та ніколи не зберігається у відкритому вигляді.',
+    securityHint:
+      'Ваш пароль зашифровано та ніколи не зберігається у відкритому вигляді.',
     recentActivity: 'Остання активність',
     noActivity: 'Активності поки немає.',
     dataRights: 'Права на дані',
@@ -400,7 +442,8 @@ const uk: LocaleMessages = {
     recentActivity: 'Остання активність',
     noActivity: 'Активності не знайдено.',
     agentTitle: 'Робоче місце агента',
-    agentSubtitle: 'Перегляньте заявки та виплати, що очікують на ваш розгляд.',
+    agentSubtitle:
+      'Перегляньте заявки та виплати, що очікують на ваш розгляд.',
     pendingApps: 'Заявки в очікуванні',
     pendingClaims: 'Виплати в очікуванні',
     approvedToday: 'Схвалено сьогодні',
@@ -417,14 +460,119 @@ const uk: LocaleMessages = {
     totalProducts: 'Усього продуктів',
     platformRevenue: 'Дохід платформи',
   },
+  clientApps: {
+    title: 'Ваші заявки',
+    subtitle: 'Слідкуйте за статусом поданих страхових заявок.',
+    applicationId: 'ID заявки',
+    submitted: 'Подано',
+    riskScore: 'Оцінка ризику',
+    riskLevel: 'Рівень ризику',
+    mlExplanation: 'Пояснення моделі',
+    unknownProduct: 'Невідомий продукт',
+    unknownCompany: 'Невідома компанія',
+    emptyTitle: 'Заявок ще немає',
+    emptyHint: 'Перегляньте наш каталог продуктів, щоб подати заявку.',
+    emptyAction: 'Перейти до каталогу',
+  },
+  clientPolicies: {
+    title: 'Ваші поліси',
+    subtitle: 'Керуйте активними полісами та платежами.',
+    actionRequired: 'Потрібна дія: очікується оплата',
+    policyNumber: 'Поліс №',
+    coveragePeriod: 'Період покриття',
+    coverageTo: 'до',
+    linkedApplication: "Пов'язана заявка",
+    viewDetails: 'Деталі →',
+    emptyTitle: 'Активних полісів немає',
+    emptyHint:
+      'Схвалені заявки перетворюються на поліси. Почніть з заявки на продукт.',
+    emptyAction: 'Переглянути заявки',
+  },
+  clientClaims: {
+    title: 'Ваші виплати',
+    subtitle: 'Подайте нову заявку на виплату або відстежуйте поточні.',
+    fileNewClaim: 'Подати нову заявку на виплату',
+    selectActivePolicy: 'Активний поліс',
+    choosePolicy: '-- Оберіть поліс --',
+    claimAmount: 'Сума виплати ($)',
+    incidentDescription: 'Опис події',
+    describePlaceholder: 'Опишіть, що сталося...',
+    processingClaim: 'Обробка заявки...',
+    submitClaim: 'Подати заявку',
+    needActivePolicy:
+      'Для подання заявки на виплату потрібен активний поліс.',
+    claimId: 'ID виплати',
+    amount: 'Сума',
+    filed: 'Подано',
+    fraudScore: 'Оцінка шахрайства',
+    fraudFlag: 'Прапор шахрайства',
+    mlAssessment: 'Оцінка моделі',
+    supportingDocuments: 'Супровідні документи',
+    emptyTitle: 'Заявок на виплату ще немає',
+    emptyHint:
+      'Коли щось трапиться — подайте заявку через форму вище.',
+    submittedSuccess: 'Заявку успішно подано',
+    pleaseSelectPolicy: 'Оберіть поліс',
+    notAuthenticated: 'Не автентифіковано',
+    submitError: 'Сталася помилка під час подання',
+    failedToSubmit: 'Не вдалося подати заявку',
+  },
+  clientQuote: {
+    title: 'Персоналізований тариф',
+    subtitle:
+      'Порівняйте страхові продукти з ціною, підібраною під ваш профіль.',
+    personalizedQuote: 'Персоналізований тариф',
+    comparePricing: 'Порівняйте ціни на страхування відповідно до вашого профілю',
+    insuranceProduct: 'Страховий продукт',
+    selectProduct: '-- Оберіть продукт --',
+    calculating: 'Обчислення...',
+    calculateButton: 'Розрахувати тариф',
+    monthlyPremium: 'Ваш щомісячний внесок',
+    perMonth: '/ місяць',
+    base: 'База',
+    riskMultiplierLabel: 'множник ризику',
+    riskLabel: 'РИЗИК',
+    riskScoreLabel: 'Оцінка ризику',
+    applyForPolicy: 'Подати заявку на цей поліс',
+    submittingApp: 'Подання заявки…',
+    reviewAfterApproval:
+      'Ви зможете переглянути і сплатити після затвердження агентом.',
+    appSubmitted: 'Заявку подано',
+    redirecting: 'Перенаправляємо вас на деталі заявки…',
+    appFailed: 'Не вдалося подати заявку',
+    appFailedHint: 'Спробуйте ще раз за хвилину.',
+    failedCalc: 'Не вдалося розрахувати тариф',
+    unexpectedError: 'Сталася неочікувана помилка під час розрахунку',
+    failedApp: 'Не вдалося подати заявку',
+  },
+  clientRecs: {
+    title: 'Рекомендовано для вас',
+    subtitle:
+      'Відкрийте страхові продукти, підібрані під ваші потреби нашим ML-двигуном.',
+  },
+  clientProducts: {
+    title: 'Каталог страхових продуктів',
+    subtitle:
+      'Повний каталог від наших страхових партнерів. Подайте заявку прямо з будь-якої картки.',
+    empty: 'Зараз продуктів немає. Спробуйте пізніше.',
+  },
+  filters: {
+    all: 'Усі',
+    appPending: 'В обробці',
+    appApproved: 'Схвалено',
+    appRejected: 'Відхилено',
+    appUnderReview: 'На розгляді',
+    claimFiled: 'Подано',
+    claimInProgress: 'В обробці',
+    claimApproved: 'Схвалено',
+    claimDenied: 'Відмовлено',
+    policyActive: 'Активні',
+    policyAwaitingPayment: 'Очікують оплату',
+    policyExpired: 'Прострочені',
+    policyCancelled: 'Скасовані',
+  },
 };
 
-export const messages: Record<Locale, LocaleMessages> = { en, uk };
+export const messages: Record<Locale, Dictionary> = { en, uk };
 
-/**
- * Type-safe key path. We don't enforce statically because the path strings are
- * short and Jest tests would catch any typos when we wire this up to real
- * surfaces — keeping the types simple avoids generic acrobatics for thesis-level
- * payoff.
- */
 export type TKey = string;

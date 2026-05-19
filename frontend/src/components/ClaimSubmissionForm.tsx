@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Activity, Loader2, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { logout } from '@/lib/auth';
+import { useT } from '@/i18n/LocaleProvider';
 
 interface Policy {
   id: string;
@@ -25,6 +26,7 @@ interface ClaimSubmissionFormProps {
 
 export default function ClaimSubmissionForm({ policies, preselectPolicyId }: ClaimSubmissionFormProps) {
   const router = useRouter();
+  const { t } = useT();
 
   const activePolicies = policies.filter((p) => p.status === 'ACTIVE');
 
@@ -44,7 +46,7 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
 
 
     if (!selectedPolicyId) {
-      toast.error('Please select a policy');
+      toast.error(t('clientClaims.pleaseSelectPolicy'));
       setIsLoading(false);
       return;
     }
@@ -52,7 +54,7 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
     const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
 
     if (!token) {
-      toast.error('Not authenticated');
+      toast.error(t('clientClaims.notAuthenticated'));
       setIsLoading(false);
       return;
     }
@@ -77,19 +79,19 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
           logout();
           return;
         }
-        throw new Error(data.message || 'Failed to submit claim');
+        throw new Error(data.message || t('clientClaims.failedToSubmit'));
       }
 
-      const newClaim = await response.json();
-      toast.success('Claim submitted successfully');
+      await response.json();
+      toast.success(t('clientClaims.submittedSuccess'));
       setAmount('');
       setDescription('');
       setSelectedPolicyId('');
-      
+
       // Refresh the page data (Server Component will re-fetch)
       router.refresh();
-    } catch (err: any) {
-      toast.error(err.message || 'An error occurred during submission');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : t('clientClaims.submitError'));
     } finally {
       setIsLoading(false);
     }
@@ -99,7 +101,7 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
     return (
       <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
         <AlertCircle className="h-8 w-8 text-amber-500 mx-auto mb-3" />
-        <p className="text-zinc-400">You need an active policy before filing a claim.</p>
+        <p className="text-zinc-400">{t('clientClaims.needActivePolicy')}</p>
       </div>
     );
   }
@@ -108,7 +110,7 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
     <section className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-xl">
       <div className="p-6 border-b border-zinc-800 flex items-center gap-2 bg-zinc-900/50">
         <Activity className="h-5 w-5 text-emerald-400" />
-        <h2 className="text-xl font-semibold text-white">File a New Claim</h2>
+        <h2 className="text-xl font-semibold text-white">{t('clientClaims.fileNewClaim')}</h2>
       </div>
 
       <div className="p-6">
@@ -116,7 +118,7 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Policy Select */}
             <div className="space-y-2">
-              <label htmlFor="policy" className="text-sm font-medium text-zinc-400">Select Active Policy</label>
+              <label htmlFor="policy" className="text-sm font-medium text-zinc-400">{t('clientClaims.selectActivePolicy')}</label>
               <select
                 id="policy"
                 value={selectedPolicyId}
@@ -124,7 +126,7 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
                 className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 outline-none transition-all appearance-none"
                 required
               >
-                <option value="">-- Choose a Policy --</option>
+                <option value="">{t('clientClaims.choosePolicy')}</option>
                 {activePolicies.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.policyNumber} - {p.product?.name} ({p.product?.company?.name})
@@ -135,7 +137,7 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
 
             {/* Amount Input */}
             <div className="space-y-2">
-              <label htmlFor="amount" className="text-sm font-medium text-zinc-400">Claim Amount ($)</label>
+              <label htmlFor="amount" className="text-sm font-medium text-zinc-400">{t('clientClaims.claimAmount')}</label>
               <input
                 id="amount"
                 type="number"
@@ -152,13 +154,13 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
 
           {/* Description Textarea */}
           <div className="space-y-2">
-            <label htmlFor="description" className="text-sm font-medium text-zinc-400">Incident Description</label>
+            <label htmlFor="description" className="text-sm font-medium text-zinc-400">{t('clientClaims.incidentDescription')}</label>
             <textarea
               id="description"
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Please describe what happened..."
+              placeholder={t('clientClaims.describePlaceholder')}
               className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 outline-none transition-all resize-none"
               required
             />
@@ -173,10 +175,10 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
             {isLoading ? (
               <>
                 <Loader2 className="h-5 w-5 animate-spin" />
-                Processing Claim...
+                {t('clientClaims.processingClaim')}
               </>
             ) : (
-              'Submit Claim'
+              t('clientClaims.submitClaim')
             )}
           </button>
         </form>

@@ -6,6 +6,7 @@ import PolicyPaymentButton from '@/components/PolicyPaymentButton';
 import StopClickPropagation from '@/components/StopClickPropagation';
 import EmptyState from '@/components/ui/EmptyState';
 import PolicyFilters from './PolicyFilters';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -34,6 +35,7 @@ export default async function ClientPoliciesPage(props: Props) {
   const statusFilter = typeof searchParams.status === 'string' ? searchParams.status : 'all';
 
   const allPolicies = await getPolicies();
+  const { t } = await getT();
   
   const counts = allPolicies.reduce((acc: any, policy: any) => {
     acc['all'] = (acc['all'] || 0) + 1;
@@ -48,8 +50,8 @@ export default async function ClientPoliciesPage(props: Props) {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">Your Policies</h1>
-        <p className="text-zinc-400 mt-1 text-sm">Manage your active policies and pending payments.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-white">{t('clientPolicies.title')}</h1>
+        <p className="text-zinc-400 mt-1 text-sm">{t('clientPolicies.subtitle')}</p>
       </div>
 
       <PolicyFilters counts={counts} />
@@ -63,7 +65,7 @@ export default async function ClientPoliciesPage(props: Props) {
                   <div className="bg-amber-500/5 border-b border-amber-500/10 px-5 py-2.5 flex items-center justify-between gap-4 relative z-10">
                     <div className="flex items-center gap-2">
                       <CreditCard className="h-4 w-4 text-amber-400" />
-                      <p className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Action Required: Payment Pending</p>
+                      <p className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">{t('clientPolicies.actionRequired')}</p>
                     </div>
                     <StopClickPropagation>
                       <PolicyPaymentButton policyId={policy.id} amount={policy.premiumAmount} />
@@ -78,20 +80,20 @@ export default async function ClientPoliciesPage(props: Props) {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-bold text-white text-lg">{policy.product?.name || 'Unknown Product'}</h3>
+                        <h3 className="font-bold text-white text-lg">{policy.product?.name || t('clientApps.unknownProduct')}</h3>
                         <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 font-bold uppercase border border-zinc-700">
                           {policy.product?.type}
                         </span>
                       </div>
-                      <p className="text-sm text-emerald-400 font-medium">{policy.product?.company?.name || 'Unknown Company'}</p>
-                      <p className="text-xs text-zinc-500 mt-1 font-mono">Policy #: {policy.policyNumber}</p>
+                      <p className="text-sm text-emerald-400 font-medium">{policy.product?.company?.name || t('clientApps.unknownCompany')}</p>
+                      <p className="text-xs text-zinc-500 mt-1 font-mono">{t('clientPolicies.policyNumber')}: {policy.policyNumber}</p>
                     </div>
                   </div>
                   
                   <div className="flex flex-wrap items-center gap-3">
                     <div className="text-right mr-4 hidden md:block">
-                      <p className="text-[10px] text-zinc-500 uppercase font-bold">Coverage Period</p>
-                      <p className="text-xs text-zinc-300">{formatDate(policy.startDate)} to {formatDate(policy.endDate)}</p>
+                      <p className="text-[10px] text-zinc-500 uppercase font-bold">{t('clientPolicies.coveragePeriod')}</p>
+                      <p className="text-xs text-zinc-300">{formatDate(policy.startDate)} {t('clientPolicies.coverageTo')} {formatDate(policy.endDate)}</p>
                     </div>
                     <span className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider border ${
                       policy.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
@@ -106,21 +108,21 @@ export default async function ClientPoliciesPage(props: Props) {
                 {/* Footer info */}
                 <div className="px-5 py-3 border-t border-zinc-800/50 bg-zinc-950/30 flex items-center justify-between">
                   <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-tight">
-                    Linked Application: <span className="text-zinc-400 ml-1">{policy.applicationId.substring(0, 8)}...</span>
+                    {t('clientPolicies.linkedApplication')}: <span className="text-zinc-400 ml-1">{policy.applicationId.substring(0, 8)}...</span>
                   </p>
                   <div className="text-[10px] text-blue-400 group-hover:text-blue-300 font-bold uppercase tracking-tight transition-colors">
-                    View Details →
+                    {t('clientPolicies.viewDetails')}
                   </div>
                 </div>
               </div>
             </Link>
           ))
         ) : (
-          <EmptyState 
-            icon={ShieldCheck} 
-            title="No active policies" 
-            description="Approved applications become policies. Start by applying for a product." 
-            action={{ label: 'View Applications', href: '/dashboard/client/applications' }} 
+          <EmptyState
+            icon={ShieldCheck}
+            title={t('clientPolicies.emptyTitle')}
+            description={t('clientPolicies.emptyHint')}
+            action={{ label: t('clientPolicies.emptyAction'), href: '/dashboard/client/applications' }}
           />
         )}
       </div>

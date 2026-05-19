@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import FilterPills from '@/components/ui/FilterPills';
+import { useT } from '@/i18n/LocaleProvider';
 
 interface PolicyFiltersProps {
   counts: { [key: string]: number };
@@ -10,14 +11,15 @@ interface PolicyFiltersProps {
 export default function PolicyFilters({ counts }: PolicyFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useT();
   const currentStatus = searchParams.get('status') || 'all';
 
   const options = [
-    { value: 'all', label: 'All', count: counts['all'] },
-    { value: 'ACTIVE', label: 'Active', count: counts['ACTIVE'] || 0 },
-    { value: 'PENDING_PAYMENT', label: 'Awaiting Payment', count: counts['PENDING_PAYMENT'] || 0 },
-    { value: 'EXPIRED', label: 'Expired', count: counts['EXPIRED'] || 0 },
-    { value: 'CANCELLED', label: 'Cancelled', count: counts['CANCELLED'] || 0 },
+    { value: 'all', label: t('filters.all'), count: counts['all'] },
+    { value: 'ACTIVE', label: t('filters.policyActive'), count: counts['ACTIVE'] || 0 },
+    { value: 'PENDING_PAYMENT', label: t('filters.policyAwaitingPayment'), count: counts['PENDING_PAYMENT'] || 0 },
+    { value: 'EXPIRED', label: t('filters.policyExpired'), count: counts['EXPIRED'] || 0 },
+    { value: 'CANCELLED', label: t('filters.policyCancelled'), count: counts['CANCELLED'] || 0 },
   ];
 
   const handleChange = (val: string) => {
