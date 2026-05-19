@@ -44,6 +44,12 @@ Live URL: **https://insurance-saas-platform.vercel.app**
 **"What technologies?"**
 > Frontend: Next.js 16 (App Router, Server Components), TailwindCSS, Recharts, Sonner, Framer Motion. Backend: NestJS 11, Prisma 5, PostgreSQL 15, Stripe SDK, Resend for email. ML: FastAPI, scikit-learn, SHAP, pandas, numpy. Auth: JWT HS256 + bcrypt + Passport.js. Observability: Sentry + nestjs-pino.
 
+**"Why does Stripe show Test Mode in the demo?"**
+> Deliberate choice for a thesis demonstration. Stripe Test Mode allows the full integration to be shown end-to-end — webhook signatures verified, Checkout sessions created, success/cancel flows, refund handling — without involving real money or requiring full KYC business verification. Switching to Live Mode for a production deployment is a single environment-variable swap (`STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET` all rotate). Test Mode also enables demonstrating edge cases that production would make impossible: declined cards (`4000 0000 0000 9995`), 3-D Secure challenge (`4000 0025 0000 3155`), insufficient funds. The code path is identical — only the keys differ.
+
+**"How is this production-grade if you're running Test Mode?"**
+> Two separate concerns. The *infrastructure* is production-grade: Vercel CDN, Railway managed Postgres, Cloudflare R2 storage, Sentry monitoring caught a real Prisma transaction timeout in production, Lighthouse scores 99/96/96/100. The *payment provider mode* is Test for safety reasons described above — switching to Live is a configuration change, not an architectural one. The webhook signature verification, idempotency handling, and audit log entries are the same in both modes.
+
 ---
 
 ## 🛡 Common pitfalls during live demo
@@ -53,7 +59,7 @@ Live URL: **https://insurance-saas-platform.vercel.app**
 | Quick-login button does nothing | Cookies blocked — disable strict tracking prevention in browser |
 | Recommendations show "Failed to load" | ML service cold-start (~30 sec wake-up) — refresh in 30 sec |
 | Some pages slow on first hit | Vercel cold-start — open all pages once before demo |
-| Stripe checkout 503 | STRIPE_SECRET_KEY not set in production (intentional for demo) — explain "payment flow works locally with test keys" |
+| Stripe checkout shows red "TEST MODE" banner | This is intentional — we run Stripe in Test Mode for the demo (see Q&A "Why Test Mode?" below). Use card `4242 4242 4242 4242`, any future expiry, any CVC. |
 
 ---
 
