@@ -124,6 +124,8 @@ const en: Dictionary = {
     footerCompliance: 'Compliance',
     footerArchitecture: 'Architecture',
     footerCopyright: 'InsurSaaS — bachelor thesis project',
+    demoTryRoleLabel: 'Or jump in as a demo user',
+    demoTryRoleHint: 'One-click login — no signup needed. Uses the seeded demo accounts.',
   },
   auth: {
     signInTitle: 'Sign in to your account',
@@ -508,6 +510,8 @@ const uk: Dictionary = {
     footerCompliance: 'Compliance',
     footerArchitecture: 'Архітектура',
     footerCopyright: 'InsurSaaS — бакалаврська робота',
+    demoTryRoleLabel: 'Або зайдіть як демо-користувач',
+    demoTryRoleHint: 'Вхід в один клік — без реєстрації. Використовуються seed-акаунти.',
   },
   auth: {
     signInTitle: 'Вхід до акаунту',

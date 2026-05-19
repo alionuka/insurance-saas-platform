@@ -20,6 +20,7 @@ import {
 import { getProducts, InsuranceProduct } from "@/lib/api";
 import { useT } from "@/i18n/LocaleProvider";
 import LocaleSwitcher from "@/i18n/LocaleSwitcher";
+import DemoLoginRow from "@/components/DemoLoginRow";
 
 export default function Home() {
   const { t } = useT();
@@ -165,6 +166,10 @@ export default function Home() {
               </div>
             ))}
           </div>
+
+          {/* Quick-demo entry — one click into any role's dashboard.
+              Renders nothing in real prod (NEXT_PUBLIC_DEMO_MODE gate). */}
+          <DemoLoginRow variant="landing" />
         </div>
       </section>
 
