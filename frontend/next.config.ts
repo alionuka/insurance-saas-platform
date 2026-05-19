@@ -3,7 +3,9 @@ import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  output: 'standalone',
+  // Only emit standalone bundle when building for Docker — otherwise let
+  // Vercel use its own optimised output (avoids App Router edge cases).
+  ...(process.env.STANDALONE_BUILD === 'true' ? { output: 'standalone' as const } : {}),
 };
 
 const exportedConfig = process.env.NEXT_PUBLIC_SENTRY_DSN
