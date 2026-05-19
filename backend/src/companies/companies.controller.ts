@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -10,6 +10,8 @@ import { CompaniesService } from './companies.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { AuthUser } from '../auth/types/auth-user';
 import { UserRole } from '@prisma/client';
 
 @ApiTags('Companies')
@@ -46,5 +48,20 @@ export class CompaniesController {
   @ApiResponse({ status: 404, description: 'Company not found' })
   findOne(@Param('id') id: string) {
     return this.companiesService.findOne(id);
+  }
+
+  @Post(':id/approve')
+  @Roles(UserRole.PLATFORM_ADMIN)
+  @ApiOperation({
+    summary:
+      'Approve a company pending KYC verification (platform admin only)',
+  })
+  @ApiResponse({ status: 200, description: 'Company moved to ACTIVE state' })
+  @ApiResponse({ status: 400, description: 'Company is not pending verification' })
+  @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
+  @ApiResponse({ status: 403, description: 'Forbidden — platform admin only' })
+  @ApiResponse({ status: 404, description: 'Company not found' })
+  approve(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.companiesService.approve(id, user);
   }
 }

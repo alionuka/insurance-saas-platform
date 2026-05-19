@@ -117,11 +117,29 @@ model Company {
   name        String
   description String?
 
+  // KYC fields captured at self-service onboarding. Stored but not validated
+  // by an external compliance provider in this thesis scope — production
+  // would wire these into ComplyAdvantage / Onfido / similar before
+  // transitioning the tenant from PENDING_VERIFICATION to ACTIVE.
+  licenseNumber String?
+  country       String?
+  contactPhone  String?
+
+  status     CompanyStatus @default(ACTIVE)
+  approvedAt DateTime?
+  approvedBy String? // PLATFORM_ADMIN user id who flipped the switch
+
   users    User[]
   products InsuranceProduct[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum CompanyStatus {
+  PENDING_VERIFICATION
+  ACTIVE
+  SUSPENDED
 }
 
 model InsuranceProduct {

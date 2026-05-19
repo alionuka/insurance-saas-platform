@@ -69,10 +69,18 @@ export class AuthService {
 
   /**
    * Self-service tenant onboarding. Atomically creates a Company together
-   * with its first COMPANY_ADMIN user, then issues tokens so the caller
-   * is automatically logged in. Production deployments would gate this
-   * behind a KYC / business-verification step; for the thesis project we
-   * keep it open and audit-logged.
+   * with its first COMPANY_ADMIN user.
+   *
+   * The Company is created with `status = PENDING_VERIFICATION` — meaning
+   * the admin can sign in and see a "your account is being reviewed" state,
+   * but cannot create products / approve applications until a
+   * PLATFORM_ADMIN flips status to ACTIVE via `POST /companies/:id/approve`.
+   *
+   * Real KYC (license validation, AML screening, business registration
+   * verification) is out of scope for this thesis project — see
+   * COMPLIANCE.md. The optional `licenseNumber`, `country` and
+   * `contactPhone` fields are captured at signup for inclusion in the
+   * compliance check, but not externally validated here.
    */
   async registerCompany(dto: RegisterCompanyDto) {
     const existingUser = await this.prisma.user.findUnique({
@@ -98,7 +106,13 @@ export class AuthService {
     const { company, user } = await this.prisma.$transaction(
       async (tx) => {
         const company = await tx.company.create({
-          data: { name: dto.companyName },
+          data: {
+            name: dto.companyName,
+            status: 'PENDING_VERIFICATION',
+            licenseNumber: dto.licenseNumber,
+            country: dto.country,
+            contactPhone: dto.contactPhone,
+          },
         });
         const user = await tx.user.create({
           data: {
@@ -120,24 +134,26 @@ export class AuthService {
       actor: { id: user.id, email: user.email, role: user.role },
       resourceType: 'Company',
       resourceId: company.id,
-      metadata: { companyName: company.name, adminEmail: user.email },
+      metadata: {
+        companyName: company.name,
+        adminEmail: user.email,
+        licenseNumber: dto.licenseNumber ?? null,
+        country: dto.country ?? null,
+      },
     });
 
-    const tokens = await this.issueTokens(user);
+    // No auto-login here: the company is PENDING_VERIFICATION, so we want
+    // the user to land on a "pending review" page rather than the
+    // dashboard. They sign in normally once the platform admin approves.
     return {
-      ...tokens,
-      user: {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        role: user.role,
-        companyId: company.id,
-      },
+      success: true,
+      status: 'PENDING_VERIFICATION' as const,
       company: {
         id: company.id,
         name: company.name,
       },
+      message:
+        'Company registered. A platform admin will review your application and notify you when access is granted.',
     };
   }
 

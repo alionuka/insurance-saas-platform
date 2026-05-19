@@ -101,6 +101,31 @@ const en: Dictionary = {
     customerSignUpHere: 'Sign up here instead',
     forCompaniesPrompt: 'Represent an insurance company?',
     companySignUpHere: 'Onboard your company',
+    // KYC fields + pending workflow
+    licenseNumberLabel: 'Insurance licence number',
+    countryLabel: 'Country (ISO-3166)',
+    contactPhoneLabel: 'Compliance contact phone',
+    kycSectionCompany: 'Company information',
+    kycSectionAdmin: 'Primary administrator',
+    requiredFields: 'Required fields marked with *',
+    kycNotice:
+      'For thesis demo purposes — production deployments require verified KYC documents (business registration, insurance licence, AML screening). The fields below capture the indicators that a real compliance team would validate externally before activating your tenant.',
+    pendingReviewTitle: 'Application received',
+    pendingReviewSubtitle1: 'Your registration for',
+    pendingReviewSubtitle2:
+      'has been recorded. A platform administrator will review the submitted KYC indicators and notify you when your tenant is activated.',
+    pendingStep1Title: 'Application submitted',
+    pendingStep1Subtitle: 'Company record + admin account created — pending verification.',
+    pendingStep2Title: 'Compliance review in progress',
+    pendingStep2Subtitle:
+      'Licence number, country, and contact details are checked against external compliance providers (ComplyAdvantage / Onfido in production).',
+    pendingStep3Title: 'Tenant activated',
+    pendingStep3Subtitle:
+      'Once approved, you can sign in and start creating insurance products, accepting applications, and processing claims.',
+    pendingDemoNoteLabel: 'Thesis-demo shortcut:',
+    pendingDemoNoteText:
+      'a PLATFORM_ADMIN can approve any pending company from /dashboard/admin/companies. In production this step would happen after the compliance team reviews the actual documents.',
+    pendingBackToSignIn: 'Back to sign in',
     forgotTitle: 'Reset your password',
     forgotSubtitle:
       "Enter your email address and we'll send you a link to reset your password.",
@@ -389,6 +414,31 @@ const uk: Dictionary = {
     customerSignUpHere: 'Зареєструйтеся тут',
     forCompaniesPrompt: 'Представляєте страхову компанію?',
     companySignUpHere: 'Зареєструвати компанію',
+    licenseNumberLabel: 'Номер страхової ліцензії',
+    countryLabel: 'Країна (ISO-3166)',
+    contactPhoneLabel: 'Контактний телефон комплаєнсу',
+    kycSectionCompany: 'Дані компанії',
+    kycSectionAdmin: 'Головний адміністратор',
+    requiredFields: "Поля з * — обов'язкові",
+    kycNotice:
+      'Для демо дипломної роботи. У продакшн-розгортанні необхідні підтверджені KYC-документи (реєстрація бізнесу, страхова ліцензія, AML-скринінг). Поля нижче фіксують ті індикатори, які реальна compliance-команда перевіряє через зовнішні сервіси перед активацією тенанта.',
+    pendingReviewTitle: 'Заявку отримано',
+    pendingReviewSubtitle1: 'Реєстрація для',
+    pendingReviewSubtitle2:
+      "зафіксована. Адміністратор платформи розгляне надані KYC-індикатори та повідомить, коли ваш тенант буде активовано.",
+    pendingStep1Title: 'Заявку подано',
+    pendingStep1Subtitle:
+      'Запис компанії та адмін-акаунт створено — очікують верифікації.',
+    pendingStep2Title: 'Триває compliance-перевірка',
+    pendingStep2Subtitle:
+      'Номер ліцензії, країна та контактні дані перевіряються через зовнішніх compliance-провайдерів (ComplyAdvantage / Onfido у продакшні).',
+    pendingStep3Title: 'Тенант активовано',
+    pendingStep3Subtitle:
+      'Після схвалення ви зможете увійти і почати створювати страхові продукти, обробляти заявки та виплати.',
+    pendingDemoNoteLabel: 'Скорочення для демо-захисту:',
+    pendingDemoNoteText:
+      'PLATFORM_ADMIN може схвалити будь-яку очікувану компанію зі сторінки /dashboard/admin/companies. У продакшн-стадії це б відбувалось після перевірки документів реальною compliance-командою.',
+    pendingBackToSignIn: 'Назад до входу',
     forgotTitle: 'Скидання паролю',
     forgotSubtitle:
       'Введіть свою електронну адресу — ми надішлемо посилання для скидання паролю.',

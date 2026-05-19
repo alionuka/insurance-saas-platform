@@ -1,5 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, MinLength, MaxLength } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 /**
  * Self-service company onboarding. Creates a new tenant (Company) together
@@ -47,4 +53,35 @@ export class RegisterCompanyDto {
   @MinLength(1)
   @MaxLength(50)
   lastName!: string;
+
+  // KYC indicators — stored against the Company row but not externally
+  // validated in this thesis project. See COMPLIANCE.md → "KYC Scope".
+  @ApiPropertyOptional({
+    example: 'IL-2024-INS-12345',
+    description:
+      'National insurance licence number — captured for KYC, not validated externally in this scope',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  licenseNumber?: string;
+
+  @ApiPropertyOptional({
+    example: 'UA',
+    description: 'ISO-3166 country code of operation (2 letters)',
+  })
+  @IsOptional()
+  @IsString()
+  @MinLength(2)
+  @MaxLength(2)
+  country?: string;
+
+  @ApiPropertyOptional({
+    example: '+380 44 555 0000',
+    description: 'Compliance contact phone number',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(30)
+  contactPhone?: string;
 }

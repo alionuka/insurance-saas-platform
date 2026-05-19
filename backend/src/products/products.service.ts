@@ -92,6 +92,21 @@ export class ProductsService {
       );
     }
 
+    // Tenant gating: PENDING_VERIFICATION companies cannot list products
+    // until a PLATFORM_ADMIN approves them via POST /companies/:id/approve.
+    // PLATFORM_ADMIN bypasses this so they can still seed data manually.
+    if (user.role === UserRole.COMPANY_ADMIN) {
+      const tenant = await this.prisma.company.findUnique({
+        where: { id: finalCompanyId },
+        select: { status: true, name: true },
+      });
+      if (tenant && tenant.status !== 'ACTIVE') {
+        throw new ForbiddenException(
+          `Company "${tenant.name}" is ${tenant.status.toLowerCase().replace('_', ' ')}. Products can be created once a platform admin approves your account.`,
+        );
+      }
+    }
+
     const product = await this.prisma.insuranceProduct.create({
       data: {
         name: dto.name,

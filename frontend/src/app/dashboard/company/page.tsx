@@ -21,21 +21,29 @@ async function getCompanyData() {
 
     const authHeader: HeadersInit = { Authorization: `Bearer ${token}` };
 
-    const [productsRes, appsRes, claimsRes, policiesRes] = await Promise.all([
-      fetch(`${API_URL}/products`, { cache: 'no-store' }).catch(() => null),
-      fetch(`${API_URL}/applications`, { 
-        cache: 'no-store',
-        headers: authHeader,
-      }).catch(() => null),
-      fetch(`${API_URL}/claims`, { 
-        cache: 'no-store',
-        headers: authHeader,
-      }).catch(() => null),
-      fetch(`${API_URL}/policies`, { 
-        cache: 'no-store',
-        headers: authHeader,
-      }).catch(() => null),
-    ]);
+    const [productsRes, appsRes, claimsRes, policiesRes, meRes] =
+      await Promise.all([
+        fetch(`${API_URL}/products`, { cache: 'no-store' }).catch(() => null),
+        fetch(`${API_URL}/applications`, {
+          cache: 'no-store',
+          headers: authHeader,
+        }).catch(() => null),
+        fetch(`${API_URL}/claims`, {
+          cache: 'no-store',
+          headers: authHeader,
+        }).catch(() => null),
+        fetch(`${API_URL}/policies`, {
+          cache: 'no-store',
+          headers: authHeader,
+        }).catch(() => null),
+        fetch(`${API_URL}/auth/me`, {
+          cache: 'no-store',
+          headers: authHeader,
+        }).catch(() => null),
+      ]);
+    const meJson = meRes && meRes.ok ? await meRes.json() : null;
+    const tenantStatus: 'PENDING_VERIFICATION' | 'ACTIVE' | 'SUSPENDED' | null =
+      meJson?.company?.status ?? null;
 
     if (appsRes?.status === 401 || claimsRes?.status === 401 || policiesRes?.status === 401) {
       return { status: 401 };
@@ -55,9 +63,23 @@ async function getCompanyData() {
     const claims = claimsJson.items ?? [];
     const policies = policiesJson.items ?? [];
 
-    return { products, applications, claims, policies, status: 200 };
-  } catch (error) {
-    return { products: [], applications: [], claims: [], policies: [], status: 500 };
+    return {
+      products,
+      applications,
+      claims,
+      policies,
+      tenantStatus,
+      status: 200,
+    };
+  } catch {
+    return {
+      products: [],
+      applications: [],
+      claims: [],
+      policies: [],
+      tenantStatus: null,
+      status: 500,
+    };
   }
 }
 
@@ -204,6 +226,35 @@ export default async function CompanyDashboard() {
 
   return (
     <div className="space-y-8">
+      {/* KYC review banner — only renders for tenants still in
+          PENDING_VERIFICATION. Soft block: dashboard is browsable but the
+          banner makes clear that product creation, application approvals
+          and policy issuance are gated until platform admin sign-off. */}
+      {data.tenantStatus === 'PENDING_VERIFICATION' && (
+        <div className="bg-amber-500/5 border border-amber-500/30 rounded-xl p-5 flex items-start gap-4">
+          <div className="h-10 w-10 rounded-full bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0">
+            <ShieldAlert className="h-5 w-5 text-amber-400" />
+          </div>
+          <div className="flex-1">
+            <h2 className="font-bold text-amber-300">
+              Your tenant is awaiting verification
+            </h2>
+            <p className="text-sm text-amber-200/70 mt-1 leading-relaxed">
+              A platform administrator is reviewing your KYC submission. You
+              can browse the dashboard, but product creation and policy
+              activation are disabled until your tenant is marked{' '}
+              <span className="font-bold text-amber-300">ACTIVE</span>. This
+              usually takes 1–3 business days in production; for the thesis
+              demo a platform admin can approve you instantly from{' '}
+              <span className="font-mono text-[11px] bg-amber-500/10 px-1 py-0.5 rounded">
+                /dashboard/admin/companies
+              </span>
+              .
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
