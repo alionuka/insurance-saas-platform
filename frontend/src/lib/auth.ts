@@ -10,6 +10,7 @@ export interface User {
   firstName: string;
   lastName: string;
   role: UserRole;
+  avatarUrl?: string | null;
 }
 
 export function setAuthData(access_token: string, refresh_token: string, user: User) {

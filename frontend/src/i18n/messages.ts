@@ -260,6 +260,10 @@ const en: Dictionary = {
     recentActivity: 'Your Recent Activity',
     noActivity: 'No recent activity yet.',
     dataRights: 'Data Rights',
+    uploadPhoto: 'Change photo',
+    photoTooLarge: 'Photo must be smaller than 2 MB',
+    photoUpdated: 'Profile photo updated',
+    photoUploadFailed: 'Failed to upload photo',
   },
   dashboard: {
     welcomeBack: 'Welcome back',
@@ -703,6 +707,10 @@ const uk: Dictionary = {
     recentActivity: 'Остання активність',
     noActivity: 'Активності поки немає.',
     dataRights: 'Права на дані',
+    uploadPhoto: 'Змінити фото',
+    photoTooLarge: 'Фото має бути менше 2 МБ',
+    photoUpdated: 'Фото профілю оновлено',
+    photoUploadFailed: 'Не вдалося завантажити фото',
   },
   dashboard: {
     welcomeBack: 'Вітаємо знову',

@@ -125,11 +125,13 @@ export class CompaniesController {
   @Post(':id/approve')
   @Roles(UserRole.PLATFORM_ADMIN)
   @ApiOperation({
-    summary:
-      'Approve a company pending KYC verification (platform admin only)',
+    summary: 'Approve a company pending KYC verification (platform admin only)',
   })
   @ApiResponse({ status: 200, description: 'Company moved to ACTIVE state' })
-  @ApiResponse({ status: 400, description: 'Company is not pending verification' })
+  @ApiResponse({
+    status: 400,
+    description: 'Company is not pending verification',
+  })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
   @ApiResponse({ status: 403, description: 'Forbidden — platform admin only' })
   @ApiResponse({ status: 404, description: 'Company not found' })

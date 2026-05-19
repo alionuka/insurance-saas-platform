@@ -7,6 +7,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { PrismaModule } from '../prisma/prisma.module';
 import { EmailModule } from '../email/email.module';
 import { AuditModule } from '../audit/audit.module';
+import { StorageModule } from '../storage/storage.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AuditModule } from '../audit/audit.module';
     PassportModule,
     EmailModule,
     AuditModule,
+    StorageModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'super-secret-key',
       signOptions: { expiresIn: '1d' },

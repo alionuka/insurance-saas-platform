@@ -18,6 +18,7 @@ import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { AuditService } from '../audit/audit.service';
 import { Prisma } from '@prisma/client';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class AuthService {
@@ -26,6 +27,7 @@ export class AuthService {
     private jwtService: JwtService,
     private emailService: EmailService,
     private auditService: AuditService,
+    private storage: StorageService,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -204,6 +206,7 @@ export class AuthService {
         firstName: user.firstName,
         lastName: user.lastName,
         role: user.role,
+        avatarUrl: user.avatarUrl,
       },
     };
   }
@@ -457,6 +460,7 @@ export class AuthService {
         firstName: matchedToken.user.firstName,
         lastName: matchedToken.user.lastName,
         role: matchedToken.user.role,
+        avatarUrl: matchedToken.user.avatarUrl,
       },
     };
   }
@@ -586,5 +590,54 @@ export class AuthService {
     );
 
     return { success: true, deletedAt: new Date().toISOString() };
+  }
+
+  async uploadAvatar(userId: string, file: Express.Multer.File) {
+    if (!file) {
+      throw new BadRequestException('No file provided');
+    }
+    const allowedMimeTypes = ['image/png', 'image/jpeg', 'image/webp'];
+    if (!allowedMimeTypes.includes(file.mimetype)) {
+      throw new BadRequestException(
+        `Unsupported avatar type: ${file.mimetype}. Allowed: ${allowedMimeTypes.join(', ')}`,
+      );
+    }
+    const MAX_BYTES = 2 * 1024 * 1024;
+    if (file.size > MAX_BYTES) {
+      throw new BadRequestException('Avatar must be smaller than 2 MB');
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    const { url } = await this.storage.uploadFile(
+      file.buffer,
+      `avatar-${userId}-${file.originalname}`,
+      file.mimetype,
+    );
+
+    const updated = await this.prisma.user.update({
+      where: { id: userId },
+      data: { avatarUrl: url },
+    });
+
+    await this.auditService.record({
+      action: 'USER_AVATAR_UPDATED',
+      actor: { id: user.id, email: user.email, role: user.role },
+      resourceType: 'User',
+      resourceId: userId,
+      metadata: {
+        filename: file.originalname,
+        sizeBytes: file.size,
+        mimeType: file.mimetype,
+      },
+    });
+
+    const { passwordHash: _passwordHash, ...result } = updated;
+    return result;
   }
 }

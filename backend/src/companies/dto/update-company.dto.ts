@@ -1,5 +1,11 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsHexColor, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsHexColor,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 /**
  * Self-service company-admin branding updates. A COMPANY_ADMIN can edit

@@ -13,7 +13,12 @@ import { UpdateCompanyDto } from './dto/update-company.dto';
 
 @Injectable()
 export class CompaniesService {
-  private readonly ALLOWED_LOGO_MIME = ['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml'];
+  private readonly ALLOWED_LOGO_MIME = [
+    'image/png',
+    'image/jpeg',
+    'image/webp',
+    'image/svg+xml',
+  ];
 
   constructor(
     private prisma: PrismaService,
@@ -122,9 +127,7 @@ export class CompaniesService {
       actor.role === UserRole.COMPANY_ADMIN &&
       actor.companyId !== companyId
     ) {
-      throw new ForbiddenException(
-        'You can only edit your own company',
-      );
+      throw new ForbiddenException('You can only edit your own company');
     }
 
     const company = await this.prisma.company.findUnique({

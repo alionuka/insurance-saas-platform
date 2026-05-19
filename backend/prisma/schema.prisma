@@ -73,6 +73,7 @@ model User {
   annualIncome Float?
   creditScore  Int?
   passwordHash String?
+  avatarUrl    String?
 
   companyId String?
   company   Company? @relation(fields: [companyId], references: [id])

@@ -80,7 +80,7 @@ const MAX_WIDTH = 420; //     26.25rem — widest before main content feels squa
 export default function DashboardSidebar() {
   const pathname = usePathname();
   const { t } = useT();
-  const [user, setUser] = useState<{ firstName: string; lastName: string; email: string; role: string } | null>(null);
+  const [user, setUser] = useState<{ firstName: string; lastName: string; email: string; role: string; avatarUrl?: string | null } | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   // null until hydrated to avoid SSR mismatch
   const [width, setWidth] = useState<number | null>(null);
@@ -106,6 +106,19 @@ export default function DashboardSidebar() {
       console.error('Failed to hydrate sidebar state', e);
       setWidth(DEFAULT_WIDTH);
     }
+  }, []);
+
+  useEffect(() => {
+    const handleUserUpdate = () => {
+      try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error('Failed to update sidebar user', e);
+      }
+    };
+    window.addEventListener('user-updated', handleUserUpdate);
+    return () => window.removeEventListener('user-updated', handleUserUpdate);
   }, []);
 
   // Mirror width into a CSS variable so the page's main content margin can
@@ -289,8 +302,16 @@ export default function DashboardSidebar() {
         <div className="p-4 border-t border-zinc-800 shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center min-w-0 pr-3">
-              <div className="h-9 w-9 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-indigo-400 shrink-0">
-                {getInitials()}
+              <div className="h-9 w-9 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center overflow-hidden text-xs font-bold text-indigo-400 shrink-0">
+                {user?.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl}
+                    alt={`${user.firstName} ${user.lastName}`}
+                    className="h-full w-full object-cover rounded-full"
+                  />
+                ) : (
+                  getInitials()
+                )}
               </div>
               <div className="ml-3 truncate">
                 <p className="text-sm font-medium text-white truncate">

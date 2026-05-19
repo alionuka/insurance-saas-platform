@@ -9,14 +9,19 @@ import {
   Delete,
   HttpCode,
   Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { Throttle } from '@nestjs/throttler';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
+  ApiConsumes,
+  ApiBody,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -57,7 +62,8 @@ export class AuthController {
   })
   @ApiResponse({
     status: 201,
-    description: 'Company + admin created, returns tokens for immediate sign-in',
+    description:
+      'Company + admin created, returns tokens for immediate sign-in',
   })
   @ApiResponse({
     status: 400,
@@ -105,6 +111,28 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
   async updateMe(@CurrentUser() user: AuthUser, @Body() dto: UpdateProfileDto) {
     return this.authService.updateProfile(user.id, dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('me/avatar')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
+  @ApiOperation({ summary: 'Upload current user avatar (2 MB max)' })
+  @ApiBearerAuth('access_token')
+  @ApiResponse({ status: 201, description: 'Avatar uploaded' })
+  @ApiResponse({ status: 400, description: 'Invalid file (type/size)' })
+  @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
+  async uploadAvatar(
+    @UploadedFile() file: Express.Multer.File,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.authService.uploadAvatar(user.id, file);
   }
 
   @UseGuards(JwtAuthGuard)

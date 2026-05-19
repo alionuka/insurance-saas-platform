@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { EmailService } from '../email/email.service';
 import { AuditService } from '../audit/audit.service';
+import { StorageService } from '../storage/storage.service';
 
 /**
  * Unit tests for AuthService — focused on security-critical logic.
@@ -44,6 +45,12 @@ describe('AuthService (unit)', () => {
       record: jest.fn(),
     };
 
+    const storageMock = {
+      uploadFile: jest
+        .fn()
+        .mockResolvedValue({ url: 'http://fake-avatar-url.com' }),
+    };
+
     const moduleRef: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
@@ -51,6 +58,7 @@ describe('AuthService (unit)', () => {
         { provide: JwtService, useValue: jwtMock },
         { provide: EmailService, useValue: emailMock },
         { provide: AuditService, useValue: auditMock },
+        { provide: StorageService, useValue: storageMock },
       ],
     }).compile();
 

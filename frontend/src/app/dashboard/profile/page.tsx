@@ -6,6 +6,7 @@ import EditProfileForm from './EditProfileForm';
 import RestartTourButton from '@/components/onboarding/RestartTourButton';
 import GdprPanel from './GdprPanel';
 import { getT } from '@/i18n/getT';
+import AvatarUploadButton from './AvatarUploadButton';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -92,8 +93,19 @@ export default async function ProfilePage() {
       {/* Hero Section */}
       <div className="flex flex-col md:flex-row md:items-center gap-6 bg-zinc-900 border border-zinc-800 p-8 rounded-xl relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-2 bg-indigo-500" />
-        <div className="h-24 w-24 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center shrink-0">
-          <span className="text-3xl font-bold text-indigo-400">{getInitials()}</span>
+        <div className="flex flex-col items-center gap-3 shrink-0">
+          <div className="h-24 w-24 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center overflow-hidden">
+            {user.avatarUrl ? (
+              <img
+                src={user.avatarUrl}
+                alt={`${user.firstName} ${user.lastName}`}
+                className="h-full w-full object-cover rounded-full"
+              />
+            ) : (
+              <span className="text-3xl font-bold text-indigo-400">{getInitials()}</span>
+            )}
+          </div>
+          <AvatarUploadButton />
         </div>
         <div className="flex-1">
           <h1 className="text-3xl font-bold text-white tracking-tight">{user.firstName} {user.lastName}</h1>
