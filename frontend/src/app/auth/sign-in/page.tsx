@@ -22,11 +22,13 @@ function SignInPageContent() {
 
   const isResetSuccess = searchParams.get('reset') === 'true';
 
+  // `role` is consumed by Playwright via data-testid — keeping it stable
+  // (English) means the e2e suite doesn't break when the UI switches to UK.
   const DEMO_ACCOUNTS = [
-    { label: t('auth.demoCustomer'), email: 'alice.customer@example.com', icon: User, color: 'bg-blue-500/5 text-blue-400 border-blue-500/20 hover:bg-blue-500/10' },
-    { label: t('auth.demoAgent'), email: 'emily.agent@example.com', icon: UserCheck, color: 'bg-emerald-500/5 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10' },
-    { label: t('auth.demoCompanyAdmin'), email: 'sarah.admin@example.com', icon: Building2, color: 'bg-amber-500/5 text-amber-400 border-amber-500/20 hover:bg-amber-500/10' },
-    { label: t('auth.demoPlatform'), email: 'admin@insurance-saas.com', icon: Crown, color: 'bg-purple-500/5 text-purple-400 border-purple-500/20 hover:bg-purple-500/10' },
+    { role: 'CUSTOMER', label: t('auth.demoCustomer'), email: 'alice.customer@example.com', icon: User, color: 'bg-blue-500/5 text-blue-400 border-blue-500/20 hover:bg-blue-500/10' },
+    { role: 'AGENT', label: t('auth.demoAgent'), email: 'emily.agent@example.com', icon: UserCheck, color: 'bg-emerald-500/5 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10' },
+    { role: 'COMPANY_ADMIN', label: t('auth.demoCompanyAdmin'), email: 'sarah.admin@example.com', icon: Building2, color: 'bg-amber-500/5 text-amber-400 border-amber-500/20 hover:bg-amber-500/10' },
+    { role: 'PLATFORM_ADMIN', label: t('auth.demoPlatform'), email: 'admin@insurance-saas.com', icon: Crown, color: 'bg-purple-500/5 text-purple-400 border-purple-500/20 hover:bg-purple-500/10' },
   ];
 
   const performLogin = async (targetEmail: string, targetPassword: string) => {
@@ -175,6 +177,7 @@ function SignInPageContent() {
                 disabled={quickLoadingEmail !== null}
                 className={`inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${acc.color}`}
                 title={acc.email}
+                data-testid={`quick-login-${acc.role}`}
               >
                 {isThisLoading ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />

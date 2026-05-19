@@ -2,21 +2,21 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Agent Workflow', () => {
   test('agent sees applications queue with risk scores', async ({ page }) => {
-    // Login as Agent
+    // Login as Agent (locale-stable)
     await page.goto('/auth/sign-in');
-    await page.click('button:has-text("Agent")');
+    await page.click('[data-testid="quick-login-AGENT"]');
     await expect(page).toHaveURL(/\/dashboard\/agent/);
 
     // Navigate to applications queue
     await page.goto('/dashboard/agent/applications');
 
-    // Expect at least one table row to be visible
-    // The table body rows have element tr
+    // At least one table row should render. We do not assert on column
+    // headers — those are locale-dependent.
     const tableRow = page.locator('tbody tr').first();
     await expect(tableRow).toBeVisible();
 
-    // Expect element with text matching LOW, MEDIUM, or HIGH risk levels
-    // Since RiskBadge displays the risk level text
+    // Risk badges render as enum literals (LOW / MEDIUM / HIGH) — same in
+    // both locales, so this text assertion is stable.
     const riskBadge = page.locator('tbody tr').locator('text=/LOW|MEDIUM|HIGH/').first();
     await expect(riskBadge).toBeVisible();
   });

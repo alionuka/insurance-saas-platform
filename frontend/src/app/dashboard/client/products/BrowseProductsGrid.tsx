@@ -152,6 +152,7 @@ export default function BrowseProductsGrid({
                     <button
                       onClick={() => submitApplication(product.id)}
                       disabled={applyingProductId !== null}
+                      data-testid="apply-product"
                       className="w-full py-2 px-3 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed text-xs font-bold text-white transition-colors flex items-center justify-center gap-1.5"
                     >
                       {applyingProductId === product.id ? (

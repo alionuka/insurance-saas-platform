@@ -106,6 +106,7 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
             <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-500" />
             <input
               type="text"
+              name="firstName"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
@@ -120,6 +121,7 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
             <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-500" />
             <input
               type="text"
+              name="lastName"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"

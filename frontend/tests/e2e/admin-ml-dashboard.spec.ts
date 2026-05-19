@@ -2,16 +2,16 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Admin ML Dashboard', () => {
   test('platform admin views ML methodology dashboard', async ({ page }) => {
-    // Login as Platform Admin
+    // Login as Platform Admin (locale-stable)
     await page.goto('/auth/sign-in');
-    await page.click('button:has-text("Platform")');
+    await page.click('[data-testid="quick-login-PLATFORM_ADMIN"]');
     await expect(page).toHaveURL(/\/dashboard\/admin/);
 
     // Navigate to ML models dashboard
     await page.goto('/dashboard/admin/ml-models');
 
-    // Expect tab buttons "Risk", "Fraud", "Recommendations"
-    // Since labels are "Risk Prediction", "Fraud Detection", "Recommendations"
+    // Tab buttons "Risk Prediction", "Fraud Detection", "Recommendations"
+    // are not localised — these surfaces remain English by design.
     const riskTab = page.locator('button:has-text("Risk")');
     const fraudTab = page.locator('button:has-text("Fraud")');
     const recsTab = page.locator('button:has-text("Recommendations")');
@@ -20,11 +20,10 @@ test.describe('Admin ML Dashboard', () => {
     await expect(fraudTab).toBeVisible();
     await expect(recsTab).toBeVisible();
 
-    // Click "Risk" tab
     await riskTab.click();
 
-    // Expect text "Cross-Validation" or "Permutation" to be visible
-    // In our UI, "CV Strategy" block shows "Cross-Validation", and feature importance shows "Permutation Importance"
+    // "Cross-Validation" block + "Permutation Importance" caption — both
+    // English ML methodology terms.
     await expect(page.locator('text=/Cross-Validation|Permutation/').first()).toBeVisible();
   });
 });
