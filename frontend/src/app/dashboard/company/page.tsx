@@ -1,4 +1,5 @@
 import { Building2, Package, Briefcase, FileBarChart2, ShieldCheck, ShieldAlert, TrendingUp, AlertTriangle, ShieldX } from 'lucide-react';
+import { getT } from '@/i18n/getT';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { cookies } from 'next/headers';
 import { logout } from '@/lib/auth';
@@ -62,6 +63,7 @@ async function getCompanyData() {
 
 export default async function CompanyDashboard() {
   const data = await getCompanyData();
+  const { t } = await getT();
 
   if (data.status === 401) {
     // This will trigger the logout effect in the layout or client components
@@ -205,8 +207,8 @@ export default async function CompanyDashboard() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Company Workspace</h1>
-          <p className="text-zinc-400 mt-1">Dedicated tenant dashboard for portfolio and risk management.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-white">{t('dashboard.companyTitle')}</h1>
+          <p className="text-zinc-400 mt-1">{t('dashboard.companySubtitle')}</p>
         </div>
         <div className="flex items-center space-x-2">
           <span className="text-xs text-zinc-500 uppercase tracking-widest font-bold">Scope: </span>

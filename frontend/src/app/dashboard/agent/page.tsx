@@ -1,14 +1,15 @@
 import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { 
-  FileText, 
-  Activity, 
-  ShieldAlert, 
+import {
+  FileText,
+  Activity,
+  ShieldAlert,
   AlertTriangle,
   Clock,
   ArrowRight
 } from 'lucide-react';
 import { formatDate } from '@/lib/formatDate';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -43,6 +44,7 @@ async function getAgentData() {
 
 export default async function AgentOverviewPage() {
   const { applications, claims } = await getAgentData();
+  const { t } = await getT();
 
   const pendingApps = applications.filter((a: any) => a.status === 'PENDING').length;
   const openClaims = claims.filter((c: any) => c.status === 'FILED' || c.status === 'IN_PROGRESS').length;
@@ -66,22 +68,22 @@ export default async function AgentOverviewPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">Agent Overview</h1>
-        <p className="text-zinc-400 mt-1 text-sm">Summary of your assigned applications and claims.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-white">{t('dashboard.agentTitle')}</h1>
+        <p className="text-zinc-400 mt-1 text-sm">{t('dashboard.agentSubtitle')}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
           <div className="flex items-center gap-3 mb-2">
             <FileText className="h-5 w-5 text-indigo-400" />
-            <h3 className="font-medium text-zinc-300">Pending Apps</h3>
+            <h3 className="font-medium text-zinc-300">{t('dashboard.pendingApps')}</h3>
           </div>
           <p className="text-3xl font-bold text-white">{pendingApps}</p>
         </div>
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
           <div className="flex items-center gap-3 mb-2">
             <Activity className="h-5 w-5 text-emerald-400" />
-            <h3 className="font-medium text-zinc-300">Open Claims</h3>
+            <h3 className="font-medium text-zinc-300">{t('dashboard.stats.openClaims')}</h3>
           </div>
           <p className="text-3xl font-bold text-white">{openClaims}</p>
         </div>
@@ -103,7 +105,7 @@ export default async function AgentOverviewPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-          <h2 className="text-lg font-medium text-white mb-4">Recent Activity</h2>
+          <h2 className="text-lg font-medium text-white mb-4">{t('dashboard.recentActivity')}</h2>
           <div className="space-y-4">
             {allActivity.map((item: any) => (
               <div key={`${item.type}-${item.id}`} className="flex items-start gap-4 p-4 rounded-lg bg-zinc-950/50 border border-zinc-800/50">
@@ -134,7 +136,7 @@ export default async function AgentOverviewPage() {
               </div>
             ))}
             {allActivity.length === 0 && (
-              <p className="text-sm text-zinc-500 text-center py-4">No recent activity.</p>
+              <p className="text-sm text-zinc-500 text-center py-4">{t('dashboard.noActivity')}</p>
             )}
           </div>
         </div>

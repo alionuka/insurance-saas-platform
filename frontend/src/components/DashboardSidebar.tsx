@@ -1,14 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  ShieldCheck, 
-  LayoutDashboard, 
-  FileText, 
-  Activity, 
-  Calculator, 
+import {
+  ShieldCheck,
+  LayoutDashboard,
+  FileText,
+  Activity,
+  Calculator,
   Sparkles,
   BarChart3,
   Package,
@@ -24,50 +24,53 @@ import {
 import { logout } from '@/lib/auth';
 import NotificationsBell from '@/components/NotificationsBell';
 import GlobalSearch from '@/components/GlobalSearch';
+import { useT } from '@/i18n/LocaleProvider';
+import LocaleSwitcher from '@/i18n/LocaleSwitcher';
 
 type NavItem = {
   href: string;
-  label: string;
+  labelKey: string;
   icon: React.ElementType;
 };
 
 const CUSTOMER_NAV: NavItem[] = [
-  { href: '/dashboard/client', label: 'Overview', icon: LayoutDashboard },
-  { href: '/dashboard/client/applications', label: 'Applications', icon: FileText },
-  { href: '/dashboard/client/policies', label: 'Policies', icon: ShieldCheck },
-  { href: '/dashboard/client/claims', label: 'Claims', icon: Activity },
-  { href: '/dashboard/client/products', label: 'Browse Products', icon: Package },
-  { href: '/dashboard/client/quote', label: 'Get a Quote', icon: Calculator },
-  { href: '/dashboard/client/recommendations', label: 'For You', icon: Sparkles },
-  { href: '/dashboard/profile', label: 'Profile', icon: UserCircle },
+  { href: '/dashboard/client', labelKey: 'sidebar.nav.overview', icon: LayoutDashboard },
+  { href: '/dashboard/client/applications', labelKey: 'sidebar.nav.applications', icon: FileText },
+  { href: '/dashboard/client/policies', labelKey: 'sidebar.nav.policies', icon: ShieldCheck },
+  { href: '/dashboard/client/claims', labelKey: 'sidebar.nav.claims', icon: Activity },
+  { href: '/dashboard/client/products', labelKey: 'sidebar.nav.browseProducts', icon: Package },
+  { href: '/dashboard/client/quote', labelKey: 'sidebar.nav.getQuote', icon: Calculator },
+  { href: '/dashboard/client/recommendations', labelKey: 'sidebar.nav.forYou', icon: Sparkles },
+  { href: '/dashboard/profile', labelKey: 'sidebar.nav.profile', icon: UserCircle },
 ];
 
 const AGENT_NAV: NavItem[] = [
-  { href: '/dashboard/agent', label: 'Overview', icon: LayoutDashboard },
-  { href: '/dashboard/agent/applications', label: 'Applications', icon: FileText },
-  { href: '/dashboard/agent/claims', label: 'Claims', icon: Activity },
-  { href: '/dashboard/profile', label: 'Profile', icon: UserCircle },
+  { href: '/dashboard/agent', labelKey: 'sidebar.nav.overview', icon: LayoutDashboard },
+  { href: '/dashboard/agent/applications', labelKey: 'sidebar.nav.applications', icon: FileText },
+  { href: '/dashboard/agent/claims', labelKey: 'sidebar.nav.claims', icon: Activity },
+  { href: '/dashboard/profile', labelKey: 'sidebar.nav.profile', icon: UserCircle },
 ];
 
 const COMPANY_ADMIN_NAV: NavItem[] = [
-  { href: '/dashboard/company', label: 'Analytics', icon: BarChart3 },
-  { href: '/dashboard/company/products', label: 'Products', icon: Package },
-  { href: '/dashboard/company/policies', label: 'Policies', icon: ShieldCheck },
-  { href: '/dashboard/company/claims', label: 'Claims', icon: Activity },
-  { href: '/dashboard/profile', label: 'Profile', icon: UserCircle },
+  { href: '/dashboard/company', labelKey: 'sidebar.nav.analytics', icon: BarChart3 },
+  { href: '/dashboard/company/products', labelKey: 'sidebar.nav.products', icon: Package },
+  { href: '/dashboard/company/policies', labelKey: 'sidebar.nav.policies', icon: ShieldCheck },
+  { href: '/dashboard/company/claims', labelKey: 'sidebar.nav.claims', icon: Activity },
+  { href: '/dashboard/profile', labelKey: 'sidebar.nav.profile', icon: UserCircle },
 ];
 
 const PLATFORM_ADMIN_NAV: NavItem[] = [
-  { href: '/dashboard/admin', label: 'Overview', icon: LayoutDashboard },
-  { href: '/dashboard/admin/companies', label: 'Companies', icon: Building2 },
-  { href: '/dashboard/admin/users', label: 'Users', icon: Users },
-  { href: '/dashboard/admin/audit-logs', label: 'Audit Log', icon: ScrollText },
-  { href: '/dashboard/admin/ml-models', label: 'ML Models', icon: Brain },
-  { href: '/dashboard/profile', label: 'Profile', icon: UserCircle },
+  { href: '/dashboard/admin', labelKey: 'sidebar.nav.overview', icon: LayoutDashboard },
+  { href: '/dashboard/admin/companies', labelKey: 'sidebar.nav.companies', icon: Building2 },
+  { href: '/dashboard/admin/users', labelKey: 'sidebar.nav.users', icon: Users },
+  { href: '/dashboard/admin/audit-logs', labelKey: 'sidebar.nav.auditLog', icon: ScrollText },
+  { href: '/dashboard/admin/ml-models', labelKey: 'sidebar.nav.mlModels', icon: Brain },
+  { href: '/dashboard/profile', labelKey: 'sidebar.nav.profile', icon: UserCircle },
 ];
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
+  const { t } = useT();
   const [user, setUser] = useState<{ firstName: string; lastName: string; email: string; role: string } | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -95,16 +98,18 @@ export default function DashboardSidebar() {
     return `${user.firstName?.[0] || ''}${user.lastName?.[0] || ''}`.toUpperCase() || 'U';
   };
 
-  const navItems = user?.role === 'CUSTOMER' ? CUSTOMER_NAV
-                 : user?.role === 'AGENT' ? AGENT_NAV
-                 : user?.role === 'COMPANY_ADMIN' ? COMPANY_ADMIN_NAV
-                 : user?.role === 'PLATFORM_ADMIN' ? PLATFORM_ADMIN_NAV
-                 : [];
+  const navItems = useMemo(() => {
+    return user?.role === 'CUSTOMER' ? CUSTOMER_NAV
+         : user?.role === 'AGENT' ? AGENT_NAV
+         : user?.role === 'COMPANY_ADMIN' ? COMPANY_ADMIN_NAV
+         : user?.role === 'PLATFORM_ADMIN' ? PLATFORM_ADMIN_NAV
+         : [];
+  }, [user?.role]);
 
   return (
     <>
       {/* Mobile Hamburger Button */}
-      <button 
+      <button
         onClick={() => setIsOpen(true)}
         className="md:hidden fixed top-4 left-4 z-40 bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-zinc-400 hover:text-white hover:bg-zinc-800/50 shadow-lg"
         aria-label="Open sidebar"
@@ -114,14 +119,14 @@ export default function DashboardSidebar() {
 
       {/* Mobile Backdrop */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* Sidebar Drawer */}
-      <aside 
+      <aside
         className={`fixed inset-y-0 left-0 w-72 md:w-60 flex flex-col bg-zinc-950 border-r border-zinc-800 z-50 transform transition-transform duration-200 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
@@ -130,10 +135,11 @@ export default function DashboardSidebar() {
         <div className="h-16 flex items-center justify-between px-4 border-b border-zinc-800 shrink-0">
           <div className="flex items-center">
             <ShieldCheck className="h-6 w-6 text-indigo-500 mr-2 shrink-0" />
-            <span className="text-xl font-semibold tracking-tight text-white hidden md:block">InsurSaaS</span>
+            <span className="text-xl font-semibold tracking-tight text-white hidden md:block">{t('sidebar.brand')}</span>
           </div>
-          
+
           <div className="flex items-center gap-2">
+            <LocaleSwitcher variant="nav" />
             <button
               data-tour="global-search"
               onClick={() => {
@@ -141,10 +147,10 @@ export default function DashboardSidebar() {
                 window.dispatchEvent(event);
               }}
               className="flex items-center gap-2 text-xs text-zinc-500 hover:text-white border border-zinc-800 rounded-md px-2 py-1 transition-colors"
-              title="Search (⌘K)"
+              title={`${t('sidebar.search')} (⌘K)`}
             >
               <Search className="h-3.5 w-3.5" />
-              <span className="hidden md:inline">Search</span>
+              <span className="hidden md:inline">{t('sidebar.search')}</span>
               <kbd className="font-mono bg-zinc-800 px-1 rounded text-[9px] font-bold hidden xl:inline">⌘K</kbd>
             </button>
             <div data-tour="notifications">
@@ -152,25 +158,25 @@ export default function DashboardSidebar() {
             </div>
           </div>
         </div>
-        
+
         {/* Navigation */}
         <div className="flex-1 overflow-y-auto py-6">
           <nav data-tour="sidebar-nav" className="px-3 space-y-1.5">
             {navItems.map((item) => {
-              const isActive = item.href === '/dashboard/client' || item.href === '/dashboard/agent' || item.href === '/dashboard/company' || item.href === '/dashboard/admin' 
+              const isActive = item.href === '/dashboard/client' || item.href === '/dashboard/agent' || item.href === '/dashboard/company' || item.href === '/dashboard/admin'
                 ? pathname === item.href
                 : pathname.startsWith(item.href);
 
               const Icon = item.icon;
 
               return (
-                <Link 
+                <Link
                   key={item.href}
-                  href={item.href} 
+                  href={item.href}
                   onClick={() => setIsOpen(false)}
                   className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors relative ${
-                    isActive 
-                      ? 'bg-indigo-500/10 text-indigo-400' 
+                    isActive
+                      ? 'bg-indigo-500/10 text-indigo-400'
                       : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200'
                   }`}
                 >
@@ -178,13 +184,13 @@ export default function DashboardSidebar() {
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-indigo-500 rounded-r-full" />
                   )}
                   <Icon className={`mr-3 h-5 w-5 shrink-0 ${isActive ? 'text-indigo-400' : 'text-zinc-500'}`} />
-                  {item.label}
+                  {t(item.labelKey)}
                 </Link>
               );
             })}
           </nav>
         </div>
-        
+
         {/* User Info & Logout */}
         <div className="p-4 border-t border-zinc-800 shrink-0">
           <div className="flex items-center justify-between">
@@ -197,24 +203,24 @@ export default function DashboardSidebar() {
                   {user ? `${user.firstName} ${user.lastName}` : 'Demo User'}
                 </p>
                 <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-tighter truncate">
-                  {user ? user.role.replace('_', ' ') : 'Read-Only'}
+                  {user ? user.role.replace('_', ' ') : t('sidebar.readonlyRole')}
                 </p>
               </div>
             </div>
-            <button 
+            <button
               onClick={() => {
                 logout();
                 window.location.href = '/auth/sign-in';
               }}
               className="text-zinc-500 hover:text-rose-400 transition-colors p-1.5 rounded-md hover:bg-rose-500/10 shrink-0"
-              title="Sign Out"
+              title={t('sidebar.signOutTitle')}
             >
               <LogOut className="h-4 w-4" />
             </button>
           </div>
         </div>
       </aside>
-      
+
       <GlobalSearch />
     </>
   );

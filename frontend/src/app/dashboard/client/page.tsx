@@ -1,8 +1,9 @@
 import { ShieldCheck, FileCheck, Activity, CreditCard, Clock, ChevronRight } from 'lucide-react';
-import { formatDate, formatCurrency } from '@/lib/formatDate';
+import { formatDate } from '@/lib/formatDate';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import CountUpNumber from '@/components/charts/CountUpNumber';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -34,6 +35,7 @@ async function getClientData() {
 
 export default async function ClientDashboardOverview() {
   const { applications, claims, policies } = await getClientData();
+  const { t } = await getT();
 
   const activePolicies = policies.filter((p: any) => p.status === 'ACTIVE');
   const openClaims = claims.filter((c: any) => c.status === 'FILED' || c.status === 'IN_PROGRESS');
@@ -77,8 +79,8 @@ export default async function ClientDashboardOverview() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">Welcome back</h1>
-        <p className="text-zinc-400 mt-1">Here is an overview of your insurance portfolio.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-white">{t('dashboard.welcomeBack')}</h1>
+        <p className="text-zinc-400 mt-1">{t('dashboard.overviewSubtitle')}</p>
       </div>
 
       {/* Stats Overview */}
@@ -88,27 +90,27 @@ export default async function ClientDashboardOverview() {
             <FileCheck className="h-6 w-6 text-indigo-400" />
           </div>
           <div>
-            <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Applications</p>
+            <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">{t('dashboard.stats.applications')}</p>
             <p className="text-2xl font-bold text-white"><CountUpNumber value={applications.length} /></p>
           </div>
         </div>
-        
+
         <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-xl flex items-center gap-4">
           <div className="h-12 w-12 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
             <ShieldCheck className="h-6 w-6 text-blue-400" />
           </div>
           <div>
-            <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Active Policies</p>
+            <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">{t('dashboard.stats.activePolicies')}</p>
             <p className="text-2xl font-bold text-white"><CountUpNumber value={activePolicies.length} /></p>
           </div>
         </div>
-        
+
         <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-xl flex items-center gap-4">
           <div className="h-12 w-12 rounded-xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
             <Activity className="h-6 w-6 text-amber-400" />
           </div>
           <div>
-            <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Open Claims</p>
+            <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">{t('dashboard.stats.openClaims')}</p>
             <p className="text-2xl font-bold text-white"><CountUpNumber value={openClaims.length} /></p>
           </div>
         </div>
@@ -118,7 +120,7 @@ export default async function ClientDashboardOverview() {
             <CreditCard className="h-6 w-6 text-emerald-400" />
           </div>
           <div>
-            <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Total Premium</p>
+            <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">{t('dashboard.stats.totalPremium')}</p>
             <p className="text-2xl font-bold text-white"><CountUpNumber value={Math.round(totalPremium)} prefix="$" /></p>
           </div>
         </div>
@@ -128,7 +130,7 @@ export default async function ClientDashboardOverview() {
       <div>
         <div className="flex items-center gap-2 mb-4">
           <Clock className="h-5 w-5 text-zinc-400" />
-          <h2 className="text-xl font-semibold text-white">Recent Activity</h2>
+          <h2 className="text-xl font-semibold text-white">{t('dashboard.recentActivity')}</h2>
         </div>
         
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
@@ -164,7 +166,7 @@ export default async function ClientDashboardOverview() {
             </div>
           ) : (
             <div className="p-8 text-center">
-              <p className="text-zinc-500 text-sm">No recent activity found.</p>
+              <p className="text-zinc-500 text-sm">{t('dashboard.noActivity')}</p>
             </div>
           )}
         </div>

@@ -5,19 +5,15 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ShieldCheck, Mail, Lock, Loader2, AlertCircle, CheckCircle2, User, UserCheck, Building2, Crown } from 'lucide-react';
 import { setAuthData, getDashboardRedirect, UserRole } from '@/lib/auth';
+import { useT } from '@/i18n/LocaleProvider';
+import LocaleSwitcher from '@/i18n/LocaleSwitcher';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-
-const DEMO_ACCOUNTS = [
-  { label: 'Customer', email: 'alice.customer@example.com', icon: User, color: 'bg-blue-500/5 text-blue-400 border-blue-500/20 hover:bg-blue-500/10' },
-  { label: 'Agent', email: 'emily.agent@example.com', icon: UserCheck, color: 'bg-emerald-500/5 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10' },
-  { label: 'Co. Admin', email: 'sarah.admin@example.com', icon: Building2, color: 'bg-amber-500/5 text-amber-400 border-amber-500/20 hover:bg-amber-500/10' },
-  { label: 'Platform', email: 'admin@insurance-saas.com', icon: Crown, color: 'bg-purple-500/5 text-purple-400 border-purple-500/20 hover:bg-purple-500/10' },
-];
 
 function SignInPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useT();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -25,6 +21,13 @@ function SignInPageContent() {
   const [quickLoadingEmail, setQuickLoadingEmail] = useState<string | null>(null);
 
   const isResetSuccess = searchParams.get('reset') === 'true';
+
+  const DEMO_ACCOUNTS = [
+    { label: t('auth.demoCustomer'), email: 'alice.customer@example.com', icon: User, color: 'bg-blue-500/5 text-blue-400 border-blue-500/20 hover:bg-blue-500/10' },
+    { label: t('auth.demoAgent'), email: 'emily.agent@example.com', icon: UserCheck, color: 'bg-emerald-500/5 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10' },
+    { label: t('auth.demoCompanyAdmin'), email: 'sarah.admin@example.com', icon: Building2, color: 'bg-amber-500/5 text-amber-400 border-amber-500/20 hover:bg-amber-500/10' },
+    { label: t('auth.demoPlatform'), email: 'admin@insurance-saas.com', icon: Crown, color: 'bg-purple-500/5 text-purple-400 border-purple-500/20 hover:bg-purple-500/10' },
+  ];
 
   const performLogin = async (targetEmail: string, targetPassword: string) => {
     setError(null);
@@ -35,7 +38,7 @@ function SignInPageContent() {
     });
     const data = await response.json();
     if (!response.ok) {
-      throw new Error(data.message || 'Failed to sign in');
+      throw new Error(data.message || t('auth.failedSignIn'));
     }
     setAuthData(data.access_token, data.refresh_token ?? '', data.user);
     router.push(getDashboardRedirect(data.user.role as UserRole));
@@ -46,8 +49,8 @@ function SignInPageContent() {
     setLoading(true);
     try {
       await performLogin(email, password);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('auth.failedSignIn'));
     } finally {
       setLoading(false);
     }
@@ -60,8 +63,8 @@ function SignInPageContent() {
     setPassword('Password123!');
     try {
       await performLogin(acc.email, 'Password123!');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('auth.failedSignIn'));
     } finally {
       setQuickLoadingEmail(null);
     }
@@ -73,7 +76,7 @@ function SignInPageContent() {
         {isResetSuccess && (
           <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-3 text-sm text-emerald-400">
             <CheckCircle2 className="h-4 w-4 shrink-0" />
-            <p>Password reset successful. Please sign in with your new password.</p>
+            <p>{t('auth.resetSuccess')}</p>
           </div>
         )}
 
@@ -86,7 +89,7 @@ function SignInPageContent() {
 
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-zinc-300">
-            Email address
+            {t('auth.emailLabel')}
           </label>
           <div className="mt-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -101,7 +104,7 @@ function SignInPageContent() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent sm:text-sm"
-              placeholder="name@example.com"
+              placeholder={t('auth.emailPlaceholder')}
             />
           </div>
         </div>
@@ -109,10 +112,10 @@ function SignInPageContent() {
         <div>
           <div className="flex items-center justify-between">
             <label htmlFor="password" className="block text-sm font-medium text-zinc-300">
-              Password
+              {t('auth.passwordLabel')}
             </label>
             <Link href="/auth/forgot-password" className="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
-              Forgot password?
+              {t('auth.forgotPassword')}
             </Link>
           </div>
           <div className="mt-1 relative">
@@ -128,7 +131,7 @@ function SignInPageContent() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent sm:text-sm"
-              placeholder="••••••••"
+              placeholder={t('auth.passwordPlaceholder')}
             />
           </div>
         </div>
@@ -142,7 +145,7 @@ function SignInPageContent() {
             {loading ? (
               <Loader2 className="h-5 w-5 animate-spin" />
             ) : (
-              'Sign in'
+              t('auth.signInButton')
             )}
           </button>
         </div>
@@ -155,7 +158,7 @@ function SignInPageContent() {
           </div>
           <div className="relative flex justify-center text-sm">
             <span className="px-2 bg-zinc-900 text-zinc-500 uppercase tracking-widest text-[10px] font-bold">
-              Quick demo login
+              {t('auth.quickDemoDivider')}
             </span>
           </div>
         </div>
@@ -184,16 +187,20 @@ function SignInPageContent() {
           })}
         </div>
         <p className="text-[10px] text-zinc-600 text-center mt-3">
-          One-click login — uses password <span className="font-mono text-zinc-500">Password123!</span> for all demo accounts.
+          {t('auth.quickDemoHint')}
         </p>
       </div>
     </div>
   );
 }
 
-export default function SignInPage() {
+function SignInPageInner() {
+  const { t } = useT();
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-zinc-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
+      <div className="absolute top-4 right-4">
+        <LocaleSwitcher variant="nav" />
+      </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <div className="h-12 w-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
@@ -201,12 +208,12 @@ export default function SignInPage() {
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
-          Sign in to your account
+          {t('auth.signInTitle')}
         </h2>
         <p className="mt-2 text-center text-sm text-zinc-400">
-          Or{' '}
+          {t('auth.signInSubtitle')}{' '}
           <Link href="/auth/sign-up" className="font-medium text-indigo-400 hover:text-indigo-300">
-            create a new account
+            {t('auth.needAccountPrompt')}
           </Link>
         </p>
       </div>
@@ -222,4 +229,8 @@ export default function SignInPage() {
       </div>
     </div>
   );
+}
+
+export default function SignInPage() {
+  return <SignInPageInner />;
 }

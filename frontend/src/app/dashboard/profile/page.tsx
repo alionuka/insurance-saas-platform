@@ -1,10 +1,11 @@
 import { cookies } from 'next/headers';
 import { UserCircle, Shield, Activity, AlertCircle } from 'lucide-react';
-import { formatDate, formatCurrency } from '@/lib/formatDate';
+import { formatDate } from '@/lib/formatDate';
 import ChangePasswordForm from './ChangePasswordForm';
 import EditProfileForm from './EditProfileForm';
 import RestartTourButton from '@/components/onboarding/RestartTourButton';
 import GdprPanel from './GdprPanel';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -30,20 +31,21 @@ async function getProfileData() {
     const auditData = auditRes.ok ? await auditRes.json() : { items: [] };
 
     return { user: meData, auditLogs: auditData.items, error: null };
-  } catch (err) {
+  } catch {
     return { error: 'FAILED_TO_FETCH' };
   }
 }
 
 export default async function ProfilePage() {
   const { user, auditLogs, error } = await getProfileData();
+  const { t } = await getT();
 
   if (error === 'UNAUTHORIZED') {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <AlertCircle className="h-12 w-12 text-rose-500 mb-4" />
-        <h2 className="text-xl font-bold text-white mb-2">Access Denied</h2>
-        <p className="text-zinc-400">Please sign in to view your profile.</p>
+        <h2 className="text-xl font-bold text-white mb-2">{t('profile.accessDenied')}</h2>
+        <p className="text-zinc-400">{t('profile.accessDeniedHint')}</p>
       </div>
     );
   }
@@ -52,8 +54,8 @@ export default async function ProfilePage() {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <AlertCircle className="h-12 w-12 text-rose-500 mb-4" />
-        <h2 className="text-xl font-bold text-white mb-2">Error Loading Profile</h2>
-        <p className="text-zinc-400">We could not load your profile information. Please try again later.</p>
+        <h2 className="text-xl font-bold text-white mb-2">{t('profile.errorLoading')}</h2>
+        <p className="text-zinc-400">{t('profile.errorLoadingHint')}</p>
       </div>
     );
   }
@@ -113,25 +115,25 @@ export default async function ProfilePage() {
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
             <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
               <UserCircle className="h-5 w-5 text-indigo-400" />
-              Account Information
+              {t('profile.accountInformation')}
             </h2>
-            
+
             <div className="grid grid-cols-2 gap-4 mb-6 pb-6 border-b border-zinc-800/60">
               <div>
-                <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">Email Address</p>
+                <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">{t('profile.emailAddress')}</p>
                 <p className="text-white font-medium break-all">{user.email}</p>
               </div>
               <div>
-                <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">Role</p>
+                <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">{t('profile.role')}</p>
                 <p className="text-white font-medium">{user.role}</p>
               </div>
               <div>
-                <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">Member Since</p>
+                <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">{t('profile.memberSince')}</p>
                 <p className="text-white font-medium">{formatDate(user.createdAt)}</p>
               </div>
               {user.role === 'COMPANY_ADMIN' && user.company && (
                 <div>
-                  <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">Company Affiliation</p>
+                  <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">{t('profile.companyAffiliation')}</p>
                   <p className="text-white font-medium">{user.company.name}</p>
                 </div>
               )}
@@ -144,9 +146,9 @@ export default async function ProfilePage() {
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
             <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
               <Shield className="h-5 w-5 text-indigo-400" />
-              Security
+              {t('profile.security')}
             </h2>
-            <p className="text-xs text-zinc-500 mb-6">Your password is encrypted and never stored in plain text.</p>
+            <p className="text-xs text-zinc-500 mb-6">{t('profile.securityHint')}</p>
 
             <ChangePasswordForm />
           </div>
@@ -160,14 +162,14 @@ export default async function ProfilePage() {
           <div className="p-6 border-b border-zinc-800">
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
               <Activity className="h-5 w-5 text-indigo-400" />
-              Your Recent Activity
+              {t('profile.recentActivity')}
             </h2>
           </div>
-          
+
           <div className="flex-1 overflow-y-auto">
             {auditLogs && auditLogs.length > 0 ? (
               <div className="divide-y divide-zinc-800/50">
-                {auditLogs.map((log: any) => (
+                {auditLogs.map((log: { id: string; action: string; resourceType?: string; resourceId?: string; createdAt: string }) => (
                   <div key={log.id} className="p-5 hover:bg-zinc-800/20 transition-colors">
                     <div className="flex items-center justify-between mb-2">
                       <span className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider border ${getActionColor(log.action)}`}>
@@ -185,7 +187,7 @@ export default async function ProfilePage() {
               </div>
             ) : (
               <div className="p-12 text-center">
-                <p className="text-zinc-500">No recent activity yet.</p>
+                <p className="text-zinc-500">{t('profile.noActivity')}</p>
               </div>
             )}
           </div>

@@ -1,4 +1,5 @@
 import { Users, Server, Activity, Database, Zap, Shield, TrendingUp, Package, ShieldCheck, ShieldAlert, AlertTriangle, UserPlus, ShieldX, ScrollText } from 'lucide-react';
+import { getT } from '@/i18n/getT';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
@@ -70,6 +71,7 @@ async function getAdminData() {
 
 export default async function AdminDashboard() {
   const data = await getAdminData();
+  const { t } = await getT();
 
   if (data.status === 401) {
     return (
@@ -151,8 +153,8 @@ export default async function AdminDashboard() {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Platform Administration</h1>
-          <p className="text-zinc-400 mt-1">Global system metrics and platform-wide monitoring.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-white">{t('dashboard.adminTitle')}</h1>
+          <p className="text-zinc-400 mt-1">{t('dashboard.adminSubtitle')}</p>
         </div>
       </div>
       

@@ -3,12 +3,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ShieldCheck, Mail, Lock, User, Loader2, AlertCircle } from 'lucide-react';
+import { ShieldCheck, Mail, Lock, Loader2, AlertCircle } from 'lucide-react';
+import { useT } from '@/i18n/LocaleProvider';
+import LocaleSwitcher from '@/i18n/LocaleSwitcher';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export default function SignUpPage() {
   const router = useRouter();
+  const { t } = useT();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -34,12 +37,12 @@ export default function SignUpPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to create account');
+        throw new Error(data.message || t('auth.createAccount'));
       }
 
       router.push('/auth/sign-in?registered=true');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('common.error'));
     } finally {
       setLoading(false);
     }
@@ -50,7 +53,10 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-zinc-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
+      <div className="absolute top-4 right-4">
+        <LocaleSwitcher variant="nav" />
+      </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <div className="h-12 w-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
@@ -58,12 +64,12 @@ export default function SignUpPage() {
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
-          Create your account
+          {t('auth.signUpTitle')}
         </h2>
         <p className="mt-2 text-center text-sm text-zinc-400">
-          Or{' '}
+          {t('auth.signUpSubtitle')}{' '}
           <Link href="/auth/sign-in" className="font-medium text-indigo-400 hover:text-indigo-300">
-            sign in to your existing account
+            {t('auth.haveAccountPrompt')}
           </Link>
         </p>
       </div>
@@ -81,7 +87,7 @@ export default function SignUpPage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label htmlFor="firstName" className="block text-sm font-medium text-zinc-300">
-                  First Name
+                  {t('auth.firstNameLabel')}
                 </label>
                 <div className="mt-1 relative">
                   <input
@@ -97,7 +103,7 @@ export default function SignUpPage() {
               </div>
               <div>
                 <label htmlFor="lastName" className="block text-sm font-medium text-zinc-300">
-                  Last Name
+                  {t('auth.lastNameLabel')}
                 </label>
                 <div className="mt-1 relative">
                   <input
@@ -115,7 +121,7 @@ export default function SignUpPage() {
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-zinc-300">
-                Email address
+                {t('auth.emailLabel')}
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -129,14 +135,14 @@ export default function SignUpPage() {
                   value={formData.email}
                   onChange={handleChange}
                   className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent sm:text-sm"
-                  placeholder="name@example.com"
+                  placeholder={t('auth.emailPlaceholder')}
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-zinc-300">
-                Password
+                {t('auth.passwordLabel')}
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -150,14 +156,14 @@ export default function SignUpPage() {
                   value={formData.password}
                   onChange={handleChange}
                   className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent sm:text-sm"
-                  placeholder="••••••••"
+                  placeholder={t('auth.passwordPlaceholder')}
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="role" className="block text-sm font-medium text-zinc-300">
-                Registering as
+                {t('auth.registeringAs')}
               </label>
               <div className="mt-1">
                 <select
@@ -167,10 +173,10 @@ export default function SignUpPage() {
                   value={formData.role}
                   className="block w-full px-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950/50 text-zinc-500 cursor-not-allowed sm:text-sm"
                 >
-                  <option value="CUSTOMER">Customer</option>
+                  <option value="CUSTOMER">{t('auth.customerRole')}</option>
                 </select>
                 <p className="mt-2 text-[10px] text-zinc-500 uppercase font-bold tracking-wider">
-                  Agent and Admin accounts must be provisioned by the platform administrator.
+                  {t('auth.rolesNote')}
                 </p>
               </div>
             </div>
@@ -184,7 +190,7 @@ export default function SignUpPage() {
                 {loading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
-                  'Create account'
+                  t('auth.createAccount')
                 )}
               </button>
             </div>
