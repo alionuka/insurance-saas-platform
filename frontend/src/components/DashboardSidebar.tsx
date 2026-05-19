@@ -138,8 +138,8 @@ export default function DashboardSidebar() {
             <span className="text-xl font-semibold tracking-tight text-white hidden md:block">{t('sidebar.brand')}</span>
           </div>
 
+          {/* Header tools — locale switcher moved to footer to free crowding here. */}
           <div className="flex items-center gap-2">
-            <LocaleSwitcher variant="nav" />
             <button
               data-tour="global-search"
               onClick={() => {
@@ -150,7 +150,6 @@ export default function DashboardSidebar() {
               title={`${t('sidebar.search')} (⌘K)`}
             >
               <Search className="h-3.5 w-3.5" />
-              <span className="hidden md:inline">{t('sidebar.search')}</span>
               <kbd className="font-mono bg-zinc-800 px-1 rounded text-[9px] font-bold hidden xl:inline">⌘K</kbd>
             </button>
             <div data-tour="notifications">
@@ -207,16 +206,19 @@ export default function DashboardSidebar() {
                 </p>
               </div>
             </div>
-            <button
-              onClick={() => {
-                logout();
-                window.location.href = '/auth/sign-in';
-              }}
-              className="text-zinc-500 hover:text-rose-400 transition-colors p-1.5 rounded-md hover:bg-rose-500/10 shrink-0"
-              title={t('sidebar.signOutTitle')}
-            >
-              <LogOut className="h-4 w-4" />
-            </button>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <LocaleSwitcher variant="nav" />
+              <button
+                onClick={() => {
+                  logout();
+                  window.location.href = '/auth/sign-in';
+                }}
+                className="text-zinc-500 hover:text-rose-400 transition-colors p-1.5 rounded-md hover:bg-rose-500/10"
+                title={t('sidebar.signOutTitle')}
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         </div>
       </aside>
