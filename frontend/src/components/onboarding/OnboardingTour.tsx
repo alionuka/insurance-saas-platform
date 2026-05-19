@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback, useLayoutEffect } from 'react';
+import { useState, useEffect, useCallback, useLayoutEffect, useMemo } from 'react';
 import { X, ChevronRight, ChevronLeft, Sparkles, Check } from 'lucide-react';
+import { useT } from '@/i18n/LocaleProvider';
 
 type TourStep = {
   selector?: string;
@@ -10,118 +11,7 @@ type TourStep = {
 };
 
 const STORAGE_KEY = 'onboarding_completed_v1';
-
-const STEPS_BY_ROLE: Record<string, TourStep[]> = {
-  CUSTOMER: [
-    {
-      title: 'Welcome to InsurSaaS',
-      body: 'Take a quick 30-second tour to learn how to manage your insurance portfolio. You can skip anytime.',
-    },
-    {
-      selector: '[data-tour="sidebar-nav"]',
-      title: 'Your Dashboard',
-      body: 'Browse applications, active policies, and submitted claims from the sidebar. Everything stays one click away.',
-    },
-    {
-      selector: 'a[href="/dashboard/client/quote"]',
-      title: 'Get an Instant Quote',
-      body: 'Compare products and submit applications in seconds. Our ML model assesses your risk profile in real time.',
-    },
-    {
-      selector: 'a[href="/dashboard/client/recommendations"]',
-      title: 'Personalized Recommendations',
-      body: 'See products tailored to your profile, ranked by relevance using our content-based recommendation engine.',
-    },
-    {
-      selector: '[data-tour="global-search"]',
-      title: 'Fast Search',
-      body: 'Press ⌘K (or Ctrl+K) anywhere to search across your applications, policies, and claims.',
-    },
-    {
-      selector: '[data-tour="notifications"]',
-      title: 'Stay Updated',
-      body: 'Notifications appear here whenever your applications or policies change status. You\'re all set — happy browsing!',
-    },
-  ],
-  AGENT: [
-    {
-      title: 'Welcome, Agent',
-      body: 'Quick tour of your underwriting workspace. You can skip anytime.',
-    },
-    {
-      selector: 'a[href="/dashboard/agent/applications"]',
-      title: 'Application Queue',
-      body: 'Review pending applications with ML risk scores. Approve or reject individually — or use bulk actions for batches.',
-    },
-    {
-      selector: 'a[href="/dashboard/agent/claims"]',
-      title: 'Claims Investigation',
-      body: 'Process filed claims. Our fraud detection model flags suspicious cases so you can focus your attention.',
-    },
-    {
-      selector: '[data-tour="global-search"]',
-      title: 'Fast Search',
-      body: 'Press ⌘K to jump straight to any application, policy, or claim by ID or description.',
-    },
-    {
-      selector: '[data-tour="notifications"]',
-      title: 'Real-Time Activity',
-      body: 'New applications and claims appear in your notifications bell as customers submit them.',
-    },
-  ],
-  COMPANY_ADMIN: [
-    {
-      title: 'Welcome, Company Admin',
-      body: 'Quick tour of your company portal. You can skip anytime.',
-    },
-    {
-      selector: 'a[href="/dashboard/company"]',
-      title: 'Live Analytics',
-      body: 'Track your products\' performance, policy growth, and claim ratios with live charts that refresh on every load.',
-    },
-    {
-      selector: 'a[href="/dashboard/company/products"]',
-      title: 'Product Catalog',
-      body: 'Create and manage the insurance products your company offers. Set base premiums and product types here.',
-    },
-    {
-      selector: 'a[href="/dashboard/company/policies"]',
-      title: 'Active Policies',
-      body: 'Browse all policies tied to your products — premium amounts, statuses, and customer details at a glance.',
-    },
-    {
-      selector: 'a[href="/dashboard/company/claims"]',
-      title: 'Claims Overview',
-      body: 'Monitor claims against your products and watch for emerging patterns. You\'re ready to go!',
-    },
-  ],
-  PLATFORM_ADMIN: [
-    {
-      title: 'Welcome, Platform Admin',
-      body: 'Quick tour of your platform-level controls. You can skip anytime.',
-    },
-    {
-      selector: 'a[href="/dashboard/admin/companies"]',
-      title: 'Tenant Management',
-      body: 'Onboard new insurance companies and inspect their performance across the platform.',
-    },
-    {
-      selector: 'a[href="/dashboard/admin/users"]',
-      title: 'User Management',
-      body: 'Browse every user across every role. Provision staff accounts and view customer profiles in detail.',
-    },
-    {
-      selector: 'a[href="/dashboard/admin/audit-logs"]',
-      title: 'Compliance Audit Log',
-      body: 'Every meaningful action — logins, status changes, payments — is recorded here for compliance reviews.',
-    },
-    {
-      selector: '[data-tour="global-search"]',
-      title: 'Platform-Wide Search',
-      body: 'Press ⌘K to instantly find any resource across all tenants. You\'re fully oriented — enjoy!',
-    },
-  ],
-};
+const VALID_ROLES = ['CUSTOMER', 'AGENT', 'COMPANY_ADMIN', 'PLATFORM_ADMIN'];
 
 const TOOLTIP_WIDTH = 380;
 const TOOLTIP_HEIGHT_EST = 240;
@@ -129,6 +19,120 @@ const VIEWPORT_PADDING = 16;
 const SPOTLIGHT_PADDING = 8;
 
 export default function OnboardingTour() {
+  const { t } = useT();
+
+  const STEPS_BY_ROLE = useMemo<Record<string, TourStep[]>>(() => ({
+    CUSTOMER: [
+      {
+        title: t('onboarding.customer.step1Title'),
+        body: t('onboarding.customer.step1Body'),
+      },
+      {
+        selector: '[data-tour="sidebar-nav"]',
+        title: t('onboarding.customer.step2Title'),
+        body: t('onboarding.customer.step2Body'),
+      },
+      {
+        selector: 'a[href="/dashboard/client/quote"]',
+        title: t('onboarding.customer.step3Title'),
+        body: t('onboarding.customer.step3Body'),
+      },
+      {
+        selector: 'a[href="/dashboard/client/recommendations"]',
+        title: t('onboarding.customer.step4Title'),
+        body: t('onboarding.customer.step4Body'),
+      },
+      {
+        selector: '[data-tour="global-search"]',
+        title: t('onboarding.customer.step5Title'),
+        body: t('onboarding.customer.step5Body'),
+      },
+      {
+        selector: '[data-tour="notifications"]',
+        title: t('onboarding.customer.step6Title'),
+        body: t('onboarding.customer.step6Body'),
+      },
+    ],
+    AGENT: [
+      {
+        title: t('onboarding.agent.step1Title'),
+        body: t('onboarding.agent.step1Body'),
+      },
+      {
+        selector: 'a[href="/dashboard/agent/applications"]',
+        title: t('onboarding.agent.step2Title'),
+        body: t('onboarding.agent.step2Body'),
+      },
+      {
+        selector: 'a[href="/dashboard/agent/claims"]',
+        title: t('onboarding.agent.step3Title'),
+        body: t('onboarding.agent.step3Body'),
+      },
+      {
+        selector: '[data-tour="global-search"]',
+        title: t('onboarding.agent.step4Title'),
+        body: t('onboarding.agent.step4Body'),
+      },
+      {
+        selector: '[data-tour="notifications"]',
+        title: t('onboarding.agent.step5Title'),
+        body: t('onboarding.agent.step5Body'),
+      },
+    ],
+    COMPANY_ADMIN: [
+      {
+        title: t('onboarding.companyAdmin.step1Title'),
+        body: t('onboarding.companyAdmin.step1Body'),
+      },
+      {
+        selector: 'a[href="/dashboard/company"]',
+        title: t('onboarding.companyAdmin.step2Title'),
+        body: t('onboarding.companyAdmin.step2Body'),
+      },
+      {
+        selector: 'a[href="/dashboard/company/products"]',
+        title: t('onboarding.companyAdmin.step3Title'),
+        body: t('onboarding.companyAdmin.step3Body'),
+      },
+      {
+        selector: 'a[href="/dashboard/company/policies"]',
+        title: t('onboarding.companyAdmin.step4Title'),
+        body: t('onboarding.companyAdmin.step4Body'),
+      },
+      {
+        selector: 'a[href="/dashboard/company/claims"]',
+        title: t('onboarding.companyAdmin.step5Title'),
+        body: t('onboarding.companyAdmin.step5Body'),
+      },
+    ],
+    PLATFORM_ADMIN: [
+      {
+        title: t('onboarding.platformAdmin.step1Title'),
+        body: t('onboarding.platformAdmin.step1Body'),
+      },
+      {
+        selector: 'a[href="/dashboard/admin/companies"]',
+        title: t('onboarding.platformAdmin.step2Title'),
+        body: t('onboarding.platformAdmin.step2Body'),
+      },
+      {
+        selector: 'a[href="/dashboard/admin/users"]',
+        title: t('onboarding.platformAdmin.step3Title'),
+        body: t('onboarding.platformAdmin.step3Body'),
+      },
+      {
+        selector: 'a[href="/dashboard/admin/audit-logs"]',
+        title: t('onboarding.platformAdmin.step4Title'),
+        body: t('onboarding.platformAdmin.step4Body'),
+      },
+      {
+        selector: '[data-tour="global-search"]',
+        title: t('onboarding.platformAdmin.step5Title'),
+        body: t('onboarding.platformAdmin.step5Body'),
+      },
+    ],
+  }), [t]);
+
   const [role, setRole] = useState<string | null>(null);
   const [stepIndex, setStepIndex] = useState(0);
   const [active, setActive] = useState(false);
@@ -145,7 +149,7 @@ export default function OnboardingTour() {
       if (!userStr) return;
 
       const user = JSON.parse(userStr);
-      if (!user?.role || !STEPS_BY_ROLE[user.role]) return;
+      if (!user?.role || !VALID_ROLES.includes(user.role)) return;
 
       setRole(user.role);
       // Delay so sidebar/nav has mounted client-side before we measure
@@ -163,7 +167,7 @@ export default function OnboardingTour() {
         const userStr = localStorage.getItem('user');
         if (!userStr) return;
         const user = JSON.parse(userStr);
-        if (!user?.role || !STEPS_BY_ROLE[user.role]) return;
+        if (!user?.role || !VALID_ROLES.includes(user.role)) return;
         setRole(user.role);
         setStepIndex(0);
         setActive(true);
@@ -376,7 +380,9 @@ export default function OnboardingTour() {
               <Sparkles className="h-4 w-4 text-indigo-400" />
             </div>
             <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">
-              Step {stepIndex + 1} of {steps.length}
+              {t('onboarding.stepCounter')
+                .replace('{current}', String(stepIndex + 1))
+                .replace('{total}', String(steps.length))}
             </span>
           </div>
           <button
@@ -414,7 +420,7 @@ export default function OnboardingTour() {
             onClick={finish}
             className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors font-medium"
           >
-            Skip tour
+            {t('onboarding.buttons.skip')}
           </button>
           <div className="flex items-center gap-2">
             {!isFirst && (
@@ -423,7 +429,7 @@ export default function OnboardingTour() {
                 className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
-                Back
+                {t('onboarding.buttons.back')}
               </button>
             )}
             <button
@@ -433,11 +439,11 @@ export default function OnboardingTour() {
               {isLast ? (
                 <>
                   <Check className="h-3.5 w-3.5" />
-                  Got it
+                  {t('onboarding.buttons.gotIt')}
                 </>
               ) : (
                 <>
-                  Next
+                  {t('onboarding.buttons.next')}
                   <ChevronRight className="h-3.5 w-3.5" />
                 </>
               )}
