@@ -52,6 +52,13 @@ A production-grade multi-tenant SaaS for insurance companies, agents, and custom
 
 ---
 
+## 📚 Documentation
+
+- [`ARCHITECTURE.md`](ARCHITECTURE.md) — system overview, service responsibilities, request flow, deployment topology, security
+- [`ERD.md`](ERD.md) — Mermaid entity-relationship diagram of all 14 Prisma models
+- [`DEMO.md`](DEMO.md) — 3-minute demo script with timestamps and Q&A talking points
+- [`ml-service/ML_METHODOLOGY.md`](ml-service/ML_METHODOLOGY.md) — full ML methodology write-up (CV, GridSearch, SHAP, permutation importance)
+
 ## 🏗 Architecture
 
 ```
