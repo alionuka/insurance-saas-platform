@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FileText, Upload, X, Loader2, Download, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatDate } from '@/lib/formatDate';
@@ -33,21 +33,11 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
   const [uploading, setUploading] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchDocuments();
-    // Get current user ID from local storage token if needed, or we can just check uploadedById
-    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        setCurrentUserId(payload.sub);
-      } catch (e) {
-        console.error('Failed to parse token payload', e);
-      }
-    }
-  }, [claimId]);
-
-  const fetchDocuments = async () => {
+  // Wrapped in useCallback so the useEffect deps array stays stable; before
+  // this was an arrow function declared AFTER useEffect — fine at runtime
+  // (effects run post-render) but a temporal-dead-zone reference flagged by
+  // the React 19 ESLint rule.
+  const fetchDocuments = useCallback(async () => {
     setLoading(true);
     const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
     if (!token) return;
@@ -65,12 +55,27 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
       if (!res.ok) throw new Error('Failed to fetch documents');
       const data = await res.json();
       setDocuments(data);
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to fetch documents');
     } finally {
       setLoading(false);
     }
-  };
+  }, [claimId]);
+
+  useEffect(() => {
+    void fetchDocuments();
+    // Hydrate current user ID from the JWT so we can later show "your upload"
+    // vs "another user's upload" affordances. Read once on mount.
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        setCurrentUserId(payload.sub);
+      } catch (e) {
+        console.error('Failed to parse token payload', e);
+      }
+    }
+  }, [claimId, fetchDocuments]);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

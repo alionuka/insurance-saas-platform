@@ -38,7 +38,10 @@ export class EmailService {
    * never thrown — email is best-effort.
    */
   private dispatchAsync(label: string, fn: () => Promise<unknown>): void {
-    setImmediate(async () => {
+    // setImmediate expects a `() => void` callback; wrap the async runner in
+    // a void-returning closure so ESLint's no-misused-promises rule is
+    // satisfied and stray rejections inside the IIFE bubble to .catch below.
+    const runWithRetry = async (): Promise<void> => {
       const maxAttempts = 3;
       let attempt = 0;
       let delayMs = 500;
@@ -62,6 +65,12 @@ export class EmailService {
           delayMs *= 2;
         }
       }
+    };
+    setImmediate(() => {
+      runWithRetry().catch((err) => {
+        // Should never get here — runWithRetry catches its own errors.
+        this.logger.error(`${label} dispatch loop crashed`, err);
+      });
     });
   }
 

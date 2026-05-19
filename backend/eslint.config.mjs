@@ -42,4 +42,13 @@ export default tseslint.config(
       "prettier/prettier": ["error", { endOfLine: "auto" }],
     },
   },
+  {
+    // Spec files: relax rules that fire false-positives against Jest's matcher
+    // ergonomics (`expect(prisma.user.create).not.toHaveBeenCalled()` reads
+    // a method without binding, but the matcher doesn't actually call it).
+    files: ['**/*.spec.ts', '**/*.e2e-spec.ts', 'test/**/*.ts'],
+    rules: {
+      '@typescript-eslint/unbound-method': 'off',
+    },
+  },
 );
