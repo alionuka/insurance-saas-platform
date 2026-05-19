@@ -376,4 +376,117 @@ export class AuthService {
       data: { revokedAt: new Date() },
     });
   }
+
+  /**
+   * GDPR — right to data portability (Article 20).
+   * Returns a JSON document containing all personal data held about the user.
+   * The user can save this file or supply it to another provider.
+   */
+  async exportData(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        applications: { include: { product: true, riskAssessments: true } },
+        policies: { include: { product: true, payments: true } },
+        claims: { include: { fraudAssessments: true, documents: true } },
+        recommendations: true,
+        payments: true,
+        company: true,
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const auditLogs = await this.prisma.auditLog.findMany({
+      where: { actorId: userId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    // Strip sensitive fields (password hash, refresh token hashes)
+    const { passwordHash: _ph, ...userSafe } = user;
+
+    await this.auditService.record({
+      action: 'GDPR_DATA_EXPORTED',
+      actor: { id: user.id, email: user.email, role: user.role },
+      resourceType: 'User',
+      resourceId: user.id,
+      metadata: { recordCount: auditLogs.length },
+    });
+
+    return {
+      exportedAt: new Date().toISOString(),
+      gdprArticle: 'Article 20 — Right to Data Portability',
+      user: userSafe,
+      auditLogs,
+    };
+  }
+
+  /**
+   * GDPR — right to erasure (Article 17, "right to be forgotten").
+   * Permanently deletes the user account and cascades to their refresh tokens,
+   * password-reset tokens, applications, claims, policies, payments.
+   * Audit logs are KEPT (with actorId set to null) for legal/regulatory retention.
+   */
+  async deleteAccount(userId: string, providedPassword: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user || !user.passwordHash) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    // Re-authenticate before destructive action
+    const isPasswordValid = await bcrypt.compare(
+      providedPassword,
+      user.passwordHash,
+    );
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Password is incorrect');
+    }
+
+    // Record the erasure BEFORE the user row is gone (otherwise actorId would be invalid)
+    await this.auditService.record({
+      action: 'GDPR_ACCOUNT_DELETED',
+      actor: { id: user.id, email: user.email, role: user.role },
+      resourceType: 'User',
+      resourceId: user.id,
+      metadata: { email: user.email },
+    });
+
+    // Anonymise lingering audit logs (FK becomes null) — kept for compliance
+    await this.prisma.auditLog.updateMany({
+      where: { actorId: userId },
+      data: { actorId: null, actorEmail: '[deleted]' },
+    });
+
+    // Cascade-delete user-owned rows. Prisma onDelete:Cascade handles refresh
+    // tokens and password reset tokens automatically. Applications, claims and
+    // policies are intentionally cascaded here via explicit deletes so the
+    // user has full erasure of their personal data.
+    await this.prisma.$transaction(async (tx) => {
+      // Delete claim documents first (FK to claims)
+      await tx.claimDocument.deleteMany({
+        where: { claim: { userId } },
+      });
+      // Fraud + risk assessments cascade via their parent claim/application
+      await tx.fraudAssessment.deleteMany({
+        where: { claim: { userId } },
+      });
+      await tx.claim.deleteMany({ where: { userId } });
+      await tx.riskAssessment.deleteMany({
+        where: { application: { userId } },
+      });
+      await tx.payment.deleteMany({ where: { userId } });
+      await tx.policy.deleteMany({ where: { userId } });
+      await tx.application.deleteMany({ where: { userId } });
+      await tx.recommendation.deleteMany({ where: { userId } });
+      // Finally, the user row itself — refresh & password reset tokens cascade
+      await tx.user.delete({ where: { id: userId } });
+    });
+
+    return { success: true, deletedAt: new Date().toISOString() };
+  }
 }

@@ -4,6 +4,7 @@ import { formatDate, formatCurrency } from '@/lib/formatDate';
 import ChangePasswordForm from './ChangePasswordForm';
 import EditProfileForm from './EditProfileForm';
 import RestartTourButton from '@/components/onboarding/RestartTourButton';
+import GdprPanel from './GdprPanel';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -146,9 +147,12 @@ export default async function ProfilePage() {
               Security
             </h2>
             <p className="text-xs text-zinc-500 mb-6">Your password is encrypted and never stored in plain text.</p>
-            
+
             <ChangePasswordForm />
           </div>
+
+          {/* GDPR — Data Rights */}
+          <GdprPanel />
         </div>
 
         {/* Recent Activity */}

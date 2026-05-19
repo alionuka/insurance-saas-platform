@@ -6,7 +6,11 @@ import {
   UseGuards,
   Request,
   Patch,
+  Delete,
+  HttpCode,
+  Res,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { Throttle } from '@nestjs/throttler';
 import {
   ApiTags,
@@ -25,6 +29,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthUser } from './types/auth-user';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { DeleteAccountDto } from './dto/delete-account.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -141,5 +146,44 @@ export class AuthController {
   async logout(@CurrentUser() user: AuthUser) {
     await this.authService.revokeAllForUser(user.id);
     return { success: true };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me/export')
+  @ApiBearerAuth('access_token')
+  @ApiOperation({
+    summary: 'GDPR data export (Article 20 — right to data portability)',
+    description: 'Returns all personal data we hold about the user as a downloadable JSON document.',
+  })
+  @ApiResponse({ status: 200, description: 'Personal data exported successfully' })
+  @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
+  async exportMyData(
+    @CurrentUser() user: AuthUser,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const data = await this.authService.exportData(user.id);
+    const filename = `insursaas-data-export-${user.id}-${new Date().toISOString().slice(0, 10)}.json`;
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    return data;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('me')
+  @HttpCode(200)
+  @ApiBearerAuth('access_token')
+  @ApiOperation({
+    summary: 'GDPR account deletion (Article 17 — right to erasure)',
+    description:
+      'Permanently deletes the user account and all linked personal data. ' +
+      'Requires current password as confirmation. Audit logs are anonymised but retained for legal compliance.',
+  })
+  @ApiResponse({ status: 200, description: 'Account permanently deleted' })
+  @ApiResponse({ status: 401, description: 'Wrong password or missing token' })
+  async deleteAccount(
+    @CurrentUser() user: AuthUser,
+    @Body() dto: DeleteAccountDto,
+  ) {
+    return this.authService.deleteAccount(user.id, dto.password);
   }
 }
