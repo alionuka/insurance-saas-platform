@@ -38,10 +38,10 @@ export class StorageService {
   private get useR2(): boolean {
     return Boolean(
       this.r2Config.accountId &&
-        this.r2Config.accessKeyId &&
-        this.r2Config.secretAccessKey &&
-        this.r2Config.bucket &&
-        this.r2Config.publicUrl,
+      this.r2Config.accessKeyId &&
+      this.r2Config.secretAccessKey &&
+      this.r2Config.bucket &&
+      this.r2Config.publicUrl,
     );
   }
 

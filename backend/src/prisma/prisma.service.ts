@@ -1,4 +1,9 @@
-import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnModuleInit,
+  OnModuleDestroy,
+} from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
 /**
@@ -48,10 +53,7 @@ export class PrismaService
  */
 function appendPoolParams(url: string): string {
   // Don't touch URLs that already configure these
-  if (
-    url.includes('connection_limit=') ||
-    url.includes('pool_timeout=')
-  ) {
+  if (url.includes('connection_limit=') || url.includes('pool_timeout=')) {
     return url;
   }
   const separator = url.includes('?') ? '&' : '?';

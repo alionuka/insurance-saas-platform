@@ -55,7 +55,7 @@ describe('AuthService (unit)', () => {
     }).compile();
 
     service = moduleRef.get<AuthService>(AuthService);
-    prisma = moduleRef.get(PrismaService) as unknown as jest.Mocked<PrismaService>;
+    prisma = moduleRef.get(PrismaService);
     jwtService = moduleRef.get(JwtService);
   });
 
@@ -72,7 +72,7 @@ describe('AuthService (unit)', () => {
         password: 'StrongPass123!',
         firstName: 'New',
         lastName: 'User',
-      } as any);
+      });
 
       const createCall = (prisma.user.create as jest.Mock).mock.calls[0][0];
       const storedHash = createCall.data.passwordHash;
@@ -143,7 +143,7 @@ describe('AuthService (unit)', () => {
       const result = await service.login({
         email: 'a@b.com',
         password,
-      } as any);
+      });
 
       expect(result).toHaveProperty('access_token');
       expect(result.access_token).toBe('fake.access.token');

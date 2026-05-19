@@ -64,12 +64,19 @@ async function bootstrap() {
   // in CORS_ORIGINS — entries starting with '/' and ending with '/' are
   // treated as regex (useful for Vercel preview URLs). Falls back to
   // FRONTEND_URL, then localhost for local dev.
-  const corsEnv = process.env.CORS_ORIGINS ?? process.env.FRONTEND_URL ?? 'http://localhost:3000';
-  const allowedOriginEntries = corsEnv.split(',').map((o) => o.trim()).filter(Boolean);
-  const allowedOrigins: (string | RegExp)[] = allowedOriginEntries.map((entry) =>
-    entry.startsWith('/') && entry.endsWith('/')
-      ? new RegExp(entry.slice(1, -1))
-      : entry,
+  const corsEnv =
+    process.env.CORS_ORIGINS ??
+    process.env.FRONTEND_URL ??
+    'http://localhost:3000';
+  const allowedOriginEntries = corsEnv
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+  const allowedOrigins: (string | RegExp)[] = allowedOriginEntries.map(
+    (entry) =>
+      entry.startsWith('/') && entry.endsWith('/')
+        ? new RegExp(entry.slice(1, -1))
+        : entry,
   );
   app.enableCors({
     origin: allowedOrigins.length === 1 ? allowedOrigins[0] : allowedOrigins,

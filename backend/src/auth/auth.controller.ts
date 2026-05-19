@@ -153,9 +153,13 @@ export class AuthController {
   @ApiBearerAuth('access_token')
   @ApiOperation({
     summary: 'GDPR data export (Article 20 — right to data portability)',
-    description: 'Returns all personal data we hold about the user as a downloadable JSON document.',
+    description:
+      'Returns all personal data we hold about the user as a downloadable JSON document.',
   })
-  @ApiResponse({ status: 200, description: 'Personal data exported successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Personal data exported successfully',
+  })
   @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
   async exportMyData(
     @CurrentUser() user: AuthUser,
