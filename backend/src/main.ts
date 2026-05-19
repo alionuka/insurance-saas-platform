@@ -61,15 +61,22 @@ async function bootstrap() {
   });
 
   // Enable CORS for the Next.js frontend(s). Accepts a comma-separated list
-  // in CORS_ORIGINS, falling back to FRONTEND_URL, then localhost for local dev.
+  // in CORS_ORIGINS — entries starting with '/' and ending with '/' are
+  // treated as regex (useful for Vercel preview URLs). Falls back to
+  // FRONTEND_URL, then localhost for local dev.
   const corsEnv = process.env.CORS_ORIGINS ?? process.env.FRONTEND_URL ?? 'http://localhost:3000';
-  const allowedOrigins = corsEnv.split(',').map((o) => o.trim()).filter(Boolean);
+  const allowedOriginEntries = corsEnv.split(',').map((o) => o.trim()).filter(Boolean);
+  const allowedOrigins: (string | RegExp)[] = allowedOriginEntries.map((entry) =>
+    entry.startsWith('/') && entry.endsWith('/')
+      ? new RegExp(entry.slice(1, -1))
+      : entry,
+  );
   app.enableCors({
     origin: allowedOrigins.length === 1 ? allowedOrigins[0] : allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
-  logger.log(`CORS allowed origins: ${allowedOrigins.join(', ')}`);
+  logger.log(`CORS allowed origins: ${allowedOriginEntries.join(', ')}`);
 
   const port = process.env.PORT || 3001;
   await app.listen(port, '0.0.0.0');
