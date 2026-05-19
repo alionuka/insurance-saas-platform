@@ -4,6 +4,10 @@ export interface Company {
   id: string;
   name: string;
   description: string;
+  // Per-tenant branding fields — populated once a COMPANY_ADMIN saves them
+  // via /companies/me. Always optional from the consumer's side.
+  logoUrl?: string | null;
+  primaryColor?: string | null;
 }
 
 export interface InsuranceProduct {
