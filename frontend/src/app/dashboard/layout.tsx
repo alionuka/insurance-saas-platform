@@ -15,7 +15,15 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
       <DashboardSidebar />
-      <main className="md:ml-60 px-4 md:px-8 pt-16 md:pt-6 pb-6">
+      {/*
+        Main content margin reacts to the sidebar's collapsed state via the
+        --sidebar-width CSS variable that the sidebar writes to :root on
+        toggle. Defaults to 15rem (expanded) on first paint to avoid layout
+        flash; collapses to 4rem when the user folds the sidebar.
+      */}
+      <main
+        className="px-4 md:px-8 pt-16 md:pt-6 pb-6 transition-[margin-left] duration-200 ease-in-out md:ml-[var(--sidebar-width,15rem)]"
+      >
         <div className="mx-auto max-w-7xl">
           <PageTransition>
             {children}
