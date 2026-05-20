@@ -1,0 +1,191 @@
+<mxfile host="app.diagrams.net" agent="claude" version="22.0.0">
+  <diagram name="Архітектура системи" id="insursaas-arch">
+    <mxGraphModel dx="1400" dy="900" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ──────────────── Title ──────────────── -->
+        <mxCell id="title" value="Архітектура системи" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="15" width="500" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ──────────────── ROW 1: Presentation Layer (Frontend) ──────────────── -->
+        <mxCell id="layer1" value="Presentation Layer — Browser (Next.js 16)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;verticalAlign=top;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="1040" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="l1_pub" value="Public" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;verticalAlign=top;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="105" width="490" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="l1_pub_1" value="Landing&#xa;page" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82B366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="75" y="135" width="100" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l1_pub_2" value="Sign-in /&#xa;Sign-up" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82B366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="190" y="135" width="100" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l1_pub_3" value="Register&#xa;company (KYC)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82B366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="305" y="135" width="110" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l1_pub_4" value="i18n EN/UK&#xa;+ DemoLogin" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82B366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="135" width="105" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="l1_auth" value="Authenticated" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;verticalAlign=top;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="570" y="105" width="490" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="l1_auth_1" value="Dashboard&#xa;(RSC)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="585" y="135" width="100" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l1_auth_2" value="Claims /&#xa;Policies" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="700" y="135" width="100" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l1_auth_3" value="Admin&#xa;panels" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="815" y="135" width="100" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l1_auth_4" value="proxy.ts&#xa;(JWT)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="930" y="135" width="115" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ──────────────── ROW 2: Application Layer (Backend) ──────────────── -->
+        <mxCell id="layer2" value="Application Layer — Backend (NestJS 11)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;verticalAlign=top;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="260" width="1040" height="230" as="geometry" />
+        </mxCell>
+
+        <!-- Cross-cutting concerns row -->
+        <mxCell id="l2_cross" value="Cross-cutting: Guards (JWT + Roles) • Throttler • Audit Log • Validation Pipes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5EEF8;strokeColor=#9673A6;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="295" width="1000" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Services row -->
+        <mxCell id="l2_s1" value="Auth&#xa;Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="60" y="345" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_s2" value="Claims&#xa;Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="195" y="345" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_s3" value="Policies /&#xa;Products" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="330" y="345" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_s4" value="Payments&#xa;(Stripe)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="465" y="345" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_s5" value="Storage&#xa;Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="600" y="345" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_s6" value="Email&#xa;(async)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="735" y="345" width="120" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_s7" value="MlClient&#xa;Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="870" y="345" width="120" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Data Access layer (inside backend container) -->
+        <mxCell id="l2_da" value="Data Access — Prisma ORM + Query Cache" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5EEF8;strokeColor=#9673A6;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="425" width="500" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ──────────────── ROW 3: Data + ML + External ──────────────── -->
+        <!-- PostgreSQL (left) -->
+        <mxCell id="postgres" value="PostgreSQL 15&#xa;(Railway, EU West)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=11;fontStyle=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="80" y="540" width="220" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- ML Service (center) -->
+        <mxCell id="ml_outer" value="ML Service (FastAPI, Python 3.12)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;verticalAlign=top;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="525" width="430" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="ml1" value="Risk model&#xa;Gradient Boosting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="365" y="555" width="125" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ml2" value="Fraud model&#xa;LR + TF-IDF" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="500" y="555" width="125" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ml3" value="Recommendations&#xa;content-based" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="635" y="555" width="135" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ml4" value="SHAP Explainer + X-Internal-API-Key" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="365" y="615" width="405" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- External Services (right column, full height) -->
+        <mxCell id="ext_outer" value="External Services" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;verticalAlign=top;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="70" width="280" height="595" as="geometry" />
+        </mxCell>
+
+        <mxCell id="stripe" value="Stripe&#xa;(Test Mode)" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="115" width="220" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="r2" value="Cloudflare R2&#xa;(object storage)" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="240" width="220" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="resend" value="Resend SMTP&#xa;(transactional email)" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="365" width="220" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="sentry" value="Sentry&#xa;(error monitoring)" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="490" width="220" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="ext_note" value="Усі сервіси у EU-регіонах,&#xa;відповідність GDPR data residency" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="610" width="240" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ──────────────── CONNECTIONS BETWEEN LAYERS ──────────────── -->
+        <!-- Frontend → Backend (HTTPS + JWT) -->
+        <mxCell id="conn_fe_be" value="HTTPS / JWT" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;fontSize=10;fontStyle=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="layer1" target="layer2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Backend Data Access → PostgreSQL -->
+        <mxCell id="conn_da_pg" value="SQL" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;fontSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.3;entryDx=0;entryDy=0;" edge="1" parent="1" source="l2_da" target="postgres">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Backend MlClient → ML Service -->
+        <mxCell id="conn_mlc_ml" value="X-Internal-API-Key" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.7;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="l2_s7" target="ml_outer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Backend services → External (dashed) -->
+        <mxCell id="conn_pay_stripe" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;dashed=1;fontSize=10;" edge="1" parent="1" source="l2_s4" target="stripe">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_sto_r2" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;dashed=1;fontSize=10;" edge="1" parent="1" source="l2_s5" target="r2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_email_resend" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;dashed=1;fontSize=10;" edge="1" parent="1" source="l2_s6" target="resend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_be_sentry" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;dashed=1;fontSize=10;" edge="1" parent="1" source="layer2" target="sentry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="conn_fe_sentry" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;dashed=1;fontSize=10;" edge="1" parent="1" source="layer1" target="sentry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ──────────────── LEGEND ──────────────── -->
+        <mxCell id="legend_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="40" y="690" width="380" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_l1" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="712" as="sourcePoint" />
+            <mxPoint x="120" y="712" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend_t1" value="Requests / Responses" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="130" y="698" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_l2" style="endArrow=classic;html=1;rounded=0;dashed=1;strokeColor=#000000;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="742" as="sourcePoint" />
+            <mxPoint x="120" y="742" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend_t2" value="External Calls / Webhooks / Monitoring" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="130" y="728" width="250" height="25" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

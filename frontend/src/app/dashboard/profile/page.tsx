@@ -151,6 +151,26 @@ export default async function ProfilePage() {
               )}
             </div>
 
+            {user.role === 'CUSTOMER' && (
+              <div className="grid grid-cols-3 gap-3 mb-6 pb-6 border-b border-zinc-800/60">
+                <div className="bg-indigo-500/5 border border-indigo-500/20 rounded-lg p-3">
+                  <p className="text-[10px] text-indigo-400 uppercase font-bold tracking-wider mb-1">Вік</p>
+                  <p className="text-white font-semibold text-lg">{user.age ?? '—'}</p>
+                  <p className="text-[9px] text-zinc-500 mt-1">used by Risk ML</p>
+                </div>
+                <div className="bg-indigo-500/5 border border-indigo-500/20 rounded-lg p-3">
+                  <p className="text-[10px] text-indigo-400 uppercase font-bold tracking-wider mb-1">Credit Score</p>
+                  <p className="text-white font-semibold text-lg">{user.creditScore ?? '—'}</p>
+                  <p className="text-[9px] text-zinc-500 mt-1">used by Risk ML</p>
+                </div>
+                <div className="bg-indigo-500/5 border border-indigo-500/20 rounded-lg p-3">
+                  <p className="text-[10px] text-indigo-400 uppercase font-bold tracking-wider mb-1">Annual Income</p>
+                  <p className="text-white font-semibold text-lg">{user.annualIncome != null ? `$${Number(user.annualIncome).toLocaleString()}` : '—'}</p>
+                  <p className="text-[9px] text-zinc-500 mt-1">used by Risk + Recs</p>
+                </div>
+              </div>
+            )}
+
             <EditProfileForm initialValues={{...user}} isCustomer={user.role === 'CUSTOMER'} />
           </div>
 
