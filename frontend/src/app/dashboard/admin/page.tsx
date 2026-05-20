@@ -35,7 +35,9 @@ async function getAdminData() {
         cache: 'no-store',
         headers: authHeader,
       }).catch(() => null),
-      fetch(`${API_URL}/audit-logs?limit=500`, { 
+      // Backend currently caps limit at 200 (see ListAuditLogsDto). Request the
+      // max — that's enough for ~20 days at ~10 events/day to populate the chart.
+      fetch(`${API_URL}/audit-logs?limit=200`, {
         cache: 'no-store',
         headers: authHeader,
       }).catch(() => null),
