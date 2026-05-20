@@ -534,27 +534,27 @@ const uk: Dictionary = {
     roleCompanyBullet1: 'Self-service tenant onboarding',
     roleCompanyBullet2: 'White-label брендинг (логотип + кольори)',
     roleCompanyBullet3: 'Real-time аналітика портфеля',
-    featuresTitle: 'Створено для продакшну з першого дня',
+    featuresTitle: 'Готова до промислової експлуатації',
     featuresSubtitle:
-      'Не прототип — кожен компонент розгорнутий і моніториться у проді.',
-    feature1Title: 'Explainable ML',
+      'Це не навчальний прототип. Усі компоненти системи розгорнуті та працюють у робочому середовищі під постійним моніторингом.',
+    feature1Title: 'Прозоре машинне навчання',
     feature1Desc:
-      'SHAP per-prediction feature contributions для risk та fraud моделей — не чорна скриня.',
-    feature2Title: 'Multi-tenant за дизайном',
+      'Для кожного прогнозу оцінки ризику та виявлення шахрайства система пояснює, які саме чинники вплинули на рішення. Жодних «чорних скринь».',
+    feature2Title: 'Ізоляція даних між компаніями',
     feature2Desc:
-      'Tenant-scoped data isolation на рівні сервісу, покрита e2e тестами.',
-    feature3Title: 'GDPR compliant',
+      'Кожна страхова компанія бачить лише власні дані. Розмежування доступу реалізовано на рівні бізнес-логіки та перевіряється автоматичними тестами.',
+    feature3Title: 'Відповідність GDPR',
     feature3Desc:
-      'Статті 17 (видалення) + 20 (експорт) реалізовані end-to-end з audit log.',
-    feature4Title: 'Реальні платежі',
+      'Реалізовано права користувача на видалення та експорт персональних даних (статті 17 і 20). Усі дії фіксуються у журналі аудиту.',
+    feature4Title: 'Безпечні онлайн-платежі',
     feature4Desc:
-      'Stripe Checkout з signature-verified webhooks, idempotent processing.',
-    feature5Title: 'Production observability',
+      'Прийом оплати через Stripe з перевіркою підпису платіжного провайдера та захистом від повторного списання коштів.',
+    feature5Title: 'Моніторинг роботи системи',
     feature5Desc:
-      'Sentry моніторинг (EU регіон) зловив реальний баг Prisma timeout — ми його виправили.',
+      'Система моніторингу (європейський регіон) виявила реальну помилку у роботі бази даних, яку було оперативно усунено.',
     feature6Title: 'Двомовний інтерфейс',
     feature6Desc:
-      'Cookie-driven EN/UK перемикач; SSR-aware щоб перший paint був у потрібній мові.',
+      'Підтримка української та англійської мов з автоматичним визначенням мови користувача та запамʼятовуванням обраної.',
     trustBadge1: 'Stripe Payments',
     trustBadge2: 'Cloudflare R2',
     trustBadge3: 'EU Data Residency',
