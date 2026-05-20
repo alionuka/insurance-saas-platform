@@ -58,7 +58,10 @@ export class MlModelsController {
       risk,
       fraud,
       recommendations,
-      plotsBaseUrl: `${mlServiceUrl}/plots`,
+      // Frontend serves plots statically from /ml-plots (synced from ml-service/training/plots/).
+      // We do NOT proxy plots through ml-service URL because in production ML_SERVICE_URL
+      // points to Railway's internal network which is not reachable from the user's browser.
+      plotsBaseUrl: '/ml-plots',
     };
   }
 }
