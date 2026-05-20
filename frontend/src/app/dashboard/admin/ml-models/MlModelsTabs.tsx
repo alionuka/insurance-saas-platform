@@ -307,9 +307,14 @@ export default function MlModelsTabs({ data }: { data: any }) {
               </div>
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center p-6 border border-dashed border-zinc-800 rounded-xl">
-                <AlertCircle className="h-6 w-6 text-zinc-600 mb-2" />
-                <p className="text-xs text-zinc-500 text-center">Permutation importance not computed for this model.</p>
-                <p className="text-[10px] text-zinc-600 mt-1 text-center">Local explainability is rendered on detail pages via SHAP values.</p>
+                <AlertCircle className="h-6 w-6 text-amber-500/70 mb-3" />
+                <p className="text-sm text-zinc-300 text-center font-medium">Не застосовується для текстових моделей</p>
+                <p className="text-xs text-zinc-500 mt-2 text-center max-w-md leading-relaxed">
+                  Fraud Detection використовує <span className="text-indigo-400 font-mono">TF-IDF</span> на ~1000+ текстових ознаках з опису claim. Permutation importance для такого простору ознак нечитабельний.
+                </p>
+                <p className="text-xs text-zinc-500 mt-3 text-center max-w-md leading-relaxed">
+                  Замість цього модель надає <span className="text-emerald-400 font-semibold">локальну пояснюваність через SHAP</span> на сторінці кожного claim — конкретні слова та числові фактори, що вплинули на конкретний прогноз.
+                </p>
               </div>
             )}
           </div>
