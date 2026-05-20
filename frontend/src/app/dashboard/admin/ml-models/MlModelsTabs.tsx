@@ -95,7 +95,11 @@ export default function MlModelsTabs({ data }: { data: any }) {
 
   const renderRiskOrFraudTab = (type: 'risk' | 'fraud') => {
     const metrics = data[type];
-    const plotsBaseUrl = data.plotsBaseUrl;
+    // Plots are served as static assets from /public/ml-plots/ via Vercel CDN.
+    // We don't use data.plotsBaseUrl from the API because in production it
+    // points to the ml-service Railway internal URL which is not reachable
+    // from the user's browser.
+    const plotsBaseUrl = '/ml-plots';
 
     if (!metrics) {
       return (
