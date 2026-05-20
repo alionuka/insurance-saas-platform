@@ -48,20 +48,27 @@ function GalleryImage({ src, alt, caption }: GalleryImageProps) {
   }
 
   return (
-    <div className="bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden shadow-md flex flex-col justify-between">
-      <div className="p-2 bg-zinc-900/20 flex items-center justify-center h-44 overflow-hidden">
+    <a
+      href={src}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group bg-white rounded-xl overflow-hidden shadow-lg ring-1 ring-zinc-800 hover:ring-indigo-500/40 hover:shadow-indigo-500/10 transition-all flex flex-col"
+      title="Натисніть, щоб відкрити в повному розмірі"
+    >
+      <div className="p-4 flex items-center justify-center h-64 bg-white">
         <img
           src={src}
           alt={alt}
           loading="lazy"
           onError={() => setHasError(true)}
-          className="max-h-full max-w-full object-contain hover:scale-102 transition-transform duration-300"
+          className="max-h-full max-w-full object-contain group-hover:scale-[1.02] transition-transform duration-300"
         />
       </div>
-      <div className="p-3 border-t border-zinc-850 bg-zinc-900/30">
-        <p className="text-xs font-semibold text-zinc-400">{caption}</p>
+      <div className="p-3 bg-zinc-950 border-t border-zinc-800">
+        <p className="text-xs font-semibold text-zinc-300 group-hover:text-indigo-400 transition-colors">{caption}</p>
+        <p className="text-[10px] text-zinc-500 mt-0.5">{alt}</p>
       </div>
-    </div>
+    </a>
   );
 }
 
