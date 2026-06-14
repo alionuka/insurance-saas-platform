@@ -77,7 +77,7 @@ export default function StatusUpdateForm({ claimId, currentStatus }: { claimId: 
         <button
           type="submit"
           disabled={loading || status === currentStatus}
-          className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 disabled:text-slate-500 text-slate-900 font-medium rounded-lg transition-colors flex items-center justify-center gap-2 min-w-[140px]"
+          className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 disabled:text-slate-500 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 min-w-[140px]"
         >
           {loading ? (
             <><Loader2 className="h-4 w-4 animate-spin" /> Updating...</>

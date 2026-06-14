@@ -199,7 +199,7 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
         <button
           type="submit"
           disabled={loading}
-          className="flex items-center gap-1.5 px-4 py-2 border border-transparent rounded-lg text-xs font-bold text-slate-900 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50"
+          className="flex items-center gap-1.5 px-4 py-2 border border-transparent rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50"
         >
           {loading && <Loader2 className="h-3 w-3 animate-spin" />}
           Save Changes

@@ -226,7 +226,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
                       return (
                         <tr 
                           key={name} 
-                          className={`hover:bg-slate-100/20 transition-colors ${isBest ? 'bg-blue-700/5 font-semibold text-slate-900' : 'text-slate-700'}`}
+                          className={`hover:bg-slate-100/20 transition-colors ${isBest ? 'bg-blue-700/5 font-semibold text-white' : 'text-slate-700'}`}
                         >
                           <td className="py-3 pr-2 flex items-center gap-2 max-w-[200px] truncate">
                             {isBest && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />}

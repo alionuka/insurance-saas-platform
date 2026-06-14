@@ -23,8 +23,8 @@ export default function FilterPills({ options, value, onChange }: FilterPillsPro
             onClick={() => onChange(option.value)}
             className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors flex items-center gap-2 ${
               isActive 
-                ? 'bg-blue-700 text-slate-900' 
-                : 'bg-white text-slate-600 hover:text-slate-800 hover:bg-slate-100 border border-slate-200'
+                ? 'bg-blue-700 text-white' 
+                : 'bg-white text-slate-600 hover:text-white hover:bg-slate-100 border border-slate-200'
             }`}
           >
             {option.label}

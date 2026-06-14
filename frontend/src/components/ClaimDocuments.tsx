@@ -168,7 +168,7 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
           Supporting Documents
         </h4>
         {canUpload && (
-          <label className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-slate-900 text-[10px] font-bold uppercase py-1.5 px-3 rounded flex items-center gap-2 transition-colors disabled:opacity-50">
+          <label className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold uppercase py-1.5 px-3 rounded flex items-center gap-2 transition-colors disabled:opacity-50">
             {uploading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />}
             Upload File
             <input

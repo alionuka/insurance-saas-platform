@@ -92,7 +92,7 @@ export default function ChangePasswordForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-blue-700 hover:bg-blue-600 text-slate-900 font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+        className="w-full bg-blue-700 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
       >
         {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
         Update Password

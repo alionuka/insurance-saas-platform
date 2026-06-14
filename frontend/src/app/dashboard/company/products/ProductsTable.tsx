@@ -76,8 +76,8 @@ export default function ProductsTable({ products }: ProductsTableProps) {
                           onClick={() => setEditingProductId(isEditing ? null : product.id)}
                           className={`p-2 rounded-lg border transition-all ${
                             isEditing
-                              ? 'bg-blue-600 border-blue-700 text-slate-900'
-                              : 'bg-slate-100/50 border-slate-300 text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                              ? 'bg-blue-600 border-blue-700 text-white'
+                              : 'bg-slate-100/50 border-slate-300 text-slate-600 hover:text-white hover:bg-slate-100'
                           }`}
                           title="Edit Product"
                         >

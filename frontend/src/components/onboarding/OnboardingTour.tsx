@@ -434,7 +434,7 @@ export default function OnboardingTour() {
             )}
             <button
               onClick={advance}
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-slate-900 bg-blue-700 hover:bg-blue-600 rounded-lg transition-colors shadow-lg shadow-blue-500/20"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-white bg-blue-700 hover:bg-blue-600 rounded-lg transition-colors shadow-lg shadow-blue-500/20"
             >
               {isLast ? (
                 <>

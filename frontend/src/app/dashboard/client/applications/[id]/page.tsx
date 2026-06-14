@@ -210,7 +210,7 @@ export default async function ClientApplicationDetailPage({ params }: { params: 
           {policy && (
             <Link
               href={`/dashboard/client/policies/${policy.id}`}
-              className="inline-flex justify-center items-center px-4 py-2 bg-blue-700 hover:bg-blue-600 text-slate-900 text-sm font-medium rounded-lg transition-colors shadow-lg shadow-blue-500/20 shrink-0"
+              className="inline-flex justify-center items-center px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-blue-500/20 shrink-0"
             >
               View Policy
             </Link>

@@ -20,7 +20,7 @@ export default function EmptyState({ icon: Icon, title, description, action }: E
       <h3 className="text-xl font-semibold text-slate-900 mb-2">{title}</h3>
       <p className="text-slate-600 max-w-sm mb-6">{description}</p>
       {action && (
-        <Link href={action.href} className="px-4 py-2 bg-blue-700 hover:bg-blue-600 text-slate-900 rounded-lg font-medium transition-colors">
+        <Link href={action.href} className="px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors">
           {action.label}
         </Link>
       )}

@@ -81,7 +81,7 @@ export default function ApplicationStatusUpdateForm({
       <button
         onClick={handleUpdate}
         disabled={isLoading || status === currentStatus}
-        className="px-4 py-2 bg-blue-700 hover:bg-blue-600 disabled:bg-slate-100 disabled:text-slate-500 text-slate-900 text-sm font-medium rounded-lg transition-colors flex items-center justify-center min-w-[80px]"
+        className="px-4 py-2 bg-blue-700 hover:bg-blue-600 disabled:bg-slate-100 disabled:text-slate-500 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center min-w-[80px]"
       >
         {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Update'}
       </button>

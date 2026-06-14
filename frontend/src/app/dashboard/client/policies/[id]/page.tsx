@@ -118,7 +118,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
             {policy.status === 'ACTIVE' && (
               <Link
                 href={`/dashboard/client/claims?policyId=${policy.id}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-700 hover:bg-blue-600 text-slate-900 text-sm font-medium rounded-lg transition-colors shadow-lg shadow-blue-500/20"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-700 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-blue-500/20"
               >
                 <Activity className="h-4 w-4" />
                 File a Claim
