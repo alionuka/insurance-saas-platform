@@ -11,10 +11,10 @@ type BulkAction = {
 };
 
 const variantClasses: Record<string, string> = {
-  primary: 'bg-blue-500 hover:bg-blue-600 shadow-blue-500/20',
+  primary: 'bg-blue-700 hover:bg-blue-600 shadow-blue-500/20',
   success: 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/20',
   danger: 'bg-rose-500 hover:bg-rose-600 shadow-rose-500/20',
-  warning: 'bg-blue-500 hover:bg-blue-600 shadow-blue-500/20 text-black',
+  warning: 'bg-blue-700 hover:bg-blue-600 shadow-blue-500/20 text-black',
 };
 
 export default function BulkActionBar({
@@ -36,16 +36,16 @@ export default function BulkActionBar({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl px-6 py-3 flex items-center gap-4"
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white border border-slate-200 rounded-2xl shadow-2xl px-6 py-3 flex items-center gap-4"
         >
           {/* Selection count */}
-          <div className="flex items-center gap-2 pr-4 border-r border-zinc-800">
-            <span className="text-sm font-bold text-white">
+          <div className="flex items-center gap-2 pr-4 border-r border-slate-200">
+            <span className="text-sm font-bold text-slate-900">
               {selectedCount} selected
             </span>
             <button
               onClick={onClearSelection}
-              className="h-5 w-5 rounded-full bg-zinc-800 hover:bg-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
+              className="h-5 w-5 rounded-full bg-slate-100 hover:bg-zinc-700 flex items-center justify-center text-slate-600 hover:text-slate-900 transition-colors"
               title="Clear selection"
             >
               <X className="h-3 w-3" />
@@ -54,8 +54,8 @@ export default function BulkActionBar({
 
           {/* Actions */}
           {isProcessing ? (
-            <div className="flex items-center gap-2 text-sm text-zinc-400">
-              <Loader2 className="h-4 w-4 animate-spin text-blue-400" />
+            <div className="flex items-center gap-2 text-sm text-slate-600">
+              <Loader2 className="h-4 w-4 animate-spin text-blue-700" />
               Processing...
             </div>
           ) : (
@@ -66,7 +66,7 @@ export default function BulkActionBar({
                   <button
                     key={action.label}
                     onClick={action.onClick}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white shadow-lg transition-colors ${variantClasses[action.variant]}`}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-900 shadow-lg transition-colors ${variantClasses[action.variant]}`}
                   >
                     <Icon className="h-3.5 w-3.5" />
                     {action.label}

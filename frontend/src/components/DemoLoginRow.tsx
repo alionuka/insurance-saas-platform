@@ -30,7 +30,7 @@ const ACCOUNTS = [
     labelKey: 'auth.demoCustomer',
     email: 'alice.customer@example.com',
     icon: User,
-    color: 'bg-blue-500/5 text-blue-400 border-blue-500/30 hover:bg-blue-500/15',
+    color: 'bg-blue-700/5 text-blue-700 border-blue-700/30 hover:bg-blue-700/15',
   },
   {
     role: 'AGENT' as const,
@@ -46,7 +46,7 @@ const ACCOUNTS = [
     email: 'sarah.admin@example.com',
     icon: Building2,
     color:
-      'bg-blue-500/5 text-blue-400 border-blue-500/30 hover:bg-blue-500/15',
+      'bg-blue-700/5 text-blue-700 border-blue-700/30 hover:bg-blue-700/15',
   },
   {
     role: 'PLATFORM_ADMIN' as const,
@@ -109,7 +109,7 @@ export default function DemoLoginRow({
                 onClick={() => handleLogin(acc.email)}
                 disabled={loadingEmail !== null}
                 data-testid={`landing-demo-${acc.role}`}
-                className={`inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border text-sm font-bold transition-all backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-0.5 ${acc.color}`}
+                className={`inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border text-sm font-bold transition-all  disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-0.5 ${acc.color}`}
                 title={acc.email}
               >
                 {isLoading ? (

@@ -69,7 +69,7 @@ export default function ApplicationStatusUpdateForm({
         value={status}
         onChange={(e) => setStatus(e.target.value)}
         disabled={isLoading}
-        className="bg-zinc-950 border border-zinc-700 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 cursor-pointer"
+        className="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 cursor-pointer"
       >
         {STATUS_OPTIONS.map((opt) => (
           <option key={opt} value={opt}>
@@ -81,7 +81,7 @@ export default function ApplicationStatusUpdateForm({
       <button
         onClick={handleUpdate}
         disabled={isLoading || status === currentStatus}
-        className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-zinc-800 disabled:text-zinc-500 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center min-w-[80px]"
+        className="px-4 py-2 bg-blue-700 hover:bg-blue-600 disabled:bg-slate-100 disabled:text-slate-500 text-slate-900 text-sm font-medium rounded-lg transition-colors flex items-center justify-center min-w-[80px]"
       >
         {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Update'}
       </button>

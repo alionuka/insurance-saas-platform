@@ -22,8 +22,8 @@ export default function LocaleSwitcher({
     'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider transition-colors';
   const styles =
     variant === 'landing'
-      ? 'bg-slate-800/60 border border-slate-700/60 text-slate-300 hover:text-white hover:bg-slate-700/60 backdrop-blur-sm'
-      : 'border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800/50';
+      ? 'bg-slate-800/60 border border-slate-300/60 text-slate-300 hover:text-slate-900 hover:bg-slate-700/60 '
+      : 'border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-100/50';
 
   return (
     <button

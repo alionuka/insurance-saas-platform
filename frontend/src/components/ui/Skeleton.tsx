@@ -19,7 +19,7 @@ export default function Skeleton({ className = '' }: SkeletonProps) {
   return (
     <div
       aria-hidden
-      className={`relative overflow-hidden bg-zinc-800/60 rounded-lg ${className}`}
+      className={`relative overflow-hidden bg-slate-100/60 rounded-lg ${className}`}
     >
       <div className="absolute inset-0 animate-shimmer" />
     </div>
@@ -42,7 +42,7 @@ export function SkeletonRow() {
 /** Card pattern: header + body lines + chart placeholder. */
 export function SkeletonCard() {
   return (
-    <div className="bg-zinc-900/40 border border-zinc-800 rounded-xl p-6 space-y-4">
+    <div className="bg-white/40 border border-slate-200 rounded-xl p-6 space-y-4">
       <Skeleton className="h-5 w-2/5" />
       <Skeleton className="h-3 w-full" />
       <Skeleton className="h-3 w-4/5" />
@@ -60,9 +60,9 @@ export function SkeletonTable({
   columns?: number;
 }) {
   return (
-    <div className="bg-zinc-900/40 border border-zinc-800 rounded-xl overflow-hidden">
+    <div className="bg-white/40 border border-slate-200 rounded-xl overflow-hidden">
       <div
-        className="px-6 py-4 border-b border-zinc-800 grid gap-4"
+        className="px-6 py-4 border-b border-slate-200 grid gap-4"
         style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
       >
         {Array.from({ length: columns }).map((_, i) => (
@@ -72,7 +72,7 @@ export function SkeletonTable({
       {Array.from({ length: rows }).map((_, rowIdx) => (
         <div
           key={rowIdx}
-          className="px-6 py-4 border-b border-zinc-800/40 grid gap-4 last:border-b-0"
+          className="px-6 py-4 border-b border-slate-200/40 grid gap-4 last:border-b-0"
           style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
         >
           {Array.from({ length: columns }).map((_, colIdx) => (

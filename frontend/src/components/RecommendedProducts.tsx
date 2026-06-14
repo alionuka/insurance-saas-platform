@@ -22,10 +22,10 @@ interface RecommendationsResponse {
 }
 
 const TYPE_STYLES: Record<string, string> = {
-  AUTO: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  AUTO: 'bg-blue-700/10 text-blue-700 border-blue-700/20',
   HEALTH: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
   LIFE: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  PROPERTY: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  PROPERTY: 'bg-blue-700/10 text-blue-700 border-blue-700/20',
 };
 
 export default function RecommendedProducts() {
@@ -113,14 +113,14 @@ export default function RecommendedProducts() {
   }, []);
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl">
-      <div className="p-6 border-b border-zinc-800 bg-zinc-900/50 flex items-center gap-3">
+    <div className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-2xl">
+      <div className="p-6 border-b border-slate-200 bg-white/50 flex items-center gap-3">
         <div className="h-10 w-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
           <Sparkles className="h-5 w-5 text-purple-400" />
         </div>
         <div>
-          <h2 className="text-lg font-bold text-white leading-tight">Recommended for You</h2>
-          <p className="text-xs text-zinc-500 mt-0.5 font-medium">
+          <h2 className="text-lg font-bold text-slate-900 leading-tight">Recommended for You</h2>
+          <p className="text-xs text-slate-500 mt-0.5 font-medium">
             Personalised by content-based ML model from our product catalog
           </p>
         </div>
@@ -128,7 +128,7 @@ export default function RecommendedProducts() {
 
       <div className="p-6">
         {loading && (
-          <div className="flex items-center justify-center py-10 text-zinc-500">
+          <div className="flex items-center justify-center py-10 text-slate-500">
             <Loader2 className="h-6 w-6 animate-spin mr-3" />
             <span className="text-sm">Computing recommendations…</span>
           </div>
@@ -147,34 +147,34 @@ export default function RecommendedProducts() {
               {data.rankedProducts.map((product, idx) => (
                 <div
                   key={product.productId}
-                  className="bg-zinc-950 border border-zinc-800 rounded-2xl p-5 hover:border-zinc-700 transition-colors flex flex-col gap-3"
+                  className="bg-slate-50 border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition-colors flex flex-col gap-3"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <div className="h-10 w-10 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center">
-                      <Package className="h-5 w-5 text-zinc-400" />
+                    <div className="h-10 w-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center">
+                      <Package className="h-5 w-5 text-slate-600" />
                     </div>
-                    <span className="text-[9px] uppercase font-bold text-zinc-600 tracking-widest">
+                    <span className="text-[9px] uppercase font-bold text-slate-400 tracking-widest">
                       #{idx + 1} match
                     </span>
                   </div>
                   <div>
-                    <h3 className="font-bold text-white text-base leading-tight">{product.name}</h3>
+                    <h3 className="font-bold text-slate-900 text-base leading-tight">{product.name}</h3>
                     <span
                       className={`inline-block mt-2 px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
-                        TYPE_STYLES[product.type] ?? 'bg-zinc-800 text-zinc-400 border-zinc-700'
+                        TYPE_STYLES[product.type] ?? 'bg-slate-100 text-slate-600 border-slate-300'
                       }`}
                     >
                       {product.type}
                     </span>
                   </div>
-                  <div className="mt-auto pt-3 border-t border-zinc-800">
+                  <div className="mt-auto pt-3 border-t border-slate-200">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-zinc-500 font-medium">Match score</span>
+                      <span className="text-slate-500 font-medium">Match score</span>
                       <span className="text-purple-400 font-mono font-bold">
                         {(product.similarity * 100).toFixed(0)}%
                       </span>
                     </div>
-                    <div className="mt-2 h-1.5 bg-zinc-900 rounded-full overflow-hidden">
+                    <div className="mt-2 h-1.5 bg-white rounded-full overflow-hidden">
                       <div
                         className="h-full bg-purple-500 rounded-full transition-all"
                         style={{ width: `${Math.min(100, product.similarity * 100)}%` }}
@@ -184,7 +184,7 @@ export default function RecommendedProducts() {
                   <button
                     onClick={() => submitApplication(product.productId)}
                     disabled={applyingProductId !== null}
-                    className="mt-3 w-full py-2 px-3 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed text-xs font-bold text-white transition-colors flex items-center justify-center gap-1.5"
+                    className="mt-3 w-full py-2 px-3 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed text-xs font-bold text-slate-900 transition-colors flex items-center justify-center gap-1.5"
                   >
                     {applyingProductId === product.productId ? (
                       <>
@@ -202,7 +202,7 @@ export default function RecommendedProducts() {
               ))}
             </div>
 
-            <div className="pt-3 flex gap-2 text-xs text-zinc-500 italic leading-relaxed">
+            <div className="pt-3 flex gap-2 text-xs text-slate-500 italic leading-relaxed">
               <Sparkles className="h-3.5 w-3.5 text-purple-400 shrink-0 mt-0.5" />
               <p>{data.explanation}</p>
             </div>

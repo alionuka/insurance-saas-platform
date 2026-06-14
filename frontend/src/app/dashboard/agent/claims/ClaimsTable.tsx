@@ -194,9 +194,9 @@ export default function ClaimsTable({
         <FilterPills options={fraudFilterOptions} value={currentFraud} onChange={(val) => handleFilterChange('fraud', val)} />
       </div>
 
-      <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-        <div className="px-6 py-4 border-b border-zinc-800 flex justify-between items-center">
-          <h2 className="text-lg font-medium text-white">Claims Investigation Queue</h2>
+      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+        <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+          <h2 className="text-lg font-medium text-slate-900">Claims Investigation Queue</h2>
           <span className="bg-emerald-500/10 text-emerald-400 text-xs px-2.5 py-1 rounded-full font-medium">
             {filteredClaims.length} total
           </span>
@@ -204,13 +204,13 @@ export default function ClaimsTable({
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[1050px]">
             <thead>
-              <tr className="bg-zinc-950/50 border-b border-zinc-800 text-xs uppercase text-zinc-500 tracking-wider">
+              <tr className="bg-slate-50/50 border-b border-slate-200 text-xs uppercase text-slate-500 tracking-wider">
                 <th className="px-4 py-3 w-10">
                   <input
                     type="checkbox"
                     checked={allSelected}
                     onChange={toggleSelectAll}
-                    className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-blue-500 focus:ring-blue-500/20 focus:ring-offset-0 cursor-pointer accent-blue-500"
+                    className="h-4 w-4 rounded border-slate-300 bg-slate-100 text-blue-500 focus:ring-blue-500/20 focus:ring-offset-0 cursor-pointer accent-blue-500"
                   />
                 </th>
                 <th className="px-6 py-3 font-medium">Customer / Description</th>
@@ -234,10 +234,10 @@ export default function ClaimsTable({
                     <tr
                       className={`transition-colors ${
                         isSelected
-                          ? 'bg-blue-500/5'
+                          ? 'bg-blue-700/5'
                           : successClaimId === claim.id
                           ? 'bg-emerald-500/5'
-                          : 'hover:bg-zinc-800/50'
+                          : 'hover:bg-slate-100/50'
                       }`}
                     >
                     {/* Checkbox */}
@@ -246,27 +246,27 @@ export default function ClaimsTable({
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => toggleSelection(claim.id)}
-                        className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-blue-500 focus:ring-blue-500/20 focus:ring-offset-0 cursor-pointer accent-blue-500"
+                        className="h-4 w-4 rounded border-slate-300 bg-slate-100 text-blue-500 focus:ring-blue-500/20 focus:ring-offset-0 cursor-pointer accent-blue-500"
                       />
                     </td>
 
                     {/* Customer / Description */}
                     <td className="px-6 py-4 min-w-[250px]">
                       <Link href={`/dashboard/agent/claims/${claim.id}`} className="block group">
-                        <div className="flex items-start gap-2 group-hover:bg-zinc-800/50 p-2 -m-2 rounded-lg transition-colors">
-                          <div className="h-8 w-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center shrink-0 mt-0.5 group-hover:border-zinc-600 transition-colors">
-                            <User className="h-4 w-4 text-zinc-400 group-hover:text-zinc-300" />
+                        <div className="flex items-start gap-2 group-hover:bg-slate-100/50 p-2 -m-2 rounded-lg transition-colors">
+                          <div className="h-8 w-8 rounded-full bg-slate-100 border border-slate-300 flex items-center justify-center shrink-0 mt-0.5 group-hover:border-zinc-600 transition-colors">
+                            <User className="h-4 w-4 text-slate-600 group-hover:text-slate-700" />
                           </div>
                           <div>
-                            <div className="text-sm font-medium text-white group-hover:text-blue-400 transition-colors">
+                            <div className="text-sm font-medium text-slate-900 group-hover:text-blue-700 transition-colors">
                               {claim.user
                                 ? `${claim.user.firstName} ${claim.user.lastName}`
                                 : `#${claim.id.substring(0, 8)}`}
                             </div>
-                            <div className="text-[11px] text-zinc-400 mt-1 line-clamp-2 italic leading-relaxed">
+                            <div className="text-[11px] text-slate-600 mt-1 line-clamp-2 italic leading-relaxed">
                               &quot;{claim.description}&quot;
                             </div>
-                            <div className="text-[10px] text-zinc-500 mt-1 uppercase tracking-tighter">
+                            <div className="text-[10px] text-slate-500 mt-1 uppercase tracking-tighter">
                               Filed: {formatDate(claim.createdAt)}
                             </div>
                           </div>
@@ -280,25 +280,25 @@ export default function ClaimsTable({
                         {policy ? (
                           <>
                             <div className="flex items-center gap-1.5">
-                              <span className="text-sm font-mono text-blue-400 font-bold">{policy.policyNumber}</span>
+                              <span className="text-sm font-mono text-blue-700 font-bold">{policy.policyNumber}</span>
                               <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold border uppercase ${
-                                policy.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20'
+                                policy.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-zinc-500/10 text-slate-600 border-zinc-500/20'
                               }`}>
                                 {policy.status}
                               </span>
                             </div>
-                            <div className="text-xs text-zinc-300 font-medium">{product?.name ?? '—'}</div>
-                            <div className="text-[10px] text-zinc-500 uppercase">{company?.name ?? '—'}</div>
+                            <div className="text-xs text-slate-700 font-medium">{product?.name ?? '—'}</div>
+                            <div className="text-[10px] text-slate-500 uppercase">{company?.name ?? '—'}</div>
                           </>
                         ) : (
-                          <span className="text-xs text-zinc-500 italic">No policy linked</span>
+                          <span className="text-xs text-slate-500 italic">No policy linked</span>
                         )}
                       </div>
                     </td>
 
                     {/* Amount */}
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-white font-bold">
+                      <div className="text-sm text-slate-900 font-bold">
                         {formatCurrency(claim.amount)}
                       </div>
                     </td>
@@ -311,7 +311,7 @@ export default function ClaimsTable({
                           flag={fraud ? fraud.flag : null}
                         />
                         {fraud?.explanation && (
-                          <div className="text-[10px] text-zinc-400 leading-tight border-l border-zinc-800 pl-2 italic">
+                          <div className="text-[10px] text-slate-600 leading-tight border-l border-slate-200 pl-2 italic">
                             {fraud.explanation}
                           </div>
                         )}
@@ -340,10 +340,10 @@ export default function ClaimsTable({
                     </td>
                   </tr>
                   {/* Documents Sub-row */}
-                  <tr key={`${claim.id}-docs`} className="bg-zinc-950/20">
-                    <td colSpan={7} className="px-6 py-0 border-b border-zinc-800">
+                  <tr key={`${claim.id}-docs`} className="bg-slate-50/20">
+                    <td colSpan={7} className="px-6 py-0 border-b border-slate-200">
                       <details className="group">
-                        <summary className="list-none cursor-pointer py-3 flex items-center gap-2 text-[10px] text-zinc-500 hover:text-blue-400 uppercase font-bold tracking-tight transition-colors">
+                        <summary className="list-none cursor-pointer py-3 flex items-center gap-2 text-[10px] text-slate-500 hover:text-blue-700 uppercase font-bold tracking-tight transition-colors">
                           <ChevronRight className="h-3 w-3 group-open:rotate-90 transition-transform" />
                           Supporting Documents
                         </summary>
@@ -358,7 +358,7 @@ export default function ClaimsTable({
               })}
               {filteredClaims.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-6 py-10 text-center text-zinc-500 text-sm">
+                  <td colSpan={7} className="px-6 py-10 text-center text-slate-500 text-sm">
                     No claims found.
                   </td>
                 </tr>

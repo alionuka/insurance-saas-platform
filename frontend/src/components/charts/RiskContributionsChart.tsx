@@ -13,12 +13,12 @@ const CustomTooltip = ({ active, payload }: any) => {
   const data = payload[0].payload;
   const sign = data.contribution >= 0 ? '+' : '';
   return (
-    <div className="bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 shadow-2xl text-left">
-      <p className="text-xs font-bold text-white">{data.feature}</p>
-      <p className="text-xs text-zinc-400 mt-1">
-        Value: <span className="text-zinc-200 font-medium font-mono">{data.value}</span>
+    <div className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 shadow-2xl text-left">
+      <p className="text-xs font-bold text-slate-900">{data.feature}</p>
+      <p className="text-xs text-slate-600 mt-1">
+        Value: <span className="text-slate-800 font-medium font-mono">{data.value}</span>
       </p>
-      <p className="text-xs text-zinc-400">
+      <p className="text-xs text-slate-600">
         Impact:{' '}
         <span className={data.contribution >= 0 ? 'text-rose-400 font-bold font-mono' : 'text-emerald-400 font-bold font-mono'}>
           {sign}{data.contribution.toFixed(2)}%
@@ -31,8 +31,8 @@ const CustomTooltip = ({ active, payload }: any) => {
 export default function RiskContributionsChart({ contributions }: { contributions: FeatureContribution[] }) {
   if (!contributions || contributions.length === 0) {
     return (
-      <div className="flex items-center justify-center p-6 border border-dashed border-zinc-800 rounded-xl">
-        <p className="text-xs text-zinc-500">No contribution explanations available.</p>
+      <div className="flex items-center justify-center p-6 border border-dashed border-slate-200 rounded-xl">
+        <p className="text-xs text-slate-500">No contribution explanations available.</p>
       </div>
     );
   }

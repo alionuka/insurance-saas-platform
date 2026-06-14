@@ -50,19 +50,19 @@ export default async function BrowseProductsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-          <Package className="h-7 w-7 text-blue-400" />
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 flex items-center gap-3">
+          <Package className="h-7 w-7 text-blue-700" />
           {t('clientProducts.title')}
         </h1>
-        <p className="text-zinc-400 mt-1 text-sm">
+        <p className="text-slate-600 mt-1 text-sm">
           {t('clientProducts.subtitle')}
         </p>
       </div>
 
       {products.length === 0 ? (
-        <div className="bg-zinc-900 border border-zinc-800 border-dashed rounded-2xl p-12 text-center">
-          <Package className="h-10 w-10 text-zinc-700 mx-auto mb-3" />
-          <p className="text-zinc-500">{t('clientProducts.empty')}</p>
+        <div className="bg-white border border-slate-200 border-dashed rounded-2xl p-12 text-center">
+          <Package className="h-10 w-10 text-slate-300 mx-auto mb-3" />
+          <p className="text-slate-500">{t('clientProducts.empty')}</p>
         </div>
       ) : (
         <BrowseProductsGrid groupedProducts={grouped} typeOrder={sortedTypes} />

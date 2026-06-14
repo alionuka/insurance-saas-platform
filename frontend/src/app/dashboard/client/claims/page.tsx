@@ -63,8 +63,8 @@ export default async function ClientClaimsPage(props: Props) {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">{t('clientClaims.title')}</h1>
-        <p className="text-zinc-400 mt-1 text-sm">{t('clientClaims.subtitle')}</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900">{t('clientClaims.title')}</h1>
+        <p className="text-slate-600 mt-1 text-sm">{t('clientClaims.subtitle')}</p>
       </div>
 
       <ClaimSubmissionForm policies={policies} preselectPolicyId={preselectPolicyId} />
@@ -77,16 +77,16 @@ export default async function ClientClaimsPage(props: Props) {
             const fraud = claim.fraudAssessments?.[0];
             return (
               <Link key={claim.id} href={`/dashboard/client/claims/${claim.id}`} className="block group">
-                <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden group-hover:border-zinc-700 transition-colors">
+                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden group-hover:border-slate-300 transition-colors">
                   <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex items-start gap-4">
-                      <div className="h-12 w-12 rounded-xl bg-zinc-800 flex items-center justify-center border border-zinc-700 flex-shrink-0">
+                      <div className="h-12 w-12 rounded-xl bg-slate-100 flex items-center justify-center border border-slate-300 flex-shrink-0">
                         <Activity className="h-6 w-6 text-emerald-400" />
                       </div>
                     <div className="flex-grow">
-                      <h3 className="font-bold text-white text-lg">{claim.application?.product?.name || t('sidebar.nav.claims')}</h3>
-                      <p className="text-sm text-zinc-300 mt-1 font-medium">{claim.description}</p>
-                      <p className="text-xs text-zinc-500 mt-1 italic">{t('clientClaims.claimId')}: {claim.id.substring(0, 8)} • {t('clientClaims.amount')}: {formatCurrency(claim.amount)} • {t('clientClaims.filed')}: {formatDate(claim.createdAt)}</p>
+                      <h3 className="font-bold text-slate-900 text-lg">{claim.application?.product?.name || t('sidebar.nav.claims')}</h3>
+                      <p className="text-sm text-slate-700 mt-1 font-medium">{claim.description}</p>
+                      <p className="text-xs text-slate-500 mt-1 italic">{t('clientClaims.claimId')}: {claim.id.substring(0, 8)} • {t('clientClaims.amount')}: {formatCurrency(claim.amount)} • {t('clientClaims.filed')}: {formatDate(claim.createdAt)}</p>
                     </div>
                   </div>
 
@@ -94,7 +94,7 @@ export default async function ClientClaimsPage(props: Props) {
                       <span className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider border ${
                       claim.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
                       claim.status === 'DENIED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 
-                      'bg-zinc-500/10 text-zinc-400 border-zinc-500/20'
+                      'bg-zinc-500/10 text-slate-600 border-zinc-500/20'
                     }`}>
                       {claim.status}
                     </span>
@@ -103,30 +103,30 @@ export default async function ClientClaimsPage(props: Props) {
 
                 {/* Fraud Assessment Info */}
                 {fraud && (
-                  <div className="px-5 pb-5 pt-0 border-t border-zinc-800/50 bg-zinc-950/30">
+                  <div className="px-5 pb-5 pt-0 border-t border-slate-200/50 bg-slate-50/30">
                     <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <div className="md:col-span-1 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
+                      <div className="md:col-span-1 p-3 rounded-lg bg-white/50 border border-slate-200">
                         <div className="flex items-center gap-2 mb-1">
-                          <TrendingUp className="h-3 w-3 text-zinc-500" />
-                          <span className="text-[10px] text-zinc-500 uppercase font-bold">{t('clientClaims.fraudScore')}</span>
+                          <TrendingUp className="h-3 w-3 text-slate-500" />
+                          <span className="text-[10px] text-slate-500 uppercase font-bold">{t('clientClaims.fraudScore')}</span>
                         </div>
-                        <p className="text-lg font-mono font-bold text-white">{fraud.fraudScore.toFixed(1)}<span className="text-xs text-zinc-500 ml-1">/ 100</span></p>
+                        <p className="text-lg font-mono font-bold text-slate-900">{fraud.fraudScore.toFixed(1)}<span className="text-xs text-slate-500 ml-1">/ 100</span></p>
                       </div>
-                      <div className="md:col-span-1 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
+                      <div className="md:col-span-1 p-3 rounded-lg bg-white/50 border border-slate-200">
                         <div className="flex items-center gap-2 mb-1">
-                          <AlertCircle className="h-3 w-3 text-zinc-500" />
-                          <span className="text-[10px] text-zinc-500 uppercase font-bold">{t('clientClaims.fraudFlag')}</span>
+                          <AlertCircle className="h-3 w-3 text-slate-500" />
+                          <span className="text-[10px] text-slate-500 uppercase font-bold">{t('clientClaims.fraudFlag')}</span>
                         </div>
                         <p className={`text-lg font-bold ${
                           fraud.flag === 'NORMAL' ? 'text-emerald-400' : 'text-rose-400 animate-pulse'
                         }`}>{fraud.flag}</p>
                       </div>
-                      <div className="md:col-span-2 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
+                      <div className="md:col-span-2 p-3 rounded-lg bg-white/50 border border-slate-200">
                         <div className="flex items-center gap-2 mb-1">
-                          <AlertTriangle className="h-3 w-3 text-zinc-500" />
-                          <span className="text-[10px] text-zinc-500 uppercase font-bold">{t('clientClaims.mlAssessment')}</span>
+                          <AlertTriangle className="h-3 w-3 text-slate-500" />
+                          <span className="text-[10px] text-slate-500 uppercase font-bold">{t('clientClaims.mlAssessment')}</span>
                         </div>
-                        <p className="text-xs text-zinc-400 italic leading-relaxed">"{fraud.explanation}"</p>
+                        <p className="text-xs text-slate-600 italic leading-relaxed">"{fraud.explanation}"</p>
                       </div>
                     </div>
                   </div>
@@ -134,9 +134,9 @@ export default async function ClientClaimsPage(props: Props) {
 
                 {/* Documents Section */}
                 <StopClickPropagation>
-                <div className="px-5 pb-4 border-t border-zinc-800/50">
+                <div className="px-5 pb-4 border-t border-slate-200/50">
                   <details className="group">
-                    <summary className="list-none cursor-pointer py-2 flex items-center gap-2 text-[10px] text-zinc-500 hover:text-blue-400 uppercase font-bold tracking-tight transition-colors">
+                    <summary className="list-none cursor-pointer py-2 flex items-center gap-2 text-[10px] text-slate-500 hover:text-blue-700 uppercase font-bold tracking-tight transition-colors">
                       <span className="group-open:rotate-90 transition-transform">▶</span>
                       {t('clientClaims.supportingDocuments')}
                     </summary>

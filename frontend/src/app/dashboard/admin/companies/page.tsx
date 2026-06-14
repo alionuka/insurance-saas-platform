@@ -59,10 +59,10 @@ export default async function AdminCompaniesPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900">
           All Companies
         </h1>
-        <p className="text-zinc-400 mt-1 text-sm">
+        <p className="text-slate-600 mt-1 text-sm">
           Manage tenant organizations on the platform — review KYC submissions,
           approve onboarding, and audit existing tenants.
         </p>
@@ -73,15 +73,15 @@ export default async function AdminCompaniesPage() {
       {pending.length > 0 && (
         <section>
           <div className="flex items-center gap-2 mb-3">
-            <Clock className="h-5 w-5 text-blue-400" />
-            <h2 className="text-lg font-semibold text-white">
+            <Clock className="h-5 w-5 text-blue-700" />
+            <h2 className="text-lg font-semibold text-slate-900">
               Pending Verification
             </h2>
-            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-700/10 text-blue-700 border border-blue-700/20">
               {pending.length}
             </span>
           </div>
-          <p className="text-xs text-zinc-500 mb-4">
+          <p className="text-xs text-slate-500 mb-4">
             New tenants awaiting KYC review. In production these would
             require compliance team sign-off; for this thesis demo a single
             click here flips the tenant to ACTIVE.
@@ -91,39 +91,39 @@ export default async function AdminCompaniesPage() {
             {pending.map((company) => (
               <div
                 key={company.id}
-                className="bg-zinc-900 border border-blue-500/30 rounded-xl p-5 shadow-lg"
+                className="bg-white border border-blue-700/30 rounded-xl p-5 shadow-lg"
               >
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                   <div className="flex items-start gap-4 flex-1 min-w-0">
-                    <div className="h-12 w-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
-                      <Building2 className="h-6 w-6 text-blue-400" />
+                    <div className="h-12 w-12 rounded-xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center shrink-0">
+                      <Building2 className="h-6 w-6 text-blue-700" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-white text-lg truncate">
+                      <h3 className="font-bold text-slate-900 text-lg truncate">
                         {company.name}
                       </h3>
-                      <p className="text-xs text-zinc-500 mt-0.5">
+                      <p className="text-xs text-slate-500 mt-0.5">
                         Submitted {formatDate(company.createdAt)}
                       </p>
                       <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-                        <div className="flex items-center gap-1.5 text-zinc-400">
-                          <FileCheck className="h-3 w-3 text-zinc-600 shrink-0" />
-                          <span className="text-zinc-500">Licence:</span>
-                          <span className="text-white font-mono truncate">
+                        <div className="flex items-center gap-1.5 text-slate-600">
+                          <FileCheck className="h-3 w-3 text-slate-400 shrink-0" />
+                          <span className="text-slate-500">Licence:</span>
+                          <span className="text-slate-900 font-mono truncate">
                             {company.licenseNumber || '—'}
                           </span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-zinc-400">
-                          <Globe className="h-3 w-3 text-zinc-600 shrink-0" />
-                          <span className="text-zinc-500">Country:</span>
-                          <span className="text-white font-mono">
+                        <div className="flex items-center gap-1.5 text-slate-600">
+                          <Globe className="h-3 w-3 text-slate-400 shrink-0" />
+                          <span className="text-slate-500">Country:</span>
+                          <span className="text-slate-900 font-mono">
                             {company.country || '—'}
                           </span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-zinc-400 min-w-0">
-                          <Phone className="h-3 w-3 text-zinc-600 shrink-0" />
-                          <span className="text-zinc-500">Phone:</span>
-                          <span className="text-white font-mono truncate">
+                        <div className="flex items-center gap-1.5 text-slate-600 min-w-0">
+                          <Phone className="h-3 w-3 text-slate-400 shrink-0" />
+                          <span className="text-slate-500">Phone:</span>
+                          <span className="text-slate-900 font-mono truncate">
                             {company.contactPhone || '—'}
                           </span>
                         </div>
@@ -143,17 +143,17 @@ export default async function AdminCompaniesPage() {
       <section>
         <div className="flex items-center gap-2 mb-3">
           <CheckCircle2 className="h-5 w-5 text-emerald-400" />
-          <h2 className="text-lg font-semibold text-white">Active Tenants</h2>
+          <h2 className="text-lg font-semibold text-slate-900">Active Tenants</h2>
           <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
             {active.length}
           </span>
         </div>
 
         {active.length > 0 ? (
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-xl">
+          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xl">
             <div className="p-0 overflow-x-auto">
               <div className="w-full text-left text-sm min-w-[800px] flex flex-col">
-                <div className="bg-zinc-950 text-zinc-500 uppercase text-[10px] font-bold tracking-wider grid grid-cols-6 px-6 py-3 border-b border-zinc-800">
+                <div className="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider grid grid-cols-6 px-6 py-3 border-b border-slate-200">
                   <div className="col-span-2">Name</div>
                   <div className="col-span-1">Country</div>
                   <div className="col-span-1 text-center">Products</div>
@@ -165,16 +165,16 @@ export default async function AdminCompaniesPage() {
                     <Link
                       href={`/dashboard/admin/companies/${company.id}`}
                       key={company.id}
-                      className="grid grid-cols-6 hover:bg-zinc-800/30 hover:border-zinc-700 transition-colors items-center px-6 py-4 group"
+                      className="grid grid-cols-6 hover:bg-slate-100/30 hover:border-slate-300 transition-colors items-center px-6 py-4 group"
                     >
-                      <div className="col-span-2 font-bold text-white group-hover:text-blue-400 transition-colors truncate">
+                      <div className="col-span-2 font-bold text-slate-900 group-hover:text-blue-700 transition-colors truncate">
                         {company.name}
                       </div>
-                      <div className="col-span-1 text-zinc-400 font-mono text-xs">
+                      <div className="col-span-1 text-slate-600 font-mono text-xs">
                         {company.country || '—'}
                       </div>
                       <div className="col-span-1 text-center">
-                        <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                        <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold rounded-md bg-blue-700/10 text-blue-700 border border-blue-700/20">
                           {company.products?.length ?? 0}
                         </span>
                       </div>
@@ -184,7 +184,7 @@ export default async function AdminCompaniesPage() {
                           Active
                         </span>
                       </div>
-                      <div className="col-span-1 text-right text-zinc-500 font-mono text-xs">
+                      <div className="col-span-1 text-right text-slate-500 font-mono text-xs">
                         {formatDate(company.createdAt)}
                       </div>
                     </Link>
@@ -207,16 +207,16 @@ export default async function AdminCompaniesPage() {
         <section>
           <div className="flex items-center gap-2 mb-3">
             <AlertTriangle className="h-5 w-5 text-rose-400" />
-            <h2 className="text-lg font-semibold text-white">Suspended</h2>
+            <h2 className="text-lg font-semibold text-slate-900">Suspended</h2>
             <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20">
               {suspended.length}
             </span>
           </div>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-sm text-zinc-400">
+          <div className="bg-white border border-slate-200 rounded-xl p-4 text-sm text-slate-600">
             {suspended.map((c) => (
               <div key={c.id} className="py-1">
                 {c.name} —{' '}
-                <span className="text-zinc-600 text-xs">
+                <span className="text-slate-400 text-xs">
                   suspended {formatDate(c.createdAt)}
                 </span>
               </div>

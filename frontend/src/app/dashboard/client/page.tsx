@@ -79,49 +79,49 @@ export default async function ClientDashboardOverview() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">{t('dashboard.welcomeBack')}</h1>
-        <p className="text-zinc-400 mt-1">{t('dashboard.overviewSubtitle')}</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900">{t('dashboard.welcomeBack')}</h1>
+        <p className="text-slate-600 mt-1">{t('dashboard.overviewSubtitle')}</p>
       </div>
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-xl flex items-center gap-4">
-          <div className="h-12 w-12 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-            <FileCheck className="h-6 w-6 text-blue-400" />
+        <div className="bg-white border border-slate-200 p-5 rounded-xl flex items-center gap-4">
+          <div className="h-12 w-12 rounded-xl bg-blue-700/10 flex items-center justify-center border border-blue-700/20">
+            <FileCheck className="h-6 w-6 text-blue-700" />
           </div>
           <div>
-            <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">{t('dashboard.stats.applications')}</p>
-            <p className="text-2xl font-bold text-white"><CountUpNumber value={applications.length} /></p>
+            <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">{t('dashboard.stats.applications')}</p>
+            <p className="text-2xl font-bold text-slate-900"><CountUpNumber value={applications.length} /></p>
           </div>
         </div>
 
-        <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-xl flex items-center gap-4">
-          <div className="h-12 w-12 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-            <ShieldCheck className="h-6 w-6 text-blue-400" />
+        <div className="bg-white border border-slate-200 p-5 rounded-xl flex items-center gap-4">
+          <div className="h-12 w-12 rounded-xl bg-blue-700/10 flex items-center justify-center border border-blue-700/20">
+            <ShieldCheck className="h-6 w-6 text-blue-700" />
           </div>
           <div>
-            <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">{t('dashboard.stats.activePolicies')}</p>
-            <p className="text-2xl font-bold text-white"><CountUpNumber value={activePolicies.length} /></p>
+            <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">{t('dashboard.stats.activePolicies')}</p>
+            <p className="text-2xl font-bold text-slate-900"><CountUpNumber value={activePolicies.length} /></p>
           </div>
         </div>
 
-        <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-xl flex items-center gap-4">
-          <div className="h-12 w-12 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-            <Activity className="h-6 w-6 text-blue-400" />
+        <div className="bg-white border border-slate-200 p-5 rounded-xl flex items-center gap-4">
+          <div className="h-12 w-12 rounded-xl bg-blue-700/10 flex items-center justify-center border border-blue-700/20">
+            <Activity className="h-6 w-6 text-blue-700" />
           </div>
           <div>
-            <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">{t('dashboard.stats.openClaims')}</p>
-            <p className="text-2xl font-bold text-white"><CountUpNumber value={openClaims.length} /></p>
+            <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">{t('dashboard.stats.openClaims')}</p>
+            <p className="text-2xl font-bold text-slate-900"><CountUpNumber value={openClaims.length} /></p>
           </div>
         </div>
 
-        <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-xl flex items-center gap-4">
+        <div className="bg-white border border-slate-200 p-5 rounded-xl flex items-center gap-4">
           <div className="h-12 w-12 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
             <CreditCard className="h-6 w-6 text-emerald-400" />
           </div>
           <div>
-            <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">{t('dashboard.stats.totalPremium')}</p>
-            <p className="text-2xl font-bold text-white"><CountUpNumber value={Math.round(totalPremium)} prefix="$" /></p>
+            <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">{t('dashboard.stats.totalPremium')}</p>
+            <p className="text-2xl font-bold text-slate-900"><CountUpNumber value={Math.round(totalPremium)} prefix="$" /></p>
           </div>
         </div>
       </div>
@@ -129,36 +129,36 @@ export default async function ClientDashboardOverview() {
       {/* Recent Activity */}
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <Clock className="h-5 w-5 text-zinc-400" />
-          <h2 className="text-xl font-semibold text-white">{t('dashboard.recentActivity')}</h2>
+          <Clock className="h-5 w-5 text-slate-600" />
+          <h2 className="text-xl font-semibold text-slate-900">{t('dashboard.recentActivity')}</h2>
         </div>
         
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
           {recentActivity.length > 0 ? (
             <div className="divide-y divide-zinc-800">
               {recentActivity.map((item) => (
                 <Link key={`${item.type}-${item.id}`} href={item.href} className="block group">
-                  <div className="p-4 sm:p-5 flex items-center justify-between hover:bg-zinc-800/50 transition-colors">
+                  <div className="p-4 sm:p-5 flex items-center justify-between hover:bg-slate-100/50 transition-colors">
                     <div className="flex items-center gap-4 min-w-0">
-                      <div className="h-10 w-10 rounded-full bg-zinc-950 border border-zinc-800 flex items-center justify-center shrink-0 group-hover:border-zinc-700 transition-colors">
-                        {item.type === 'APPLICATION' && <FileCheck className="h-4 w-4 text-blue-400" />}
-                        {item.type === 'POLICY' && <ShieldCheck className="h-4 w-4 text-blue-400" />}
+                      <div className="h-10 w-10 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 group-hover:border-slate-300 transition-colors">
+                        {item.type === 'APPLICATION' && <FileCheck className="h-4 w-4 text-blue-700" />}
+                        {item.type === 'POLICY' && <ShieldCheck className="h-4 w-4 text-blue-700" />}
                         {item.type === 'CLAIM' && <Activity className="h-4 w-4 text-emerald-400" />}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-white truncate">{item.title}</p>
+                        <p className="text-sm font-medium text-slate-900 truncate">{item.title}</p>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <p className="text-xs text-zinc-500 truncate">{item.subtitle}</p>
-                          <span className="text-[10px] text-zinc-600">•</span>
-                          <p className="text-xs text-zinc-500 shrink-0">{formatDate(item.createdAt)}</p>
+                          <p className="text-xs text-slate-500 truncate">{item.subtitle}</p>
+                          <span className="text-[10px] text-slate-400">•</span>
+                          <p className="text-xs text-slate-500 shrink-0">{formatDate(item.createdAt)}</p>
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-4 shrink-0 pl-4">
-                      <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider border bg-zinc-950 text-zinc-400 border-zinc-800">
+                      <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider border bg-slate-50 text-slate-600 border-slate-200">
                         {item.status.replace('_', ' ')}
                       </span>
-                      <ChevronRight className="h-4 w-4 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
+                      <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-slate-600 transition-colors" />
                     </div>
                   </div>
                 </Link>
@@ -166,7 +166,7 @@ export default async function ClientDashboardOverview() {
             </div>
           ) : (
             <div className="p-8 text-center">
-              <p className="text-zinc-500 text-sm">{t('dashboard.noActivity')}</p>
+              <p className="text-slate-500 text-sm">{t('dashboard.noActivity')}</p>
             </div>
           )}
         </div>

@@ -25,9 +25,9 @@ function SignInPageContent() {
   // `role` is consumed by Playwright via data-testid — keeping it stable
   // (English) means the e2e suite doesn't break when the UI switches to UK.
   const DEMO_ACCOUNTS = [
-    { role: 'CUSTOMER', label: t('auth.demoCustomer'), email: 'alice.customer@example.com', icon: User, color: 'bg-blue-500/5 text-blue-400 border-blue-500/20 hover:bg-blue-500/10' },
+    { role: 'CUSTOMER', label: t('auth.demoCustomer'), email: 'alice.customer@example.com', icon: User, color: 'bg-blue-700/5 text-blue-700 border-blue-700/20 hover:bg-blue-700/10' },
     { role: 'AGENT', label: t('auth.demoAgent'), email: 'emily.agent@example.com', icon: UserCheck, color: 'bg-emerald-500/5 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10' },
-    { role: 'COMPANY_ADMIN', label: t('auth.demoCompanyAdmin'), email: 'sarah.admin@example.com', icon: Building2, color: 'bg-blue-500/5 text-blue-400 border-blue-500/20 hover:bg-blue-500/10' },
+    { role: 'COMPANY_ADMIN', label: t('auth.demoCompanyAdmin'), email: 'sarah.admin@example.com', icon: Building2, color: 'bg-blue-700/5 text-blue-700 border-blue-700/20 hover:bg-blue-700/10' },
     { role: 'PLATFORM_ADMIN', label: t('auth.demoPlatform'), email: 'admin@insurance-saas.com', icon: Crown, color: 'bg-purple-500/5 text-purple-400 border-purple-500/20 hover:bg-purple-500/10' },
   ];
 
@@ -73,7 +73,7 @@ function SignInPageContent() {
   };
 
   return (
-    <div className="bg-zinc-900 py-8 px-4 shadow-xl border border-zinc-800 sm:rounded-2xl sm:px-10">
+    <div className="bg-white py-8 px-4 shadow-xl border border-slate-200 sm:rounded-2xl sm:px-10">
       <form className="space-y-6" onSubmit={handleSubmit}>
         {isResetSuccess && (
           <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-3 text-sm text-emerald-400">
@@ -90,12 +90,12 @@ function SignInPageContent() {
         )}
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-zinc-300">
+          <label htmlFor="email" className="block text-sm font-medium text-slate-700">
             {t('auth.emailLabel')}
           </label>
           <div className="mt-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Mail className="h-4 w-4 text-zinc-500" />
+              <Mail className="h-4 w-4 text-slate-500" />
             </div>
             <input
               id="email"
@@ -105,7 +105,7 @@ function SignInPageContent() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+              className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
               placeholder={t('auth.emailPlaceholder')}
             />
           </div>
@@ -113,16 +113,16 @@ function SignInPageContent() {
 
         <div>
           <div className="flex items-center justify-between">
-            <label htmlFor="password" className="block text-sm font-medium text-zinc-300">
+            <label htmlFor="password" className="block text-sm font-medium text-slate-700">
               {t('auth.passwordLabel')}
             </label>
-            <Link href="/auth/forgot-password" className="text-xs text-blue-400 hover:text-blue-300 font-medium transition-colors">
+            <Link href="/auth/forgot-password" className="text-xs text-blue-700 hover:text-blue-600 font-medium transition-colors">
               {t('auth.forgotPassword')}
             </Link>
           </div>
           <div className="mt-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Lock className="h-4 w-4 text-zinc-500" />
+              <Lock className="h-4 w-4 text-slate-500" />
             </div>
             <input
               id="password"
@@ -132,7 +132,7 @@ function SignInPageContent() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+              className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
               placeholder={t('auth.passwordPlaceholder')}
             />
           </div>
@@ -142,7 +142,7 @@ function SignInPageContent() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-slate-900 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <Loader2 className="h-5 w-5 animate-spin" />
@@ -161,10 +161,10 @@ function SignInPageContent() {
         <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-zinc-800" />
+              <div className="w-full border-t border-slate-200" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-zinc-900 text-zinc-500 uppercase tracking-widest text-[10px] font-bold">
+              <span className="px-2 bg-white text-slate-500 uppercase tracking-widest text-[10px] font-bold">
                 {t('auth.quickDemoDivider')}
               </span>
             </div>
@@ -194,7 +194,7 @@ function SignInPageContent() {
               );
             })}
           </div>
-          <p className="text-[10px] text-zinc-600 text-center mt-3">
+          <p className="text-[10px] text-slate-400 text-center mt-3">
             {t('auth.quickDemoHint')}
           </p>
         </div>
@@ -206,30 +206,30 @@ function SignInPageContent() {
 function SignInPageInner() {
   const { t } = useT();
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
       <div className="absolute top-4 right-4">
         <LocaleSwitcher variant="nav" />
       </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="h-12 w-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+          <div className="h-12 w-12 rounded-xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center">
             <ShieldCheck className="h-8 w-8 text-blue-500" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
+        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900">
           {t('auth.signInTitle')}
         </h2>
-        <p className="mt-2 text-center text-sm text-zinc-400">
+        <p className="mt-2 text-center text-sm text-slate-600">
           {t('auth.signInSubtitle')}{' '}
-          <Link href="/auth/sign-up" className="font-medium text-blue-400 hover:text-blue-300">
+          <Link href="/auth/sign-up" className="font-medium text-blue-700 hover:text-blue-600">
             {t('auth.needAccountPrompt')}
           </Link>
         </p>
-        <p className="mt-3 text-center text-xs text-zinc-500">
+        <p className="mt-3 text-center text-xs text-slate-500">
           {t('auth.forCompaniesPrompt')}{' '}
           <Link
             href="/auth/register-company"
-            className="font-medium text-blue-400 hover:text-blue-300"
+            className="font-medium text-blue-700 hover:text-blue-600"
           >
             {t('auth.companySignUpHere')} →
           </Link>
@@ -238,8 +238,8 @@ function SignInPageInner() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <Suspense fallback={
-          <div className="bg-zinc-900 py-12 px-4 shadow-xl border border-zinc-800 sm:rounded-2xl sm:px-10 flex justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-zinc-700" />
+          <div className="bg-white py-12 px-4 shadow-xl border border-slate-200 sm:rounded-2xl sm:px-10 flex justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-slate-300" />
           </div>
         }>
           <SignInPageContent />

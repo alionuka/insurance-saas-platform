@@ -23,10 +23,10 @@ type Product = {
 };
 
 const TYPE_STYLES: Record<string, string> = {
-  AUTO: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  AUTO: 'bg-blue-700/10 text-blue-700 border-blue-700/20',
   HEALTH: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
   LIFE: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  PROPERTY: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  PROPERTY: 'bg-blue-700/10 text-blue-700 border-blue-700/20',
   TRAVEL: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
 };
 
@@ -99,15 +99,15 @@ export default function BrowseProductsGrid({
             <div className="flex items-center gap-3 mb-4">
               <span
                 className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full border ${
-                  TYPE_STYLES[type] ?? 'bg-zinc-800 text-zinc-400 border-zinc-700'
+                  TYPE_STYLES[type] ?? 'bg-slate-100 text-slate-600 border-slate-300'
                 }`}
               >
                 {type}
               </span>
-              <h2 className="text-lg font-semibold text-white">
+              <h2 className="text-lg font-semibold text-slate-900">
                 {TYPE_LABELS[type] ?? type}
               </h2>
-              <span className="text-xs text-zinc-600 font-mono">{products.length} products</span>
+              <span className="text-xs text-slate-400 font-mono">{products.length} products</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -116,7 +116,7 @@ export default function BrowseProductsGrid({
                 return (
                 <div
                   key={product.id}
-                  className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 hover:border-zinc-700 transition-colors flex flex-col gap-4 relative overflow-hidden"
+                  className="bg-white border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition-colors flex flex-col gap-4 relative overflow-hidden"
                 >
                   {brandColor && (
                     <div
@@ -127,7 +127,7 @@ export default function BrowseProductsGrid({
                   )}
                   <div className="flex items-start justify-between gap-2">
                     <div
-                      className="h-10 w-10 rounded-lg border border-zinc-800 flex items-center justify-center shrink-0 overflow-hidden"
+                      className="h-10 w-10 rounded-lg border border-slate-200 flex items-center justify-center shrink-0 overflow-hidden"
                       style={{
                         backgroundColor: brandColor ? brandColor + '15' : '#09090b',
                       }}
@@ -149,7 +149,7 @@ export default function BrowseProductsGrid({
                     <span
                       className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded border ${
                         TYPE_STYLES[product.type] ??
-                        'bg-zinc-800 text-zinc-400 border-zinc-700'
+                        'bg-slate-100 text-slate-600 border-slate-300'
                       }`}
                     >
                       {product.type}
@@ -157,34 +157,34 @@ export default function BrowseProductsGrid({
                   </div>
 
                   <div className="flex-1">
-                    <h3 className="font-bold text-white text-base leading-tight">
+                    <h3 className="font-bold text-slate-900 text-base leading-tight">
                       {product.name}
                     </h3>
                     {product.company && (
                       <div className="flex items-center gap-1.5 mt-1.5">
-                        <Building2 className="h-3 w-3 text-zinc-500" />
-                        <p className="text-xs text-zinc-500">{product.company.name}</p>
+                        <Building2 className="h-3 w-3 text-slate-500" />
+                        <p className="text-xs text-slate-500">{product.company.name}</p>
                       </div>
                     )}
                   </div>
 
-                  <div className="pt-3 border-t border-zinc-800/50">
+                  <div className="pt-3 border-t border-slate-200/50">
                     <div className="flex items-baseline justify-between mb-3">
-                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">
+                      <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">
                         Base premium
                       </span>
                       <div className="text-right">
                         <span className="text-xl font-bold text-emerald-400">
                           {formatCurrency(product.basePremium)}
                         </span>
-                        <span className="text-[10px] text-zinc-500 font-bold ml-1">/ mo</span>
+                        <span className="text-[10px] text-slate-500 font-bold ml-1">/ mo</span>
                       </div>
                     </div>
                     <button
                       onClick={() => submitApplication(product.id)}
                       disabled={applyingProductId !== null}
                       data-testid="apply-product"
-                      className="w-full py-2 px-3 rounded-xl disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed text-xs font-bold text-white transition-colors flex items-center justify-center gap-1.5 hover:opacity-90"
+                      className="w-full py-2 px-3 rounded-xl disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed text-xs font-bold text-slate-900 transition-colors flex items-center justify-center gap-1.5 hover:opacity-90"
                       style={{
                         backgroundColor: brandColor ?? '#059669',
                       }}

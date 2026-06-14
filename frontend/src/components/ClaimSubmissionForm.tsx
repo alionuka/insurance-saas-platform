@@ -99,18 +99,18 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
 
   if (activePolicies.length === 0) {
     return (
-      <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
+      <div className="bg-white/50 border border-slate-200 rounded-xl p-6 text-center">
         <AlertCircle className="h-8 w-8 text-blue-500 mx-auto mb-3" />
-        <p className="text-zinc-400">{t('clientClaims.needActivePolicy')}</p>
+        <p className="text-slate-600">{t('clientClaims.needActivePolicy')}</p>
       </div>
     );
   }
 
   return (
-    <section className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-xl">
-      <div className="p-6 border-b border-zinc-800 flex items-center gap-2 bg-zinc-900/50">
+    <section className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xl">
+      <div className="p-6 border-b border-slate-200 flex items-center gap-2 bg-white/50">
         <Activity className="h-5 w-5 text-emerald-400" />
-        <h2 className="text-xl font-semibold text-white">{t('clientClaims.fileNewClaim')}</h2>
+        <h2 className="text-xl font-semibold text-slate-900">{t('clientClaims.fileNewClaim')}</h2>
       </div>
 
       <div className="p-6">
@@ -118,12 +118,12 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Policy Select */}
             <div className="space-y-2">
-              <label htmlFor="policy" className="text-sm font-medium text-zinc-400">{t('clientClaims.selectActivePolicy')}</label>
+              <label htmlFor="policy" className="text-sm font-medium text-slate-600">{t('clientClaims.selectActivePolicy')}</label>
               <select
                 id="policy"
                 value={selectedPolicyId}
                 onChange={(e) => setSelectedPolicyId(e.target.value)}
-                className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 outline-none transition-all appearance-none"
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-slate-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 outline-none transition-all appearance-none"
                 required
               >
                 <option value="">{t('clientClaims.choosePolicy')}</option>
@@ -137,7 +137,7 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
 
             {/* Amount Input */}
             <div className="space-y-2">
-              <label htmlFor="amount" className="text-sm font-medium text-zinc-400">{t('clientClaims.claimAmount')}</label>
+              <label htmlFor="amount" className="text-sm font-medium text-slate-600">{t('clientClaims.claimAmount')}</label>
               <input
                 id="amount"
                 type="number"
@@ -146,7 +146,7 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="0.00"
-                className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 outline-none transition-all"
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-slate-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 outline-none transition-all"
                 required
               />
             </div>
@@ -154,14 +154,14 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
 
           {/* Description Textarea */}
           <div className="space-y-2">
-            <label htmlFor="description" className="text-sm font-medium text-zinc-400">{t('clientClaims.incidentDescription')}</label>
+            <label htmlFor="description" className="text-sm font-medium text-slate-600">{t('clientClaims.incidentDescription')}</label>
             <textarea
               id="description"
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder={t('clientClaims.describePlaceholder')}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 outline-none transition-all resize-none"
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-slate-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 outline-none transition-all resize-none"
               required
             />
           </div>
@@ -170,7 +170,7 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-800 disabled:text-zinc-500 text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/20"
+            className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-100 disabled:text-slate-500 text-slate-900 font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/20"
           >
             {isLoading ? (
               <>

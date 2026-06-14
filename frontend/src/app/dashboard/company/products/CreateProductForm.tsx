@@ -83,10 +83,10 @@ export default function CreateProductForm() {
   };
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl shadow-xl overflow-hidden">
-      <div className="p-6 border-b border-zinc-800 bg-zinc-900/50 flex items-center gap-2">
-        <Plus className="h-5 w-5 text-blue-400" />
-        <h2 className="text-lg font-bold text-white">Register New Product</h2>
+    <div className="bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden">
+      <div className="p-6 border-b border-slate-200 bg-white/50 flex items-center gap-2">
+        <Plus className="h-5 w-5 text-blue-700" />
+        <h2 className="text-lg font-bold text-slate-900">Register New Product</h2>
       </div>
 
       <div className="p-8">
@@ -95,12 +95,12 @@ export default function CreateProductForm() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-zinc-400 mb-1.5">
+              <label htmlFor="name" className="block text-sm font-medium text-slate-600 mb-1.5">
                 Product Name
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Package className="h-4 w-4 text-zinc-500" />
+                  <Package className="h-4 w-4 text-slate-500" />
                 </div>
                 <input
                   id="name"
@@ -109,26 +109,26 @@ export default function CreateProductForm() {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
+                  className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
                   placeholder="Premium Life Plus"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="type" className="block text-sm font-medium text-zinc-400 mb-1.5">
+              <label htmlFor="type" className="block text-sm font-medium text-slate-600 mb-1.5">
                 Product Type
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Type className="h-4 w-4 text-zinc-500" />
+                  <Type className="h-4 w-4 text-slate-500" />
                 </div>
                 <select
                   id="type"
                   name="type"
                   value={formData.type}
                   onChange={handleChange}
-                  className="block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm appearance-none cursor-pointer"
+                  className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm appearance-none cursor-pointer"
                 >
                   <option value="LIFE">Life Insurance</option>
                   <option value="AUTO">Auto Insurance</option>
@@ -140,12 +140,12 @@ export default function CreateProductForm() {
           </div>
 
           <div>
-            <label htmlFor="basePremium" className="block text-sm font-medium text-zinc-400 mb-1.5">
+            <label htmlFor="basePremium" className="block text-sm font-medium text-slate-600 mb-1.5">
               Base Monthly Premium ($)
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <DollarSign className="h-4 w-4 text-zinc-500" />
+                <DollarSign className="h-4 w-4 text-slate-500" />
               </div>
               <input
                 id="basePremium"
@@ -156,19 +156,19 @@ export default function CreateProductForm() {
                 required
                 value={formData.basePremium}
                 onChange={handleChange}
-                className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
+                className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
                 placeholder="0.00"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-zinc-400 mb-1.5">
+            <label htmlFor="description" className="block text-sm font-medium text-slate-600 mb-1.5">
               Description (Optional)
             </label>
             <div className="relative">
               <div className="absolute top-3 left-3 flex items-center pointer-events-none">
-                <FileText className="h-4 w-4 text-zinc-500" />
+                <FileText className="h-4 w-4 text-slate-500" />
               </div>
               <textarea
                 id="description"
@@ -176,7 +176,7 @@ export default function CreateProductForm() {
                 rows={3}
                 value={formData.description}
                 onChange={handleChange}
-                className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm resize-none"
+                className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm resize-none"
                 placeholder="Briefly describe the product coverage..."
               />
             </div>
@@ -186,7 +186,7 @@ export default function CreateProductForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-blue-900/20"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-bold text-slate-900 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-blue-900/20"
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />

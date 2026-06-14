@@ -1,8 +1,20 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────
+ * Light "classic insurance" theme — AXA / Allianz / State Farm feel.
+ * Off-white background, deep navy accent, no dark variant.
+ * ───────────────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;       /* slate-50 — off-white, paper-like */
+  --foreground: #0f172a;       /* slate-900 — high-contrast text */
+  --surface: #ffffff;          /* white cards on the off-white page */
+  --surface-muted: #f1f5f9;    /* slate-100 — subtle alt rows */
+  --border: #e2e8f0;           /* slate-200 — calm hairline borders */
+  --border-strong: #cbd5e1;    /* slate-300 — interactive borders */
+  --text-secondary: #475569;   /* slate-600 — body copy */
+  --text-muted: #64748b;       /* slate-500 — captions / labels */
+  --accent: #1d4ed8;           /* blue-700 — deep navy primary */
+  --accent-hover: #1e40af;     /* blue-800 — pressed / hover */
 }
 
 @theme inline {
@@ -12,17 +24,11 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), 'Inter', Arial, Helvetica, sans-serif;
+  font-feature-settings: 'ss01', 'cv11';   /* refined letterforms */
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -58,7 +64,7 @@ body {
   animation: pulse-glow 2.4s ease-out infinite;
 }
 
-/* Shimmer (for skeleton loaders) */
+/* Shimmer (for skeleton loaders) — light-theme aware */
 @keyframes shimmer {
   0%   { background-position: -1000px 0; }
   100% { background-position: 1000px 0; }
@@ -66,9 +72,9 @@ body {
 .animate-shimmer {
   background: linear-gradient(
     90deg,
-    rgba(39, 39, 42, 0) 0%,
-    rgba(63, 63, 70, 0.6) 50%,
-    rgba(39, 39, 42, 0) 100%
+    rgba(226, 232, 240, 0) 0%,
+    rgba(203, 213, 225, 0.8) 50%,
+    rgba(226, 232, 240, 0) 100%
   );
   background-size: 1000px 100%;
   animation: shimmer 2s linear infinite;
@@ -84,47 +90,50 @@ body {
   animation: gradient-flow 6s ease-in-out infinite;
 }
 
-/* Dot grid background (apply on a wrapper that has its own bg) */
+/* Dot grid background — tuned for light surfaces */
 .bg-dot-grid {
-  background-image: radial-gradient(circle, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(100, 116, 139, 0.12) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
-/* Subtle line grid (used in hero) */
+/* Subtle line grid — tuned for light surfaces */
 .bg-line-grid {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
-/* Glass card surface */
-.glass-card {
-  background: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(148, 163, 184, 0.12);
+/* "Paper" card — clean white surface with hairline border and soft shadow,
+ * inspired by classical insurance / financial documents. */
+.paper-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow:
+    0 1px 0 0 rgba(15, 23, 42, 0.02),
+    0 8px 24px -12px rgba(15, 23, 42, 0.08);
 }
-.glass-card-strong {
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(148, 163, 184, 0.18);
+.paper-card-elevated {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow:
+    0 4px 12px -4px rgba(15, 23, 42, 0.08),
+    0 12px 40px -16px rgba(15, 23, 42, 0.12);
 }
 
-/* Glow + lift on hover (for cards / interactive surfaces) */
-.glow-on-hover {
+/* Subtle lift on hover (no neon glow — just a confident shadow). */
+.lift-on-hover {
   transition:
-    transform 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
-.glow-on-hover:hover {
+.lift-on-hover:hover {
   transform: translateY(-2px);
-  border-color: rgba(59, 130, 246, 0.35);
+  border-color: var(--border-strong);
   box-shadow:
-    0 0 0 1px rgba(59, 130, 246, 0.15),
-    0 12px 40px -8px rgba(59, 130, 246, 0.25);
+    0 8px 20px -8px rgba(15, 23, 42, 0.12),
+    0 20px 50px -20px rgba(15, 23, 42, 0.18);
 }
 
 /* 1px gradient border (blue → slate → blue) */
@@ -153,58 +162,63 @@ body {
   pointer-events: none;
 }
 
-/* Primary CTA button (gradient + glow) */
+/* Primary CTA — solid deep navy, classical banking confidence */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
-  border-radius: 9999px;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  padding: 12px 28px;
+  border-radius: 8px;
+  background: var(--accent);
   color: #fff;
   font-weight: 600;
   font-size: 14px;
+  letter-spacing: 0.01em;
   border: none;
   cursor: pointer;
   transition:
+    background 0.2s ease,
     transform 0.2s ease,
-    box-shadow 0.2s ease,
-    filter 0.2s ease;
-  box-shadow: 0 4px 14px -2px rgba(59, 130, 246, 0.35);
+    box-shadow 0.2s ease;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 2px 6px -1px rgba(29, 78, 216, 0.25);
 }
 .btn-primary:hover {
+  background: var(--accent-hover);
   transform: translateY(-1px);
-  box-shadow: 0 8px 24px -2px rgba(59, 130, 246, 0.5);
-  filter: brightness(1.1);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 6px 16px -4px rgba(29, 78, 216, 0.35);
 }
 .btn-primary:active {
   transform: translateY(0);
 }
 
-/* Secondary button (glass + border highlight on hover) */
+/* Secondary CTA — outlined, neutral, sits next to .btn-primary */
 .btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
-  border-radius: 9999px;
-  background: rgba(30, 41, 59, 0.6);
-  color: #e2e8f0;
-  font-weight: 500;
+  padding: 12px 28px;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--foreground);
+  font-weight: 600;
   font-size: 14px;
-  border: 1px solid rgba(71, 85, 105, 0.6);
+  border: 1px solid var(--border-strong);
   cursor: pointer;
   transition:
-    transform 0.2s ease,
     background 0.2s ease,
-    border-color 0.2s ease;
-  backdrop-filter: blur(8px);
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 .btn-secondary:hover {
-  background: rgba(30, 41, 59, 0.85);
-  border-color: rgba(59, 130, 246, 0.4);
+  background: var(--surface-muted);
+  border-color: var(--accent);
+  color: var(--accent);
   transform: translateY(-1px);
 }
 
@@ -213,7 +227,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Subtle custom scrollbar (matches fintech vibe) */
+/* Subtle custom scrollbar — tuned for light theme */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -222,13 +236,13 @@ html {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(71, 85, 105, 0.5);
+  background: rgba(148, 163, 184, 0.5);
   border-radius: 5px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.5);
+  background: rgba(29, 78, 216, 0.5);
   background-clip: padding-box;
 }
 

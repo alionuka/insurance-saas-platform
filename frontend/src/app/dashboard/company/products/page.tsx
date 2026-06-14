@@ -42,8 +42,8 @@ export default async function CompanyProductsPage() {
         <div className="h-16 w-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4">
           <ShieldAlert className="h-10 w-10 text-rose-500" />
         </div>
-        <h2 className="text-2xl font-bold text-white mb-2">Access Forbidden</h2>
-        <p className="text-zinc-400 text-center max-w-md">
+        <h2 className="text-2xl font-bold text-slate-900 mb-2">Access Forbidden</h2>
+        <p className="text-slate-600 text-center max-w-md">
           You do not have permission to access this page. Product management is restricted to Company Administrators.
         </p>
       </div>
@@ -54,17 +54,17 @@ export default async function CompanyProductsPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="h-12 w-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+          <div className="h-12 w-12 rounded-xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center">
             <Package className="h-6 w-6 text-blue-500" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-white">Product Catalog</h1>
-            <p className="text-zinc-400 mt-1">Manage insurance products for your company.</p>
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900">Product Catalog</h1>
+            <p className="text-slate-600 mt-1">Manage insurance products for your company.</p>
           </div>
         </div>
         <Link 
           href="/dashboard/company"
-          className="flex items-center gap-2 text-sm font-medium text-zinc-500 hover:text-white transition-colors"
+          className="flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Dashboard

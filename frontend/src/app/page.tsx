@@ -43,26 +43,26 @@ export default function Home() {
   }, [t]);
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-blue-500/30 overflow-x-hidden">
+    <main className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-700/15 overflow-x-hidden">
       {/* ─── Sticky nav ───────────────────────────────────────────────── */}
-      <nav className="sticky top-0 z-50 border-b border-slate-900/80 bg-slate-950/80 backdrop-blur-xl">
+      <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white/85 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
-              <ShieldCheck className="h-4 w-4 text-blue-400" />
+            <div className="h-8 w-8 rounded-lg bg-blue-700 flex items-center justify-center shadow-sm">
+              <ShieldCheck className="h-4 w-4 text-white" />
             </div>
-            <span className="text-base font-bold tracking-tight">
+            <span className="text-base font-bold tracking-tight text-slate-900">
               InsurSaaS
             </span>
           </div>
-          <div className="hidden md:flex items-center gap-7 text-sm text-slate-400">
-            <a href="#roles" className="hover:text-white transition-colors">
+          <div className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600">
+            <a href="#roles" className="hover:text-blue-700 transition-colors">
               {t("landing.navRoles")}
             </a>
-            <a href="#features" className="hover:text-white transition-colors">
+            <a href="#features" className="hover:text-blue-700 transition-colors">
               {t("landing.navFeatures")}
             </a>
-            <a href="#products" className="hover:text-white transition-colors">
+            <a href="#products" className="hover:text-blue-700 transition-colors">
               {t("landing.navProducts")}
             </a>
           </div>
@@ -70,13 +70,13 @@ export default function Home() {
             <LocaleSwitcher variant="landing" />
             <Link
               href="/auth/sign-in"
-              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium text-slate-200 hover:bg-slate-800/60 transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-semibold text-slate-700 hover:text-blue-700 transition-colors"
             >
               {t("landing.navSignIn")}
             </Link>
             <Link
               href="/auth/sign-up"
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white text-slate-950 text-sm font-semibold hover:bg-slate-200 transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-blue-700 text-white text-sm font-semibold hover:bg-blue-800 transition-colors shadow-sm"
             >
               {t("landing.ctaPrimary")}
               <ArrowRight className="h-3.5 w-3.5" />
@@ -86,61 +86,53 @@ export default function Home() {
       </nav>
 
       {/* ─── Hero ────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden pt-20 pb-24 lg:pt-32 lg:pb-32">
-        {/* Subtle line grid (top-faded) + floating glow orbs.
-            Orbs drift slowly via CSS keyframes so the hero feels "alive". */}
-        <div className="absolute inset-0 bg-line-grid [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
-        <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 pointer-events-none animate-float-slow">
-          <div className="h-[500px] w-[500px] rounded-full bg-blue-600/25 blur-[120px]" />
-        </div>
-        <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 pointer-events-none animate-float-slow-reverse">
-          <div className="h-[500px] w-[500px] rounded-full bg-emerald-600/20 blur-[120px]" />
-        </div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none animate-float-slow opacity-60">
-          <div className="h-[300px] w-[300px] rounded-full bg-cyan-500/15 blur-[100px]" />
+      <section className="relative overflow-hidden pt-20 pb-24 lg:pt-32 lg:pb-32 bg-gradient-to-b from-white via-slate-50 to-slate-100/40">
+        {/* Editorial: faint dot-grid + a single tasteful navy radial.
+            No floating orbs — they're the giveaway "AI" vibe. */}
+        <div className="absolute inset-0 bg-dot-grid [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
+        <div className="absolute top-0 right-0 -translate-y-24 translate-x-1/4 pointer-events-none">
+          <div className="h-[600px] w-[600px] rounded-full bg-blue-100/60 blur-[140px]" />
         </div>
 
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Link
             href="/auth/register-company"
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/60 border border-slate-700/60 text-xs font-medium text-slate-300 mb-8 backdrop-blur-sm hover:border-blue-500/40 hover:text-blue-300 transition-colors group"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-semibold text-blue-700 mb-8 hover:bg-blue-100 transition-colors group"
           >
-            <Sparkles className="h-3 w-3 text-blue-400" />
+            <ShieldCheck className="h-3.5 w-3.5 text-blue-700" />
             {t("landing.heroNewBadge")}
             <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
           </Link>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.05] mb-8">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.05] mb-8 text-slate-900">
             {t("landing.heroLine1")}{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 animate-gradient-text">
+            <span className="text-blue-700">
               {t("landing.heroBrand")}
             </span>
           </h1>
 
-          <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-400 mb-10 leading-relaxed">
+          <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-600 mb-10 leading-relaxed">
             {t("landing.heroSubtitle")}
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-3 mb-16">
             <Link
               href="/auth/sign-up"
-              className="group relative px-7 py-3.5 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_30px_-4px_rgba(59,130,246,0.6)] inline-flex items-center justify-center gap-2 overflow-hidden"
+              className="group px-7 py-3.5 rounded-md bg-blue-700 text-white font-semibold transition-all hover:bg-blue-800 hover:-translate-y-0.5 hover:shadow-lg inline-flex items-center justify-center gap-2 shadow-md"
             >
-              <span className="relative z-10">{t("landing.ctaPrimary")}</span>
-              <ArrowRight className="relative z-10 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-              {/* subtle sheen on hover */}
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent translate-x-[-120%] group-hover:translate-x-[120%] transition-transform duration-700" />
+              <span>{t("landing.ctaPrimary")}</span>
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
             </Link>
             <Link
               href="/auth/sign-in"
-              className="px-7 py-3.5 rounded-full bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700/60 hover:border-blue-500/40 font-semibold transition-all hover:-translate-y-0.5 inline-flex items-center justify-center backdrop-blur-sm"
+              className="px-7 py-3.5 rounded-md bg-white text-slate-900 border border-slate-300 hover:border-blue-700 hover:text-blue-700 font-semibold transition-all hover:-translate-y-0.5 inline-flex items-center justify-center"
             >
               {t("landing.ctaSecondary")}
             </Link>
           </div>
 
           {/* Stats strip */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-800/60 border border-slate-800 rounded-2xl overflow-hidden backdrop-blur-sm max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-200 border border-slate-200 rounded-xl overflow-hidden max-w-4xl mx-auto shadow-sm">
             {[
               {
                 value: t("landing.heroStat1Value"),
@@ -161,9 +153,9 @@ export default function Home() {
             ].map((s) => (
               <div
                 key={s.label}
-                className="bg-slate-950/80 px-4 py-6 flex flex-col items-center"
+                className="bg-white px-4 py-6 flex flex-col items-center"
               >
-                <span className="text-2xl md:text-3xl font-black text-white tracking-tight">
+                <span className="text-2xl md:text-3xl font-black text-blue-700 tracking-tight">
                   {s.value}
                 </span>
                 <span className="text-[10px] md:text-xs uppercase tracking-widest text-slate-500 font-bold mt-1 text-center">
@@ -180,13 +172,13 @@ export default function Home() {
       </section>
 
       {/* ─── Role-based section ──────────────────────────────────────── */}
-      <section id="roles" className="py-24 border-t border-slate-900">
+      <section id="roles" className="py-24 border-t border-slate-200 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-slate-900">
               {t("landing.roleSectionTitle")}
             </h2>
-            <p className="text-lg text-slate-400 leading-relaxed">
+            <p className="text-lg text-slate-600 leading-relaxed">
               {t("landing.roleSectionSubtitle")}
             </p>
           </div>
@@ -225,40 +217,32 @@ export default function Home() {
               },
             ].map((role) => {
               const Icon = role.icon;
+              // Subtle tint per role — classic banking palette, no neon.
               const colorClasses: Record<string, string> = {
-                blue: "bg-blue-500/10 border-blue-500/30 text-blue-400",
-                emerald:
-                  "bg-emerald-500/10 border-emerald-500/30 text-emerald-400",
-                rose: "bg-rose-500/10 border-rose-500/30 text-rose-400",
-              };
-              // Tint the hover glow with the role's accent so each card
-              // breathes its own subtle colour when the user mouses over.
-              const glowClasses: Record<string, string> = {
-                blue: "hover:shadow-[0_12px_40px_-8px_rgba(59,130,246,0.35)] hover:border-blue-500/40",
-                emerald:
-                  "hover:shadow-[0_12px_40px_-8px_rgba(16,185,129,0.35)] hover:border-emerald-500/40",
-                rose: "hover:shadow-[0_12px_40px_-8px_rgba(244,63,94,0.3)] hover:border-rose-500/40",
+                blue: "bg-blue-50 border-blue-200 text-blue-700",
+                emerald: "bg-emerald-50 border-emerald-200 text-emerald-700",
+                rose: "bg-rose-50 border-rose-200 text-rose-700",
               };
               return (
                 <div
                   key={role.title}
-                  className={`group relative p-8 rounded-3xl glass-card transition-all duration-300 hover:-translate-y-1 ${glowClasses[role.color]}`}
+                  className="group relative p-8 rounded-2xl paper-card lift-on-hover"
                 >
                   <div
-                    className={`h-12 w-12 rounded-2xl border flex items-center justify-center mb-6 transition-transform group-hover:scale-110 ${colorClasses[role.color]}`}
+                    className={`h-12 w-12 rounded-xl border flex items-center justify-center mb-6 transition-transform group-hover:scale-105 ${colorClasses[role.color]}`}
                   >
                     <Icon className="h-6 w-6" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-4">
+                  <h3 className="text-2xl font-bold text-slate-900 mb-4">
                     {role.title}
                   </h3>
                   <ul className="space-y-3">
                     {role.bullets.map((b) => (
                       <li
                         key={b}
-                        className="flex items-start gap-2.5 text-slate-300 text-sm leading-relaxed"
+                        className="flex items-start gap-2.5 text-slate-700 text-sm leading-relaxed"
                       >
-                        <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
                         <span>{b}</span>
                       </li>
                     ))}
@@ -271,18 +255,18 @@ export default function Home() {
       </section>
 
       {/* ─── Features grid ───────────────────────────────────────────── */}
-      <section id="features" className="py-24 border-t border-slate-900 bg-slate-950">
+      <section id="features" className="py-24 border-t border-slate-200 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-slate-900">
               {t("landing.featuresTitle")}
             </h2>
-            <p className="text-lg text-slate-400 leading-relaxed">
+            <p className="text-lg text-slate-600 leading-relaxed">
               {t("landing.featuresSubtitle")}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-slate-800/40 border border-slate-800 rounded-3xl overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-slate-200 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
             {[
               {
                 icon: Brain,
@@ -319,15 +303,15 @@ export default function Home() {
               return (
                 <div
                   key={f.title}
-                  className="group bg-slate-950/60 p-8 hover:bg-slate-900/70 transition-all duration-300 relative"
+                  className="group bg-white p-8 hover:bg-slate-50 transition-colors duration-200"
                 >
-                  <div className="h-10 w-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4 transition-all group-hover:scale-110 group-hover:border-blue-500/40 group-hover:shadow-[0_0_20px_-2px_rgba(59,130,246,0.4)]">
-                    <Icon className="h-5 w-5 text-blue-400" />
+                  <div className="h-10 w-10 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center mb-4 transition-transform group-hover:scale-105">
+                    <Icon className="h-5 w-5 text-blue-700" />
                   </div>
-                  <h3 className="font-bold text-white mb-2 text-lg">
+                  <h3 className="font-bold text-slate-900 mb-2 text-lg">
                     {f.title}
                   </h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">
+                  <p className="text-sm text-slate-600 leading-relaxed">
                     {f.desc}
                   </p>
                 </div>
@@ -340,26 +324,26 @@ export default function Home() {
       {/* ─── Products section (existing, polished) ──────────────────── */}
       <section
         id="products"
-        className="py-24 border-t border-slate-900 relative"
+        className="py-24 border-t border-slate-200 relative bg-white"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-slate-900">
               {t("landing.productsHeading")}
             </h2>
-            <p className="text-lg text-slate-400 leading-relaxed">
+            <p className="text-lg text-slate-600 leading-relaxed">
               {t("landing.productsSubtitle")}
             </p>
           </div>
 
           {loading && (
             <div className="flex justify-center items-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" />
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-700" />
             </div>
           )}
 
           {error && (
-            <div className="p-6 bg-red-500/10 border border-red-500/50 rounded-2xl text-center text-red-400 max-w-2xl mx-auto backdrop-blur-sm">
+            <div className="p-6 bg-red-500/10 border border-red-500/50 rounded-2xl text-center text-red-400 max-w-2xl mx-auto ">
               <p>{error}</p>
             </div>
           )}
@@ -371,7 +355,7 @@ export default function Home() {
                 return (
                   <div
                     key={product.id}
-                    className="group p-6 rounded-2xl bg-slate-900/40 border border-slate-800 hover:border-slate-700 transition-all backdrop-blur-sm hover:-translate-y-1 flex flex-col relative overflow-hidden"
+                    className="group p-6 rounded-2xl bg-white/40 border border-slate-200 hover:border-slate-300 transition-all  hover:-translate-y-1 flex flex-col relative overflow-hidden"
                   >
                     {brand && (
                       <div
@@ -382,7 +366,7 @@ export default function Home() {
                     )}
                     <div className="flex justify-between items-start mb-5">
                       <div
-                        className="h-10 w-10 rounded-lg border border-slate-800 flex items-center justify-center overflow-hidden"
+                        className="h-10 w-10 rounded-lg border border-slate-200 flex items-center justify-center overflow-hidden"
                         style={{
                           backgroundColor: brand ? brand + "15" : "rgba(99,102,241,0.1)",
                         }}
@@ -402,11 +386,11 @@ export default function Home() {
                           />
                         )}
                       </div>
-                      <span className="px-2.5 py-0.5 rounded text-[10px] font-bold text-blue-300 border border-blue-500/20 bg-blue-500/5 uppercase tracking-widest">
+                      <span className="px-2.5 py-0.5 rounded text-[10px] font-bold text-blue-600 border border-blue-700/20 bg-blue-700/5 uppercase tracking-widest">
                         {product.type}
                       </span>
                     </div>
-                    <h3 className="text-lg font-bold text-white mb-1">
+                    <h3 className="text-lg font-bold text-slate-900 mb-1">
                       {product.name}
                     </h3>
                     <p className="text-xs font-medium text-emerald-400 mb-4">
@@ -422,7 +406,7 @@ export default function Home() {
                     )}
                     <Link
                       href="/auth/sign-in"
-                      className="mt-5 w-full py-2.5 px-4 rounded-xl text-white text-sm font-bold transition-all flex items-center justify-center gap-1.5 hover:opacity-90"
+                      className="mt-5 w-full py-2.5 px-4 rounded-xl text-slate-900 text-sm font-bold transition-all flex items-center justify-center gap-1.5 hover:opacity-90"
                       style={{ backgroundColor: brand ?? "#3b82f6" }}
                     >
                       {t("landing.applyNow")}
@@ -437,7 +421,7 @@ export default function Home() {
       </section>
 
       {/* ─── Trust strip ─────────────────────────────────────────────── */}
-      <section className="py-12 border-t border-slate-900 bg-slate-950">
+      <section className="py-12 border-t border-slate-200 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-slate-500">
             {[
@@ -461,7 +445,7 @@ export default function Home() {
       </section>
 
       {/* ─── Final CTA ───────────────────────────────────────────────── */}
-      <section className="py-24 border-t border-slate-900 relative overflow-hidden">
+      <section className="py-24 border-t border-slate-200 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-transparent to-emerald-600/5" />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
@@ -480,7 +464,7 @@ export default function Home() {
             </Link>
             <Link
               href="/auth/register-company"
-              className="px-7 py-3.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/30 font-semibold hover:bg-blue-500/20 transition-all inline-flex items-center justify-center gap-2"
+              className="px-7 py-3.5 rounded-full bg-blue-700/10 text-blue-600 border border-blue-700/30 font-semibold hover:bg-blue-700/20 transition-all inline-flex items-center justify-center gap-2"
             >
               <Building2 className="h-4 w-4" />
               {t("landing.finalCtaSecondary")}
@@ -490,13 +474,13 @@ export default function Home() {
       </section>
 
       {/* ─── Footer ──────────────────────────────────────────────────── */}
-      <footer className="border-t border-slate-900 py-12">
+      <footer className="border-t border-slate-200 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="h-7 w-7 rounded-md bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
-                  <ShieldCheck className="h-3.5 w-3.5 text-blue-400" />
+                <div className="h-7 w-7 rounded-md bg-blue-700/10 border border-blue-700/30 flex items-center justify-center">
+                  <ShieldCheck className="h-3.5 w-3.5 text-blue-700" />
                 </div>
                 <span className="text-sm font-bold tracking-tight">
                   InsurSaaS
@@ -512,19 +496,19 @@ export default function Home() {
               </h4>
               <ul className="space-y-2 text-sm text-slate-400">
                 <li>
-                  <a href="#features" className="hover:text-white transition-colors">
+                  <a href="#features" className="hover:text-slate-900 transition-colors">
                     {t("landing.navFeatures")}
                   </a>
                 </li>
                 <li>
-                  <a href="#products" className="hover:text-white transition-colors">
+                  <a href="#products" className="hover:text-slate-900 transition-colors">
                     {t("landing.navProducts")}
                   </a>
                 </li>
                 <li>
                   <Link
                     href="/auth/register-company"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-slate-900 transition-colors"
                   >
                     {t("auth.companySignUpHere")}
                   </Link>
@@ -541,7 +525,7 @@ export default function Home() {
                     href="https://backend-production-2cce.up.railway.app/api/docs"
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-slate-900 transition-colors"
                   >
                     {t("landing.footerSwagger")}
                   </a>
@@ -551,7 +535,7 @@ export default function Home() {
                     href="https://github.com/alionuka/insurance-saas-platform/blob/main/ARCHITECTURE.md"
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-slate-900 transition-colors"
                   >
                     {t("landing.footerArchitecture")}
                   </a>
@@ -561,7 +545,7 @@ export default function Home() {
                     href="https://github.com/alionuka/insurance-saas-platform/blob/main/COMPLIANCE.md"
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-slate-900 transition-colors"
                   >
                     {t("landing.footerCompliance")}
                   </a>
@@ -578,7 +562,7 @@ export default function Home() {
                     href="https://github.com/alionuka/insurance-saas-platform"
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-slate-900 transition-colors"
                   >
                     GitHub
                   </a>
@@ -586,7 +570,7 @@ export default function Home() {
                 <li>
                   <Link
                     href="/auth/sign-up"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-slate-900 transition-colors"
                   >
                     {t("landing.ctaPrimary")}
                   </Link>
@@ -594,7 +578,7 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-slate-900 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600">
+          <div className="border-t border-slate-200 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600">
             <p>© 2026 {t("landing.footerCopyright")}</p>
             <div className="flex items-center gap-4">
               <span>Next.js 16 · NestJS 11 · FastAPI · scikit-learn</span>

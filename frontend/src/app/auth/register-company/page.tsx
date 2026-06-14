@@ -83,27 +83,27 @@ export default function RegisterCompanyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
       <div className="absolute top-4 right-4">
         <LocaleSwitcher variant="nav" />
       </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-xl">
         <div className="flex justify-center">
-          <div className="h-12 w-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-            <Building2 className="h-8 w-8 text-blue-400" />
+          <div className="h-12 w-12 rounded-xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center">
+            <Building2 className="h-8 w-8 text-blue-700" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
+        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900">
           {t('auth.registerCompanyTitle')}
         </h2>
-        <p className="mt-2 text-center text-sm text-zinc-400 max-w-md mx-auto">
+        <p className="mt-2 text-center text-sm text-slate-600 max-w-md mx-auto">
           {t('auth.registerCompanySubtitle')}
         </p>
-        <p className="mt-3 text-center text-xs text-zinc-500">
+        <p className="mt-3 text-center text-xs text-slate-500">
           {t('auth.forCustomersPrompt')}{' '}
           <Link
             href="/auth/sign-up"
-            className="font-medium text-blue-400 hover:text-blue-300"
+            className="font-medium text-blue-700 hover:text-blue-600"
           >
             {t('auth.customerSignUpHere')}
           </Link>
@@ -111,10 +111,10 @@ export default function RegisterCompanyPage() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-xl">
-        <div className="bg-zinc-900 py-8 px-6 shadow-xl border border-zinc-800 sm:rounded-2xl sm:px-10">
+        <div className="bg-white py-8 px-6 shadow-xl border border-slate-200 sm:rounded-2xl sm:px-10">
           {/* KYC disclaimer banner */}
-          <div className="mb-6 p-3 rounded-lg bg-blue-500/5 border border-blue-500/20 flex gap-3 text-xs text-blue-300/80">
-            <FileCheck className="h-4 w-4 shrink-0 mt-0.5 text-blue-400" />
+          <div className="mb-6 p-3 rounded-lg bg-blue-700/5 border border-blue-700/20 flex gap-3 text-xs text-blue-600/80">
+            <FileCheck className="h-4 w-4 shrink-0 mt-0.5 text-blue-700" />
             <p className="leading-relaxed">
               {t('auth.kycNotice')}
             </p>
@@ -129,17 +129,17 @@ export default function RegisterCompanyPage() {
             )}
 
             <fieldset className="space-y-4">
-              <legend className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2">
+              <legend className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">
                 {t('auth.kycSectionCompany')}
               </legend>
 
               <div>
-                <label htmlFor="companyName" className="block text-sm font-medium text-zinc-300">
+                <label htmlFor="companyName" className="block text-sm font-medium text-slate-700">
                   {t('auth.companyNameLabel')} *
                 </label>
                 <div className="mt-1 relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Building2 className="h-4 w-4 text-zinc-500" />
+                    <Building2 className="h-4 w-4 text-slate-500" />
                   </div>
                   <input
                     id="companyName"
@@ -150,7 +150,7 @@ export default function RegisterCompanyPage() {
                     maxLength={100}
                     value={formData.companyName}
                     onChange={handleChange}
-                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
                     placeholder={t('auth.companyNamePlaceholder')}
                   />
                 </div>
@@ -158,12 +158,12 @@ export default function RegisterCompanyPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="licenseNumber" className="block text-sm font-medium text-zinc-300">
+                  <label htmlFor="licenseNumber" className="block text-sm font-medium text-slate-700">
                     {t('auth.licenseNumberLabel')}
                   </label>
                   <div className="mt-1 relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <FileCheck className="h-4 w-4 text-zinc-500" />
+                      <FileCheck className="h-4 w-4 text-slate-500" />
                     </div>
                     <input
                       id="licenseNumber"
@@ -172,19 +172,19 @@ export default function RegisterCompanyPage() {
                       maxLength={100}
                       value={formData.licenseNumber}
                       onChange={handleChange}
-                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
                       placeholder="IL-2024-INS-12345"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="country" className="block text-sm font-medium text-zinc-300">
+                  <label htmlFor="country" className="block text-sm font-medium text-slate-700">
                     {t('auth.countryLabel')}
                   </label>
                   <div className="mt-1 relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Globe className="h-4 w-4 text-zinc-500" />
+                      <Globe className="h-4 w-4 text-slate-500" />
                     </div>
                     <input
                       id="country"
@@ -196,7 +196,7 @@ export default function RegisterCompanyPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, country: e.target.value.toUpperCase() })
                       }
-                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
                       placeholder="UA"
                     />
                   </div>
@@ -204,12 +204,12 @@ export default function RegisterCompanyPage() {
               </div>
 
               <div>
-                <label htmlFor="contactPhone" className="block text-sm font-medium text-zinc-300">
+                <label htmlFor="contactPhone" className="block text-sm font-medium text-slate-700">
                   {t('auth.contactPhoneLabel')}
                 </label>
                 <div className="mt-1 relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Phone className="h-4 w-4 text-zinc-500" />
+                    <Phone className="h-4 w-4 text-slate-500" />
                   </div>
                   <input
                     id="contactPhone"
@@ -218,26 +218,26 @@ export default function RegisterCompanyPage() {
                     maxLength={30}
                     value={formData.contactPhone}
                     onChange={handleChange}
-                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
                     placeholder="+380 44 555 0000"
                   />
                 </div>
               </div>
             </fieldset>
 
-            <fieldset className="space-y-4 pt-2 border-t border-zinc-800/60">
-              <legend className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2 pt-3">
+            <fieldset className="space-y-4 pt-2 border-t border-slate-200/60">
+              <legend className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2 pt-3">
                 {t('auth.kycSectionAdmin')}
               </legend>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-zinc-300">
+                  <label htmlFor="firstName" className="block text-sm font-medium text-slate-700">
                     {t('auth.firstNameLabel')} *
                   </label>
                   <div className="mt-1 relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <UserIcon className="h-4 w-4 text-zinc-500" />
+                      <UserIcon className="h-4 w-4 text-slate-500" />
                     </div>
                     <input
                       id="firstName"
@@ -246,12 +246,12 @@ export default function RegisterCompanyPage() {
                       required
                       value={formData.firstName}
                       onChange={handleChange}
-                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
                     />
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-zinc-300">
+                  <label htmlFor="lastName" className="block text-sm font-medium text-slate-700">
                     {t('auth.lastNameLabel')} *
                   </label>
                   <div className="mt-1">
@@ -262,19 +262,19 @@ export default function RegisterCompanyPage() {
                       required
                       value={formData.lastName}
                       onChange={handleChange}
-                      className="appearance-none block w-full px-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                      className="appearance-none block w-full px-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
                     />
                   </div>
                 </div>
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-zinc-300">
+                <label htmlFor="email" className="block text-sm font-medium text-slate-700">
                   {t('auth.emailLabel')} *
                 </label>
                 <div className="mt-1 relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-4 w-4 text-zinc-500" />
+                    <Mail className="h-4 w-4 text-slate-500" />
                   </div>
                   <input
                     id="email"
@@ -283,19 +283,19 @@ export default function RegisterCompanyPage() {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
                     placeholder={t('auth.emailPlaceholder')}
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-zinc-300">
+                <label htmlFor="password" className="block text-sm font-medium text-slate-700">
                   {t('auth.passwordLabel')} *
                 </label>
                 <div className="mt-1 relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-4 w-4 text-zinc-500" />
+                    <Lock className="h-4 w-4 text-slate-500" />
                   </div>
                   <input
                     id="password"
@@ -306,7 +306,7 @@ export default function RegisterCompanyPage() {
                     maxLength={72}
                     value={formData.password}
                     onChange={handleChange}
-                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
                     placeholder={t('auth.passwordPlaceholder')}
                   />
                 </div>
@@ -317,7 +317,7 @@ export default function RegisterCompanyPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center items-center gap-2 py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center items-center gap-2 py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-slate-900 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
@@ -328,18 +328,18 @@ export default function RegisterCompanyPage() {
                   </>
                 )}
               </button>
-              <p className="text-[10px] text-zinc-600 text-center mt-2">
+              <p className="text-[10px] text-slate-400 text-center mt-2">
                 * {t('auth.requiredFields')}
               </p>
             </div>
           </form>
         </div>
 
-        <p className="mt-6 text-center text-xs text-zinc-600">
+        <p className="mt-6 text-center text-xs text-slate-400">
           {t('auth.signInSubtitle')}{' '}
           <Link
             href="/auth/sign-in"
-            className="font-medium text-blue-400 hover:text-blue-300"
+            className="font-medium text-blue-700 hover:text-blue-600"
           >
             {t('auth.haveAccountPrompt')}
           </Link>

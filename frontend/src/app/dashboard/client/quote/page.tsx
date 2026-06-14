@@ -21,8 +21,8 @@ export default async function ClientQuotePage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">{t('clientQuote.title')}</h1>
-        <p className="text-zinc-400 mt-1 text-sm">{t('clientQuote.subtitle')}</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900">{t('clientQuote.title')}</h1>
+        <p className="text-slate-600 mt-1 text-sm">{t('clientQuote.subtitle')}</p>
       </div>
 
       <QuoteCalculator products={products} />

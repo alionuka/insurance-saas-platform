@@ -372,14 +372,14 @@ export default function OnboardingTour() {
         aria-modal="true"
         aria-labelledby="onboarding-title"
         style={tooltipStyle}
-        className="bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl shadow-blue-500/10 p-6"
+        className="bg-white border border-slate-200 rounded-2xl shadow-2xl shadow-blue-500/10 p-6"
       >
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-              <Sparkles className="h-4 w-4 text-blue-400" />
+            <div className="h-8 w-8 rounded-lg bg-blue-700/10 border border-blue-700/20 flex items-center justify-center">
+              <Sparkles className="h-4 w-4 text-blue-700" />
             </div>
-            <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">
+            <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">
               {t('onboarding.stepCounter')
                 .replace('{current}', String(stepIndex + 1))
                 .replace('{total}', String(steps.length))}
@@ -387,17 +387,17 @@ export default function OnboardingTour() {
           </div>
           <button
             onClick={finish}
-            className="text-zinc-500 hover:text-white transition-colors p-1 -mr-1 rounded"
+            className="text-slate-500 hover:text-slate-900 transition-colors p-1 -mr-1 rounded"
             aria-label="Close tour"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <h3 id="onboarding-title" className="text-lg font-bold text-white mb-2">
+        <h3 id="onboarding-title" className="text-lg font-bold text-slate-900 mb-2">
           {currentStep.title}
         </h3>
-        <p className="text-sm text-zinc-400 leading-relaxed">{currentStep.body}</p>
+        <p className="text-sm text-slate-600 leading-relaxed">{currentStep.body}</p>
 
         {/* Progress dots */}
         <div className="flex items-center gap-1.5 mt-5 mb-5">
@@ -406,9 +406,9 @@ export default function OnboardingTour() {
               key={i}
               className={`h-1 rounded-full transition-all ${
                 i === stepIndex
-                  ? 'bg-blue-500 w-6'
+                  ? 'bg-blue-700 w-6'
                   : i < stepIndex
-                  ? 'bg-blue-500/40 w-1.5'
+                  ? 'bg-blue-700/40 w-1.5'
                   : 'bg-zinc-700 w-1.5'
               }`}
             />
@@ -418,7 +418,7 @@ export default function OnboardingTour() {
         <div className="flex items-center justify-between gap-3">
           <button
             onClick={finish}
-            className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors font-medium"
+            className="text-xs text-slate-500 hover:text-slate-700 transition-colors font-medium"
           >
             {t('onboarding.buttons.skip')}
           </button>
@@ -426,7 +426,7 @@ export default function OnboardingTour() {
             {!isFirst && (
               <button
                 onClick={() => setStepIndex(stepIndex - 1)}
-                className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors"
+                className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-zinc-700 rounded-lg transition-colors"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
                 {t('onboarding.buttons.back')}
@@ -434,7 +434,7 @@ export default function OnboardingTour() {
             )}
             <button
               onClick={advance}
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors shadow-lg shadow-blue-500/20"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-slate-900 bg-blue-700 hover:bg-blue-600 rounded-lg transition-colors shadow-lg shadow-blue-500/20"
             >
               {isLast ? (
                 <>

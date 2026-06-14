@@ -13,25 +13,25 @@ function SuccessContent() {
   const { t } = useT();
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
       <div className="absolute top-4 right-4">
         <LocaleSwitcher variant="nav" />
       </div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-lg">
         <div className="flex justify-center">
-          <div className="h-16 w-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-            <Clock className="h-9 w-9 text-blue-400" />
+          <div className="h-16 w-16 rounded-2xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center">
+            <Clock className="h-9 w-9 text-blue-700" />
           </div>
         </div>
 
-        <h1 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
+        <h1 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900">
           {t('auth.pendingReviewTitle')}
         </h1>
-        <p className="mt-3 text-center text-zinc-400 leading-relaxed">
+        <p className="mt-3 text-center text-slate-600 leading-relaxed">
           {t('auth.pendingReviewSubtitle1')}{' '}
-          <span className="text-white font-semibold inline-flex items-center gap-1">
-            <Building2 className="h-4 w-4 text-blue-400" />
+          <span className="text-slate-900 font-semibold inline-flex items-center gap-1">
+            <Building2 className="h-4 w-4 text-blue-700" />
             {companyName}
           </span>{' '}
           {t('auth.pendingReviewSubtitle2')}
@@ -39,14 +39,14 @@ function SuccessContent() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-xl space-y-5">
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xl space-y-5">
           <div className="flex items-start gap-3">
             <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-white">
+              <p className="text-sm font-medium text-slate-900">
                 {t('auth.pendingStep1Title')}
               </p>
-              <p className="text-xs text-zinc-500 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5">
                 {t('auth.pendingStep1Subtitle')}
               </p>
             </div>
@@ -57,31 +57,31 @@ function SuccessContent() {
               <div className="h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
             </div>
             <div>
-              <p className="text-sm font-medium text-white">
+              <p className="text-sm font-medium text-slate-900">
                 {t('auth.pendingStep2Title')}
               </p>
-              <p className="text-xs text-zinc-500 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5">
                 {t('auth.pendingStep2Subtitle')}
               </p>
             </div>
           </div>
 
           <div className="flex items-start gap-3 opacity-60">
-            <div className="h-5 w-5 rounded-full border-2 border-zinc-700 shrink-0 mt-0.5" />
+            <div className="h-5 w-5 rounded-full border-2 border-slate-300 shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-white">
+              <p className="text-sm font-medium text-slate-900">
                 {t('auth.pendingStep3Title')}
               </p>
-              <p className="text-xs text-zinc-500 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5">
                 {t('auth.pendingStep3Subtitle')}
               </p>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-zinc-800/60">
-            <div className="p-3 rounded-lg bg-blue-500/5 border border-blue-500/15">
-              <p className="text-[11px] text-blue-300/70 leading-relaxed">
-                <strong className="text-blue-300">{t('auth.pendingDemoNoteLabel')}</strong>{' '}
+          <div className="pt-4 border-t border-slate-200/60">
+            <div className="p-3 rounded-lg bg-blue-700/5 border border-blue-700/15">
+              <p className="text-[11px] text-blue-600/70 leading-relaxed">
+                <strong className="text-blue-600">{t('auth.pendingDemoNoteLabel')}</strong>{' '}
                 {t('auth.pendingDemoNoteText')}
               </p>
             </div>
@@ -91,7 +91,7 @@ function SuccessContent() {
         <div className="mt-6 text-center">
           <Link
             href="/auth/sign-in"
-            className="inline-flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-medium text-blue-700 hover:text-blue-600 transition-colors"
           >
             {t('auth.pendingBackToSignIn')}
             <ArrowRight className="h-4 w-4" />
@@ -106,8 +106,8 @@ export default function RegisterCompanySuccessPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-          <Clock className="h-8 w-8 text-blue-400 animate-pulse" />
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+          <Clock className="h-8 w-8 text-blue-700 animate-pulse" />
         </div>
       }
     >

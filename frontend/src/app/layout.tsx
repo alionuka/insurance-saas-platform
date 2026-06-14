@@ -46,11 +46,11 @@ export default async function RootLayout({
           richColors
           closeButton
           position="bottom-right"
-          theme="dark"
+          theme="light"
           toastOptions={{
             classNames: {
               toast:
-                'backdrop-blur-xl border border-slate-700/60 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.5)]',
+                'border border-slate-200 shadow-[0_8px_30px_-4px_rgba(15,23,42,0.12)]',
             },
           }}
         />

@@ -39,14 +39,14 @@ export default async function MlModelsDashboardPage() {
   return (
     <div className="space-y-6">
       {/* Header section */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div className="flex items-center gap-4">
-          <div className="h-12 w-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
-            <Brain className="h-6 w-6 text-blue-400" />
+          <div className="h-12 w-12 rounded-xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center shrink-0">
+            <Brain className="h-6 w-6 text-blue-700" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">ML Model Methodology</h1>
-            <p className="text-zinc-400 mt-1">Metrics, training performance, and explainability artifacts</p>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900">ML Model Methodology</h1>
+            <p className="text-slate-600 mt-1">Metrics, training performance, and explainability artifacts</p>
           </div>
         </div>
       </div>
@@ -54,12 +54,12 @@ export default async function MlModelsDashboardPage() {
       {data ? (
         <MlModelsTabs data={data} />
       ) : (
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-12 text-center max-w-lg mx-auto shadow-md">
+        <div className="bg-white border border-slate-200 rounded-xl p-12 text-center max-w-lg mx-auto shadow-md">
           <div className="mx-auto h-12 w-12 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4">
             <ShieldAlert className="h-6 w-6 text-red-400" />
           </div>
-          <h2 className="text-lg font-bold text-white mb-2">Metrics Not Available</h2>
-          <p className="text-sm text-zinc-400 leading-relaxed">
+          <h2 className="text-lg font-bold text-slate-900 mb-2">Metrics Not Available</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
             The machine learning service metrics are currently offline or cannot be parsed. Please check if the ML service is running.
           </p>
         </div>

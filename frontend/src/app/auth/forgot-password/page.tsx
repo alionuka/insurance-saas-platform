@@ -34,35 +34,35 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
       <div className="absolute top-4 right-4">
         <LocaleSwitcher variant="nav" />
       </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="h-12 w-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+          <div className="h-12 w-12 rounded-xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center">
             <ShieldCheck className="h-8 w-8 text-blue-500" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
+        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900">
           {t('auth.forgotTitle')}
         </h2>
-        <p className="mt-2 text-center text-sm text-zinc-400">
+        <p className="mt-2 text-center text-sm text-slate-600">
           {t('auth.forgotSubtitle')}
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-zinc-900 py-8 px-4 shadow-xl border border-zinc-800 sm:rounded-2xl sm:px-10">
+        <div className="bg-white py-8 px-4 shadow-xl border border-slate-200 sm:rounded-2xl sm:px-10">
           {!submitted ? (
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-zinc-300">
+                <label htmlFor="email" className="block text-sm font-medium text-slate-700">
                   {t('auth.emailLabel')}
                 </label>
                 <div className="mt-1 relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-4 w-4 text-zinc-500" />
+                    <Mail className="h-4 w-4 text-slate-500" />
                   </div>
                   <input
                     id="email"
@@ -72,7 +72,7 @@ export default function ForgotPasswordPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
+                    className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
                     placeholder={t('auth.emailPlaceholder')}
                   />
                 </div>
@@ -82,7 +82,7 @@ export default function ForgotPasswordPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-slate-900 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <Loader2 className="h-5 w-5 animate-spin" />
@@ -93,7 +93,7 @@ export default function ForgotPasswordPage() {
               </div>
 
               <div className="text-center">
-                <Link href="/auth/sign-in" className="inline-flex items-center gap-2 text-sm font-medium text-zinc-500 hover:text-white transition-colors">
+                <Link href="/auth/sign-in" className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
                   <ArrowLeft className="h-4 w-4" />
                   {t('auth.backToSignIn')}
                 </Link>
@@ -107,15 +107,15 @@ export default function ForgotPasswordPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <h3 className="text-xl font-bold text-white">{t('auth.checkEmail')}</h3>
-                <p className="text-sm text-zinc-400 max-w-xs mx-auto leading-relaxed">
-                  {t('auth.ifAccountExists')} <span className="text-zinc-200 font-medium">{email}</span>, {t('auth.resetLinkSent')}
+                <h3 className="text-xl font-bold text-slate-900">{t('auth.checkEmail')}</h3>
+                <p className="text-sm text-slate-600 max-w-xs mx-auto leading-relaxed">
+                  {t('auth.ifAccountExists')} <span className="text-slate-800 font-medium">{email}</span>, {t('auth.resetLinkSent')}
                 </p>
               </div>
               <div className="pt-4">
                 <Link
                   href="/auth/sign-in"
-                  className="w-full flex justify-center py-3 px-4 border border-zinc-800 rounded-lg text-sm font-semibold text-white bg-zinc-950 hover:bg-zinc-900 transition-all"
+                  className="w-full flex justify-center py-3 px-4 border border-slate-200 rounded-lg text-sm font-semibold text-slate-900 bg-slate-50 hover:bg-white transition-all"
                 >
                   {t('auth.returnToSignIn')}
                 </Link>

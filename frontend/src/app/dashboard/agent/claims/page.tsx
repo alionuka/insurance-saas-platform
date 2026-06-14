@@ -29,8 +29,8 @@ export default async function AgentClaimsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">Claims Queue</h1>
-        <p className="text-zinc-400 mt-1 text-sm">Investigate and update claim statuses.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Claims Queue</h1>
+        <p className="text-slate-600 mt-1 text-sm">Investigate and update claim statuses.</p>
       </div>
 
       {claims.length > 0 ? (

@@ -23,11 +23,11 @@ export default function DashboardEntry() {
 
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center text-center">
-      <div className="h-16 w-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-6">
+      <div className="h-16 w-16 rounded-2xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center mb-6">
         <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
       </div>
-      <h1 className="text-2xl font-bold text-white mb-2">Redirecting to your dashboard...</h1>
-      <p className="text-zinc-400">Please wait while we verify your access.</p>
+      <h1 className="text-2xl font-bold text-slate-900 mb-2">Redirecting to your dashboard...</h1>
+      <p className="text-slate-600">Please wait while we verify your access.</p>
     </div>
   );
 }

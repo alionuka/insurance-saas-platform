@@ -18,14 +18,14 @@ export type ClaimStatus = (typeof CLAIM_STATUSES)[number];
 
 export const appStatusColors: Record<ApplicationStatus, string> = {
   PENDING: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-  UNDER_REVIEW: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  UNDER_REVIEW: 'bg-blue-700/10 text-blue-700 border-blue-700/20',
   APPROVED: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
   REJECTED: 'bg-red-500/10 text-red-400 border-red-500/20',
 };
 
 export const claimStatusColors: Record<ClaimStatus, string> = {
   FILED: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-  IN_PROGRESS: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  IN_PROGRESS: 'bg-blue-700/10 text-blue-700 border-blue-700/20',
   APPROVED: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
   DENIED: 'bg-red-500/10 text-red-400 border-red-500/20',
 };
@@ -37,7 +37,7 @@ export function StatusBadge({
   status: string;
   colorMap: Record<string, string>;
 }) {
-  const color = colorMap[status] ?? 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+  const color = colorMap[status] ?? 'bg-zinc-500/10 text-slate-600 border-zinc-500/20';
   return (
     <span
       className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border ${color}`}
@@ -53,7 +53,7 @@ export function StatusBadge({
 }
 
 export function RiskBadge({ score, level }: { score: number | null; level: string | null }) {
-  if (score === null) return <span className="text-xs text-zinc-500">N/A</span>;
+  if (score === null) return <span className="text-xs text-slate-500">N/A</span>;
   const high = score > 70;
   const med = score > 40;
   return (
@@ -71,14 +71,14 @@ export function RiskBadge({ score, level }: { score: number | null; level: strin
         >
           {score.toFixed(0)}
         </span>
-        {level && <span className="ml-1 text-[10px] text-zinc-500 uppercase">{level}</span>}
+        {level && <span className="ml-1 text-[10px] text-slate-500 uppercase">{level}</span>}
       </div>
     </div>
   );
 }
 
 export function FraudBadge({ score, flag }: { score: number | null; flag: string | null }) {
-  if (score === null) return <span className="text-xs text-zinc-500">N/A</span>;
+  if (score === null) return <span className="text-xs text-slate-500">N/A</span>;
   const high = score > 75;
   const med = score > 40;
   return (
@@ -93,7 +93,7 @@ export function FraudBadge({ score, flag }: { score: number | null; flag: string
         {high ? 'High' : med ? 'Med' : 'Low'} ({score.toFixed(0)})
       </span>
       {flag && (
-        <span className="text-[10px] text-zinc-500 uppercase tracking-wide">{flag}</span>
+        <span className="text-[10px] text-slate-500 uppercase tracking-wide">{flag}</span>
       )}
     </div>
   );
@@ -114,7 +114,7 @@ export function StatusSelect<T extends string>({
 }) {
   if (isLoading) {
     return (
-      <span className="flex items-center gap-1.5 text-zinc-400 text-xs">
+      <span className="flex items-center gap-1.5 text-slate-600 text-xs">
         <Loader2 className="h-4 w-4 animate-spin" /> Saving…
       </span>
     );
@@ -125,7 +125,7 @@ export function StatusSelect<T extends string>({
         key={currentStatus} /* re-mount so defaultValue reflects server value */
         defaultValue={currentStatus}
         onChange={(e) => onChange(e.target.value as T)}
-        className="text-xs bg-zinc-950 border border-zinc-700 text-white rounded-md px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer hover:border-zinc-500 transition-colors"
+        className="text-xs bg-slate-50 border border-slate-300 text-slate-900 rounded-md px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer hover:border-zinc-500 transition-colors"
       >
         {options.map((s) => (
           <option key={s} value={s}>

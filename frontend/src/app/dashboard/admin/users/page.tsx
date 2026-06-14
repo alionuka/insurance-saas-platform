@@ -9,10 +9,10 @@ import { formatDate } from '@/lib/formatDate';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 const roleColors: Record<string, string> = {
-  CUSTOMER: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  CUSTOMER: 'bg-blue-700/10 text-blue-700 border-blue-700/20',
   AGENT: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  COMPANY_ADMIN: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  PLATFORM_ADMIN: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  COMPANY_ADMIN: 'bg-blue-700/10 text-blue-700 border-blue-700/20',
+  PLATFORM_ADMIN: 'bg-blue-700/10 text-blue-700 border-blue-700/20',
 };
 
 async function getPageData(roleFilter?: string) {
@@ -73,8 +73,8 @@ export default async function ManageUsersPage(props: Props) {
         <div className="h-16 w-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4">
           <ShieldAlert className="h-10 w-10 text-rose-500" />
         </div>
-        <h2 className="text-2xl font-bold text-white mb-2">Access Forbidden</h2>
-        <p className="text-zinc-400 text-center max-w-md">
+        <h2 className="text-2xl font-bold text-slate-900 mb-2">Access Forbidden</h2>
+        <p className="text-slate-600 text-center max-w-md">
           You do not have permission to access this page. Staff account management is restricted to Platform Administrators only.
         </p>
       </div>
@@ -84,12 +84,12 @@ export default async function ManageUsersPage(props: Props) {
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-4">
-        <div className="h-12 w-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+        <div className="h-12 w-12 rounded-xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center">
           <Users className="h-6 w-6 text-blue-500" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">User Management</h1>
-          <p className="text-zinc-400 mt-1">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">User Management</h1>
+          <p className="text-slate-600 mt-1">
             View all platform users and create new staff accounts.
           </p>
         </div>
@@ -100,10 +100,10 @@ export default async function ManageUsersPage(props: Props) {
         <UsersFilters counts={counts} />
 
         {users.length > 0 ? (
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-xl">
+          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm min-w-[800px]">
-                <thead className="bg-zinc-950 text-zinc-500 uppercase text-[10px] font-bold tracking-wider">
+                <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider">
                   <tr>
                     <th className="px-6 py-3">Name</th>
                     <th className="px-6 py-3">Email</th>
@@ -114,29 +114,29 @@ export default async function ManageUsersPage(props: Props) {
                 </thead>
                 <tbody className="divide-y divide-zinc-800">
                   {users.map((user: any) => (
-                    <tr key={user.id} className="hover:bg-zinc-800/30 transition-colors group">
+                    <tr key={user.id} className="hover:bg-slate-100/30 transition-colors group">
                       <td className="px-6 py-4">
-                        <Link href={`/dashboard/admin/users/${user.id}`} className="flex items-center gap-3 group-hover:text-blue-400 transition-colors">
-                          <div className="h-8 w-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-xs font-bold text-blue-400 shrink-0">
+                        <Link href={`/dashboard/admin/users/${user.id}`} className="flex items-center gap-3 group-hover:text-blue-700 transition-colors">
+                          <div className="h-8 w-8 rounded-full bg-blue-700/10 border border-blue-700/20 flex items-center justify-center text-xs font-bold text-blue-700 shrink-0">
                             {(user.firstName?.[0] || '').toUpperCase()}{(user.lastName?.[0] || '').toUpperCase()}
                           </div>
-                          <span className="font-medium text-white group-hover:text-blue-400 transition-colors">
+                          <span className="font-medium text-slate-900 group-hover:text-blue-700 transition-colors">
                             {user.firstName} {user.lastName}
                           </span>
                         </Link>
                       </td>
-                      <td className="px-6 py-4 text-zinc-400 font-mono text-xs">
+                      <td className="px-6 py-4 text-slate-600 font-mono text-xs">
                         {user.email}
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${roleColors[user.role] || 'bg-zinc-800 text-zinc-400 border-zinc-700'}`}>
+                        <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${roleColors[user.role] || 'bg-slate-100 text-slate-600 border-slate-300'}`}>
                           {user.role.replace('_', ' ')}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-zinc-400 text-xs">
+                      <td className="px-6 py-4 text-slate-600 text-xs">
                         {user.company?.name || '—'}
                       </td>
-                      <td className="px-6 py-4 text-right text-zinc-500 font-mono text-xs">
+                      <td className="px-6 py-4 text-right text-slate-500 font-mono text-xs">
                         {formatDate(user.createdAt)}
                       </td>
                     </tr>

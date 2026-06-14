@@ -103,10 +103,10 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
   };
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl shadow-xl overflow-hidden">
-      <div className="p-6 border-b border-zinc-800 bg-zinc-900/50 flex items-center gap-2">
-        <ShieldCheck className="h-5 w-5 text-blue-400" />
-        <h2 className="text-lg font-bold text-white">Provision New Staff Account</h2>
+    <div className="bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden">
+      <div className="p-6 border-b border-slate-200 bg-white/50 flex items-center gap-2">
+        <ShieldCheck className="h-5 w-5 text-blue-700" />
+        <h2 className="text-lg font-bold text-slate-900">Provision New Staff Account</h2>
       </div>
 
       <div className="p-8">
@@ -115,12 +115,12 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-zinc-400 mb-1.5">
+              <label htmlFor="firstName" className="block text-sm font-medium text-slate-600 mb-1.5">
                 First Name
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-4 w-4 text-zinc-500" />
+                  <User className="h-4 w-4 text-slate-500" />
                 </div>
                 <input
                   id="firstName"
@@ -129,19 +129,19 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
                   required
                   value={formData.firstName}
                   onChange={handleChange}
-                  className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
+                  className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
                   placeholder="Jane"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-zinc-400 mb-1.5">
+              <label htmlFor="lastName" className="block text-sm font-medium text-slate-600 mb-1.5">
                 Last Name
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-4 w-4 text-zinc-500" />
+                  <User className="h-4 w-4 text-slate-500" />
                 </div>
                 <input
                   id="lastName"
@@ -150,7 +150,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
                   required
                   value={formData.lastName}
                   onChange={handleChange}
-                  className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
+                  className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
                   placeholder="Smith"
                 />
               </div>
@@ -158,12 +158,12 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-zinc-400 mb-1.5">
+            <label htmlFor="email" className="block text-sm font-medium text-slate-600 mb-1.5">
               Email Address
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Mail className="h-4 w-4 text-zinc-500" />
+                <Mail className="h-4 w-4 text-slate-500" />
               </div>
               <input
                 id="email"
@@ -172,19 +172,19 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
+                className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
                 placeholder="jane.smith@example.com"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-zinc-400 mb-1.5">
+            <label htmlFor="password" className="block text-sm font-medium text-slate-600 mb-1.5">
               Password
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-4 w-4 text-zinc-500" />
+                <Lock className="h-4 w-4 text-slate-500" />
               </div>
               <input
                 id="password"
@@ -194,7 +194,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
                 minLength={8}
                 value={formData.password}
                 onChange={handleChange}
-                className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
+                className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
                 placeholder="••••••••"
               />
             </div>
@@ -202,7 +202,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="role" className="block text-sm font-medium text-zinc-400 mb-1.5">
+              <label htmlFor="role" className="block text-sm font-medium text-slate-600 mb-1.5">
                 Staff Role
               </label>
               <select
@@ -210,7 +210,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="block w-full px-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm appearance-none cursor-pointer"
+                className="block w-full px-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm appearance-none cursor-pointer"
               >
                 <option value="AGENT">Agent</option>
                 <option value="COMPANY_ADMIN">Company Admin</option>
@@ -220,12 +220,12 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
 
             {formData.role === 'COMPANY_ADMIN' && (
               <div>
-                <label htmlFor="companyId" className="block text-sm font-medium text-zinc-400 mb-1.5">
+                <label htmlFor="companyId" className="block text-sm font-medium text-slate-600 mb-1.5">
                   Assigned Company
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Building2 className="h-4 w-4 text-zinc-500" />
+                    <Building2 className="h-4 w-4 text-slate-500" />
                   </div>
                   <select
                     id="companyId"
@@ -233,7 +233,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
                     required={formData.role === 'COMPANY_ADMIN'}
                     value={formData.companyId}
                     onChange={handleChange}
-                    className="block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm appearance-none cursor-pointer"
+                    className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm appearance-none cursor-pointer"
                   >
                     <option value="">-- Select a Company --</option>
                     {companies.length > 0 ? (
@@ -255,7 +255,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-blue-900/20"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-bold text-slate-900 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-blue-900/20"
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />

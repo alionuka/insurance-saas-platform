@@ -137,24 +137,24 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
       case 'LOW':
         return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
       case 'MEDIUM':
-        return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+        return 'bg-blue-700/10 text-blue-700 border-blue-700/20';
       case 'HIGH':
         return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
       default:
-        return 'bg-zinc-800 text-zinc-400 border-zinc-700';
+        return 'bg-slate-100 text-slate-600 border-slate-300';
     }
   };
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl">
-      <div className="p-6 border-b border-zinc-800 bg-zinc-900/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-2xl">
+      <div className="p-6 border-b border-slate-200 bg-white/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-            <Calculator className="h-5 w-5 text-blue-400" />
+          <div className="h-10 w-10 rounded-xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center">
+            <Calculator className="h-5 w-5 text-blue-700" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white leading-tight">{t('clientQuote.personalizedQuote')}</h2>
-            <p className="text-xs text-zinc-500 mt-0.5 font-medium">{t('clientQuote.comparePricing')}</p>
+            <h2 className="text-lg font-bold text-slate-900 leading-tight">{t('clientQuote.personalizedQuote')}</h2>
+            <p className="text-xs text-slate-500 mt-0.5 font-medium">{t('clientQuote.comparePricing')}</p>
           </div>
         </div>
       </div>
@@ -162,14 +162,14 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
       <div className="p-8 space-y-6">
         <div className="space-y-4">
           <div>
-            <label htmlFor="product-select" className="block text-sm font-semibold text-zinc-400 mb-2">
+            <label htmlFor="product-select" className="block text-sm font-semibold text-slate-600 mb-2">
               {t('clientQuote.insuranceProduct')}
             </label>
             <select
               id="product-select"
               value={selectedProductId}
               onChange={handleProductChange}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer appearance-none"
+              className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 px-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer appearance-none"
             >
               <option value="">{t('clientQuote.selectProduct')}</option>
               {products.map((product) => (
@@ -183,7 +183,7 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
           <button
             onClick={calculateQuote}
             disabled={!selectedProductId || loading}
-            className="w-full py-4 px-6 rounded-2xl bg-blue-600 hover:bg-blue-500 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed font-bold text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20 active:scale-[0.98]"
+            className="w-full py-4 px-6 rounded-2xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed font-bold text-slate-900 transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20 active:scale-[0.98]"
           >
             {loading ? (
               <>
@@ -207,17 +207,17 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
         )}
 
         {quote && (
-          <div className="p-6 rounded-3xl bg-zinc-950 border border-zinc-800 space-y-6 animate-in zoom-in-95 fade-in duration-500">
+          <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200 space-y-6 animate-in zoom-in-95 fade-in duration-500">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
-                <p className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider mb-1">{t('clientQuote.monthlyPremium')}</p>
+                <p className="text-[10px] uppercase font-bold text-slate-500 tracking-wider mb-1">{t('clientQuote.monthlyPremium')}</p>
                 <div className="flex items-baseline gap-2">
                   <span className="text-4xl font-black text-emerald-400 tracking-tight">
                     ${quote.monthlyPremium.toFixed(2)}
                   </span>
-                  <span className="text-zinc-500 font-bold text-sm">{t('clientQuote.perMonth')}</span>
+                  <span className="text-slate-500 font-bold text-sm">{t('clientQuote.perMonth')}</span>
                 </div>
-                <p className="text-[10px] text-zinc-500 mt-2 font-medium bg-zinc-900 px-2 py-1 rounded-md inline-block">
+                <p className="text-[10px] text-slate-500 mt-2 font-medium bg-white px-2 py-1 rounded-md inline-block">
                   {t('clientQuote.base')} ${quote.basePremium} × {quote.riskMultiplier.toFixed(2)} {t('clientQuote.riskMultiplierLabel')}
                 </p>
               </div>
@@ -226,16 +226,16 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
                 <span className={`px-3 py-1 rounded-full text-[10px] font-bold border ${getRiskStyles(quote.riskLevel)}`}>
                   {quote.riskLevel} {t('clientQuote.riskLabel')}
                 </span>
-                <div className="flex items-center gap-1.5 text-xs text-zinc-400 font-bold">
+                <div className="flex items-center gap-1.5 text-xs text-slate-600 font-bold">
                   <TrendingUp className="h-3 w-3" />
                   {t('clientQuote.riskScoreLabel')}: {quote.riskScore}/100
                 </div>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-zinc-800 flex gap-3">
-              <Info className="h-4 w-4 text-blue-400 shrink-0 mt-0.5" />
-              <p className="text-xs text-zinc-400 leading-relaxed italic">
+            <div className="pt-4 border-t border-slate-200 flex gap-3">
+              <Info className="h-4 w-4 text-blue-700 shrink-0 mt-0.5" />
+              <p className="text-xs text-slate-600 leading-relaxed italic">
                 "{quote.explanation}"
               </p>
             </div>
@@ -243,7 +243,7 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
             <button
               onClick={submitApplication}
               disabled={applying}
-              className="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed font-bold text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/20 active:scale-[0.98]"
+              className="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed font-bold text-slate-900 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/20 active:scale-[0.98]"
             >
               {applying ? (
                 <>
@@ -258,7 +258,7 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
                 </>
               )}
             </button>
-            <p className="text-[10px] text-zinc-600 text-center -mt-3">
+            <p className="text-[10px] text-slate-400 text-center -mt-3">
               {t('clientQuote.reviewAfterApproval')}
             </p>
           </div>

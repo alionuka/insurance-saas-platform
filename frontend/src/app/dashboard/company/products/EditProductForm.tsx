@@ -103,15 +103,15 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-zinc-950 p-4 rounded-xl border border-zinc-800">
+    <form onSubmit={handleSubmit} className="space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-medium text-zinc-400 mb-1">
+          <label className="block text-xs font-medium text-slate-600 mb-1">
             Product Name
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Package className="h-4 w-4 text-zinc-500" />
+              <Package className="h-4 w-4 text-slate-500" />
             </div>
             <input
               name="name"
@@ -119,24 +119,24 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
               required
               value={formData.name}
               onChange={handleChange}
-              className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-900 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
+              className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-white text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-zinc-400 mb-1">
+          <label className="block text-xs font-medium text-slate-600 mb-1">
             Product Type
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Type className="h-4 w-4 text-zinc-500" />
+              <Type className="h-4 w-4 text-slate-500" />
             </div>
             <select
               name="type"
               value={formData.type}
               onChange={handleChange}
-              className="block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm cursor-pointer appearance-none"
+              className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm cursor-pointer appearance-none"
             >
               <option value="LIFE">Life Insurance</option>
               <option value="AUTO">Auto Insurance</option>
@@ -147,12 +147,12 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-zinc-400 mb-1">
+          <label className="block text-xs font-medium text-slate-600 mb-1">
             Base Monthly Premium ($)
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <DollarSign className="h-4 w-4 text-zinc-500" />
+              <DollarSign className="h-4 w-4 text-slate-500" />
             </div>
             <input
               name="basePremium"
@@ -162,44 +162,44 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
               required
               value={formData.basePremium}
               onChange={handleChange}
-              className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-900 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
+              className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-white text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-zinc-400 mb-1">
+          <label className="block text-xs font-medium text-slate-600 mb-1">
             Description
           </label>
           <div className="relative">
             <div className="absolute top-2.5 left-3 flex items-center pointer-events-none">
-              <FileText className="h-4 w-4 text-zinc-500" />
+              <FileText className="h-4 w-4 text-slate-500" />
             </div>
             <textarea
               name="description"
               rows={2}
               value={formData.description}
               onChange={handleChange}
-              className="appearance-none block w-full pl-10 pr-3 py-1.5 border border-zinc-800 rounded-lg bg-zinc-900 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm resize-none"
+              className="appearance-none block w-full pl-10 pr-3 py-1.5 border border-slate-200 rounded-lg bg-white text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm resize-none"
               placeholder="Brief description..."
             />
           </div>
         </div>
       </div>
 
-      <div className="flex justify-end gap-2 pt-2 border-t border-zinc-800/60">
+      <div className="flex justify-end gap-2 pt-2 border-t border-slate-200/60">
         <button
           type="button"
           onClick={onCancel}
           disabled={loading}
-          className="px-4 py-2 border border-zinc-800 hover:border-zinc-700 text-zinc-400 hover:text-white rounded-lg text-xs font-bold transition-all disabled:opacity-50"
+          className="px-4 py-2 border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 rounded-lg text-xs font-bold transition-all disabled:opacity-50"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="flex items-center gap-1.5 px-4 py-2 border border-transparent rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50"
+          className="flex items-center gap-1.5 px-4 py-2 border border-transparent rounded-lg text-xs font-bold text-slate-900 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50"
         >
           {loading && <Loader2 className="h-3 w-3 animate-spin" />}
           Save Changes

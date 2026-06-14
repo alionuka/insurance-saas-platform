@@ -56,18 +56,18 @@ export default function StatusUpdateForm({ claimId, currentStatus }: { claimId: 
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 md:p-8">
-      <h2 className="text-lg font-semibold text-white mb-4">Update Claim Status</h2>
+    <form onSubmit={handleSubmit} className="bg-white border border-slate-200 rounded-xl p-6 md:p-8">
+      <h2 className="text-lg font-semibold text-slate-900 mb-4">Update Claim Status</h2>
       <div className="flex flex-col sm:flex-row gap-4 items-end">
         <div className="flex-1 w-full">
-          <label className="block text-xs font-medium text-zinc-400 mb-2 uppercase tracking-wider">
+          <label className="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wider">
             Current Status
           </label>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
             disabled={loading}
-            className="w-full bg-zinc-950 border border-zinc-700 text-white rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            className="w-full bg-slate-50 border border-slate-300 text-slate-900 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
           >
             {CLAIM_STATUSES.map((s) => (
               <option key={s} value={s}>{s}</option>
@@ -77,7 +77,7 @@ export default function StatusUpdateForm({ claimId, currentStatus }: { claimId: 
         <button
           type="submit"
           disabled={loading || status === currentStatus}
-          className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-zinc-800 disabled:text-zinc-500 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 min-w-[140px]"
+          className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 disabled:text-slate-500 text-slate-900 font-medium rounded-lg transition-colors flex items-center justify-center gap-2 min-w-[140px]"
         >
           {loading ? (
             <><Loader2 className="h-4 w-4 animate-spin" /> Updating...</>

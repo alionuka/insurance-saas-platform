@@ -91,8 +91,8 @@ export default async function CompanyDashboard() {
     // This will trigger the logout effect in the layout or client components
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-        <p className="mt-4 text-zinc-400">Session expired. Redirecting...</p>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+        <p className="mt-4 text-slate-600">Session expired. Redirecting...</p>
       </div>
     );
   }
@@ -101,8 +101,8 @@ export default async function CompanyDashboard() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 border-2 border-dashed border-rose-900/30 rounded-3xl bg-rose-950/10 text-center">
         <ShieldX className="h-12 w-12 text-rose-500 mb-4" />
-        <h2 className="text-xl font-bold text-white mb-2">Access Denied</h2>
-        <p className="text-zinc-400 max-w-md">Your account does not have permission to view the Company Admin workspace.</p>
+        <h2 className="text-xl font-bold text-slate-900 mb-2">Access Denied</h2>
+        <p className="text-slate-600 max-w-md">Your account does not have permission to view the Company Admin workspace.</p>
       </div>
     );
   }
@@ -231,22 +231,22 @@ export default async function CompanyDashboard() {
           banner makes clear that product creation, application approvals
           and policy issuance are gated until platform admin sign-off. */}
       {data.tenantStatus === 'PENDING_VERIFICATION' && (
-        <div className="bg-blue-500/5 border border-blue-500/30 rounded-xl p-5 flex items-start gap-4">
-          <div className="h-10 w-10 rounded-full bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0">
-            <ShieldAlert className="h-5 w-5 text-blue-400" />
+        <div className="bg-blue-700/5 border border-blue-700/30 rounded-xl p-5 flex items-start gap-4">
+          <div className="h-10 w-10 rounded-full bg-blue-700/15 border border-blue-700/30 flex items-center justify-center shrink-0">
+            <ShieldAlert className="h-5 w-5 text-blue-700" />
           </div>
           <div className="flex-1">
-            <h2 className="font-bold text-blue-300">
+            <h2 className="font-bold text-blue-600">
               Your tenant is awaiting verification
             </h2>
             <p className="text-sm text-blue-200/70 mt-1 leading-relaxed">
               A platform administrator is reviewing your KYC submission. You
               can browse the dashboard, but product creation and policy
               activation are disabled until your tenant is marked{' '}
-              <span className="font-bold text-blue-300">ACTIVE</span>. This
+              <span className="font-bold text-blue-600">ACTIVE</span>. This
               usually takes 1–3 business days in production; for the thesis
               demo a platform admin can approve you instantly from{' '}
-              <span className="font-mono text-[11px] bg-blue-500/10 px-1 py-0.5 rounded">
+              <span className="font-mono text-[11px] bg-blue-700/10 px-1 py-0.5 rounded">
                 /dashboard/admin/companies
               </span>
               .
@@ -258,12 +258,12 @@ export default async function CompanyDashboard() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">{t('dashboard.companyTitle')}</h1>
-          <p className="text-zinc-400 mt-1">{t('dashboard.companySubtitle')}</p>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">{t('dashboard.companyTitle')}</h1>
+          <p className="text-slate-600 mt-1">{t('dashboard.companySubtitle')}</p>
         </div>
         <div className="flex items-center space-x-2">
-          <span className="text-xs text-zinc-500 uppercase tracking-widest font-bold">Scope: </span>
-          <span className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+          <span className="text-xs text-slate-500 uppercase tracking-widest font-bold">Scope: </span>
+          <span className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-blue-700/10 text-blue-700 border border-blue-700/20">
             <ShieldCheck className="w-4 h-4 mr-2" />
             Authenticated Tenant
           </span>
@@ -274,15 +274,15 @@ export default async function CompanyDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Link 
           href="/dashboard/company/products"
-          className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 hover:border-zinc-700 transition-colors group"
+          className="bg-white border border-slate-200 rounded-xl p-4 hover:border-slate-300 transition-colors group"
         >
           <div className="flex items-center gap-4">
-            <div className="h-10 w-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
-              <Package className="h-5 w-5 text-blue-400" />
+            <div className="h-10 w-10 rounded-lg bg-blue-700/10 border border-blue-700/20 flex items-center justify-center group-hover:bg-blue-700/20 transition-colors">
+              <Package className="h-5 w-5 text-blue-700" />
             </div>
             <div>
-              <p className="text-sm font-bold text-white">Manage Products</p>
-              <p className="text-[10px] text-zinc-500 font-medium uppercase tracking-tight">Catalog & Pricing</p>
+              <p className="text-sm font-bold text-slate-900">Manage Products</p>
+              <p className="text-[10px] text-slate-500 font-medium uppercase tracking-tight">Catalog & Pricing</p>
             </div>
           </div>
         </Link>
@@ -290,63 +290,63 @@ export default async function CompanyDashboard() {
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
+        <div className="bg-white border border-slate-200 p-5 rounded-2xl">
           <div className="flex justify-between items-start mb-4">
-            <div className="h-10 w-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-              <Briefcase className="h-5 w-5 text-blue-400" />
+            <div className="h-10 w-10 rounded-xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center">
+              <Briefcase className="h-5 w-5 text-blue-700" />
             </div>
-            <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Portfolio</span>
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Portfolio</span>
           </div>
-          <p className="text-2xl font-bold text-white"><CountUpNumber value={totalApps} /></p>
-          <p className="text-xs text-zinc-500 mt-1">Total Applications</p>
+          <p className="text-2xl font-bold text-slate-900"><CountUpNumber value={totalApps} /></p>
+          <p className="text-xs text-slate-500 mt-1">Total Applications</p>
         </div>
 
-        <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
+        <div className="bg-white border border-slate-200 p-5 rounded-2xl">
           <div className="flex justify-between items-start mb-4">
             <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
               <ShieldCheck className="h-5 w-5 text-emerald-400" />
             </div>
             <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Active</span>
           </div>
-          <p className="text-2xl font-bold text-white"><CountUpNumber value={activePolicies} /></p>
-          <p className="text-xs text-zinc-500 mt-1">In-Force Policies</p>
+          <p className="text-2xl font-bold text-slate-900"><CountUpNumber value={activePolicies} /></p>
+          <p className="text-xs text-slate-500 mt-1">In-Force Policies</p>
         </div>
 
-        <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
+        <div className="bg-white border border-slate-200 p-5 rounded-2xl">
           <div className="flex justify-between items-start mb-4">
             <div className="h-10 w-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
               <ShieldAlert className="h-5 w-5 text-rose-400" />
             </div>
-            <span className={`text-[10px] font-bold uppercase tracking-wider ${suspiciousClaims > 0 ? 'text-rose-400 animate-pulse' : 'text-zinc-500'}`}>
+            <span className={`text-[10px] font-bold uppercase tracking-wider ${suspiciousClaims > 0 ? 'text-rose-400 animate-pulse' : 'text-slate-500'}`}>
               {suspiciousClaims} Flagged
             </span>
           </div>
-          <p className="text-2xl font-bold text-white"><CountUpNumber value={totalClaims} /></p>
-          <p className="text-xs text-zinc-500 mt-1">Total Claims Filed</p>
+          <p className="text-2xl font-bold text-slate-900"><CountUpNumber value={totalClaims} /></p>
+          <p className="text-xs text-slate-500 mt-1">Total Claims Filed</p>
         </div>
 
-        <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
+        <div className="bg-white border border-slate-200 p-5 rounded-2xl">
           <div className="flex justify-between items-start mb-4">
-            <div className="h-10 w-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-              <TrendingUp className="h-5 w-5 text-blue-400" />
+            <div className="h-10 w-10 rounded-xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center">
+              <TrendingUp className="h-5 w-5 text-blue-700" />
             </div>
-            <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Risk Index</span>
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Risk Index</span>
           </div>
-          <p className="text-2xl font-bold text-white">{avgRiskScore.toFixed(1)}</p>
-          <p className="text-xs text-zinc-500 mt-1">Avg Risk Score</p>
+          <p className="text-2xl font-bold text-slate-900">{avgRiskScore.toFixed(1)}</p>
+          <p className="text-xs text-slate-500 mt-1">Avg Risk Score</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {/* Applications Pipeline Section */}
-        <section className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl">
-          <div className="px-6 py-4 border-b border-zinc-800 bg-zinc-900/50 flex items-center gap-2">
+        <section className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xl">
+          <div className="px-6 py-4 border-b border-slate-200 bg-white/50 flex items-center gap-2">
             <ShieldCheck className="h-5 w-5 text-emerald-400" />
-            <h2 className="text-lg font-bold text-white">Application Pipeline</h2>
+            <h2 className="text-lg font-bold text-slate-900">Application Pipeline</h2>
           </div>
           <div className="p-0 overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-zinc-950 text-zinc-500 uppercase text-[10px] font-bold tracking-wider">
+              <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider">
                 <tr>
                   <th className="px-6 py-3">Customer & Product</th>
                   <th className="px-6 py-3 text-center">Status</th>
@@ -357,16 +357,16 @@ export default async function CompanyDashboard() {
                 {applications.map((app: any) => {
                   const risk = app.riskAssessments?.[0];
                   return (
-                    <tr key={app.id} className="hover:bg-zinc-800/30 transition-colors">
+                    <tr key={app.id} className="hover:bg-slate-100/30 transition-colors">
                       <td className="px-6 py-4">
-                        <p className="font-bold text-white">{app.user?.firstName} {app.user?.lastName}</p>
-                        <p className="text-[10px] text-zinc-500 uppercase font-bold">{app.product?.name}</p>
+                        <p className="font-bold text-slate-900">{app.user?.firstName} {app.user?.lastName}</p>
+                        <p className="text-[10px] text-slate-500 uppercase font-bold">{app.product?.name}</p>
                       </td>
                       <td className="px-6 py-4 text-center">
                         <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase border ${
                           app.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
                           app.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 
-                          'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                          'bg-blue-700/10 text-blue-700 border-blue-700/20'
                         }`}>
                           {app.status}
                         </span>
@@ -374,20 +374,20 @@ export default async function CompanyDashboard() {
                       <td className="px-6 py-4 text-right">
                         {risk ? (
                           <div className="flex flex-col items-end">
-                            <span className="font-mono font-bold text-white">{risk.riskScore.toFixed(1)}</span>
+                            <span className="font-mono font-bold text-slate-900">{risk.riskScore.toFixed(1)}</span>
                             <span className={`text-[9px] font-bold uppercase ${
                               risk.riskLevel === 'LOW' ? 'text-emerald-400' : 
-                              risk.riskLevel === 'HIGH' ? 'text-rose-400' : 'text-blue-400'
+                              risk.riskLevel === 'HIGH' ? 'text-rose-400' : 'text-blue-700'
                             }`}>{risk.riskLevel}</span>
                           </div>
-                        ) : <span className="text-zinc-700">—</span>}
+                        ) : <span className="text-slate-300">—</span>}
                       </td>
                     </tr>
                   );
                 })}
                 {applications.length === 0 && (
                   <tr>
-                    <td colSpan={3} className="px-6 py-12 text-center text-zinc-500 italic">No applications found for this tenant.</td>
+                    <td colSpan={3} className="px-6 py-12 text-center text-slate-500 italic">No applications found for this tenant.</td>
                   </tr>
                 )}
               </tbody>
@@ -396,14 +396,14 @@ export default async function CompanyDashboard() {
         </section>
 
         {/* Claims Monitor Section */}
-        <section className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl">
-          <div className="px-6 py-4 border-b border-zinc-800 bg-zinc-900/50 flex items-center gap-2">
+        <section className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xl">
+          <div className="px-6 py-4 border-b border-slate-200 bg-white/50 flex items-center gap-2">
             <ShieldAlert className="h-5 w-5 text-rose-400" />
-            <h2 className="text-lg font-bold text-white">Claims Monitor</h2>
+            <h2 className="text-lg font-bold text-slate-900">Claims Monitor</h2>
           </div>
           <div className="p-0 overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-zinc-950 text-zinc-500 uppercase text-[10px] font-bold tracking-wider">
+              <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider">
                 <tr>
                   <th className="px-6 py-3">Claim Details</th>
                   <th className="px-6 py-3 text-center">Status</th>
@@ -414,17 +414,17 @@ export default async function CompanyDashboard() {
                 {claims.map((claim: any) => {
                   const fraud = claim.fraudAssessments?.[0];
                   return (
-                    <tr key={claim.id} className="hover:bg-zinc-800/30 transition-colors">
+                    <tr key={claim.id} className="hover:bg-slate-100/30 transition-colors">
                       <td className="px-6 py-4">
-                        <p className="font-bold text-white">{claim.user?.firstName} {claim.user?.lastName}</p>
-                        <p className="text-[10px] text-zinc-400 uppercase font-bold">{claim.application?.product?.name}</p>
-                        <p className="text-[10px] text-zinc-500 mt-1 italic line-clamp-1">"{claim.description}"</p>
+                        <p className="font-bold text-slate-900">{claim.user?.firstName} {claim.user?.lastName}</p>
+                        <p className="text-[10px] text-slate-600 uppercase font-bold">{claim.application?.product?.name}</p>
+                        <p className="text-[10px] text-slate-500 mt-1 italic line-clamp-1">"{claim.description}"</p>
                       </td>
                       <td className="px-6 py-4 text-center">
                         <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase border ${
                           claim.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
                           claim.status === 'DENIED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 
-                          'bg-zinc-800 text-zinc-500 border-zinc-700'
+                          'bg-slate-100 text-slate-500 border-slate-300'
                         }`}>
                           {claim.status}
                         </span>
@@ -432,7 +432,7 @@ export default async function CompanyDashboard() {
                       <td className="px-6 py-4 text-right">
                         {fraud ? (
                           <div className="flex flex-col items-end">
-                            <span className="font-mono font-bold text-white">{fraud.fraudScore.toFixed(1)}</span>
+                            <span className="font-mono font-bold text-slate-900">{fraud.fraudScore.toFixed(1)}</span>
                             <div className="flex items-center gap-1">
                               {fraud.flag === 'SUSPICIOUS' && <AlertTriangle className="h-3 w-3 text-rose-400" />}
                               <span className={`text-[9px] font-bold uppercase ${
@@ -440,14 +440,14 @@ export default async function CompanyDashboard() {
                               }`}>{fraud.flag}</span>
                             </div>
                           </div>
-                        ) : <span className="text-zinc-700">—</span>}
+                        ) : <span className="text-slate-300">—</span>}
                       </td>
                     </tr>
                   );
                 })}
                 {claims.length === 0 && (
                   <tr>
-                    <td colSpan={3} className="px-6 py-12 text-center text-zinc-500 italic">No claims filed.</td>
+                    <td colSpan={3} className="px-6 py-12 text-center text-slate-500 italic">No claims filed.</td>
                   </tr>
                 )}
               </tbody>
@@ -467,8 +467,8 @@ export default async function CompanyDashboard() {
 
       {/* Business Intelligence Section */}
       <div>
-        <h2 className="text-xl font-bold text-white tracking-tight mb-1">Business Intelligence</h2>
-        <p className="text-zinc-500 text-sm mb-6">
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight mb-1">Business Intelligence</h2>
+        <p className="text-slate-500 text-sm mb-6">
           ML-powered insights derived from your portfolio
         </p>
 
@@ -481,14 +481,14 @@ export default async function CompanyDashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <TopFraudDriversChart drivers={topFraudDrivers} />
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 flex flex-col justify-center">
-            <p className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold mb-2">ML Explainability Coverage</p>
-            <p className="text-3xl font-bold text-white">
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col justify-center">
+            <p className="text-[10px] text-slate-500 uppercase tracking-wider font-bold mb-2">ML Explainability Coverage</p>
+            <p className="text-3xl font-bold text-slate-900">
               <CountUpNumber value={appsWithRisk.length} /> + <CountUpNumber value={claims.filter((c: any) => c.fraudAssessments?.[0]).length} />
             </p>
-            <p className="text-xs text-zinc-500 mt-1">
+            <p className="text-xs text-slate-500 mt-1">
               Predictions with SHAP feature contributions
-              <span className="block text-[10px] text-zinc-600 mt-1">Risk model + Fraud model</span>
+              <span className="block text-[10px] text-slate-400 mt-1">Risk model + Fraud model</span>
             </p>
           </div>
         </div>
