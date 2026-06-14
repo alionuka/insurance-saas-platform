@@ -62,10 +62,10 @@ export default async function ClientPoliciesPage(props: Props) {
             <Link key={policy.id} href={`/dashboard/client/policies/${policy.id}`} className="block group">
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden group-hover:border-zinc-700 transition-colors">
                 {policy.status === 'PENDING_PAYMENT' && (
-                  <div className="bg-teal-500/5 border-b border-teal-500/10 px-5 py-2.5 flex items-center justify-between gap-4 relative z-10">
+                  <div className="bg-blue-500/5 border-b border-blue-500/10 px-5 py-2.5 flex items-center justify-between gap-4 relative z-10">
                     <div className="flex items-center gap-2">
-                      <CreditCard className="h-4 w-4 text-teal-400" />
-                      <p className="text-[10px] font-bold text-teal-400 uppercase tracking-widest">{t('clientPolicies.actionRequired')}</p>
+                      <CreditCard className="h-4 w-4 text-blue-400" />
+                      <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">{t('clientPolicies.actionRequired')}</p>
                     </div>
                     <StopClickPropagation>
                       <PolicyPaymentButton policyId={policy.id} amount={policy.premiumAmount} />
@@ -97,7 +97,7 @@ export default async function ClientPoliciesPage(props: Props) {
                     </div>
                     <span className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider border ${
                       policy.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
-                      policy.status === 'PENDING_PAYMENT' ? 'bg-teal-500/10 text-teal-400 border-teal-500/20' :
+                      policy.status === 'PENDING_PAYMENT' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
                       'bg-zinc-500/10 text-zinc-400 border-zinc-500/20'
                     }`}>
                       {policy.status.replace('_', ' ')}

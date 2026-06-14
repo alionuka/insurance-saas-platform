@@ -43,13 +43,13 @@ export default function Home() {
   }, [t]);
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-teal-500/30 overflow-x-hidden">
+    <main className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-blue-500/30 overflow-x-hidden">
       {/* ─── Sticky nav ───────────────────────────────────────────────── */}
       <nav className="sticky top-0 z-50 border-b border-slate-900/80 bg-slate-950/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-teal-500/10 border border-teal-500/30 flex items-center justify-center">
-              <ShieldCheck className="h-4 w-4 text-teal-400" />
+            <div className="h-8 w-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
+              <ShieldCheck className="h-4 w-4 text-blue-400" />
             </div>
             <span className="text-base font-bold tracking-tight">
               InsurSaaS
@@ -91,7 +91,7 @@ export default function Home() {
             Orbs drift slowly via CSS keyframes so the hero feels "alive". */}
         <div className="absolute inset-0 bg-line-grid [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
         <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 pointer-events-none animate-float-slow">
-          <div className="h-[500px] w-[500px] rounded-full bg-teal-600/25 blur-[120px]" />
+          <div className="h-[500px] w-[500px] rounded-full bg-blue-600/25 blur-[120px]" />
         </div>
         <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 pointer-events-none animate-float-slow-reverse">
           <div className="h-[500px] w-[500px] rounded-full bg-emerald-600/20 blur-[120px]" />
@@ -103,16 +103,16 @@ export default function Home() {
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Link
             href="/auth/register-company"
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/60 border border-slate-700/60 text-xs font-medium text-slate-300 mb-8 backdrop-blur-sm hover:border-teal-500/40 hover:text-teal-300 transition-colors group"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/60 border border-slate-700/60 text-xs font-medium text-slate-300 mb-8 backdrop-blur-sm hover:border-blue-500/40 hover:text-blue-300 transition-colors group"
           >
-            <Sparkles className="h-3 w-3 text-teal-400" />
+            <Sparkles className="h-3 w-3 text-blue-400" />
             {t("landing.heroNewBadge")}
             <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
           </Link>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.05] mb-8">
             {t("landing.heroLine1")}{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-400 to-emerald-400 animate-gradient-text">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 animate-gradient-text">
               {t("landing.heroBrand")}
             </span>
           </h1>
@@ -124,7 +124,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row justify-center gap-3 mb-16">
             <Link
               href="/auth/sign-up"
-              className="group relative px-7 py-3.5 rounded-full bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_30px_-4px_rgba(20,184,166,0.6)] inline-flex items-center justify-center gap-2 overflow-hidden"
+              className="group relative px-7 py-3.5 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_30px_-4px_rgba(59,130,246,0.6)] inline-flex items-center justify-center gap-2 overflow-hidden"
             >
               <span className="relative z-10">{t("landing.ctaPrimary")}</span>
               <ArrowRight className="relative z-10 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
@@ -133,7 +133,7 @@ export default function Home() {
             </Link>
             <Link
               href="/auth/sign-in"
-              className="px-7 py-3.5 rounded-full bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700/60 hover:border-teal-500/40 font-semibold transition-all hover:-translate-y-0.5 inline-flex items-center justify-center backdrop-blur-sm"
+              className="px-7 py-3.5 rounded-full bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700/60 hover:border-blue-500/40 font-semibold transition-all hover:-translate-y-0.5 inline-flex items-center justify-center backdrop-blur-sm"
             >
               {t("landing.ctaSecondary")}
             </Link>
@@ -196,7 +196,7 @@ export default function Home() {
               {
                 icon: Users,
                 title: t("landing.roleCustomerTitle"),
-                color: "teal",
+                color: "blue",
                 bullets: [
                   t("landing.roleCustomerBullet1"),
                   t("landing.roleCustomerBullet2"),
@@ -226,7 +226,7 @@ export default function Home() {
             ].map((role) => {
               const Icon = role.icon;
               const colorClasses: Record<string, string> = {
-                teal: "bg-teal-500/10 border-teal-500/30 text-teal-400",
+                blue: "bg-blue-500/10 border-blue-500/30 text-blue-400",
                 emerald:
                   "bg-emerald-500/10 border-emerald-500/30 text-emerald-400",
                 rose: "bg-rose-500/10 border-rose-500/30 text-rose-400",
@@ -234,7 +234,7 @@ export default function Home() {
               // Tint the hover glow with the role's accent so each card
               // breathes its own subtle colour when the user mouses over.
               const glowClasses: Record<string, string> = {
-                teal: "hover:shadow-[0_12px_40px_-8px_rgba(20,184,166,0.35)] hover:border-teal-500/40",
+                blue: "hover:shadow-[0_12px_40px_-8px_rgba(59,130,246,0.35)] hover:border-blue-500/40",
                 emerald:
                   "hover:shadow-[0_12px_40px_-8px_rgba(16,185,129,0.35)] hover:border-emerald-500/40",
                 rose: "hover:shadow-[0_12px_40px_-8px_rgba(244,63,94,0.3)] hover:border-rose-500/40",
@@ -321,8 +321,8 @@ export default function Home() {
                   key={f.title}
                   className="group bg-slate-950/60 p-8 hover:bg-slate-900/70 transition-all duration-300 relative"
                 >
-                  <div className="h-10 w-10 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center mb-4 transition-all group-hover:scale-110 group-hover:border-teal-500/40 group-hover:shadow-[0_0_20px_-2px_rgba(20,184,166,0.4)]">
-                    <Icon className="h-5 w-5 text-teal-400" />
+                  <div className="h-10 w-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4 transition-all group-hover:scale-110 group-hover:border-blue-500/40 group-hover:shadow-[0_0_20px_-2px_rgba(59,130,246,0.4)]">
+                    <Icon className="h-5 w-5 text-blue-400" />
                   </div>
                   <h3 className="font-bold text-white mb-2 text-lg">
                     {f.title}
@@ -354,7 +354,7 @@ export default function Home() {
 
           {loading && (
             <div className="flex justify-center items-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500" />
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" />
             </div>
           )}
 
@@ -398,11 +398,11 @@ export default function Home() {
                         ) : (
                           <ShieldCheck
                             className="h-5 w-5"
-                            style={{ color: brand ?? "#2dd4bf" }}
+                            style={{ color: brand ?? "#60a5fa" }}
                           />
                         )}
                       </div>
-                      <span className="px-2.5 py-0.5 rounded text-[10px] font-bold text-teal-300 border border-teal-500/20 bg-teal-500/5 uppercase tracking-widest">
+                      <span className="px-2.5 py-0.5 rounded text-[10px] font-bold text-blue-300 border border-blue-500/20 bg-blue-500/5 uppercase tracking-widest">
                         {product.type}
                       </span>
                     </div>
@@ -423,7 +423,7 @@ export default function Home() {
                     <Link
                       href="/auth/sign-in"
                       className="mt-5 w-full py-2.5 px-4 rounded-xl text-white text-sm font-bold transition-all flex items-center justify-center gap-1.5 hover:opacity-90"
-                      style={{ backgroundColor: brand ?? "#14b8a6" }}
+                      style={{ backgroundColor: brand ?? "#3b82f6" }}
                     >
                       {t("landing.applyNow")}
                       <ArrowRight className="h-3.5 w-3.5" />
@@ -462,7 +462,7 @@ export default function Home() {
 
       {/* ─── Final CTA ───────────────────────────────────────────────── */}
       <section className="py-24 border-t border-slate-900 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-teal-600/5 via-transparent to-emerald-600/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-transparent to-emerald-600/5" />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
             {t("landing.finalCtaTitle")}
@@ -480,7 +480,7 @@ export default function Home() {
             </Link>
             <Link
               href="/auth/register-company"
-              className="px-7 py-3.5 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/30 font-semibold hover:bg-teal-500/20 transition-all inline-flex items-center justify-center gap-2"
+              className="px-7 py-3.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/30 font-semibold hover:bg-blue-500/20 transition-all inline-flex items-center justify-center gap-2"
             >
               <Building2 className="h-4 w-4" />
               {t("landing.finalCtaSecondary")}
@@ -495,8 +495,8 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="h-7 w-7 rounded-md bg-teal-500/10 border border-teal-500/30 flex items-center justify-center">
-                  <ShieldCheck className="h-3.5 w-3.5 text-teal-400" />
+                <div className="h-7 w-7 rounded-md bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
+                  <ShieldCheck className="h-3.5 w-3.5 text-blue-400" />
                 </div>
                 <span className="text-sm font-bold tracking-tight">
                   InsurSaaS

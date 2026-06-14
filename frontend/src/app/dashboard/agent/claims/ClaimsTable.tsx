@@ -210,7 +210,7 @@ export default function ClaimsTable({
                     type="checkbox"
                     checked={allSelected}
                     onChange={toggleSelectAll}
-                    className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-teal-500 focus:ring-teal-500/20 focus:ring-offset-0 cursor-pointer accent-teal-500"
+                    className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-blue-500 focus:ring-blue-500/20 focus:ring-offset-0 cursor-pointer accent-blue-500"
                   />
                 </th>
                 <th className="px-6 py-3 font-medium">Customer / Description</th>
@@ -234,7 +234,7 @@ export default function ClaimsTable({
                     <tr
                       className={`transition-colors ${
                         isSelected
-                          ? 'bg-teal-500/5'
+                          ? 'bg-blue-500/5'
                           : successClaimId === claim.id
                           ? 'bg-emerald-500/5'
                           : 'hover:bg-zinc-800/50'
@@ -246,7 +246,7 @@ export default function ClaimsTable({
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => toggleSelection(claim.id)}
-                        className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-teal-500 focus:ring-teal-500/20 focus:ring-offset-0 cursor-pointer accent-teal-500"
+                        className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-blue-500 focus:ring-blue-500/20 focus:ring-offset-0 cursor-pointer accent-blue-500"
                       />
                     </td>
 
@@ -258,7 +258,7 @@ export default function ClaimsTable({
                             <User className="h-4 w-4 text-zinc-400 group-hover:text-zinc-300" />
                           </div>
                           <div>
-                            <div className="text-sm font-medium text-white group-hover:text-teal-400 transition-colors">
+                            <div className="text-sm font-medium text-white group-hover:text-blue-400 transition-colors">
                               {claim.user
                                 ? `${claim.user.firstName} ${claim.user.lastName}`
                                 : `#${claim.id.substring(0, 8)}`}
@@ -280,7 +280,7 @@ export default function ClaimsTable({
                         {policy ? (
                           <>
                             <div className="flex items-center gap-1.5">
-                              <span className="text-sm font-mono text-teal-400 font-bold">{policy.policyNumber}</span>
+                              <span className="text-sm font-mono text-blue-400 font-bold">{policy.policyNumber}</span>
                               <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold border uppercase ${
                                 policy.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20'
                               }`}>
@@ -343,7 +343,7 @@ export default function ClaimsTable({
                   <tr key={`${claim.id}-docs`} className="bg-zinc-950/20">
                     <td colSpan={7} className="px-6 py-0 border-b border-zinc-800">
                       <details className="group">
-                        <summary className="list-none cursor-pointer py-3 flex items-center gap-2 text-[10px] text-zinc-500 hover:text-teal-400 uppercase font-bold tracking-tight transition-colors">
+                        <summary className="list-none cursor-pointer py-3 flex items-center gap-2 text-[10px] text-zinc-500 hover:text-blue-400 uppercase font-bold tracking-tight transition-colors">
                           <ChevronRight className="h-3 w-3 group-open:rotate-90 transition-transform" />
                           Supporting Documents
                         </summary>

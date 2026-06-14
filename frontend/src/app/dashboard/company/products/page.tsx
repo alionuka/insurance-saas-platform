@@ -54,8 +54,8 @@ export default async function CompanyProductsPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="h-12 w-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center">
-            <Package className="h-6 w-6 text-teal-500" />
+          <div className="h-12 w-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+            <Package className="h-6 w-6 text-blue-500" />
           </div>
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-white">Product Catalog</h1>

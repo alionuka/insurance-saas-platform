@@ -64,7 +64,7 @@ export default async function CompanyPoliciesPage() {
                     <td className="px-6 py-4 text-center">
                       <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase border ${
                         policy.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
-                        policy.status === 'PENDING_PAYMENT' ? 'bg-teal-500/10 text-teal-400 border-teal-500/20' :
+                        policy.status === 'PENDING_PAYMENT' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
                         'bg-zinc-800 text-zinc-500 border-zinc-700'
                       }`}>
                         {policy.status.replace('_', ' ')}

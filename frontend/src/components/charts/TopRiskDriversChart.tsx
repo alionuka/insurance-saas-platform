@@ -16,7 +16,7 @@ const CustomTooltip = ({ active, payload }: any) => {
     <div className="bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 shadow-2xl text-left">
       <p className="text-xs font-bold text-white">{data.feature}</p>
       <p className="text-xs text-zinc-400 mt-1">
-        Cumulative impact: <span className="text-teal-400 font-mono font-bold">{data.totalImpact.toFixed(1)} pts</span>
+        Cumulative impact: <span className="text-blue-400 font-mono font-bold">{data.totalImpact.toFixed(1)} pts</span>
       </p>
       <p className="text-xs text-zinc-500">
         Across {data.occurrences} prediction{data.occurrences === 1 ? '' : 's'}
@@ -30,7 +30,7 @@ export default function TopRiskDriversChart({ drivers }: { drivers: RiskDriver[]
     return (
       <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 h-full">
         <div className="flex items-center gap-2 mb-2">
-          <Brain className="h-5 w-5 text-teal-400" />
+          <Brain className="h-5 w-5 text-blue-400" />
           <h3 className="text-lg font-bold text-white">Top Risk Drivers</h3>
         </div>
         <p className="text-xs text-zinc-500 mb-6">Aggregated ML feature contributions across portfolio</p>
@@ -47,7 +47,7 @@ export default function TopRiskDriversChart({ drivers }: { drivers: RiskDriver[]
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 h-full">
       <div className="flex items-center gap-2 mb-2">
-        <Brain className="h-5 w-5 text-teal-400" />
+        <Brain className="h-5 w-5 text-blue-400" />
         <h3 className="text-lg font-bold text-white">Top Risk Drivers</h3>
       </div>
       <p className="text-xs text-zinc-500 mb-4">Cumulative ML feature impact (SHAP) across all assessed applications</p>
@@ -78,7 +78,7 @@ export default function TopRiskDriversChart({ drivers }: { drivers: RiskDriver[]
             <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255, 255, 255, 0.03)' }} />
             <Bar dataKey="totalImpact" radius={4} barSize={14}>
               {chartData.map((_, index) => (
-                <Cell key={`cell-${index}`} fill="#2dd4bf" fillOpacity={0.85} />
+                <Cell key={`cell-${index}`} fill="#60a5fa" fillOpacity={0.85} />
               ))}
             </Bar>
           </BarChart>

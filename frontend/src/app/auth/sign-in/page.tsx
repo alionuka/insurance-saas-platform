@@ -27,7 +27,7 @@ function SignInPageContent() {
   const DEMO_ACCOUNTS = [
     { role: 'CUSTOMER', label: t('auth.demoCustomer'), email: 'alice.customer@example.com', icon: User, color: 'bg-blue-500/5 text-blue-400 border-blue-500/20 hover:bg-blue-500/10' },
     { role: 'AGENT', label: t('auth.demoAgent'), email: 'emily.agent@example.com', icon: UserCheck, color: 'bg-emerald-500/5 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10' },
-    { role: 'COMPANY_ADMIN', label: t('auth.demoCompanyAdmin'), email: 'sarah.admin@example.com', icon: Building2, color: 'bg-teal-500/5 text-teal-400 border-teal-500/20 hover:bg-teal-500/10' },
+    { role: 'COMPANY_ADMIN', label: t('auth.demoCompanyAdmin'), email: 'sarah.admin@example.com', icon: Building2, color: 'bg-blue-500/5 text-blue-400 border-blue-500/20 hover:bg-blue-500/10' },
     { role: 'PLATFORM_ADMIN', label: t('auth.demoPlatform'), email: 'admin@insurance-saas.com', icon: Crown, color: 'bg-purple-500/5 text-purple-400 border-purple-500/20 hover:bg-purple-500/10' },
   ];
 
@@ -105,7 +105,7 @@ function SignInPageContent() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent sm:text-sm"
+              className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
               placeholder={t('auth.emailPlaceholder')}
             />
           </div>
@@ -116,7 +116,7 @@ function SignInPageContent() {
             <label htmlFor="password" className="block text-sm font-medium text-zinc-300">
               {t('auth.passwordLabel')}
             </label>
-            <Link href="/auth/forgot-password" className="text-xs text-teal-400 hover:text-teal-300 font-medium transition-colors">
+            <Link href="/auth/forgot-password" className="text-xs text-blue-400 hover:text-blue-300 font-medium transition-colors">
               {t('auth.forgotPassword')}
             </Link>
           </div>
@@ -132,7 +132,7 @@ function SignInPageContent() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent sm:text-sm"
+              className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
               placeholder={t('auth.passwordPlaceholder')}
             />
           </div>
@@ -142,7 +142,7 @@ function SignInPageContent() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <Loader2 className="h-5 w-5 animate-spin" />
@@ -212,8 +212,8 @@ function SignInPageInner() {
       </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="h-12 w-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center">
-            <ShieldCheck className="h-8 w-8 text-teal-500" />
+          <div className="h-12 w-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+            <ShieldCheck className="h-8 w-8 text-blue-500" />
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
@@ -221,7 +221,7 @@ function SignInPageInner() {
         </h2>
         <p className="mt-2 text-center text-sm text-zinc-400">
           {t('auth.signInSubtitle')}{' '}
-          <Link href="/auth/sign-up" className="font-medium text-teal-400 hover:text-teal-300">
+          <Link href="/auth/sign-up" className="font-medium text-blue-400 hover:text-blue-300">
             {t('auth.needAccountPrompt')}
           </Link>
         </p>
@@ -229,7 +229,7 @@ function SignInPageInner() {
           {t('auth.forCompaniesPrompt')}{' '}
           <Link
             href="/auth/register-company"
-            className="font-medium text-teal-400 hover:text-teal-300"
+            className="font-medium text-blue-400 hover:text-blue-300"
           >
             {t('auth.companySignUpHere')} →
           </Link>

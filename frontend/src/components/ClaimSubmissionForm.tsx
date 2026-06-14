@@ -100,7 +100,7 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
   if (activePolicies.length === 0) {
     return (
       <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
-        <AlertCircle className="h-8 w-8 text-teal-500 mx-auto mb-3" />
+        <AlertCircle className="h-8 w-8 text-blue-500 mx-auto mb-3" />
         <p className="text-zinc-400">{t('clientClaims.needActivePolicy')}</p>
       </div>
     );

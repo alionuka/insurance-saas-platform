@@ -36,7 +36,7 @@ export default async function ClientApplicationDetailPage({ params }: { params: 
   if (result.status === 401) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
         <p className="mt-4 text-zinc-400">Session expired. Redirecting...</p>
       </div>
     );
@@ -64,8 +64,8 @@ export default async function ClientApplicationDetailPage({ params }: { params: 
     switch (status) {
       case 'APPROVED': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
       case 'REJECTED': return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
-      case 'PENDING': return 'bg-teal-500/10 text-teal-400 border-teal-500/20';
-      case 'UNDER_REVIEW': return 'bg-teal-500/10 text-teal-400 border-teal-500/20';
+      case 'PENDING': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+      case 'UNDER_REVIEW': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
       default: return 'bg-zinc-800 text-zinc-400 border-zinc-700';
     }
   };
@@ -73,7 +73,7 @@ export default async function ClientApplicationDetailPage({ params }: { params: 
   const getRiskLevelColor = (level: string) => {
     switch (level) {
       case 'LOW': return 'text-emerald-400';
-      case 'MEDIUM': return 'text-teal-400';
+      case 'MEDIUM': return 'text-blue-400';
       case 'HIGH': return 'text-rose-400';
       default: return 'text-zinc-400';
     }
@@ -83,7 +83,7 @@ export default async function ClientApplicationDetailPage({ params }: { params: 
     <div className="max-w-4xl space-y-6">
       <Link 
         href="/dashboard/client/applications"
-        className="inline-flex items-center text-sm font-medium text-zinc-400 hover:text-teal-400 transition-colors"
+        className="inline-flex items-center text-sm font-medium text-zinc-400 hover:text-blue-400 transition-colors"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
         Back to Applications
@@ -91,8 +91,8 @@ export default async function ClientApplicationDetailPage({ params }: { params: 
 
       {/* Hero */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 md:p-8 flex items-start gap-4 shadow-xl">
-        <div className="h-16 w-16 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center shrink-0">
-          <FileText className="h-8 w-8 text-teal-400" />
+        <div className="h-16 w-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
+          <FileText className="h-8 w-8 text-blue-400" />
         </div>
         <div className="flex-1">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -113,7 +113,7 @@ export default async function ClientApplicationDetailPage({ params }: { params: 
         {/* Product Card */}
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-md">
           <div className="flex items-center gap-2 mb-4">
-            <Box className="h-5 w-5 text-teal-400" />
+            <Box className="h-5 w-5 text-blue-400" />
             <h2 className="text-lg font-bold text-white">Product Overview</h2>
           </div>
           {product ? (
@@ -129,7 +129,7 @@ export default async function ClientApplicationDetailPage({ params }: { params: 
                 </div>
                 <div>
                   <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Base Premium</p>
-                  <p className="text-teal-400 mt-1 font-bold">{formatCurrency(product.basePremium)}</p>
+                  <p className="text-blue-400 mt-1 font-bold">{formatCurrency(product.basePremium)}</p>
                 </div>
               </div>
               {product.company && (
@@ -147,7 +147,7 @@ export default async function ClientApplicationDetailPage({ params }: { params: 
         {/* Risk Assessment Card */}
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-md flex flex-col">
           <div className="flex items-center gap-2 mb-4">
-            <ShieldAlert className="h-5 w-5 text-teal-400" />
+            <ShieldAlert className="h-5 w-5 text-blue-400" />
             <h2 className="text-lg font-bold text-white">Risk Assessment</h2>
           </div>
           {risk ? (
@@ -193,7 +193,7 @@ export default async function ClientApplicationDetailPage({ params }: { params: 
                     Status: <span className="text-emerald-400 font-medium">{policy.status.replace('_', ' ')}</span>
                   </p>
                   <p className="text-sm text-zinc-300">
-                    Premium: <span className="text-teal-400 font-bold">{formatCurrency(policy.premiumAmount)}</span>
+                    Premium: <span className="text-blue-400 font-bold">{formatCurrency(policy.premiumAmount)}</span>
                   </p>
                 </div>
               ) : (
@@ -210,7 +210,7 @@ export default async function ClientApplicationDetailPage({ params }: { params: 
           {policy && (
             <Link
               href={`/dashboard/client/policies/${policy.id}`}
-              className="inline-flex justify-center items-center px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-teal-500/20 shrink-0"
+              className="inline-flex justify-center items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-blue-500/20 shrink-0"
             >
               View Policy
             </Link>

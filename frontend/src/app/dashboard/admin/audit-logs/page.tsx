@@ -53,7 +53,7 @@ export default async function AuditLogPage() {
   const getActionColor = (action: string) => {
     const a = action.toLowerCase();
     if (a.includes('login') || a.includes('register') || a.includes('password')) return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-    if (a.includes('application') || a.includes('claim') || a.includes('policy')) return 'bg-teal-500/10 text-teal-400 border-teal-500/20';
+    if (a.includes('application') || a.includes('claim') || a.includes('policy')) return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
     if (a.includes('payment')) return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
     if (a.includes('document')) return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
     return 'bg-zinc-800 text-zinc-500 border-zinc-700';
@@ -63,7 +63,7 @@ export default async function AuditLogPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-          <ScrollText className="h-8 w-8 text-teal-400" />
+          <ScrollText className="h-8 w-8 text-blue-400" />
           Audit Log
         </h1>
         <p className="text-zinc-400 mt-1">Platform-wide record of state-changing events.</p>
@@ -132,7 +132,7 @@ export default async function AuditLogPage() {
                   </td>
                   <td className="px-6 py-4">
                     <details className="group">
-                      <summary className="list-none cursor-pointer flex items-center gap-1 text-[10px] font-bold uppercase text-teal-400 hover:text-teal-300 transition-colors">
+                      <summary className="list-none cursor-pointer flex items-center gap-1 text-[10px] font-bold uppercase text-blue-400 hover:text-blue-300 transition-colors">
                         <FileText className="h-3 w-3" />
                         View
                         <ChevronRight className="h-3 w-3 group-open:rotate-90 transition-transform" />

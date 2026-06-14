@@ -43,7 +43,7 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
   if (compRes.status === 401) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
         <p className="mt-4 text-zinc-400">Session expired. Redirecting...</p>
       </div>
     );
@@ -90,7 +90,7 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
     <div className="max-w-5xl space-y-6">
       <Link 
         href="/dashboard/admin/companies"
-        className="inline-flex items-center text-sm font-medium text-zinc-400 hover:text-teal-400 transition-colors"
+        className="inline-flex items-center text-sm font-medium text-zinc-400 hover:text-blue-400 transition-colors"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
         Back to Companies
@@ -98,8 +98,8 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
 
       {/* Hero */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 md:p-8 flex items-start gap-4 shadow-xl">
-        <div className="h-16 w-16 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center shrink-0">
-          <Building2 className="h-8 w-8 text-teal-400" />
+        <div className="h-16 w-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
+          <Building2 className="h-8 w-8 text-blue-400" />
         </div>
         <div className="flex-1">
           <h1 className="text-2xl font-bold tracking-tight text-white">{company.name}</h1>
@@ -111,7 +111,7 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 shadow-sm flex items-center gap-4">
           <div className="h-12 w-12 rounded-full bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-700">
-            <Package className="h-5 w-5 text-teal-400" />
+            <Package className="h-5 w-5 text-blue-400" />
           </div>
           <div>
             <p className="text-sm font-medium text-zinc-400">Total Products</p>
@@ -131,7 +131,7 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
 
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 shadow-sm flex items-center gap-4">
           <div className="h-12 w-12 rounded-full bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-700">
-            <Activity className="h-5 w-5 text-teal-400" />
+            <Activity className="h-5 w-5 text-blue-400" />
           </div>
           <div>
             <p className="text-sm font-medium text-zinc-400">Open Claims</p>
@@ -182,7 +182,7 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-md">
             <div className="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
               <h2 className="text-lg font-bold text-white">Registered Products</h2>
-              <span className="bg-teal-500/10 text-teal-400 text-xs px-2.5 py-1 rounded-full font-medium">
+              <span className="bg-blue-500/10 text-blue-400 text-xs px-2.5 py-1 rounded-full font-medium">
                 {companyProducts.length} Total
               </span>
             </div>
@@ -208,7 +208,7 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
                             {prod.type}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-right font-bold text-teal-400">
+                        <td className="px-6 py-4 text-right font-bold text-blue-400">
                           {formatCurrency(prod.basePremium)}
                         </td>
                         <td className="px-6 py-4 text-right text-zinc-500 font-mono text-xs">

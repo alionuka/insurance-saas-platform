@@ -90,7 +90,7 @@ export default function NotificationsBell() {
       return <ShieldCheck className="h-4 w-4 text-blue-400" />;
     }
     if (type.includes('application') || type.includes('claim')) {
-      return <Activity className="h-4 w-4 text-teal-400" />;
+      return <Activity className="h-4 w-4 text-blue-400" />;
     }
     if (type.includes('payment') || act.includes('payment')) {
       return <CreditCard className="h-4 w-4 text-emerald-400" />;
@@ -108,7 +108,7 @@ export default function NotificationsBell() {
     <div className="relative" ref={dropdownRef}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
+        className="relative p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
         aria-label="Notifications"
       >
         <Bell className="h-5 w-5" />
@@ -126,7 +126,7 @@ export default function NotificationsBell() {
             {unreadCount > 0 && (
               <button 
                 onClick={handleMarkAllAsRead}
-                className="text-xs text-teal-400 hover:text-teal-300 transition-colors font-medium"
+                className="text-xs text-blue-400 hover:text-blue-300 transition-colors font-medium"
               >
                 Mark all as read
               </button>

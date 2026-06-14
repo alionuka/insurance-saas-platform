@@ -47,7 +47,7 @@ export default async function ClientClaimDetailPage({ params }: { params: Promis
         <ShieldAlert className="h-16 w-16 text-rose-500" />
         <h1 className="text-2xl font-bold text-white">Access Denied</h1>
         <p className="text-zinc-400">You do not have permission to view this claim.</p>
-        <Link href="/dashboard/client" className="text-teal-400 hover:text-teal-300 font-medium">
+        <Link href="/dashboard/client" className="text-blue-400 hover:text-blue-300 font-medium">
           Return to Dashboard
         </Link>
       </div>
@@ -57,10 +57,10 @@ export default async function ClientClaimDetailPage({ params }: { params: Promis
   if (status === 404 || !claim) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-4">
-        <AlertTriangle className="h-16 w-16 text-teal-500" />
+        <AlertTriangle className="h-16 w-16 text-blue-500" />
         <h1 className="text-2xl font-bold text-white">Claim Not Found</h1>
         <p className="text-zinc-400">The claim you are looking for does not exist.</p>
-        <Link href="/dashboard/client" className="text-teal-400 hover:text-teal-300 font-medium">
+        <Link href="/dashboard/client" className="text-blue-400 hover:text-blue-300 font-medium">
           Return to Dashboard
         </Link>
       </div>
@@ -74,14 +74,14 @@ export default async function ClientClaimDetailPage({ params }: { params: Promis
 
   const statusColors: Record<string, string> = {
     FILED: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-    IN_PROGRESS: 'bg-teal-500/10 text-teal-400 border-teal-500/20',
+    IN_PROGRESS: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
     APPROVED: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
     DENIED: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
   };
 
   const fraudFlagColors: Record<string, string> = {
     NORMAL: 'text-emerald-400',
-    SUSPICIOUS: 'text-teal-400',
+    SUSPICIOUS: 'text-blue-400',
     FRAUDULENT: 'text-rose-400',
   };
 
@@ -163,7 +163,7 @@ export default async function ClientClaimDetailPage({ params }: { params: Promis
       {fraud && (
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 md:p-8">
           <div className="flex items-center gap-2 mb-6">
-            <ShieldAlert className="h-5 w-5 text-teal-400" />
+            <ShieldAlert className="h-5 w-5 text-blue-400" />
             <h2 className="text-lg font-semibold text-white">Fraud Assessment</h2>
           </div>
           

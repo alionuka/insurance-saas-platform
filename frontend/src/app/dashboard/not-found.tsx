@@ -15,7 +15,7 @@ export default function DashboardNotFound() {
         </p>
         <Link 
           href="/dashboard/client"
-          className="inline-flex items-center px-6 py-2.5 bg-teal-500 hover:bg-teal-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-teal-500/20"
+          className="inline-flex items-center px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-blue-500/20"
         >
           Return to Overview
         </Link>

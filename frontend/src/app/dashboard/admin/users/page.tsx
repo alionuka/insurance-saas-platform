@@ -11,8 +11,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const roleColors: Record<string, string> = {
   CUSTOMER: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
   AGENT: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  COMPANY_ADMIN: 'bg-teal-500/10 text-teal-400 border-teal-500/20',
-  PLATFORM_ADMIN: 'bg-teal-500/10 text-teal-400 border-teal-500/20',
+  COMPANY_ADMIN: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  PLATFORM_ADMIN: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
 };
 
 async function getPageData(roleFilter?: string) {
@@ -84,8 +84,8 @@ export default async function ManageUsersPage(props: Props) {
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-4">
-        <div className="h-12 w-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center">
-          <Users className="h-6 w-6 text-teal-500" />
+        <div className="h-12 w-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+          <Users className="h-6 w-6 text-blue-500" />
         </div>
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-white">User Management</h1>
@@ -116,11 +116,11 @@ export default async function ManageUsersPage(props: Props) {
                   {users.map((user: any) => (
                     <tr key={user.id} className="hover:bg-zinc-800/30 transition-colors group">
                       <td className="px-6 py-4">
-                        <Link href={`/dashboard/admin/users/${user.id}`} className="flex items-center gap-3 group-hover:text-teal-400 transition-colors">
-                          <div className="h-8 w-8 rounded-full bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-xs font-bold text-teal-400 shrink-0">
+                        <Link href={`/dashboard/admin/users/${user.id}`} className="flex items-center gap-3 group-hover:text-blue-400 transition-colors">
+                          <div className="h-8 w-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-xs font-bold text-blue-400 shrink-0">
                             {(user.firstName?.[0] || '').toUpperCase()}{(user.lastName?.[0] || '').toUpperCase()}
                           </div>
-                          <span className="font-medium text-white group-hover:text-teal-400 transition-colors">
+                          <span className="font-medium text-white group-hover:text-blue-400 transition-colors">
                             {user.firstName} {user.lastName}
                           </span>
                         </Link>

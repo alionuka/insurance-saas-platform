@@ -63,7 +63,7 @@ export default async function ClientApplicationsPage(props: Props) {
                 <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex items-start gap-4">
                     <div className="h-12 w-12 rounded-xl bg-zinc-800 flex items-center justify-center border border-zinc-700 flex-shrink-0">
-                      <FileCheck className="h-6 w-6 text-teal-400" />
+                      <FileCheck className="h-6 w-6 text-blue-400" />
                     </div>
                     <div>
                       <h3 className="font-bold text-white text-lg">{app.product?.name || t('clientApps.unknownProduct')}</h3>
@@ -76,7 +76,7 @@ export default async function ClientApplicationsPage(props: Props) {
                     <span className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider border ${
                       app.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
                       app.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 
-                      'bg-teal-500/10 text-teal-400 border-teal-500/20'
+                      'bg-blue-500/10 text-blue-400 border-blue-500/20'
                     }`}>
                       {app.status}
                     </span>
@@ -101,7 +101,7 @@ export default async function ClientApplicationsPage(props: Props) {
                         </div>
                         <p className={`text-lg font-bold ${
                           risk.riskLevel === 'LOW' ? 'text-emerald-400' : 
-                          risk.riskLevel === 'HIGH' ? 'text-rose-400' : 'text-teal-400'
+                          risk.riskLevel === 'HIGH' ? 'text-rose-400' : 'text-blue-400'
                         }`}>{risk.riskLevel}</p>
                       </div>
                       <div className="md:col-span-2 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">

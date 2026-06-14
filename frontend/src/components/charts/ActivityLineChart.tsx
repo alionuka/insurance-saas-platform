@@ -5,7 +5,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 type DataPoint = { date: string; count: number };
 
 const COLORS: Record<string, { stroke: string; fill: string }> = {
-  teal: { stroke: '#2dd4bf', fill: '#2dd4bf' },
+  blue: { stroke: '#60a5fa', fill: '#60a5fa' },
   emerald: { stroke: '#34d399', fill: '#34d399' },
   rose: { stroke: '#fb7185', fill: '#fb7185' },
 };
@@ -20,8 +20,8 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   );
 };
 
-export default function ActivityLineChart({ data, title, color = 'teal' }: { data: DataPoint[]; title?: string; color?: string }) {
-  const palette = COLORS[color] ?? COLORS.teal;
+export default function ActivityLineChart({ data, title, color = 'blue' }: { data: DataPoint[]; title?: string; color?: string }) {
+  const palette = COLORS[color] ?? COLORS.blue;
 
   if (data.length === 0) {
     return (

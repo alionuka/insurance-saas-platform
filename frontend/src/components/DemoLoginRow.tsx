@@ -46,7 +46,7 @@ const ACCOUNTS = [
     email: 'sarah.admin@example.com',
     icon: Building2,
     color:
-      'bg-teal-500/5 text-teal-400 border-teal-500/30 hover:bg-teal-500/15',
+      'bg-blue-500/5 text-blue-400 border-blue-500/30 hover:bg-blue-500/15',
   },
   {
     role: 'PLATFORM_ADMIN' as const,

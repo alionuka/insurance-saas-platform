@@ -20,8 +20,8 @@ function SuccessContent() {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-lg">
         <div className="flex justify-center">
-          <div className="h-16 w-16 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center">
-            <Clock className="h-9 w-9 text-teal-400" />
+          <div className="h-16 w-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+            <Clock className="h-9 w-9 text-blue-400" />
           </div>
         </div>
 
@@ -31,7 +31,7 @@ function SuccessContent() {
         <p className="mt-3 text-center text-zinc-400 leading-relaxed">
           {t('auth.pendingReviewSubtitle1')}{' '}
           <span className="text-white font-semibold inline-flex items-center gap-1">
-            <Building2 className="h-4 w-4 text-teal-400" />
+            <Building2 className="h-4 w-4 text-blue-400" />
             {companyName}
           </span>{' '}
           {t('auth.pendingReviewSubtitle2')}
@@ -53,8 +53,8 @@ function SuccessContent() {
           </div>
 
           <div className="flex items-start gap-3">
-            <div className="h-5 w-5 rounded-full border-2 border-teal-400 shrink-0 mt-0.5 flex items-center justify-center">
-              <div className="h-2 w-2 rounded-full bg-teal-400 animate-pulse" />
+            <div className="h-5 w-5 rounded-full border-2 border-blue-400 shrink-0 mt-0.5 flex items-center justify-center">
+              <div className="h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
             </div>
             <div>
               <p className="text-sm font-medium text-white">
@@ -79,9 +79,9 @@ function SuccessContent() {
           </div>
 
           <div className="pt-4 border-t border-zinc-800/60">
-            <div className="p-3 rounded-lg bg-teal-500/5 border border-teal-500/15">
-              <p className="text-[11px] text-teal-300/70 leading-relaxed">
-                <strong className="text-teal-300">{t('auth.pendingDemoNoteLabel')}</strong>{' '}
+            <div className="p-3 rounded-lg bg-blue-500/5 border border-blue-500/15">
+              <p className="text-[11px] text-blue-300/70 leading-relaxed">
+                <strong className="text-blue-300">{t('auth.pendingDemoNoteLabel')}</strong>{' '}
                 {t('auth.pendingDemoNoteText')}
               </p>
             </div>
@@ -91,7 +91,7 @@ function SuccessContent() {
         <div className="mt-6 text-center">
           <Link
             href="/auth/sign-in"
-            className="inline-flex items-center gap-2 text-sm font-medium text-teal-400 hover:text-teal-300 transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
           >
             {t('auth.pendingBackToSignIn')}
             <ArrowRight className="h-4 w-4" />
@@ -107,7 +107,7 @@ export default function RegisterCompanySuccessPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-          <Clock className="h-8 w-8 text-teal-400 animate-pulse" />
+          <Clock className="h-8 w-8 text-blue-400 animate-pulse" />
         </div>
       }
     >

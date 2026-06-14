@@ -78,7 +78,7 @@ export default async function AdminDashboard() {
   if (data.status === 401) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
         <p className="mt-4 text-zinc-400">Session expired. Redirecting...</p>
       </div>
     );
@@ -115,17 +115,17 @@ export default async function AdminDashboard() {
   // Chart data: Applications by Status
   const appStatusCounts = applications.reduce((acc: any, a: any) => { acc[a.status] = (acc[a.status] || 0) + 1; return acc; }, {});
   const appsPieData = [
-    { name: 'Pending', value: appStatusCounts['PENDING'] || 0, color: '#2dd4bf' },
+    { name: 'Pending', value: appStatusCounts['PENDING'] || 0, color: '#60a5fa' },
     { name: 'Approved', value: appStatusCounts['APPROVED'] || 0, color: '#34d399' },
     { name: 'Rejected', value: appStatusCounts['REJECTED'] || 0, color: '#fb7185' },
-    { name: 'Under Review', value: appStatusCounts['UNDER_REVIEW'] || 0, color: '#2dd4bf' },
+    { name: 'Under Review', value: appStatusCounts['UNDER_REVIEW'] || 0, color: '#60a5fa' },
   ];
 
   // Chart data: Claims by Status
   const claimStatusCounts = claims.reduce((acc: any, c: any) => { acc[c.status] = (acc[c.status] || 0) + 1; return acc; }, {});
   const claimsPieData = [
     { name: 'Filed', value: claimStatusCounts['FILED'] || 0, color: '#60a5fa' },
-    { name: 'In Progress', value: claimStatusCounts['IN_PROGRESS'] || 0, color: '#2dd4bf' },
+    { name: 'In Progress', value: claimStatusCounts['IN_PROGRESS'] || 0, color: '#60a5fa' },
     { name: 'Approved', value: claimStatusCounts['APPROVED'] || 0, color: '#34d399' },
     { name: 'Denied', value: claimStatusCounts['DENIED'] || 0, color: '#fb7185' },
   ];
@@ -134,7 +134,7 @@ export default async function AdminDashboard() {
   const policyStatusCounts = policies.reduce((acc: any, p: any) => { acc[p.status] = (acc[p.status] || 0) + 1; return acc; }, {});
   const policiesPieData = [
     { name: 'Active', value: policyStatusCounts['ACTIVE'] || 0, color: '#34d399' },
-    { name: 'Pending Payment', value: policyStatusCounts['PENDING_PAYMENT'] || 0, color: '#2dd4bf' },
+    { name: 'Pending Payment', value: policyStatusCounts['PENDING_PAYMENT'] || 0, color: '#60a5fa' },
     { name: 'Expired', value: policyStatusCounts['EXPIRED'] || 0, color: '#71717a' },
     { name: 'Cancelled', value: policyStatusCounts['CANCELLED'] || 0, color: '#fb7185' },
   ];
@@ -167,8 +167,8 @@ export default async function AdminDashboard() {
           className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 hover:border-zinc-700 transition-colors group"
         >
           <div className="flex items-center gap-4">
-            <div className="h-10 w-10 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center group-hover:bg-teal-500/20 transition-colors">
-              <UserPlus className="h-5 w-5 text-teal-400" />
+            <div className="h-10 w-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
+              <UserPlus className="h-5 w-5 text-blue-400" />
             </div>
             <div>
               <p className="text-sm font-bold text-white">Manage Users</p>
@@ -198,7 +198,7 @@ export default async function AdminDashboard() {
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Tenants</span>
-            <Database className="h-4 w-4 text-teal-500" />
+            <Database className="h-4 w-4 text-blue-500" />
           </div>
           <p className="text-xl font-bold text-white"><CountUpNumber value={totalCompanies} /></p>
         </div>
@@ -230,7 +230,7 @@ export default async function AdminDashboard() {
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Policies</span>
-            <ShieldCheck className="h-4 w-4 text-teal-400" />
+            <ShieldCheck className="h-4 w-4 text-blue-400" />
           </div>
           <p className="text-xl font-bold text-white"><CountUpNumber value={totalPolicies} /></p>
         </div>
@@ -266,7 +266,7 @@ export default async function AdminDashboard() {
         {/* Companies Section */}
         <section className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl">
           <div className="px-6 py-4 border-b border-zinc-800 bg-zinc-900/50 flex items-center gap-2">
-            <Database className="h-5 w-5 text-teal-400" />
+            <Database className="h-5 w-5 text-blue-400" />
             <h2 className="text-lg font-bold text-white">Platform Tenants</h2>
           </div>
           <div className="p-0 overflow-x-auto">
@@ -283,7 +283,7 @@ export default async function AdminDashboard() {
                   <tr key={company.id} className="hover:bg-zinc-800/30 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-teal-400">
+                        <div className="h-9 w-9 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-blue-400">
                           {company.name.substring(0, 2).toUpperCase()}
                         </div>
                         <p className="font-bold text-white">{company.name}</p>
@@ -330,7 +330,7 @@ export default async function AdminDashboard() {
                         <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase border ${
                           app.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
                           app.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 
-                          'bg-teal-500/10 text-teal-400 border-teal-500/20'
+                          'bg-blue-500/10 text-blue-400 border-blue-500/20'
                         }`}>
                           {app.status}
                         </span>
@@ -341,7 +341,7 @@ export default async function AdminDashboard() {
                             <span className="font-mono font-bold text-white">{risk.riskScore.toFixed(1)}</span>
                             <span className={`text-[9px] font-bold uppercase ${
                               risk.riskLevel === 'LOW' ? 'text-emerald-400' : 
-                              risk.riskLevel === 'HIGH' ? 'text-rose-400' : 'text-teal-400'
+                              risk.riskLevel === 'HIGH' ? 'text-rose-400' : 'text-blue-400'
                             }`}>{risk.riskLevel}</span>
                           </div>
                         ) : <span className="text-zinc-700">—</span>}
