@@ -16,10 +16,10 @@ export default function GlobalError({
 
   return (
     <html lang="en">
-      <body className="bg-slate-50 text-slate-900">
+      <body className="bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100">
         <div className="min-h-screen flex flex-col items-center justify-center p-8">
           <h1 className="text-4xl font-bold mb-4">Something went wrong</h1>
-          <p className="text-slate-600 mb-6 text-center max-w-md">
+          <p className="text-slate-600 dark:text-slate-400 mb-6 text-center max-w-md">
             An unexpected error occurred. Our team has been notified.
           </p>
           <button

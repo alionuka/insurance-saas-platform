@@ -39,16 +39,16 @@ export default function BulkActionBar({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white border border-slate-200 rounded-2xl shadow-2xl px-6 py-3 flex items-center gap-4"
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl px-6 py-3 flex items-center gap-4"
         >
           {/* Selection count */}
-          <div className="flex items-center gap-2 pr-4 border-r border-slate-200">
-            <span className="text-sm font-bold text-slate-900">
+          <div className="flex items-center gap-2 pr-4 border-r border-slate-200 dark:border-slate-800">
+            <span className="text-sm font-bold text-slate-900 dark:text-slate-100">
               {selectedCount} selected
             </span>
             <button
               onClick={onClearSelection}
-              className="h-5 w-5 rounded-full bg-slate-100 hover:bg-zinc-700 flex items-center justify-center text-slate-600 hover:text-slate-900 transition-colors"
+              className="h-5 w-5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
               title="Clear selection"
             >
               <X className="h-3 w-3" />
@@ -57,7 +57,7 @@ export default function BulkActionBar({
 
           {/* Actions */}
           {isProcessing ? (
-            <div className="flex items-center gap-2 text-sm text-slate-600">
+            <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
               <Loader2 className="h-4 w-4 animate-spin text-blue-700" />
               Processing...
             </div>
@@ -69,7 +69,7 @@ export default function BulkActionBar({
                   <button
                     key={action.label}
                     onClick={action.onClick}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-900 shadow-lg transition-colors ${variantClasses[action.variant]}`}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${variantClasses[action.variant]}`}
                   >
                     <Icon className="h-3.5 w-3.5" />
                     {action.label}

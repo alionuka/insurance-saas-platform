@@ -16,22 +16,22 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center text-slate-900 px-6">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#060b1a] flex flex-col items-center justify-center text-slate-900 dark:text-slate-100 px-6">
       <div className="flex flex-col items-center max-w-md text-center">
         <div className="h-20 w-20 rounded-full bg-rose-500/10 flex items-center justify-center mb-6">
           <AlertCircle className="h-10 w-10 text-rose-500" />
         </div>
         <h2 className="text-2xl font-bold">Something went wrong</h2>
-        <p className="text-slate-600 mt-2 mb-6 leading-relaxed">
+        <p className="text-slate-600 dark:text-slate-400 mt-2 mb-6 leading-relaxed">
           We encountered an unexpected error while trying to process your request.
         </p>
 
         {error.message && (
-          <details className="w-full text-left bg-white border border-slate-200 rounded-lg p-4 mb-8">
-            <summary className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:text-slate-700">
+          <details className="w-full text-left bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 mb-8">
+            <summary className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-700 dark:hover:text-slate-300">
               Error Details
             </summary>
-            <p className="text-sm font-mono text-rose-400 mt-3 whitespace-pre-wrap break-all">
+            <p className="text-sm font-mono text-rose-700 dark:text-rose-400 mt-3 whitespace-pre-wrap break-all">
               {error.message}
             </p>
           </details>
@@ -46,7 +46,7 @@ export default function GlobalError({
           </button>
           <Link 
             href="/"
-            className="px-6 py-2.5 bg-slate-100 hover:bg-zinc-700 text-slate-900 text-sm font-medium rounded-lg transition-colors w-full sm:w-auto"
+            className="px-6 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-zinc-700 text-slate-900 dark:text-slate-100 text-sm font-medium rounded-lg transition-colors w-full sm:w-auto"
           >
             Go Home
           </Link>

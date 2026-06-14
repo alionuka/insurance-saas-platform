@@ -28,12 +28,12 @@ function formatCurrency(n: number): string {
 export default function ProductPerformanceTable({ rows }: { rows: ProductRow[] }) {
   if (!rows || rows.length === 0) {
     return (
-      <div className="bg-white border border-slate-200 rounded-2xl p-6">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
         <div className="flex items-center gap-2 mb-2">
           <Package className="h-5 w-5 text-blue-700" />
-          <h3 className="text-lg font-bold text-slate-900">Performance per Product</h3>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Performance per Product</h3>
         </div>
-        <p className="text-sm text-slate-500 mt-4">No products to compare yet.</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-4">No products to compare yet.</p>
       </div>
     );
   }
@@ -43,20 +43,20 @@ export default function ProductPerformanceTable({ rows }: { rows: ProductRow[] }
   const maxRevenue = Math.max(...sorted.map((r) => r.premiumRevenue), 1);
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
-      <div className="px-6 py-4 border-b border-slate-200 bg-white/50">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+      <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
         <div className="flex items-center gap-2">
           <Package className="h-5 w-5 text-blue-700" />
-          <h3 className="text-lg font-bold text-slate-900">Performance per Product</h3>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Performance per Product</h3>
         </div>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
           Revenue, in-force policies, and claim experience — ranked by premium revenue
         </p>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider">
+          <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
             <tr>
               <th className="px-6 py-3">Product</th>
               <th className="px-6 py-3 text-right">Apps</th>
@@ -76,19 +76,19 @@ export default function ProductPerformanceTable({ rows }: { rows: ProductRow[] }
                 : 'text-rose-400';
               const revenuePct = (row.premiumRevenue / maxRevenue) * 100;
               return (
-                <tr key={row.productId} className="hover:bg-slate-100/30 transition-colors">
+                <tr key={row.productId} className="hover:bg-slate-100 dark:hover:bg-slate-800/30 transition-colors">
                   <td className="px-6 py-4">
-                    <p className="font-medium text-slate-900 text-sm">{row.productName}</p>
-                    <span className={`text-[9px] uppercase font-bold tracking-wider ${TYPE_COLOR[row.productType] ?? 'text-slate-600'}`}>
+                    <p className="font-medium text-slate-900 dark:text-slate-100 text-sm">{row.productName}</p>
+                    <span className={`text-[9px] uppercase font-bold tracking-wider ${TYPE_COLOR[row.productType] ?? 'text-slate-600 dark:text-slate-400'}`}>
                       {row.productType}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-right font-mono text-slate-700">{row.appsCount}</td>
-                  <td className="px-6 py-4 text-right font-mono text-slate-700">{row.policiesActive}</td>
+                  <td className="px-6 py-4 text-right font-mono text-slate-700 dark:text-slate-300">{row.appsCount}</td>
+                  <td className="px-6 py-4 text-right font-mono text-slate-700 dark:text-slate-300">{row.policiesActive}</td>
                   <td className="px-6 py-4 text-right">
                     <div className="inline-flex flex-col items-end gap-1">
-                      <span className="font-bold text-emerald-400 font-mono">{formatCurrency(row.premiumRevenue)}</span>
-                      <div className="w-24 h-1 bg-white rounded-full overflow-hidden">
+                      <span className="font-bold text-emerald-700 dark:text-emerald-400 font-mono">{formatCurrency(row.premiumRevenue)}</span>
+                      <div className="w-24 h-1 bg-white dark:bg-slate-900 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-emerald-500 rounded-full"
                           style={{ width: `${revenuePct}%` }}
@@ -97,15 +97,15 @@ export default function ProductPerformanceTable({ rows }: { rows: ProductRow[] }
                     </div>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <span className="font-mono text-slate-700">{row.approvedClaims}</span>
-                    <span className="text-[10px] text-slate-400 font-mono ml-1">/{row.claimsCount}</span>
+                    <span className="font-mono text-slate-700 dark:text-slate-300">{row.approvedClaims}</span>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono ml-1">/{row.claimsCount}</span>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="inline-flex items-center gap-1.5">
                       {lossRatio > 0 && (lossRatio >= 0.5 ? (
-                        <TrendingUp className="h-3 w-3 text-rose-400" />
+                        <TrendingUp className="h-3 w-3 text-rose-700 dark:text-rose-400" />
                       ) : (
-                        <TrendingDown className="h-3 w-3 text-emerald-400" />
+                        <TrendingDown className="h-3 w-3 text-emerald-700 dark:text-emerald-400" />
                       ))}
                       <span className={`font-mono font-bold ${ratioColor}`}>
                         {(lossRatio * 100).toFixed(0)}%

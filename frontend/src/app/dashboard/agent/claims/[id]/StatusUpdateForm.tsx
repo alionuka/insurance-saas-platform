@@ -56,18 +56,18 @@ export default function StatusUpdateForm({ claimId, currentStatus }: { claimId: 
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white border border-slate-200 rounded-xl p-6 md:p-8">
-      <h2 className="text-lg font-semibold text-slate-900 mb-4">Update Claim Status</h2>
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 md:p-8">
+      <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Update Claim Status</h2>
       <div className="flex flex-col sm:flex-row gap-4 items-end">
         <div className="flex-1 w-full">
-          <label className="block text-xs font-medium text-slate-600 mb-2 uppercase tracking-wider">
+          <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2 uppercase tracking-wider">
             Current Status
           </label>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
             disabled={loading}
-            className="w-full bg-slate-50 border border-slate-300 text-slate-900 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            className="w-full bg-slate-50 dark:bg-[#060b1a] border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
           >
             {CLAIM_STATUSES.map((s) => (
               <option key={s} value={s}>{s}</option>

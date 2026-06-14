@@ -63,7 +63,7 @@ export default function DeleteProductButton({ productId, productName, onDeleted 
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="p-2 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-500 hover:bg-rose-500 hover:text-slate-900 transition-all shadow-sm"
+        className="p-2 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-500 hover:bg-rose-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all shadow-sm"
         title="Delete Product"
       >
         <Trash2 className="h-4 w-4" />
@@ -71,26 +71,26 @@ export default function DeleteProductButton({ productId, productName, onDeleted 
 
       {isOpen && (
         <div className="fixed inset-0 bg-black/60  z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
-            <div className="p-6 border-b border-slate-200 bg-white/50 flex items-center gap-3 text-rose-500">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="p-6 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 flex items-center gap-3 text-rose-500">
               <div className="h-10 w-10 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
                 <AlertTriangle className="h-5 w-5" />
               </div>
-              <h2 className="text-lg font-bold text-slate-900">Confirm Deletion</h2>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Confirm Deletion</h2>
             </div>
 
             <div className="p-6">
-              <p className="text-slate-700 text-sm leading-relaxed">
-                Are you sure you want to delete <strong className="text-slate-900">"{productName}"</strong>? This action cannot be undone.
+              <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+                Are you sure you want to delete <strong className="text-slate-900 dark:text-slate-100">"{productName}"</strong>? This action cannot be undone.
               </p>
             </div>
 
-            <div className="px-6 py-4 bg-slate-50 border-t border-slate-200/60 flex justify-end gap-3">
+            <div className="px-6 py-4 bg-slate-50 dark:bg-[#060b1a] border-t border-slate-200 dark:border-slate-800/60 flex justify-end gap-3">
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
                 disabled={loading}
-                className="px-4 py-2 border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 rounded-xl text-sm font-bold transition-all disabled:opacity-50"
+                className="px-4 py-2 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 rounded-xl text-sm font-bold transition-all disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -98,7 +98,7 @@ export default function DeleteProductButton({ productId, productName, onDeleted 
                 type="button"
                 onClick={handleDelete}
                 disabled={loading}
-                className="flex items-center gap-1.5 px-4 py-2 border border-transparent rounded-xl text-sm font-bold text-slate-900 bg-rose-600 hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 transition-all disabled:opacity-50 shadow-lg shadow-rose-900/20"
+                className="flex items-center gap-1.5 px-4 py-2 border border-transparent rounded-xl text-sm font-bold text-slate-900 dark:text-slate-100 bg-rose-600 hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 transition-all disabled:opacity-50 shadow-lg shadow-rose-900/20"
               >
                 {loading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />

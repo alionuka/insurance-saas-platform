@@ -13,12 +13,12 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (!active || !payload?.length) return null;
   const data = payload[0].payload;
   return (
-    <div className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 shadow-2xl text-left">
-      <p className="text-xs font-bold text-slate-900">{data.feature}</p>
-      <p className="text-xs text-slate-600 mt-1">
-        Cumulative impact: <span className="text-rose-400 font-mono font-bold">{data.totalImpact.toFixed(1)} pts</span>
+    <div className="bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 shadow-2xl text-left">
+      <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{data.feature}</p>
+      <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+        Cumulative impact: <span className="text-rose-700 dark:text-rose-400 font-mono font-bold">{data.totalImpact.toFixed(1)} pts</span>
       </p>
-      <p className="text-xs text-slate-500">
+      <p className="text-xs text-slate-500 dark:text-slate-400">
         Across {data.occurrences} claim assessment{data.occurrences === 1 ? '' : 's'}
       </p>
     </div>
@@ -28,14 +28,14 @@ const CustomTooltip = ({ active, payload }: any) => {
 export default function TopFraudDriversChart({ drivers }: { drivers: FraudDriver[] }) {
   if (!drivers || drivers.length === 0) {
     return (
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 h-full">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 h-full">
         <div className="flex items-center gap-2 mb-2">
-          <ShieldAlert className="h-5 w-5 text-rose-400" />
-          <h3 className="text-lg font-bold text-slate-900">Top Fraud Drivers</h3>
+          <ShieldAlert className="h-5 w-5 text-rose-700 dark:text-rose-400" />
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Top Fraud Drivers</h3>
         </div>
-        <p className="text-xs text-slate-500 mb-6">Aggregated fraud feature contributions across all claims</p>
-        <div className="flex items-center justify-center h-[220px] border border-dashed border-slate-200 rounded-xl">
-          <p className="text-sm text-slate-500">No fraud assessments yet.</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">Aggregated fraud feature contributions across all claims</p>
+        <div className="flex items-center justify-center h-[220px] border border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
+          <p className="text-sm text-slate-500 dark:text-slate-400">No fraud assessments yet.</p>
         </div>
       </div>
     );
@@ -44,12 +44,12 @@ export default function TopFraudDriversChart({ drivers }: { drivers: FraudDriver
   const chartData = [...drivers].reverse();
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-6 h-full">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 h-full">
       <div className="flex items-center gap-2 mb-2">
-        <ShieldAlert className="h-5 w-5 text-rose-400" />
-        <h3 className="text-lg font-bold text-slate-900">Top Fraud Drivers</h3>
+        <ShieldAlert className="h-5 w-5 text-rose-700 dark:text-rose-400" />
+        <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Top Fraud Drivers</h3>
       </div>
-      <p className="text-xs text-slate-500 mb-4">Cumulative fraud feature impact (SHAP) across all claim assessments</p>
+      <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">Cumulative fraud feature impact (SHAP) across all claim assessments</p>
 
       <div className="h-[240px] w-full">
         <ResponsiveContainer width="100%" height="100%">

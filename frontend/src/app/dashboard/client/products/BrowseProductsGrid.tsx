@@ -99,15 +99,15 @@ export default function BrowseProductsGrid({
             <div className="flex items-center gap-3 mb-4">
               <span
                 className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full border ${
-                  TYPE_STYLES[type] ?? 'bg-slate-100 text-slate-600 border-slate-300'
+                  TYPE_STYLES[type] ?? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'
                 }`}
               >
                 {type}
               </span>
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
                 {TYPE_LABELS[type] ?? type}
               </h2>
-              <span className="text-xs text-slate-400 font-mono">{products.length} products</span>
+              <span className="text-xs text-slate-400 dark:text-slate-500 font-mono">{products.length} products</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -116,7 +116,7 @@ export default function BrowseProductsGrid({
                 return (
                 <div
                   key={product.id}
-                  className="bg-white border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition-colors flex flex-col gap-4 relative overflow-hidden"
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 hover:border-slate-300 dark:hover:border-slate-700 transition-colors flex flex-col gap-4 relative overflow-hidden"
                 >
                   {brandColor && (
                     <div
@@ -127,10 +127,18 @@ export default function BrowseProductsGrid({
                   )}
                   <div className="flex items-start justify-between gap-2">
                     <div
-                      className="h-10 w-10 rounded-lg border border-slate-200 flex items-center justify-center shrink-0 overflow-hidden"
-                      style={{
-                        backgroundColor: brandColor ? brandColor + '15' : '#09090b',
-                      }}
+                      className={
+                        // Brand tint when company has a primary color; otherwise
+                        // a soft surface that adapts to the theme.
+                        brandColor
+                          ? 'h-10 w-10 rounded-lg border border-slate-200 dark:border-slate-800 flex items-center justify-center shrink-0 overflow-hidden'
+                          : 'h-10 w-10 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 flex items-center justify-center shrink-0 overflow-hidden'
+                      }
+                      style={
+                        brandColor
+                          ? { backgroundColor: brandColor + '15' }
+                          : undefined
+                      }
                     >
                       {product.company?.logoUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
@@ -141,15 +149,15 @@ export default function BrowseProductsGrid({
                         />
                       ) : (
                         <Package
-                          className="h-5 w-5"
-                          style={{ color: brandColor ?? '#60a5fa' }}
+                          className="h-5 w-5 text-blue-700"
+                          style={brandColor ? { color: brandColor } : undefined}
                         />
                       )}
                     </div>
                     <span
                       className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded border ${
                         TYPE_STYLES[product.type] ??
-                        'bg-slate-100 text-slate-600 border-slate-300'
+                        'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'
                       }`}
                     >
                       {product.type}
@@ -157,34 +165,34 @@ export default function BrowseProductsGrid({
                   </div>
 
                   <div className="flex-1">
-                    <h3 className="font-bold text-slate-900 text-base leading-tight">
+                    <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base leading-tight">
                       {product.name}
                     </h3>
                     {product.company && (
                       <div className="flex items-center gap-1.5 mt-1.5">
-                        <Building2 className="h-3 w-3 text-slate-500" />
-                        <p className="text-xs text-slate-500">{product.company.name}</p>
+                        <Building2 className="h-3 w-3 text-slate-500 dark:text-slate-400" />
+                        <p className="text-xs text-slate-500 dark:text-slate-400">{product.company.name}</p>
                       </div>
                     )}
                   </div>
 
-                  <div className="pt-3 border-t border-slate-200/50">
+                  <div className="pt-3 border-t border-slate-200 dark:border-slate-800/50">
                     <div className="flex items-baseline justify-between mb-3">
-                      <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">
                         Base premium
                       </span>
                       <div className="text-right">
-                        <span className="text-xl font-bold text-emerald-400">
+                        <span className="text-xl font-bold text-blue-700">
                           {formatCurrency(product.basePremium)}
                         </span>
-                        <span className="text-[10px] text-slate-500 font-bold ml-1">/ mo</span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold ml-1">/ mo</span>
                       </div>
                     </div>
                     <button
                       onClick={() => submitApplication(product.id)}
                       disabled={applyingProductId !== null}
                       data-testid="apply-product"
-                      className="w-full py-2 px-3 rounded-xl disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed text-xs font-bold text-slate-900 transition-colors flex items-center justify-center gap-1.5 hover:opacity-90"
+                      className="w-full py-2 px-3 rounded-xl disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed text-xs font-bold text-slate-900 dark:text-slate-100 transition-colors flex items-center justify-center gap-1.5 hover:opacity-90"
                       style={{
                         backgroundColor: brandColor ?? '#059669',
                       }}

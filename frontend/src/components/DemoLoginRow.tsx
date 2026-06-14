@@ -98,7 +98,7 @@ export default function DemoLoginRow({
   if (variant === 'landing') {
     return (
       <div className="mt-12 max-w-3xl mx-auto">
-        <p className="text-center text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">
+        <p className="text-center text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-4">
           {t('landing.demoTryRoleLabel')}
         </p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
@@ -125,7 +125,7 @@ export default function DemoLoginRow({
             );
           })}
         </div>
-        <p className="text-[11px] text-slate-600 text-center mt-3">
+        <p className="text-[11px] text-slate-600 dark:text-slate-400 text-center mt-3">
           {t('landing.demoTryRoleHint')}
         </p>
       </div>

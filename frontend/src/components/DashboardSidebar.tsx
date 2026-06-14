@@ -215,7 +215,7 @@ export default function DashboardSidebar() {
       {/* Mobile Hamburger Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="md:hidden fixed top-4 left-4 z-40 bg-white border border-slate-200 rounded-lg p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100/50 shadow-lg"
+        className="md:hidden fixed top-4 left-4 z-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/50 shadow-lg"
         aria-label="Open sidebar"
       >
         <Menu className="h-5 w-5" />
@@ -234,15 +234,15 @@ export default function DashboardSidebar() {
           and use the fixed w-72 drawer pattern. */}
       <aside
         style={sidebarStyle}
-        className={`fixed inset-y-0 left-0 w-72 flex flex-col bg-slate-50 border-r border-slate-200 z-50 transform transition-transform duration-200 ease-in-out ${
+        className={`fixed inset-y-0 left-0 w-72 flex flex-col bg-slate-50 dark:bg-[#060b1a] border-r border-slate-200 dark:border-slate-800 z-50 transform transition-transform duration-200 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
       >
         {/* Brand + header tools */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200 shrink-0">
+        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200 dark:border-slate-800 shrink-0">
           <div className="flex items-center min-w-0">
             <ShieldCheck className="h-6 w-6 text-blue-500 mr-2 shrink-0" />
-            <span className="text-xl font-semibold tracking-tight text-slate-900 truncate hidden md:block">
+            <span className="text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 truncate hidden md:block">
               {t('sidebar.brand')}
             </span>
           </div>
@@ -255,11 +255,11 @@ export default function DashboardSidebar() {
                 const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true });
                 window.dispatchEvent(event);
               }}
-              className="flex items-center gap-2 text-xs text-slate-500 hover:text-slate-900 border border-slate-200 rounded-md px-2 py-1 transition-colors"
+              className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 border border-slate-200 dark:border-slate-800 rounded-md px-2 py-1 transition-colors"
               title={`${t('sidebar.search')} (⌘K)`}
             >
               <Search className="h-3.5 w-3.5" />
-              <kbd className="font-mono bg-slate-100 px-1 rounded text-[9px] font-bold hidden xl:inline">⌘K</kbd>
+              <kbd className="font-mono bg-slate-100 dark:bg-slate-800 px-1 rounded text-[9px] font-bold hidden xl:inline">⌘K</kbd>
             </button>
             <div data-tour="notifications">
               <NotificationsBell />
@@ -285,13 +285,13 @@ export default function DashboardSidebar() {
                   className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors relative ${
                     isActive
                       ? 'bg-blue-700/10 text-blue-700'
-                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
                   }`}
                 >
                   {isActive && (
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-blue-700 rounded-r-full" />
                   )}
-                  <Icon className={`mr-3 h-5 w-5 shrink-0 ${isActive ? 'text-blue-700' : 'text-slate-500'}`} />
+                  <Icon className={`mr-3 h-5 w-5 shrink-0 ${isActive ? 'text-blue-700' : 'text-slate-500 dark:text-slate-400'}`} />
                   <span className="truncate">{t(item.labelKey)}</span>
                 </Link>
               );
@@ -300,10 +300,10 @@ export default function DashboardSidebar() {
         </div>
 
         {/* User Info & Logout */}
-        <div className="p-4 border-t border-slate-200 shrink-0">
+        <div className="p-4 border-t border-slate-200 dark:border-slate-800 shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center min-w-0 pr-3">
-              <div className="h-9 w-9 rounded-full bg-slate-100 border border-slate-300 flex items-center justify-center overflow-hidden text-xs font-bold text-blue-700 shrink-0">
+              <div className="h-9 w-9 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center overflow-hidden text-xs font-bold text-blue-700 shrink-0">
                 {user?.avatarUrl ? (
                   <img
                     src={user.avatarUrl}
@@ -315,10 +315,10 @@ export default function DashboardSidebar() {
                 )}
               </div>
               <div className="ml-3 truncate">
-                <p className="text-sm font-medium text-slate-900 truncate">
+                <p className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate">
                   {user ? `${user.firstName} ${user.lastName}` : 'Demo User'}
                 </p>
-                <p className="text-[10px] text-slate-500 uppercase font-bold tracking-tighter truncate">
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-tighter truncate">
                   {user ? user.role.replace('_', ' ') : t('sidebar.readonlyRole')}
                 </p>
               </div>
@@ -331,7 +331,7 @@ export default function DashboardSidebar() {
                   logout();
                   window.location.href = '/auth/sign-in';
                 }}
-                className="text-slate-500 hover:text-rose-400 transition-colors p-1.5 rounded-md hover:bg-rose-500/10"
+                className="text-slate-500 dark:text-slate-400 hover:text-rose-400 transition-colors p-1.5 rounded-md hover:bg-rose-500/10"
                 title={t('sidebar.signOutTitle')}
               >
                 <LogOut className="h-4 w-4" />
@@ -354,7 +354,7 @@ export default function DashboardSidebar() {
           className="hidden md:block absolute top-0 right-0 h-full w-1.5 cursor-col-resize group z-[60]"
         >
           {/* Visible accent on hover */}
-          <div className="absolute inset-y-0 right-0 w-px bg-slate-100 group-hover:bg-blue-700 group-hover:w-0.5 transition-all" />
+          <div className="absolute inset-y-0 right-0 w-px bg-slate-100 dark:bg-slate-800 group-hover:bg-blue-700 group-hover:w-0.5 transition-all" />
         </div>
       </aside>
 

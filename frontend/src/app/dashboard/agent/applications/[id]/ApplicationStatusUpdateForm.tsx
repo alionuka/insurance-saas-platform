@@ -69,7 +69,7 @@ export default function ApplicationStatusUpdateForm({
         value={status}
         onChange={(e) => setStatus(e.target.value)}
         disabled={isLoading}
-        className="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 cursor-pointer"
+        className="bg-slate-50 dark:bg-[#060b1a] border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 cursor-pointer"
       >
         {STATUS_OPTIONS.map((opt) => (
           <option key={opt} value={opt}>

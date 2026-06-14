@@ -96,13 +96,13 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-6">
       {/* Logo section */}
       <div>
-        <label className="block text-sm font-bold text-slate-900 mb-2">Logo</label>
+        <label className="block text-sm font-bold text-slate-900 dark:text-slate-100 mb-2">Logo</label>
         <div className="flex items-center gap-4">
           <div
-            className="h-20 w-20 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0"
+            className="h-20 w-20 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#060b1a] flex items-center justify-center overflow-hidden shrink-0"
             style={
               !logoUrl
                 ? { backgroundColor: primaryColor + '20' }
@@ -138,7 +138,7 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploadingLogo}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 hover:bg-zinc-700 disabled:opacity-50 text-sm font-medium text-slate-900 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-zinc-700 disabled:opacity-50 text-sm font-medium text-slate-900 dark:text-slate-100 transition-colors"
             >
               {uploadingLogo ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -147,7 +147,7 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
               )}
               {logoUrl ? 'Replace logo' : 'Upload logo'}
             </button>
-            <p className="text-[11px] text-slate-500 mt-2">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2">
               PNG, JPEG, WebP, or SVG. Max 2 MB. Square ratio works best.
             </p>
           </div>
@@ -155,12 +155,12 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
       </div>
 
       {/* Fields form */}
-      <form onSubmit={handleSaveFields} className="space-y-5 pt-2 border-t border-slate-200/60">
+      <form onSubmit={handleSaveFields} className="space-y-5 pt-2 border-t border-slate-200 dark:border-slate-800/60">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
           <div>
             <label
               htmlFor="company-name"
-              className="block text-sm font-medium text-slate-700 mb-1"
+              className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
             >
               Company name
             </label>
@@ -172,14 +172,14 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
               maxLength={100}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm"
+              className="w-full px-3 py-2 bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm"
             />
           </div>
 
           <div>
             <label
               htmlFor="primary-color"
-              className="block text-sm font-medium text-slate-700 mb-1"
+              className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
             >
               Primary colour
             </label>
@@ -189,14 +189,14 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
                 type="color"
                 value={primaryColor}
                 onChange={(e) => setPrimaryColor(e.target.value)}
-                className="h-10 w-14 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer"
+                className="h-10 w-14 bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-lg cursor-pointer"
               />
               <input
                 type="text"
                 value={primaryColor}
                 onChange={(e) => setPrimaryColor(e.target.value)}
                 pattern="^#[0-9a-fA-F]{6}$"
-                className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-2 bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-100 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="#3b82f6"
               />
             </div>
@@ -206,7 +206,7 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
         <div>
           <label
             htmlFor="company-description"
-            className="block text-sm font-medium text-slate-700 mb-1"
+            className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
           >
             Description
           </label>
@@ -216,10 +216,10 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
             maxLength={500}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm resize-none"
+            className="w-full px-3 py-2 bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm resize-none"
             placeholder="Short tagline shown to customers — what makes your company different?"
           />
-          <p className="text-[11px] text-slate-500 mt-1">
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
             {description.length} / 500 characters
           </p>
         </div>
@@ -227,7 +227,7 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
         <button
           type="submit"
           disabled={savingFields}
-          className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-semibold text-slate-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-semibold text-slate-900 dark:text-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ backgroundColor: primaryColor }}
         >
           {savingFields ? (

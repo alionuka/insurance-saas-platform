@@ -50,8 +50,8 @@ export default async function ClientPoliciesPage(props: Props) {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">{t('clientPolicies.title')}</h1>
-        <p className="text-slate-600 mt-1 text-sm">{t('clientPolicies.subtitle')}</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">{t('clientPolicies.title')}</h1>
+        <p className="text-slate-600 dark:text-slate-400 mt-1 text-sm">{t('clientPolicies.subtitle')}</p>
       </div>
 
       <PolicyFilters counts={counts} />
@@ -60,7 +60,7 @@ export default async function ClientPoliciesPage(props: Props) {
         {policies.length > 0 ? (
           policies.map((policy: any) => (
             <Link key={policy.id} href={`/dashboard/client/policies/${policy.id}`} className="block group">
-              <div className="bg-white border border-slate-200 rounded-xl overflow-hidden group-hover:border-slate-300 transition-colors">
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden group-hover:border-slate-300 transition-colors">
                 {policy.status === 'PENDING_PAYMENT' && (
                   <div className="bg-blue-700/5 border-b border-blue-700/10 px-5 py-2.5 flex items-center justify-between gap-4 relative z-10">
                     <div className="flex items-center gap-2">
@@ -75,30 +75,30 @@ export default async function ClientPoliciesPage(props: Props) {
                 
                 <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-slate-100 flex items-center justify-center border border-slate-300 flex-shrink-0">
+                    <div className="h-12 w-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-300 dark:border-slate-700 flex-shrink-0">
                       <ShieldCheck className="h-6 w-6 text-blue-700" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-bold text-slate-900 text-lg">{policy.product?.name || t('clientApps.unknownProduct')}</h3>
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-bold uppercase border border-slate-300">
+                        <h3 className="font-bold text-slate-900 dark:text-slate-100 text-lg">{policy.product?.name || t('clientApps.unknownProduct')}</h3>
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold uppercase border border-slate-300 dark:border-slate-700">
                           {policy.product?.type}
                         </span>
                       </div>
-                      <p className="text-sm text-emerald-400 font-medium">{policy.product?.company?.name || t('clientApps.unknownCompany')}</p>
-                      <p className="text-xs text-slate-500 mt-1 font-mono">{t('clientPolicies.policyNumber')}: {policy.policyNumber}</p>
+                      <p className="text-sm text-emerald-700 dark:text-emerald-400 font-medium">{policy.product?.company?.name || t('clientApps.unknownCompany')}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono">{t('clientPolicies.policyNumber')}: {policy.policyNumber}</p>
                     </div>
                   </div>
                   
                   <div className="flex flex-wrap items-center gap-3">
                     <div className="text-right mr-4 hidden md:block">
-                      <p className="text-[10px] text-slate-500 uppercase font-bold">{t('clientPolicies.coveragePeriod')}</p>
-                      <p className="text-xs text-slate-700">{formatDate(policy.startDate)} {t('clientPolicies.coverageTo')} {formatDate(policy.endDate)}</p>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold">{t('clientPolicies.coveragePeriod')}</p>
+                      <p className="text-xs text-slate-700 dark:text-slate-300">{formatDate(policy.startDate)} {t('clientPolicies.coverageTo')} {formatDate(policy.endDate)}</p>
                     </div>
                     <span className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider border ${
-                      policy.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
+                      policy.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20' : 
                       policy.status === 'PENDING_PAYMENT' ? 'bg-blue-700/10 text-blue-700 border-blue-700/20' :
-                      'bg-zinc-500/10 text-slate-600 border-zinc-500/20'
+                      'bg-zinc-500/10 text-slate-600 dark:text-slate-400 border-zinc-500/20'
                     }`}>
                       {policy.status.replace('_', ' ')}
                     </span>
@@ -106,9 +106,9 @@ export default async function ClientPoliciesPage(props: Props) {
                 </div>
                 
                 {/* Footer info */}
-                <div className="px-5 py-3 border-t border-slate-200/50 bg-slate-50/30 flex items-center justify-between">
-                  <p className="text-[10px] text-slate-500 uppercase font-bold tracking-tight">
-                    {t('clientPolicies.linkedApplication')}: <span className="text-slate-600 ml-1">{policy.applicationId.substring(0, 8)}...</span>
+                <div className="px-5 py-3 border-t border-slate-200 dark:border-slate-800/50 bg-slate-50 dark:bg-[#060b1a]/30 flex items-center justify-between">
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-tight">
+                    {t('clientPolicies.linkedApplication')}: <span className="text-slate-600 dark:text-slate-400 ml-1">{policy.applicationId.substring(0, 8)}...</span>
                   </p>
                   <div className="text-[10px] text-blue-700 group-hover:text-blue-600 font-bold uppercase tracking-tight transition-colors">
                     {t('clientPolicies.viewDetails')}

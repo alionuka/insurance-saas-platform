@@ -71,15 +71,15 @@ function ResetPasswordForm() {
           </div>
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-slate-900">{t('auth.invalidLink')}</h3>
-          <p className="text-sm text-slate-600 max-w-xs mx-auto leading-relaxed">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">{t('auth.invalidLink')}</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xs mx-auto leading-relaxed">
             {t('auth.invalidLinkHint')}
           </p>
         </div>
         <div className="pt-4">
           <Link
             href="/auth/forgot-password"
-            className="w-full flex justify-center py-3 px-4 border border-slate-200 rounded-lg text-sm font-semibold text-slate-900 bg-slate-50 hover:bg-white transition-all"
+            className="w-full flex justify-center py-3 px-4 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-semibold text-slate-900 dark:text-slate-100 bg-slate-50 dark:bg-[#060b1a] hover:bg-white transition-all"
           >
             {t('auth.requestNewLink')}
           </Link>
@@ -97,8 +97,8 @@ function ResetPasswordForm() {
           </div>
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-slate-900">{t('auth.passwordUpdated')}</h3>
-          <p className="text-sm text-slate-600">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">{t('auth.passwordUpdated')}</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400">
             {t('auth.redirectingToSignIn')}
           </p>
         </div>
@@ -120,12 +120,12 @@ function ResetPasswordForm() {
 
       <div className="space-y-4">
         <div>
-          <label htmlFor="newPassword" className="block text-sm font-medium text-slate-700">
+          <label htmlFor="newPassword" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             {t('auth.newPasswordLabel')}
           </label>
           <div className="mt-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Lock className="h-4 w-4 text-slate-500" />
+              <Lock className="h-4 w-4 text-slate-500 dark:text-slate-400" />
             </div>
             <input
               id="newPassword"
@@ -135,19 +135,19 @@ function ResetPasswordForm() {
               minLength={8}
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
+              className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
               placeholder={t('auth.passwordPlaceholder')}
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700">
+          <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             {t('auth.confirmNewPasswordLabel')}
           </label>
           <div className="mt-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Lock className="h-4 w-4 text-slate-500" />
+              <Lock className="h-4 w-4 text-slate-500 dark:text-slate-400" />
             </div>
             <input
               id="confirmPassword"
@@ -157,7 +157,7 @@ function ResetPasswordForm() {
               minLength={8}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
+              className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all"
               placeholder={t('auth.passwordPlaceholder')}
             />
           </div>
@@ -187,7 +187,7 @@ function ResetPasswordForm() {
 function ResetPasswordInner() {
   const { t } = useT();
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#060b1a] flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
       <div className="absolute top-4 right-4">
         <LocaleSwitcher variant="nav" />
       </div>
@@ -197,16 +197,16 @@ function ResetPasswordInner() {
             <ShieldCheck className="h-8 w-8 text-blue-500" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900">
+        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
           {t('auth.resetTitle')}
         </h2>
-        <p className="mt-2 text-center text-sm text-slate-600">
+        <p className="mt-2 text-center text-sm text-slate-600 dark:text-slate-400">
           {t('auth.resetSubtitle')}
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-xl border border-slate-200 sm:rounded-2xl sm:px-10">
+        <div className="bg-white dark:bg-slate-900 py-8 px-4 shadow-xl border border-slate-200 dark:border-slate-800 sm:rounded-2xl sm:px-10">
           <Suspense fallback={
             <div className="flex justify-center py-8">
               <Loader2 className="h-8 w-8 animate-spin text-slate-300" />

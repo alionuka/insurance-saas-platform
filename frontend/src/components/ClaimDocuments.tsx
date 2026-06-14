@@ -161,9 +161,9 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
   };
 
   return (
-    <div className="p-4 bg-slate-50/50 border border-slate-200 rounded-lg mt-2 space-y-4">
+    <div className="p-4 bg-slate-50 dark:bg-[#060b1a]/50 border border-slate-200 dark:border-slate-800 rounded-lg mt-2 space-y-4">
       <div className="flex items-center justify-between">
-        <h4 className="text-sm font-bold text-slate-700 uppercase tracking-tight flex items-center gap-2">
+        <h4 className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-tight flex items-center gap-2">
           <FileText className="h-4 w-4 text-blue-700" />
           Supporting Documents
         </h4>
@@ -186,27 +186,27 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
 
       {loading ? (
         <div className="flex items-center justify-center py-6">
-          <Loader2 className="h-6 w-6 text-slate-400 animate-spin" />
+          <Loader2 className="h-6 w-6 text-slate-400 dark:text-slate-500 animate-spin" />
         </div>
       ) : documents.length > 0 ? (
         <div className="grid gap-2">
           {documents.map((doc) => (
-            <div key={doc.id} className="group flex items-center justify-between p-2.5 bg-white border border-slate-200 rounded hover:border-slate-300 transition-colors">
+            <div key={doc.id} className="group flex items-center justify-between p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
               <div className="flex items-center gap-3 overflow-hidden">
-                <div className="h-8 w-8 rounded bg-slate-100 flex items-center justify-center shrink-0 border border-slate-300">
-                  <FileText className="h-4 w-4 text-slate-600" />
+                <div className="h-8 w-8 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 border border-slate-300 dark:border-slate-700">
+                  <FileText className="h-4 w-4 text-slate-600 dark:text-slate-400" />
                 </div>
                 <div className="overflow-hidden">
                   <a 
                     href={doc.url} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-sm font-medium text-slate-900 hover:text-blue-700 transition-colors truncate block max-w-xs flex items-center gap-2"
+                    className="text-sm font-medium text-slate-900 dark:text-slate-100 hover:text-blue-700 transition-colors truncate block max-w-xs flex items-center gap-2"
                   >
                     {doc.filename}
                     <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </a>
-                  <p className="text-[10px] text-slate-500">
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400">
                     {formatSize(doc.sizeBytes)} • {doc.mimeType.split('/')[1].toUpperCase()} • {formatDate(doc.uploadedAt)}
                   </p>
                 </div>
@@ -215,7 +215,7 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
                 {canUpload && currentUserId === doc.uploadedById && (
                   <button 
                     onClick={() => handleDelete(doc.id)}
-                    className="p-1.5 text-slate-500 hover:text-rose-400 transition-colors"
+                    className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-rose-400 transition-colors"
                     title="Delete document"
                   >
                     <X className="h-4 w-4" />
@@ -224,7 +224,7 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
                 <a 
                   href={doc.url} 
                   download 
-                  className="p-1.5 text-slate-500 hover:text-slate-900 transition-colors"
+                  className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
                   title="Download"
                 >
                   <Download className="h-4 w-4" />
@@ -234,7 +234,7 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
           ))}
         </div>
       ) : (
-        <div className="py-8 text-center border border-slate-200 border-dashed rounded text-slate-500 text-xs italic">
+        <div className="py-8 text-center border border-slate-200 dark:border-slate-800 border-dashed rounded text-slate-500 dark:text-slate-400 text-xs italic">
           No documents uploaded yet.
         </div>
       )}

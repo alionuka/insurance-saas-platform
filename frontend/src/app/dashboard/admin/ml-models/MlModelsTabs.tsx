@@ -39,10 +39,10 @@ function GalleryImage({ src, alt, caption }: GalleryImageProps) {
 
   if (hasError) {
     return (
-      <div className="bg-slate-50 border border-slate-200 rounded-xl h-56 flex flex-col items-center justify-center text-center p-4">
+      <div className="bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-xl h-56 flex flex-col items-center justify-center text-center p-4">
         <FileImage className="h-8 w-8 text-slate-300 mb-2" />
-        <p className="text-xs text-slate-500">Plot not available</p>
-        <p className="text-[10px] text-slate-400 mt-1 max-w-[180px] break-all">{alt}</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400">Plot not available</p>
+        <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1 max-w-[180px] break-all">{alt}</p>
       </div>
     );
   }
@@ -52,10 +52,10 @@ function GalleryImage({ src, alt, caption }: GalleryImageProps) {
       href={src}
       target="_blank"
       rel="noopener noreferrer"
-      className="group bg-white rounded-xl overflow-hidden shadow-lg ring-1 ring-zinc-800 hover:ring-blue-500/40 hover:shadow-blue-500/10 transition-all flex flex-col"
+      className="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-lg ring-1 ring-zinc-800 hover:ring-blue-500/40 hover:shadow-blue-500/10 transition-all flex flex-col"
       title="Натисніть, щоб відкрити в повному розмірі"
     >
-      <div className="p-4 flex items-center justify-center h-64 bg-white">
+      <div className="p-4 flex items-center justify-center h-64 bg-white dark:bg-slate-900">
         <img
           src={src}
           alt={alt}
@@ -64,9 +64,9 @@ function GalleryImage({ src, alt, caption }: GalleryImageProps) {
           className="max-h-full max-w-full object-contain group-hover:scale-[1.02] transition-transform duration-300"
         />
       </div>
-      <div className="p-3 bg-slate-50 border-t border-slate-200">
-        <p className="text-xs font-semibold text-slate-700 group-hover:text-blue-700 transition-colors">{caption}</p>
-        <p className="text-[10px] text-slate-500 mt-0.5">{alt}</p>
+      <div className="p-3 bg-slate-50 dark:bg-[#060b1a] border-t border-slate-200 dark:border-slate-800">
+        <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-blue-700 transition-colors">{caption}</p>
+        <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">{alt}</p>
       </div>
     </a>
   );
@@ -76,15 +76,15 @@ const CustomPermutationTooltip = ({ active, payload }: any) => {
   if (!active || !payload?.length) return null;
   const data = payload[0].payload;
   return (
-    <div className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 shadow-2xl text-left">
-      <p className="text-xs font-bold text-slate-900">{data.feature}</p>
-      <p className="text-xs text-slate-600 mt-1">
+    <div className="bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 shadow-2xl text-left">
+      <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{data.feature}</p>
+      <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
         Mean decrease in AUC:{' '}
         <span className="text-blue-700 font-bold font-mono">
           {data.mean.toFixed(4)}
         </span>
       </p>
-      <p className="text-[10px] text-slate-500">
+      <p className="text-[10px] text-slate-500 dark:text-slate-400">
         Std dev: <span className="font-mono">{data.std.toFixed(4)}</span>
       </p>
     </div>
@@ -110,10 +110,10 @@ export default function MlModelsTabs({ data }: { data: any }) {
 
     if (!metrics) {
       return (
-        <div className="bg-white border border-slate-200 rounded-xl p-12 text-center shadow-md">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-12 text-center shadow-md">
           <AlertCircle className="mx-auto h-8 w-8 text-blue-500 mb-3" />
-          <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-2">Metrics Offline</h3>
-          <p className="text-xs text-slate-500">No telemetry or metric definitions found for {type} model.</p>
+          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider mb-2">Metrics Offline</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">No telemetry or metric definitions found for {type} model.</p>
         </div>
       );
     }
@@ -133,66 +133,66 @@ export default function MlModelsTabs({ data }: { data: any }) {
         {/* Top Cards: Methodology & Hyperparameters */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Methodology */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-md lg:col-span-2 flex flex-col justify-between">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md lg:col-span-2 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <Layers className="h-5 w-5 text-blue-700" />
-                <h2 className="text-base font-bold text-slate-900">Model Methodology</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Model Methodology</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Best Model Architecture</span>
-                  <p className="text-slate-900 font-medium text-sm mt-0.5">{best_model || metrics.best_pipeline || 'N/A'}</p>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Best Model Architecture</span>
+                  <p className="text-slate-900 dark:text-slate-100 font-medium text-sm mt-0.5">{best_model || metrics.best_pipeline || 'N/A'}</p>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">CV Strategy</span>
-                  <p className="text-slate-700 text-xs mt-0.5 font-mono">{methodology?.cv_strategy || 'N/A'}</p>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">CV Strategy</span>
+                  <p className="text-slate-700 dark:text-slate-300 text-xs mt-0.5 font-mono">{methodology?.cv_strategy || 'N/A'}</p>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Hyperparameter Search</span>
-                  <p className="text-slate-700 text-xs mt-0.5">{methodology?.hyperparameter_search || 'N/A'}</p>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Hyperparameter Search</span>
+                  <p className="text-slate-700 dark:text-slate-300 text-xs mt-0.5">{methodology?.hyperparameter_search || 'N/A'}</p>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Selection Criterion</span>
-                  <p className="text-slate-700 text-xs mt-0.5">{methodology?.best_model_selection_criterion || methodology?.best_pipeline_selection_criterion || 'N/A'}</p>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Selection Criterion</span>
+                  <p className="text-slate-700 dark:text-slate-300 text-xs mt-0.5">{methodology?.best_model_selection_criterion || methodology?.best_pipeline_selection_criterion || 'N/A'}</p>
                 </div>
               </div>
             </div>
             {methodology?.ablation_design && (
-              <div className="mt-4 pt-3 border-t border-slate-200/60">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Ablation Study Design</span>
-                <p className="text-xs text-slate-600 mt-1 italic leading-relaxed">"{methodology.ablation_design}"</p>
+              <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/60">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Ablation Study Design</span>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 italic leading-relaxed">"{methodology.ablation_design}"</p>
               </div>
             )}
           </div>
 
           {/* Hyperparameters */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-md flex flex-col justify-between">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <Award className="h-5 w-5 text-blue-700" />
-                <h2 className="text-base font-bold text-slate-900">Optimal Hyperparameters</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Optimal Hyperparameters</h2>
               </div>
-              <p className="text-xs text-slate-600 mb-4">Refit grid search optimal settings for highest generalization score.</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-4">Refit grid search optimal settings for highest generalization score.</p>
               <div className="flex flex-wrap gap-2">
                 {best_params && Object.entries(best_params).length > 0 ? (
                   Object.entries(best_params).map(([key, val]: any) => (
                     <div 
                       key={key} 
-                      className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 flex flex-col items-start min-w-[100px]"
+                      className="bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-1.5 flex flex-col items-start min-w-[100px]"
                     >
-                      <span className="text-[9px] text-slate-500 font-mono tracking-tight font-bold">{key}</span>
+                      <span className="text-[9px] text-slate-500 dark:text-slate-400 font-mono tracking-tight font-bold">{key}</span>
                       <span className="text-xs text-blue-700 font-mono font-bold mt-0.5">
                         {typeof val === 'boolean' ? (val ? 'True' : 'False') : String(val)}
                       </span>
                     </div>
                   ))
                 ) : (
-                  <p className="text-xs text-slate-500 italic">No hyperparameters found.</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 italic">No hyperparameters found.</p>
                 )}
               </div>
             </div>
-            <div className="mt-4 pt-3 border-t border-slate-200/60 flex items-center justify-between text-xs text-slate-500 font-mono">
+            <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/60 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 font-mono">
               <span>N_Train: {metrics.n_train || 'N/A'}</span>
               <span>N_Test: {metrics.n_test || 'N/A'}</span>
             </div>
@@ -202,16 +202,16 @@ export default function MlModelsTabs({ data }: { data: any }) {
         {/* Middle row: CV comparison table & Feature importance */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           {/* CV Table */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-md lg:col-span-3 flex flex-col justify-between">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md lg:col-span-3 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <BarChart3 className="h-5 w-5 text-blue-700" />
-                <h2 className="text-base font-bold text-slate-900">Classifier Comparison</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Classifier Comparison</h2>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="border-b border-slate-200 text-slate-500 uppercase tracking-wider font-semibold">
+                    <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">
                       <th className="pb-3 pr-2">Pipeline Architecture</th>
                       <th className="pb-3 px-2 text-right">CV Mean AUC</th>
                       <th className="pb-3 px-2 text-right">CV Std</th>
@@ -226,22 +226,22 @@ export default function MlModelsTabs({ data }: { data: any }) {
                       return (
                         <tr 
                           key={name} 
-                          className={`hover:bg-slate-100/20 transition-colors ${isBest ? 'bg-blue-700/5 font-semibold text-white' : 'text-slate-700'}`}
+                          className={`hover:bg-slate-100 dark:hover:bg-slate-800/20 transition-colors ${isBest ? 'bg-blue-700/5 font-semibold text-white' : 'text-slate-700 dark:text-slate-300'}`}
                         >
                           <td className="py-3 pr-2 flex items-center gap-2 max-w-[200px] truncate">
-                            {isBest && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />}
+                            {isBest && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400 shrink-0" />}
                             <span className="truncate">{name}</span>
                           </td>
                           <td className="py-3 px-2 text-right font-mono">
                             {(summary.cv_mean_roc_auc ?? summary.mean_roc_auc ?? 0).toFixed(4)}
                           </td>
-                          <td className="py-3 px-2 text-right font-mono text-slate-500">
+                          <td className="py-3 px-2 text-right font-mono text-slate-500 dark:text-slate-400">
                             {(summary.cv_std_roc_auc ?? summary.std_roc_auc ?? 0).toFixed(4)}
                           </td>
                           <td className="py-3 px-2 text-right font-mono text-blue-700">
                             {(test.roc_auc ?? 0).toFixed(4)}
                           </td>
-                          <td className="py-3 pl-2 text-right font-mono text-emerald-400">
+                          <td className="py-3 pl-2 text-right font-mono text-emerald-700 dark:text-emerald-400">
                             {(test.f1 ?? 0).toFixed(4)}
                           </td>
                         </tr>
@@ -251,7 +251,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
                 </table>
               </div>
             </div>
-            <div className="mt-4 pt-3 border-t border-slate-200/60 flex items-center gap-4 text-[10px] text-slate-500 font-mono">
+            <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/60 flex items-center gap-4 text-[10px] text-slate-500 dark:text-slate-400 font-mono">
               <div className="flex items-center gap-1.5">
                 <div className="h-2.5 w-2.5 rounded bg-blue-700/10 border border-blue-700/30"></div>
                 <span>Best Cross-Validated Pipeline</span>
@@ -260,13 +260,13 @@ export default function MlModelsTabs({ data }: { data: any }) {
           </div>
 
           {/* Permutation Importance Recharts Chart */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-md lg:col-span-2 flex flex-col justify-between">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md lg:col-span-2 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <Activity className="h-5 w-5 text-blue-700" />
-                <h2 className="text-base font-bold text-slate-900">Permutation Importance</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Permutation Importance</h2>
               </div>
-              <p className="text-xs text-slate-600 mb-4">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-4">
                 Mean decrease in test ROC-AUC score under random feature permutation.
               </p>
             </div>
@@ -306,14 +306,14 @@ export default function MlModelsTabs({ data }: { data: any }) {
                 </ResponsiveContainer>
               </div>
             ) : (
-              <div className="flex-1 flex flex-col items-center justify-center p-6 border border-dashed border-slate-200 rounded-xl">
+              <div className="flex-1 flex flex-col items-center justify-center p-6 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
                 <AlertCircle className="h-6 w-6 text-blue-500/70 mb-3" />
-                <p className="text-sm text-slate-700 text-center font-medium">Не застосовується для текстових моделей</p>
-                <p className="text-xs text-slate-500 mt-2 text-center max-w-md leading-relaxed">
+                <p className="text-sm text-slate-700 dark:text-slate-300 text-center font-medium">Не застосовується для текстових моделей</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 text-center max-w-md leading-relaxed">
                   Fraud Detection використовує <span className="text-blue-700 font-mono">TF-IDF</span> на ~1000+ текстових ознаках з опису claim. Permutation importance для такого простору ознак нечитабельний.
                 </p>
-                <p className="text-xs text-slate-500 mt-3 text-center max-w-md leading-relaxed">
-                  Замість цього модель надає <span className="text-emerald-400 font-semibold">локальну пояснюваність через SHAP</span> на сторінці кожного claim — конкретні слова та числові фактори, що вплинули на конкретний прогноз.
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-3 text-center max-w-md leading-relaxed">
+                  Замість цього модель надає <span className="text-emerald-700 dark:text-emerald-400 font-semibold">локальну пояснюваність через SHAP</span> на сторінці кожного claim — конкретні слова та числові фактори, що вплинули на конкретний прогноз.
                 </p>
               </div>
             )}
@@ -323,64 +323,64 @@ export default function MlModelsTabs({ data }: { data: any }) {
         {/* Confusion Matrix and Plot Gallery */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           {/* Confusion Matrix */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-md lg:col-span-2 flex flex-col justify-between">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md lg:col-span-2 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <Grid className="h-5 w-5 text-blue-700" />
-                <h2 className="text-base font-bold text-slate-900">Confusion Matrix Heatmap</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Confusion Matrix Heatmap</h2>
               </div>
-              <p className="text-xs text-slate-600 mb-4">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-4">
                 Testing fold classification results. Metrics calculated from the confusion matrix.
               </p>
               <div className="grid grid-cols-2 gap-3 aspect-square max-w-[240px] mx-auto w-full">
                 <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 flex flex-col items-center justify-center text-center">
-                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wide">True Negative</span>
-                  <span className="text-2xl font-bold font-mono text-emerald-400 mt-1">{tn}</span>
-                  <span className="text-[9px] text-slate-600 mt-0.5">Predicted Safe<br/>Actual Safe</span>
+                  <span className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide">True Negative</span>
+                  <span className="text-2xl font-bold font-mono text-emerald-700 dark:text-emerald-400 mt-1">{tn}</span>
+                  <span className="text-[9px] text-slate-600 dark:text-slate-400 mt-0.5">Predicted Safe<br/>Actual Safe</span>
                 </div>
                 <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl p-3 flex flex-col items-center justify-center text-center">
-                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wide">False Positive</span>
-                  <span className="text-2xl font-bold font-mono text-rose-400 mt-1">{fp}</span>
-                  <span className="text-[9px] text-slate-600 mt-0.5">Predicted Risk<br/>Actual Safe</span>
+                  <span className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide">False Positive</span>
+                  <span className="text-2xl font-bold font-mono text-rose-700 dark:text-rose-400 mt-1">{fp}</span>
+                  <span className="text-[9px] text-slate-600 dark:text-slate-400 mt-0.5">Predicted Risk<br/>Actual Safe</span>
                 </div>
                 <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl p-3 flex flex-col items-center justify-center text-center">
-                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wide">False Negative</span>
-                  <span className="text-2xl font-bold font-mono text-rose-400 mt-1">{fn}</span>
-                  <span className="text-[9px] text-slate-600 mt-0.5">Predicted Safe<br/>Actual Risk</span>
+                  <span className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide">False Negative</span>
+                  <span className="text-2xl font-bold font-mono text-rose-700 dark:text-rose-400 mt-1">{fn}</span>
+                  <span className="text-[9px] text-slate-600 dark:text-slate-400 mt-0.5">Predicted Safe<br/>Actual Risk</span>
                 </div>
                 <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 flex flex-col items-center justify-center text-center">
-                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wide">True Positive</span>
-                  <span className="text-2xl font-bold font-mono text-emerald-400 mt-1">{tp}</span>
-                  <span className="text-[9px] text-slate-600 mt-0.5">Predicted Risk<br/>Actual Risk</span>
+                  <span className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide">True Positive</span>
+                  <span className="text-2xl font-bold font-mono text-emerald-700 dark:text-emerald-400 mt-1">{tp}</span>
+                  <span className="text-[9px] text-slate-600 dark:text-slate-400 mt-0.5">Predicted Risk<br/>Actual Risk</span>
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 mt-6 pt-4 border-t border-slate-200/60 text-xs font-mono">
+            <div className="grid grid-cols-2 gap-4 mt-6 pt-4 border-t border-slate-200 dark:border-slate-800/60 text-xs font-mono">
               <div>
-                <span className="text-slate-500 block">Accuracy:</span>
-                <span className="text-slate-800 font-bold">{(accuracy * 100).toFixed(1)}%</span>
+                <span className="text-slate-500 dark:text-slate-400 block">Accuracy:</span>
+                <span className="text-slate-800 dark:text-slate-200 font-bold">{(accuracy * 100).toFixed(1)}%</span>
               </div>
               <div>
-                <span className="text-slate-500 block">Precision:</span>
-                <span className="text-slate-800 font-bold">{(precision * 100).toFixed(1)}%</span>
+                <span className="text-slate-500 dark:text-slate-400 block">Precision:</span>
+                <span className="text-slate-800 dark:text-slate-200 font-bold">{(precision * 100).toFixed(1)}%</span>
               </div>
               <div>
-                <span className="text-slate-500 block">Recall:</span>
-                <span className="text-slate-800 font-bold">{(recall * 100).toFixed(1)}%</span>
+                <span className="text-slate-500 dark:text-slate-400 block">Recall:</span>
+                <span className="text-slate-800 dark:text-slate-200 font-bold">{(recall * 100).toFixed(1)}%</span>
               </div>
               <div>
-                <span className="text-slate-500 block">F1-Score:</span>
-                <span className="text-slate-800 font-bold">{(f1 * 100).toFixed(1)}%</span>
+                <span className="text-slate-500 dark:text-slate-400 block">F1-Score:</span>
+                <span className="text-slate-800 dark:text-slate-200 font-bold">{(f1 * 100).toFixed(1)}%</span>
               </div>
             </div>
           </div>
 
           {/* Plot Gallery */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-md lg:col-span-3 flex flex-col justify-between">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md lg:col-span-3 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <FileImage className="h-5 w-5 text-blue-700" />
-                <h2 className="text-base font-bold text-slate-900">Training Metrics Gallery</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Training Metrics Gallery</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <GalleryImage 
@@ -400,8 +400,8 @@ export default function MlModelsTabs({ data }: { data: any }) {
                 />
               </div>
             </div>
-            <div className="mt-4 pt-3 border-t border-slate-200/60 flex items-center gap-2 text-[10px] text-slate-500">
-              <InfoIcon className="h-3.5 w-3.5 text-slate-400" />
+            <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/60 flex items-center gap-2 text-[10px] text-slate-500 dark:text-slate-400">
+              <InfoIcon className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
               <span>Plots loaded on demand. Re-generates dynamically upon model retraining scripts executions.</span>
             </div>
           </div>
@@ -415,10 +415,10 @@ export default function MlModelsTabs({ data }: { data: any }) {
 
     if (!recs) {
       return (
-        <div className="bg-white border border-slate-200 rounded-xl p-12 text-center shadow-md">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-12 text-center shadow-md">
           <AlertCircle className="mx-auto h-8 w-8 text-blue-500 mb-3" />
-          <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-2">Metrics Offline</h3>
-          <p className="text-xs text-slate-500">No recommendation model metrics details available.</p>
+          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider mb-2">Metrics Offline</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">No recommendation model metrics details available.</p>
         </div>
       );
     }
@@ -430,77 +430,77 @@ export default function MlModelsTabs({ data }: { data: any }) {
         {/* Info row */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Methodology */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-md lg:col-span-2 flex flex-col justify-between">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md lg:col-span-2 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <Layers className="h-5 w-5 text-blue-700" />
-                <h2 className="text-base font-bold text-slate-900">Recommender Methodology</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Recommender Methodology</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Filtering Paradigm</span>
-                  <p className="text-slate-900 font-medium text-sm mt-0.5">{recs.approach || 'Content-Based Filtering'}</p>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Filtering Paradigm</span>
+                  <p className="text-slate-900 dark:text-slate-100 font-medium text-sm mt-0.5">{recs.approach || 'Content-Based Filtering'}</p>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Catalog Size</span>
-                  <p className="text-slate-700 text-sm mt-0.5 font-bold font-mono text-blue-700">
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Catalog Size</span>
+                  <p className="text-slate-700 dark:text-slate-300 text-sm mt-0.5 font-bold font-mono text-blue-700">
                     {recs.n_products_in_catalog || 'N/A'} products
                   </p>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Vocabulary Size</span>
-                  <p className="text-slate-700 text-sm mt-0.5 font-mono">{recs.tfidf_vocabulary_size || '200'} words</p>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Vocabulary Size</span>
+                  <p className="text-slate-700 dark:text-slate-300 text-sm mt-0.5 font-mono">{recs.tfidf_vocabulary_size || '200'} words</p>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">TF-IDF N-Gram range</span>
-                  <p className="text-slate-700 text-sm mt-0.5 font-mono">
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">TF-IDF N-Gram range</span>
+                  <p className="text-slate-700 dark:text-slate-300 text-sm mt-0.5 font-mono">
                     {recs.tfidf_ngram_range ? `(${recs.tfidf_ngram_range.join(', ')})` : '(1, 2)'}
                   </p>
                 </div>
               </div>
             </div>
-            <div className="mt-4 pt-3 border-t border-slate-200/60 text-xs text-slate-500 font-mono">
+            <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/60 text-xs text-slate-500 dark:text-slate-400 font-mono">
               <span>Catalog consists of Auto, Health, Life, and Property premium products.</span>
             </div>
           </div>
 
           {/* Demographic Accuracy Card */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-md flex flex-col justify-between">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Target className="h-5 w-5 text-emerald-400" />
-                <h2 className="text-base font-bold text-slate-900">Demographic Accuracy</h2>
+                <Target className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Demographic Accuracy</h2>
               </div>
-              <p className="text-xs text-slate-600 mb-4">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-4">
                 Demographic profile match accuracy against expected target product category.
               </p>
               <div className="flex items-end gap-1 mb-2">
-                <span className="text-4xl font-bold font-mono text-emerald-400">{(accuracy * 100).toFixed(0)}</span>
-                <span className="text-sm text-slate-500 font-bold mb-1">% Match</span>
+                <span className="text-4xl font-bold font-mono text-emerald-700 dark:text-emerald-400">{(accuracy * 100).toFixed(0)}</span>
+                <span className="text-sm text-slate-500 dark:text-slate-400 font-bold mb-1">% Match</span>
               </div>
-              <div className="w-full bg-slate-50 border border-slate-200 rounded-full h-2">
+              <div className="w-full bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-full h-2">
                 <div 
                   className="bg-emerald-500 h-1.5 rounded-full transition-all duration-500" 
                   style={{ width: `${accuracy * 100}%` }}
                 ></div>
               </div>
             </div>
-            <span className="text-[10px] text-slate-500 font-mono mt-4">
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-4">
               Tested on 5 key representative customer cohorts.
             </span>
           </div>
         </div>
 
         {/* Per profile breakdown */}
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-md">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md">
           <div className="flex items-center gap-2 mb-4">
             <Sparkles className="h-5 w-5 text-blue-700" />
-            <h2 className="text-base font-bold text-slate-900">Demographic Cohort Predictions</h2>
+            <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Demographic Cohort Predictions</h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-slate-200 text-slate-500 uppercase tracking-wider font-semibold">
+                <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">
                   <th className="pb-3 pr-2">Profile Group</th>
                   <th className="pb-3 px-2">Interest Query Keywords</th>
                   <th className="pb-3 px-2">Top Recommendation Match</th>
@@ -514,27 +514,27 @@ export default function MlModelsTabs({ data }: { data: any }) {
                   const topProduct = summary.top_3?.[0] || {};
                   const matched = summary.matched_expectation;
                   return (
-                    <tr key={profileKey} className="hover:bg-slate-100/10 transition-colors text-slate-700">
-                      <td className="py-3 pr-2 font-semibold text-slate-900 capitalize">
+                    <tr key={profileKey} className="hover:bg-slate-100 dark:hover:bg-slate-800/10 transition-colors text-slate-700 dark:text-slate-300">
+                      <td className="py-3 pr-2 font-semibold text-slate-900 dark:text-slate-100 capitalize">
                         {profileKey.replace(/_/g, ' ')}
                       </td>
-                      <td className="py-3 px-2 text-slate-600 italic max-w-[200px] truncate" title={summary.query}>
+                      <td className="py-3 px-2 text-slate-600 dark:text-slate-400 italic max-w-[200px] truncate" title={summary.query}>
                         "{summary.query}"
                       </td>
-                      <td className="py-3 px-2 text-slate-800">
+                      <td className="py-3 px-2 text-slate-800 dark:text-slate-200">
                         {topProduct.name || 'N/A'}
                       </td>
                       <td className="py-3 px-2 text-right font-mono font-bold text-blue-700">
                         {topProduct.similarity ? (topProduct.similarity * 100).toFixed(0) : '0'}%
                       </td>
                       <td className="py-3 px-2 text-center">
-                        <span className="text-[10px] uppercase font-bold bg-zinc-850 px-2 py-0.5 rounded text-slate-600">
+                        <span className="text-[10px] uppercase font-bold bg-zinc-850 px-2 py-0.5 rounded text-slate-600 dark:text-slate-400">
                           {summary.expected_top_type}
                         </span>
                       </td>
                       <td className="py-3 pl-2 text-center">
                         {matched ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
                             Match
                           </span>
                         ) : (
@@ -557,7 +557,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
   return (
     <div className="space-y-6">
       {/* Tabs toggle */}
-      <div className="flex border-b border-slate-200/80 gap-6">
+      <div className="flex border-b border-slate-200 dark:border-slate-800/80 gap-6">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -568,7 +568,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
               className={`flex items-center gap-2 pb-4 text-sm font-semibold border-b-2 transition-all cursor-pointer ${
                 isActive 
                   ? 'border-blue-700 text-blue-700' 
-                  : 'border-transparent text-slate-500 hover:text-slate-700'
+                  : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
               }`}
             >
               <Icon className="h-4 w-4" />

@@ -8,9 +8,9 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (!active || !payload?.length) return null;
   const data = payload[0];
   return (
-    <div className="bg-slate-100 border border-slate-300 rounded-lg px-3 py-2 shadow-xl">
-      <p className="text-xs font-bold text-slate-900">{data.name}</p>
-      <p className="text-xs text-slate-600">{data.value} items</p>
+    <div className="bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 shadow-xl">
+      <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{data.name}</p>
+      <p className="text-xs text-slate-600 dark:text-slate-400">{data.value} items</p>
     </div>
   );
 };
@@ -20,16 +20,16 @@ export default function StatusPieChart({ data, title }: { data: PieData[]; title
 
   if (total === 0) {
     return (
-      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-md flex flex-col items-center justify-center min-h-[280px]">
-        {title && <h3 className="text-sm font-bold text-slate-600 uppercase tracking-wider mb-4">{title}</h3>}
-        <p className="text-sm text-slate-400">No data yet</p>
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md flex flex-col items-center justify-center min-h-[280px]">
+        {title && <h3 className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-4">{title}</h3>}
+        <p className="text-sm text-slate-400 dark:text-slate-500">No data yet</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-md">
-      {title && <h3 className="text-sm font-bold text-slate-600 uppercase tracking-wider mb-4">{title}</h3>}
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md">
+      {title && <h3 className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-4">{title}</h3>}
       <div className="h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -55,7 +55,7 @@ export default function StatusPieChart({ data, title }: { data: PieData[]; title
         {data.map((d) => (
           <div key={d.name} className="flex items-center gap-1.5">
             <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: d.color }} />
-            <span className="text-[11px] text-slate-600 font-medium">{d.name} <span className="text-slate-500">({d.value})</span></span>
+            <span className="text-[11px] text-slate-600 dark:text-slate-400 font-medium">{d.name} <span className="text-slate-500 dark:text-slate-400">({d.value})</span></span>
           </div>
         ))}
       </div>

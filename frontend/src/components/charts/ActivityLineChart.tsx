@@ -14,9 +14,9 @@ const COLORS: Record<string, { stroke: string; fill: string }> = {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-slate-100 border border-slate-300 rounded-lg px-3 py-2 shadow-xl">
-      <p className="text-xs font-bold text-slate-900">{label}</p>
-      <p className="text-xs text-slate-600">{payload[0].value} events</p>
+    <div className="bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 shadow-xl">
+      <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{label}</p>
+      <p className="text-xs text-slate-600 dark:text-slate-400">{payload[0].value} events</p>
     </div>
   );
 };
@@ -26,16 +26,16 @@ export default function ActivityLineChart({ data, title, color = 'blue' }: { dat
 
   if (data.length === 0) {
     return (
-      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-md flex flex-col items-center justify-center min-h-[280px]">
-        {title && <h3 className="text-sm font-bold text-slate-600 uppercase tracking-wider mb-4">{title}</h3>}
-        <p className="text-sm text-slate-400">No activity data available</p>
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md flex flex-col items-center justify-center min-h-[280px]">
+        {title && <h3 className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-4">{title}</h3>}
+        <p className="text-sm text-slate-400 dark:text-slate-500">No activity data available</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-md">
-      {title && <h3 className="text-sm font-bold text-slate-600 uppercase tracking-wider mb-4">{title}</h3>}
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md">
+      {title && <h3 className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-4">{title}</h3>}
       <div className="h-[250px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>

@@ -13,7 +13,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100">
       <DashboardSidebar />
       {/*
         Main content margin reacts to the sidebar's collapsed state via the

@@ -53,7 +53,7 @@ export function StatusBadge({
 }
 
 export function RiskBadge({ score, level }: { score: number | null; level: string | null }) {
-  if (score === null) return <span className="text-xs text-slate-500">N/A</span>;
+  if (score === null) return <span className="text-xs text-slate-500 dark:text-slate-400">N/A</span>;
   const high = score > 70;
   const med = score > 40;
   return (
@@ -67,18 +67,18 @@ export function RiskBadge({ score, level }: { score: number | null; level: strin
       )}
       <div>
         <span
-          className={`text-sm font-medium ${high ? 'text-red-400' : med ? 'text-yellow-400' : 'text-emerald-400'}`}
+          className={`text-sm font-medium ${high ? 'text-red-400' : med ? 'text-yellow-400' : 'text-emerald-700 dark:text-emerald-400'}`}
         >
           {score.toFixed(0)}
         </span>
-        {level && <span className="ml-1 text-[10px] text-slate-500 uppercase">{level}</span>}
+        {level && <span className="ml-1 text-[10px] text-slate-500 dark:text-slate-400 uppercase">{level}</span>}
       </div>
     </div>
   );
 }
 
 export function FraudBadge({ score, flag }: { score: number | null; flag: string | null }) {
-  if (score === null) return <span className="text-xs text-slate-500">N/A</span>;
+  if (score === null) return <span className="text-xs text-slate-500 dark:text-slate-400">N/A</span>;
   const high = score > 75;
   const med = score > 40;
   return (
@@ -87,13 +87,13 @@ export function FraudBadge({ score, flag }: { score: number | null; flag: string
         className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold border w-fit
           ${high ? 'bg-red-500/10 text-red-400 border-red-500/20' :
             med ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20' :
-                  'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}`}
+                  'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20'}`}
       >
         {high && <ShieldAlert className="w-3 h-3" />}
         {high ? 'High' : med ? 'Med' : 'Low'} ({score.toFixed(0)})
       </span>
       {flag && (
-        <span className="text-[10px] text-slate-500 uppercase tracking-wide">{flag}</span>
+        <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wide">{flag}</span>
       )}
     </div>
   );
@@ -114,7 +114,7 @@ export function StatusSelect<T extends string>({
 }) {
   if (isLoading) {
     return (
-      <span className="flex items-center gap-1.5 text-slate-600 text-xs">
+      <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 text-xs">
         <Loader2 className="h-4 w-4 animate-spin" /> Saving…
       </span>
     );
@@ -125,7 +125,7 @@ export function StatusSelect<T extends string>({
         key={currentStatus} /* re-mount so defaultValue reflects server value */
         defaultValue={currentStatus}
         onChange={(e) => onChange(e.target.value as T)}
-        className="text-xs bg-slate-50 border border-slate-300 text-slate-900 rounded-md px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer hover:border-zinc-500 transition-colors"
+        className="text-xs bg-slate-50 dark:bg-[#060b1a] border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-md px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer hover:border-zinc-500 transition-colors"
       >
         {options.map((s) => (
           <option key={s} value={s}>

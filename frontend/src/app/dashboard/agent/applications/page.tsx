@@ -29,8 +29,8 @@ export default async function AgentApplicationsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Applications Queue</h1>
-        <p className="text-slate-600 mt-1 text-sm">Review and update application statuses.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Applications Queue</h1>
+        <p className="text-slate-600 dark:text-slate-400 mt-1 text-sm">Review and update application statuses.</p>
       </div>
 
       {applications.length > 0 ? (

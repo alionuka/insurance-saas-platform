@@ -48,8 +48,8 @@ export default async function ClientApplicationsPage(props: Props) {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">{t('clientApps.title')}</h1>
-        <p className="text-slate-600 mt-1 text-sm">{t('clientApps.subtitle')}</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">{t('clientApps.title')}</h1>
+        <p className="text-slate-600 dark:text-slate-400 mt-1 text-sm">{t('clientApps.subtitle')}</p>
       </div>
 
       <ApplicationFilters counts={counts} />
@@ -59,23 +59,23 @@ export default async function ClientApplicationsPage(props: Props) {
           applications.map((app: any) => {
             const risk = app.riskAssessments?.[0];
             return (
-              <Link href={`/dashboard/client/applications/${app.id}`} key={app.id} className="bg-white border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 transition-colors block group">
+              <Link href={`/dashboard/client/applications/${app.id}`} key={app.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden hover:border-slate-300 dark:hover:border-slate-700 transition-colors block group">
                 <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-slate-100 flex items-center justify-center border border-slate-300 flex-shrink-0">
+                    <div className="h-12 w-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-300 dark:border-slate-700 flex-shrink-0">
                       <FileCheck className="h-6 w-6 text-blue-700" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-slate-900 text-lg">{app.product?.name || t('clientApps.unknownProduct')}</h3>
-                      <p className="text-sm text-emerald-400 font-medium">{app.product?.company?.name || t('clientApps.unknownCompany')}</p>
-                      <p className="text-xs text-slate-500 mt-1 italic">{t('clientApps.applicationId')}: {app.id.substring(0, 8)} • {t('clientApps.submitted')}: {formatDate(app.createdAt)}</p>
+                      <h3 className="font-bold text-slate-900 dark:text-slate-100 text-lg">{app.product?.name || t('clientApps.unknownProduct')}</h3>
+                      <p className="text-sm text-emerald-700 dark:text-emerald-400 font-medium">{app.product?.company?.name || t('clientApps.unknownCompany')}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 italic">{t('clientApps.applicationId')}: {app.id.substring(0, 8)} • {t('clientApps.submitted')}: {formatDate(app.createdAt)}</p>
                     </div>
                   </div>
                   
                   <div className="flex flex-wrap items-center gap-3">
                     <span className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider border ${
-                      app.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
-                      app.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 
+                      app.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20' : 
+                      app.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20' : 
                       'bg-blue-700/10 text-blue-700 border-blue-700/20'
                     }`}>
                       {app.status}
@@ -85,31 +85,31 @@ export default async function ClientApplicationsPage(props: Props) {
 
                 {/* Risk Assessment Info */}
                 {risk && (
-                  <div className="px-5 pb-5 pt-0 border-t border-slate-200/50 bg-slate-50/30">
+                  <div className="px-5 pb-5 pt-0 border-t border-slate-200 dark:border-slate-800/50 bg-slate-50 dark:bg-[#060b1a]/30">
                     <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <div className="md:col-span-1 p-3 rounded-lg bg-white/50 border border-slate-200">
+                      <div className="md:col-span-1 p-3 rounded-lg bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
                         <div className="flex items-center gap-2 mb-1">
-                          <TrendingUp className="h-3 w-3 text-slate-500" />
-                          <span className="text-[10px] text-slate-500 uppercase font-bold">{t('clientApps.riskScore')}</span>
+                          <TrendingUp className="h-3 w-3 text-slate-500 dark:text-slate-400" />
+                          <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold">{t('clientApps.riskScore')}</span>
                         </div>
-                        <p className="text-lg font-mono font-bold text-slate-900">{risk.riskScore.toFixed(1)}<span className="text-xs text-slate-500 ml-1">/ 100</span></p>
+                        <p className="text-lg font-mono font-bold text-slate-900 dark:text-slate-100">{risk.riskScore.toFixed(1)}<span className="text-xs text-slate-500 dark:text-slate-400 ml-1">/ 100</span></p>
                       </div>
-                      <div className="md:col-span-1 p-3 rounded-lg bg-white/50 border border-slate-200">
+                      <div className="md:col-span-1 p-3 rounded-lg bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
                         <div className="flex items-center gap-2 mb-1">
-                          <AlertCircle className="h-3 w-3 text-slate-500" />
-                          <span className="text-[10px] text-slate-500 uppercase font-bold">{t('clientApps.riskLevel')}</span>
+                          <AlertCircle className="h-3 w-3 text-slate-500 dark:text-slate-400" />
+                          <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold">{t('clientApps.riskLevel')}</span>
                         </div>
                         <p className={`text-lg font-bold ${
-                          risk.riskLevel === 'LOW' ? 'text-emerald-400' : 
-                          risk.riskLevel === 'HIGH' ? 'text-rose-400' : 'text-blue-700'
+                          risk.riskLevel === 'LOW' ? 'text-emerald-700 dark:text-emerald-400' : 
+                          risk.riskLevel === 'HIGH' ? 'text-rose-700 dark:text-rose-400' : 'text-blue-700'
                         }`}>{risk.riskLevel}</p>
                       </div>
-                      <div className="md:col-span-2 p-3 rounded-lg bg-white/50 border border-slate-200">
+                      <div className="md:col-span-2 p-3 rounded-lg bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
                         <div className="flex items-center gap-2 mb-1">
-                          <AlertTriangle className="h-3 w-3 text-slate-500" />
-                          <span className="text-[10px] text-slate-500 uppercase font-bold">{t('clientApps.mlExplanation')}</span>
+                          <AlertTriangle className="h-3 w-3 text-slate-500 dark:text-slate-400" />
+                          <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold">{t('clientApps.mlExplanation')}</span>
                         </div>
-                        <p className="text-xs text-slate-600 italic leading-relaxed">"{risk.explanation}"</p>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 italic leading-relaxed">"{risk.explanation}"</p>
                       </div>
                     </div>
                   </div>

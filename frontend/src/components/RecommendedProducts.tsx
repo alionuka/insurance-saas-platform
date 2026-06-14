@@ -115,14 +115,14 @@ export default function RecommendedProducts() {
   }, []);
 
   return (
-    <div className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-2xl">
-      <div className="p-6 border-b border-slate-200 bg-white/50 flex items-center gap-3">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+      <div className="p-6 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 flex items-center gap-3">
         <div className="h-10 w-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center">
           <Sparkles className="h-5 w-5 text-blue-700" />
         </div>
         <div>
-          <h2 className="text-lg font-bold text-slate-900 leading-tight">Recommended for You</h2>
-          <p className="text-xs text-slate-500 mt-0.5 font-medium">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 leading-tight">Recommended for You</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
             Personalised by content-based ML model from our product catalog
           </p>
         </div>
@@ -130,7 +130,7 @@ export default function RecommendedProducts() {
 
       <div className="p-6">
         {loading && (
-          <div className="flex items-center justify-center py-10 text-slate-500">
+          <div className="flex items-center justify-center py-10 text-slate-500 dark:text-slate-400">
             <Loader2 className="h-6 w-6 animate-spin mr-3" />
             <span className="text-sm">Computing recommendations…</span>
           </div>
@@ -149,34 +149,34 @@ export default function RecommendedProducts() {
               {data.rankedProducts.map((product, idx) => (
                 <div
                   key={product.productId}
-                  className="bg-slate-50 border border-slate-200 rounded-2xl p-5 hover:border-slate-300 transition-colors flex flex-col gap-3"
+                  className="bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 hover:border-slate-300 dark:hover:border-slate-700 transition-colors flex flex-col gap-3"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <div className="h-10 w-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center">
-                      <Package className="h-5 w-5 text-slate-600" />
+                    <div className="h-10 w-10 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center">
+                      <Package className="h-5 w-5 text-slate-600 dark:text-slate-400" />
                     </div>
-                    <span className="text-[9px] uppercase font-bold text-slate-400 tracking-widest">
+                    <span className="text-[9px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-widest">
                       #{idx + 1} match
                     </span>
                   </div>
                   <div>
-                    <h3 className="font-bold text-slate-900 text-base leading-tight">{product.name}</h3>
+                    <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base leading-tight">{product.name}</h3>
                     <span
                       className={`inline-block mt-2 px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
-                        TYPE_STYLES[product.type] ?? 'bg-slate-100 text-slate-600 border-slate-300'
+                        TYPE_STYLES[product.type] ?? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'
                       }`}
                     >
                       {product.type}
                     </span>
                   </div>
-                  <div className="mt-auto pt-3 border-t border-slate-200">
+                  <div className="mt-auto pt-3 border-t border-slate-200 dark:border-slate-800">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-500 font-medium">Match score</span>
+                      <span className="text-slate-500 dark:text-slate-400 font-medium">Match score</span>
                       <span className="text-blue-700 font-mono font-bold">
                         {(product.similarity * 100).toFixed(0)}%
                       </span>
                     </div>
-                    <div className="mt-2 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                    <div className="mt-2 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-blue-700 rounded-full transition-all"
                         style={{ width: `${Math.min(100, product.similarity * 100)}%` }}
@@ -204,7 +204,7 @@ export default function RecommendedProducts() {
               ))}
             </div>
 
-            <div className="pt-3 flex gap-2 text-xs text-slate-500 italic leading-relaxed">
+            <div className="pt-3 flex gap-2 text-xs text-slate-500 dark:text-slate-400 italic leading-relaxed">
               <Sparkles className="h-3.5 w-3.5 text-blue-700 shrink-0 mt-0.5" />
               <p>{data.explanation}</p>
             </div>

@@ -73,8 +73,8 @@ export default async function ManageUsersPage(props: Props) {
         <div className="h-16 w-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4">
           <ShieldAlert className="h-10 w-10 text-rose-500" />
         </div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">Access Forbidden</h2>
-        <p className="text-slate-600 text-center max-w-md">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">Access Forbidden</h2>
+        <p className="text-slate-600 dark:text-slate-400 text-center max-w-md">
           You do not have permission to access this page. Staff account management is restricted to Platform Administrators only.
         </p>
       </div>
@@ -88,8 +88,8 @@ export default async function ManageUsersPage(props: Props) {
           <Users className="h-6 w-6 text-blue-500" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">User Management</h1>
-          <p className="text-slate-600 mt-1">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">User Management</h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">
             View all platform users and create new staff accounts.
           </p>
         </div>
@@ -100,10 +100,10 @@ export default async function ManageUsersPage(props: Props) {
         <UsersFilters counts={counts} />
 
         {users.length > 0 ? (
-          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xl">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm min-w-[800px]">
-                <thead className="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider">
+                <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
                   <tr>
                     <th className="px-6 py-3">Name</th>
                     <th className="px-6 py-3">Email</th>
@@ -114,29 +114,29 @@ export default async function ManageUsersPage(props: Props) {
                 </thead>
                 <tbody className="divide-y divide-zinc-800">
                   {users.map((user: any) => (
-                    <tr key={user.id} className="hover:bg-slate-100/30 transition-colors group">
+                    <tr key={user.id} className="hover:bg-slate-100 dark:hover:bg-slate-800/30 transition-colors group">
                       <td className="px-6 py-4">
                         <Link href={`/dashboard/admin/users/${user.id}`} className="flex items-center gap-3 group-hover:text-blue-700 transition-colors">
                           <div className="h-8 w-8 rounded-full bg-blue-700/10 border border-blue-700/20 flex items-center justify-center text-xs font-bold text-blue-700 shrink-0">
                             {(user.firstName?.[0] || '').toUpperCase()}{(user.lastName?.[0] || '').toUpperCase()}
                           </div>
-                          <span className="font-medium text-slate-900 group-hover:text-blue-700 transition-colors">
+                          <span className="font-medium text-slate-900 dark:text-slate-100 group-hover:text-blue-700 transition-colors">
                             {user.firstName} {user.lastName}
                           </span>
                         </Link>
                       </td>
-                      <td className="px-6 py-4 text-slate-600 font-mono text-xs">
+                      <td className="px-6 py-4 text-slate-600 dark:text-slate-400 font-mono text-xs">
                         {user.email}
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${roleColors[user.role] || 'bg-slate-100 text-slate-600 border-slate-300'}`}>
+                        <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${roleColors[user.role] || 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'}`}>
                           {user.role.replace('_', ' ')}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-slate-600 text-xs">
+                      <td className="px-6 py-4 text-slate-600 dark:text-slate-400 text-xs">
                         {user.company?.name || '—'}
                       </td>
-                      <td className="px-6 py-4 text-right text-slate-500 font-mono text-xs">
+                      <td className="px-6 py-4 text-right text-slate-500 dark:text-slate-400 font-mono text-xs">
                         {formatDate(user.createdAt)}
                       </td>
                     </tr>

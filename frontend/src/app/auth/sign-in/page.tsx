@@ -73,10 +73,10 @@ function SignInPageContent() {
   };
 
   return (
-    <div className="bg-white py-8 px-4 shadow-xl border border-slate-200 sm:rounded-2xl sm:px-10">
+    <div className="bg-white dark:bg-slate-900 py-8 px-4 shadow-xl border border-slate-200 dark:border-slate-800 sm:rounded-2xl sm:px-10">
       <form className="space-y-6" onSubmit={handleSubmit}>
         {isResetSuccess && (
-          <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-3 text-sm text-emerald-400">
+          <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-3 text-sm text-emerald-700 dark:text-emerald-400">
             <CheckCircle2 className="h-4 w-4 shrink-0" />
             <p>{t('auth.resetSuccess')}</p>
           </div>
@@ -90,12 +90,12 @@ function SignInPageContent() {
         )}
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-slate-700">
+          <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             {t('auth.emailLabel')}
           </label>
           <div className="mt-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Mail className="h-4 w-4 text-slate-500" />
+              <Mail className="h-4 w-4 text-slate-500 dark:text-slate-400" />
             </div>
             <input
               id="email"
@@ -105,7 +105,7 @@ function SignInPageContent() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+              className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
               placeholder={t('auth.emailPlaceholder')}
             />
           </div>
@@ -113,7 +113,7 @@ function SignInPageContent() {
 
         <div>
           <div className="flex items-center justify-between">
-            <label htmlFor="password" className="block text-sm font-medium text-slate-700">
+            <label htmlFor="password" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
               {t('auth.passwordLabel')}
             </label>
             <Link href="/auth/forgot-password" className="text-xs text-blue-700 hover:text-blue-600 font-medium transition-colors">
@@ -122,7 +122,7 @@ function SignInPageContent() {
           </div>
           <div className="mt-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Lock className="h-4 w-4 text-slate-500" />
+              <Lock className="h-4 w-4 text-slate-500 dark:text-slate-400" />
             </div>
             <input
               id="password"
@@ -132,7 +132,7 @@ function SignInPageContent() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+              className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
               placeholder={t('auth.passwordPlaceholder')}
             />
           </div>
@@ -161,10 +161,10 @@ function SignInPageContent() {
         <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-200" />
+              <div className="w-full border-t border-slate-200 dark:border-slate-800" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-slate-500 uppercase tracking-widest text-[10px] font-bold">
+              <span className="px-2 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 uppercase tracking-widest text-[10px] font-bold">
                 {t('auth.quickDemoDivider')}
               </span>
             </div>
@@ -194,7 +194,7 @@ function SignInPageContent() {
               );
             })}
           </div>
-          <p className="text-[10px] text-slate-400 text-center mt-3">
+          <p className="text-[10px] text-slate-400 dark:text-slate-500 text-center mt-3">
             {t('auth.quickDemoHint')}
           </p>
         </div>
@@ -206,7 +206,7 @@ function SignInPageContent() {
 function SignInPageInner() {
   const { t } = useT();
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#060b1a] flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
       <div className="absolute top-4 right-4">
         <LocaleSwitcher variant="nav" />
       </div>
@@ -216,16 +216,16 @@ function SignInPageInner() {
             <ShieldCheck className="h-8 w-8 text-blue-500" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900">
+        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
           {t('auth.signInTitle')}
         </h2>
-        <p className="mt-2 text-center text-sm text-slate-600">
+        <p className="mt-2 text-center text-sm text-slate-600 dark:text-slate-400">
           {t('auth.signInSubtitle')}{' '}
           <Link href="/auth/sign-up" className="font-medium text-blue-700 hover:text-blue-600">
             {t('auth.needAccountPrompt')}
           </Link>
         </p>
-        <p className="mt-3 text-center text-xs text-slate-500">
+        <p className="mt-3 text-center text-xs text-slate-500 dark:text-slate-400">
           {t('auth.forCompaniesPrompt')}{' '}
           <Link
             href="/auth/register-company"
@@ -238,7 +238,7 @@ function SignInPageInner() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <Suspense fallback={
-          <div className="bg-white py-12 px-4 shadow-xl border border-slate-200 sm:rounded-2xl sm:px-10 flex justify-center">
+          <div className="bg-white dark:bg-slate-900 py-12 px-4 shadow-xl border border-slate-200 dark:border-slate-800 sm:rounded-2xl sm:px-10 flex justify-center">
             <Loader2 className="h-8 w-8 animate-spin text-slate-300" />
           </div>
         }>

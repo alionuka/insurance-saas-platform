@@ -53,7 +53,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#060b1a] flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative">
       <div className="absolute top-4 right-4">
         <LocaleSwitcher variant="nav" />
       </div>
@@ -63,16 +63,16 @@ export default function SignUpPage() {
             <ShieldCheck className="h-8 w-8 text-blue-500" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900">
+        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
           {t('auth.signUpTitle')}
         </h2>
-        <p className="mt-2 text-center text-sm text-slate-600">
+        <p className="mt-2 text-center text-sm text-slate-600 dark:text-slate-400">
           {t('auth.signUpSubtitle')}{' '}
           <Link href="/auth/sign-in" className="font-medium text-blue-700 hover:text-blue-600">
             {t('auth.haveAccountPrompt')}
           </Link>
         </p>
-        <p className="mt-3 text-center text-xs text-slate-500">
+        <p className="mt-3 text-center text-xs text-slate-500 dark:text-slate-400">
           {t('auth.forCompaniesPrompt')}{' '}
           <Link
             href="/auth/register-company"
@@ -84,7 +84,7 @@ export default function SignUpPage() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-xl border border-slate-200 sm:rounded-2xl sm:px-10">
+        <div className="bg-white dark:bg-slate-900 py-8 px-4 shadow-xl border border-slate-200 dark:border-slate-800 sm:rounded-2xl sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
               <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center gap-3 text-sm text-red-400">
@@ -95,7 +95,7 @@ export default function SignUpPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-slate-700">
+                <label htmlFor="firstName" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                   {t('auth.firstNameLabel')}
                 </label>
                 <div className="mt-1 relative">
@@ -106,12 +106,12 @@ export default function SignUpPage() {
                     required
                     value={formData.firstName}
                     onChange={handleChange}
-                    className="appearance-none block w-full px-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                    className="appearance-none block w-full px-3 py-2 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
                   />
                 </div>
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-slate-700">
+                <label htmlFor="lastName" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                   {t('auth.lastNameLabel')}
                 </label>
                 <div className="mt-1 relative">
@@ -122,19 +122,19 @@ export default function SignUpPage() {
                     required
                     value={formData.lastName}
                     onChange={handleChange}
-                    className="appearance-none block w-full px-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                    className="appearance-none block w-full px-3 py-2 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
                   />
                 </div>
               </div>
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 {t('auth.emailLabel')}
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-4 w-4 text-slate-500" />
+                  <Mail className="h-4 w-4 text-slate-500 dark:text-slate-400" />
                 </div>
                 <input
                   id="email"
@@ -143,19 +143,19 @@ export default function SignUpPage() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
                   placeholder={t('auth.emailPlaceholder')}
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="password" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 {t('auth.passwordLabel')}
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-4 w-4 text-slate-500" />
+                  <Lock className="h-4 w-4 text-slate-500 dark:text-slate-400" />
                 </div>
                 <input
                   id="password"
@@ -164,14 +164,14 @@ export default function SignUpPage() {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
+                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm"
                   placeholder={t('auth.passwordPlaceholder')}
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="role" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="role" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 {t('auth.registeringAs')}
               </label>
               <div className="mt-1">
@@ -180,11 +180,11 @@ export default function SignUpPage() {
                   name="role"
                   disabled
                   value={formData.role}
-                  className="block w-full px-3 py-2 border border-slate-200 rounded-lg bg-slate-50/50 text-slate-500 cursor-not-allowed sm:text-sm"
+                  className="block w-full px-3 py-2 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-[#060b1a]/50 text-slate-500 dark:text-slate-400 cursor-not-allowed sm:text-sm"
                 >
                   <option value="CUSTOMER">{t('auth.customerRole')}</option>
                 </select>
-                <p className="mt-2 text-[10px] text-slate-500 uppercase font-bold tracking-wider">
+                <p className="mt-2 text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">
                   {t('auth.rolesNote')}
                 </p>
               </div>

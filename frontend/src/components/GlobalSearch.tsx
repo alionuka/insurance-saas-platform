@@ -144,20 +144,20 @@ export default function GlobalSearch() {
         onClick={() => setIsOpen(false)} 
         aria-hidden="true" 
       />
-      <div className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+      <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
         {/* Search Input */}
-        <div className="flex items-center px-4 border-b border-slate-200 shrink-0 h-16">
-          <Search className="h-5 w-5 text-slate-500 mr-3" />
+        <div className="flex items-center px-4 border-b border-slate-200 dark:border-slate-800 shrink-0 h-16">
+          <Search className="h-5 w-5 text-slate-500 dark:text-slate-400 mr-3" />
           <input
             ref={inputRef}
             type="text"
             placeholder="Search applications, claims, or policies..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="flex-1 bg-transparent border-none text-slate-900 focus:outline-none placeholder:text-slate-500 text-lg"
+            className="flex-1 bg-transparent border-none text-slate-900 dark:text-slate-100 focus:outline-none placeholder:text-slate-500 text-lg"
           />
           {isLoading && <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />}
-          <div className="ml-3 px-2 py-1 bg-slate-100 rounded text-[10px] font-mono font-bold text-slate-500 uppercase">
+          <div className="ml-3 px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">
             ESC
           </div>
         </div>
@@ -165,32 +165,32 @@ export default function GlobalSearch() {
         {/* Results Body */}
         <div className="flex-1 max-h-[60vh] overflow-y-auto p-4 space-y-6">
           {!query.trim() ? (
-            <div className="py-12 text-center text-slate-500">
+            <div className="py-12 text-center text-slate-500 dark:text-slate-400">
               <Search className="h-8 w-8 mx-auto mb-3 opacity-20" />
               <p>Type to search across your applications, claims, and policies.</p>
             </div>
           ) : totalResults === 0 && !isLoading ? (
-            <div className="py-12 text-center text-slate-500">
+            <div className="py-12 text-center text-slate-500 dark:text-slate-400">
               <p>No matches for "{query}"</p>
             </div>
           ) : (
             <>
               {results.applications.length > 0 && (
                 <div className="space-y-2">
-                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider px-2">Applications</h3>
+                  <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-2">Applications</h3>
                   {results.applications.map((res) => (
                     <Link
                       key={res.id}
                       href={res.url}
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-100/50 transition-colors group"
+                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors group"
                     >
                       <div className="h-10 w-10 rounded-lg bg-blue-700/10 flex items-center justify-center shrink-0 border border-blue-700/20 group-hover:border-blue-700/40">
                         <FileText className="h-5 w-5 text-blue-700" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-slate-900 group-hover:text-blue-700 transition-colors">{res.title}</p>
-                        <p className="text-xs text-slate-500 mt-0.5">{res.subtitle}</p>
+                        <p className="text-sm font-medium text-slate-900 dark:text-slate-100 group-hover:text-blue-700 transition-colors">{res.title}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{res.subtitle}</p>
                       </div>
                     </Link>
                   ))}
@@ -199,20 +199,20 @@ export default function GlobalSearch() {
 
               {results.claims.length > 0 && (
                 <div className="space-y-2">
-                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider px-2">Claims</h3>
+                  <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-2">Claims</h3>
                   {results.claims.map((res) => (
                     <Link
                       key={res.id}
                       href={res.url}
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-100/50 transition-colors group"
+                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors group"
                     >
                       <div className="h-10 w-10 rounded-lg bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/20 group-hover:border-rose-500/40">
-                        <Activity className="h-5 w-5 text-rose-400" />
+                        <Activity className="h-5 w-5 text-rose-700 dark:text-rose-400" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-slate-900 group-hover:text-rose-400 transition-colors">{res.title}</p>
-                        <p className="text-xs text-slate-500 mt-0.5">{res.subtitle}</p>
+                        <p className="text-sm font-medium text-slate-900 dark:text-slate-100 group-hover:text-rose-400 transition-colors">{res.title}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{res.subtitle}</p>
                       </div>
                     </Link>
                   ))}
@@ -221,20 +221,20 @@ export default function GlobalSearch() {
 
               {results.policies.length > 0 && (
                 <div className="space-y-2">
-                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider px-2">Policies</h3>
+                  <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-2">Policies</h3>
                   {results.policies.map((res) => (
                     <Link
                       key={res.id}
                       href={res.url}
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-100/50 transition-colors group"
+                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors group"
                     >
                       <div className="h-10 w-10 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20 group-hover:border-emerald-500/40">
-                        <ShieldCheck className="h-5 w-5 text-emerald-400" />
+                        <ShieldCheck className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-slate-900 group-hover:text-emerald-400 transition-colors">{res.title}</p>
-                        <p className="text-xs text-slate-500 mt-0.5">{res.subtitle}</p>
+                        <p className="text-sm font-medium text-slate-900 dark:text-slate-100 group-hover:text-emerald-400 transition-colors">{res.title}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{res.subtitle}</p>
                       </div>
                     </Link>
                   ))}

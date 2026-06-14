@@ -45,8 +45,8 @@ export default async function ClientClaimDetailPage({ params }: { params: Promis
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-4">
         <ShieldAlert className="h-16 w-16 text-rose-500" />
-        <h1 className="text-2xl font-bold text-slate-900">Access Denied</h1>
-        <p className="text-slate-600">You do not have permission to view this claim.</p>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Access Denied</h1>
+        <p className="text-slate-600 dark:text-slate-400">You do not have permission to view this claim.</p>
         <Link href="/dashboard/client" className="text-blue-700 hover:text-blue-600 font-medium">
           Return to Dashboard
         </Link>
@@ -58,8 +58,8 @@ export default async function ClientClaimDetailPage({ params }: { params: Promis
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-4">
         <AlertTriangle className="h-16 w-16 text-blue-500" />
-        <h1 className="text-2xl font-bold text-slate-900">Claim Not Found</h1>
-        <p className="text-slate-600">The claim you are looking for does not exist.</p>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Claim Not Found</h1>
+        <p className="text-slate-600 dark:text-slate-400">The claim you are looking for does not exist.</p>
         <Link href="/dashboard/client" className="text-blue-700 hover:text-blue-600 font-medium">
           Return to Dashboard
         </Link>
@@ -87,31 +87,31 @@ export default async function ClientClaimDetailPage({ params }: { params: Promis
 
   return (
     <div className="space-y-8 max-w-4xl">
-      <Link href="/dashboard/client" className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors text-sm font-medium">
+      <Link href="/dashboard/client" className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors text-sm font-medium">
         <ArrowLeft className="h-4 w-4" />
         Back to Dashboard
       </Link>
 
       {/* Hero Section */}
-      <div className="bg-white border border-slate-200 rounded-xl p-6 md:p-8">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 md:p-8">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
           <div className="flex items-start gap-4">
-            <div className="h-16 w-16 rounded-2xl bg-slate-100 flex items-center justify-center border border-slate-300 flex-shrink-0">
-              <Activity className="h-8 w-8 text-emerald-400" />
+            <div className="h-16 w-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-300 dark:border-slate-700 flex-shrink-0">
+              <Activity className="h-8 w-8 text-emerald-700 dark:text-emerald-400" />
             </div>
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
                   Claim #{claim.id.substring(0, 8)}
                 </h1>
-                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${statusColors[claim.status] || 'bg-zinc-500/10 text-slate-600 border-zinc-500/20'}`}>
+                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${statusColors[claim.status] || 'bg-zinc-500/10 text-slate-600 dark:text-slate-400 border-zinc-500/20'}`}>
                   {claim.status}
                 </span>
               </div>
-              <p className="text-xl text-slate-700 font-medium mb-1">
+              <p className="text-xl text-slate-700 dark:text-slate-300 font-medium mb-1">
                 {formatCurrency(claim.amount)}
               </p>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Filed: {formatDate(claim.createdAt)}
               </p>
             </div>
@@ -123,37 +123,37 @@ export default async function ClientClaimDetailPage({ params }: { params: Promis
       <div>
         {policy ? (
           <Link href={`/dashboard/client/policies/${policy.id}`} className="block group">
-            <div className="bg-white border border-slate-200 rounded-xl p-5 flex items-center gap-4 group-hover:border-slate-300 transition-colors">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 flex items-center gap-4 group-hover:border-slate-300 transition-colors">
               <div className="h-12 w-12 rounded-xl bg-blue-700/10 flex items-center justify-center border border-blue-700/20 flex-shrink-0">
                 <ShieldCheck className="h-6 w-6 text-blue-700" />
               </div>
               <div className="flex-grow">
-                <p className="text-sm font-bold text-slate-900 mb-0.5">Policy #{policy.policyNumber}</p>
-                <p className="text-xs text-slate-600">{product?.name || 'Unknown Product'} • {company?.name || 'Unknown Company'}</p>
+                <p className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-0.5">Policy #{policy.policyNumber}</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400">{product?.name || 'Unknown Product'} • {company?.name || 'Unknown Company'}</p>
               </div>
-              <div className="text-slate-500 group-hover:text-slate-900 transition-colors">
+              <div className="text-slate-500 dark:text-slate-400 group-hover:text-slate-900 transition-colors">
                 <ArrowLeft className="h-5 w-5 rotate-180" />
               </div>
             </div>
           </Link>
         ) : (
-          <div className="bg-white/50 border border-slate-200 border-dashed rounded-xl p-5 flex items-center gap-4">
-            <div className="h-12 w-12 rounded-xl bg-slate-100 flex items-center justify-center border border-slate-300 flex-shrink-0">
-              <ShieldCheck className="h-6 w-6 text-slate-500" />
+          <div className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 border-dashed rounded-xl p-5 flex items-center gap-4">
+            <div className="h-12 w-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-300 dark:border-slate-700 flex-shrink-0">
+              <ShieldCheck className="h-6 w-6 text-slate-500 dark:text-slate-400" />
             </div>
             <div>
-              <p className="text-sm font-bold text-slate-600 mb-0.5">No active policy linked</p>
-              <p className="text-xs text-slate-500">Application: {claim.applicationId}</p>
+              <p className="text-sm font-bold text-slate-600 dark:text-slate-400 mb-0.5">No active policy linked</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Application: {claim.applicationId}</p>
             </div>
           </div>
         )}
       </div>
 
       {/* Description Section */}
-      <div className="bg-white border border-slate-200 rounded-xl p-6 md:p-8">
-        <h2 className="text-lg font-semibold text-slate-900 mb-4">Incident Description</h2>
-        <div className="bg-slate-50/50 rounded-lg p-5 border border-slate-200/50">
-          <p className="text-slate-700 italic leading-relaxed whitespace-pre-wrap">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 md:p-8">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Incident Description</h2>
+        <div className="bg-slate-50 dark:bg-[#060b1a]/50 rounded-lg p-5 border border-slate-200 dark:border-slate-800/50">
+          <p className="text-slate-700 dark:text-slate-300 italic leading-relaxed whitespace-pre-wrap">
             "{claim.description}"
           </p>
         </div>
@@ -161,37 +161,37 @@ export default async function ClientClaimDetailPage({ params }: { params: Promis
 
       {/* Fraud Assessment Section */}
       {fraud && (
-        <div className="bg-white border border-slate-200 rounded-xl p-6 md:p-8">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 md:p-8">
           <div className="flex items-center gap-2 mb-6">
             <ShieldAlert className="h-5 w-5 text-blue-700" />
-            <h2 className="text-lg font-semibold text-slate-900">Fraud Assessment</h2>
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Fraud Assessment</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="md:col-span-1 p-4 rounded-lg bg-slate-50/50 border border-slate-200">
+            <div className="md:col-span-1 p-4 rounded-lg bg-slate-50 dark:bg-[#060b1a]/50 border border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="h-4 w-4 text-slate-500" />
-                <span className="text-xs text-slate-500 uppercase font-bold tracking-wider">Score</span>
+                <TrendingUp className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                <span className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Score</span>
               </div>
-              <p className="text-2xl font-mono font-bold text-slate-900">
-                {fraud.fraudScore.toFixed(1)}<span className="text-sm text-slate-500 ml-1">/ 100</span>
+              <p className="text-2xl font-mono font-bold text-slate-900 dark:text-slate-100">
+                {fraud.fraudScore.toFixed(1)}<span className="text-sm text-slate-500 dark:text-slate-400 ml-1">/ 100</span>
               </p>
             </div>
-            <div className="md:col-span-1 p-4 rounded-lg bg-slate-50/50 border border-slate-200">
+            <div className="md:col-span-1 p-4 rounded-lg bg-slate-50 dark:bg-[#060b1a]/50 border border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2 mb-2">
-                <AlertCircle className="h-4 w-4 text-slate-500" />
-                <span className="text-xs text-slate-500 uppercase font-bold tracking-wider">Flag</span>
+                <AlertCircle className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                <span className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Flag</span>
               </div>
-              <p className={`text-xl font-bold ${fraudFlagColors[fraud.flag] || 'text-slate-600'}`}>
+              <p className={`text-xl font-bold ${fraudFlagColors[fraud.flag] || 'text-slate-600 dark:text-slate-400'}`}>
                 {fraud.flag}
               </p>
             </div>
-            <div className="md:col-span-2 p-4 rounded-lg bg-slate-50/50 border border-slate-200">
+            <div className="md:col-span-2 p-4 rounded-lg bg-slate-50 dark:bg-[#060b1a]/50 border border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2 mb-2">
-                <AlertTriangle className="h-4 w-4 text-slate-500" />
-                <span className="text-xs text-slate-500 uppercase font-bold tracking-wider">ML Assessment</span>
+                <AlertTriangle className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                <span className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">ML Assessment</span>
               </div>
-              <p className="text-sm text-slate-600 italic leading-relaxed">
+              <p className="text-sm text-slate-600 dark:text-slate-400 italic leading-relaxed">
                 "{fraud.explanation}"
               </p>
             </div>
@@ -200,8 +200,8 @@ export default async function ClientClaimDetailPage({ params }: { params: Promis
       )}
 
       {/* Documents Section */}
-      <div className="bg-white border border-slate-200 rounded-xl p-6 md:p-8">
-        <h2 className="text-lg font-semibold text-slate-900 mb-6">Supporting Documents</h2>
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 md:p-8">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">Supporting Documents</h2>
         <ClaimDocuments claimId={claim.id} canUpload={true} />
       </div>
 
