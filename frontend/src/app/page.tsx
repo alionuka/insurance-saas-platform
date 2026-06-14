@@ -87,13 +87,17 @@ export default function Home() {
 
       {/* ─── Hero ────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden pt-20 pb-24 lg:pt-32 lg:pb-32">
-        {/* Background grid + orbs */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
-        <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 pointer-events-none">
-          <div className="h-[500px] w-[500px] rounded-full bg-teal-600/20 blur-[120px]" />
+        {/* Subtle line grid (top-faded) + floating glow orbs.
+            Orbs drift slowly via CSS keyframes so the hero feels "alive". */}
+        <div className="absolute inset-0 bg-line-grid [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
+        <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 pointer-events-none animate-float-slow">
+          <div className="h-[500px] w-[500px] rounded-full bg-teal-600/25 blur-[120px]" />
         </div>
-        <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 pointer-events-none">
-          <div className="h-[500px] w-[500px] rounded-full bg-emerald-600/15 blur-[120px]" />
+        <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 pointer-events-none animate-float-slow-reverse">
+          <div className="h-[500px] w-[500px] rounded-full bg-emerald-600/20 blur-[120px]" />
+        </div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none animate-float-slow opacity-60">
+          <div className="h-[300px] w-[300px] rounded-full bg-cyan-500/15 blur-[100px]" />
         </div>
 
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -108,7 +112,7 @@ export default function Home() {
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.05] mb-8">
             {t("landing.heroLine1")}{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-400 to-emerald-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-cyan-400 to-emerald-400 animate-gradient-text">
               {t("landing.heroBrand")}
             </span>
           </h1>
@@ -120,14 +124,16 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row justify-center gap-3 mb-16">
             <Link
               href="/auth/sign-up"
-              className="px-7 py-3.5 rounded-full bg-white text-slate-950 font-semibold transition-all hover:bg-slate-200 hover:-translate-y-0.5 inline-flex items-center justify-center gap-2"
+              className="group relative px-7 py-3.5 rounded-full bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_30px_-4px_rgba(20,184,166,0.6)] inline-flex items-center justify-center gap-2 overflow-hidden"
             >
-              {t("landing.ctaPrimary")}
-              <ArrowRight className="h-4 w-4" />
+              <span className="relative z-10">{t("landing.ctaPrimary")}</span>
+              <ArrowRight className="relative z-10 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+              {/* subtle sheen on hover */}
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent translate-x-[-120%] group-hover:translate-x-[120%] transition-transform duration-700" />
             </Link>
             <Link
               href="/auth/sign-in"
-              className="px-7 py-3.5 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700/60 font-semibold transition-all hover:-translate-y-0.5 inline-flex items-center justify-center"
+              className="px-7 py-3.5 rounded-full bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700/60 hover:border-teal-500/40 font-semibold transition-all hover:-translate-y-0.5 inline-flex items-center justify-center backdrop-blur-sm"
             >
               {t("landing.ctaSecondary")}
             </Link>
@@ -225,13 +231,21 @@ export default function Home() {
                   "bg-emerald-500/10 border-emerald-500/30 text-emerald-400",
                 rose: "bg-rose-500/10 border-rose-500/30 text-rose-400",
               };
+              // Tint the hover glow with the role's accent so each card
+              // breathes its own subtle colour when the user mouses over.
+              const glowClasses: Record<string, string> = {
+                teal: "hover:shadow-[0_12px_40px_-8px_rgba(20,184,166,0.35)] hover:border-teal-500/40",
+                emerald:
+                  "hover:shadow-[0_12px_40px_-8px_rgba(16,185,129,0.35)] hover:border-emerald-500/40",
+                rose: "hover:shadow-[0_12px_40px_-8px_rgba(244,63,94,0.3)] hover:border-rose-500/40",
+              };
               return (
                 <div
                   key={role.title}
-                  className="group p-8 rounded-3xl bg-slate-900/40 border border-slate-800 hover:border-slate-700 transition-all backdrop-blur-sm hover:-translate-y-1"
+                  className={`group relative p-8 rounded-3xl glass-card transition-all duration-300 hover:-translate-y-1 ${glowClasses[role.color]}`}
                 >
                   <div
-                    className={`h-12 w-12 rounded-2xl border flex items-center justify-center mb-6 ${colorClasses[role.color]}`}
+                    className={`h-12 w-12 rounded-2xl border flex items-center justify-center mb-6 transition-transform group-hover:scale-110 ${colorClasses[role.color]}`}
                   >
                     <Icon className="h-6 w-6" />
                   </div>
@@ -305,9 +319,9 @@ export default function Home() {
               return (
                 <div
                   key={f.title}
-                  className="bg-slate-950/60 p-8 hover:bg-slate-900/60 transition-colors"
+                  className="group bg-slate-950/60 p-8 hover:bg-slate-900/70 transition-all duration-300 relative"
                 >
-                  <div className="h-10 w-10 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center mb-4">
+                  <div className="h-10 w-10 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center mb-4 transition-all group-hover:scale-110 group-hover:border-teal-500/40 group-hover:shadow-[0_0_20px_-2px_rgba(20,184,166,0.4)]">
                     <Icon className="h-5 w-5 text-teal-400" />
                   </div>
                   <h3 className="font-bold text-white mb-2 text-lg">
