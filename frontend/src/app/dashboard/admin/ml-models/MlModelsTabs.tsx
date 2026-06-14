@@ -52,7 +52,7 @@ function GalleryImage({ src, alt, caption }: GalleryImageProps) {
       href={src}
       target="_blank"
       rel="noopener noreferrer"
-      className="group bg-white rounded-xl overflow-hidden shadow-lg ring-1 ring-zinc-800 hover:ring-indigo-500/40 hover:shadow-indigo-500/10 transition-all flex flex-col"
+      className="group bg-white rounded-xl overflow-hidden shadow-lg ring-1 ring-zinc-800 hover:ring-amber-500/40 hover:shadow-amber-500/10 transition-all flex flex-col"
       title="Натисніть, щоб відкрити в повному розмірі"
     >
       <div className="p-4 flex items-center justify-center h-64 bg-white">
@@ -65,7 +65,7 @@ function GalleryImage({ src, alt, caption }: GalleryImageProps) {
         />
       </div>
       <div className="p-3 bg-zinc-950 border-t border-zinc-800">
-        <p className="text-xs font-semibold text-zinc-300 group-hover:text-indigo-400 transition-colors">{caption}</p>
+        <p className="text-xs font-semibold text-zinc-300 group-hover:text-amber-400 transition-colors">{caption}</p>
         <p className="text-[10px] text-zinc-500 mt-0.5">{alt}</p>
       </div>
     </a>
@@ -80,7 +80,7 @@ const CustomPermutationTooltip = ({ active, payload }: any) => {
       <p className="text-xs font-bold text-white">{data.feature}</p>
       <p className="text-xs text-zinc-400 mt-1">
         Mean decrease in AUC:{' '}
-        <span className="text-indigo-400 font-bold font-mono">
+        <span className="text-amber-400 font-bold font-mono">
           {data.mean.toFixed(4)}
         </span>
       </p>
@@ -102,11 +102,11 @@ export default function MlModelsTabs({ data }: { data: any }) {
 
   const renderRiskOrFraudTab = (type: 'risk' | 'fraud') => {
     const metrics = data[type];
-    // Plots are served as static assets from /public/ml-plots/ via Vercel CDN.
-    // We don't use data.plotsBaseUrl from the API because in production it
-    // points to the ml-service Railway internal URL which is not reachable
-    // from the user's browser.
-    const plotsBaseUrl = '/ml-plots';
+    // Plots are proxied through the Next.js API route /api/ml-plots/[filename]
+    // which authenticates via the access_token cookie and streams the PNG
+    // from the backend (which in turn fetches it from the ml-service on
+    // Railway's internal network). This keeps the ml-service private.
+    const plotsBaseUrl = '/api/ml-plots';
 
     if (!metrics) {
       return (
@@ -136,7 +136,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-md lg:col-span-2 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Layers className="h-5 w-5 text-indigo-400" />
+                <Layers className="h-5 w-5 text-amber-400" />
                 <h2 className="text-base font-bold text-white">Model Methodology</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
@@ -182,7 +182,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
                       className="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 flex flex-col items-start min-w-[100px]"
                     >
                       <span className="text-[9px] text-zinc-500 font-mono tracking-tight font-bold">{key}</span>
-                      <span className="text-xs text-indigo-400 font-mono font-bold mt-0.5">
+                      <span className="text-xs text-amber-400 font-mono font-bold mt-0.5">
                         {typeof val === 'boolean' ? (val ? 'True' : 'False') : String(val)}
                       </span>
                     </div>
@@ -205,7 +205,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-md lg:col-span-3 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <BarChart3 className="h-5 w-5 text-indigo-400" />
+                <BarChart3 className="h-5 w-5 text-amber-400" />
                 <h2 className="text-base font-bold text-white">Classifier Comparison</h2>
               </div>
               <div className="overflow-x-auto">
@@ -226,7 +226,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
                       return (
                         <tr 
                           key={name} 
-                          className={`hover:bg-zinc-800/20 transition-colors ${isBest ? 'bg-indigo-500/5 font-semibold text-white' : 'text-zinc-300'}`}
+                          className={`hover:bg-zinc-800/20 transition-colors ${isBest ? 'bg-amber-500/5 font-semibold text-white' : 'text-zinc-300'}`}
                         >
                           <td className="py-3 pr-2 flex items-center gap-2 max-w-[200px] truncate">
                             {isBest && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />}
@@ -238,7 +238,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
                           <td className="py-3 px-2 text-right font-mono text-zinc-500">
                             {(summary.cv_std_roc_auc ?? summary.std_roc_auc ?? 0).toFixed(4)}
                           </td>
-                          <td className="py-3 px-2 text-right font-mono text-indigo-400">
+                          <td className="py-3 px-2 text-right font-mono text-amber-400">
                             {(test.roc_auc ?? 0).toFixed(4)}
                           </td>
                           <td className="py-3 pl-2 text-right font-mono text-emerald-400">
@@ -253,7 +253,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
             </div>
             <div className="mt-4 pt-3 border-t border-zinc-800/60 flex items-center gap-4 text-[10px] text-zinc-500 font-mono">
               <div className="flex items-center gap-1.5">
-                <div className="h-2.5 w-2.5 rounded bg-indigo-500/10 border border-indigo-500/30"></div>
+                <div className="h-2.5 w-2.5 rounded bg-amber-500/10 border border-amber-500/30"></div>
                 <span>Best Cross-Validated Pipeline</span>
               </div>
             </div>
@@ -263,7 +263,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-md lg:col-span-2 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Activity className="h-5 w-5 text-indigo-400" />
+                <Activity className="h-5 w-5 text-amber-400" />
                 <h2 className="text-base font-bold text-white">Permutation Importance</h2>
               </div>
               <p className="text-xs text-zinc-400 mb-4">
@@ -299,7 +299,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
                     />
                     <Tooltip content={<CustomPermutationTooltip />} cursor={{ fill: 'rgba(255, 255, 255, 0.03)' }} />
                     <ReferenceLine x={0} stroke="#3f3f46" strokeWidth={1} />
-                    <Bar dataKey="mean" radius={3} barSize={10} fill="#818cf8" fillOpacity={0.85}>
+                    <Bar dataKey="mean" radius={3} barSize={10} fill="#fbbf24" fillOpacity={0.85}>
                       <ErrorBar dataKey="std" width={4} strokeWidth={1.5} stroke="#fb7185" />
                     </Bar>
                   </BarChart>
@@ -310,7 +310,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
                 <AlertCircle className="h-6 w-6 text-amber-500/70 mb-3" />
                 <p className="text-sm text-zinc-300 text-center font-medium">Не застосовується для текстових моделей</p>
                 <p className="text-xs text-zinc-500 mt-2 text-center max-w-md leading-relaxed">
-                  Fraud Detection використовує <span className="text-indigo-400 font-mono">TF-IDF</span> на ~1000+ текстових ознаках з опису claim. Permutation importance для такого простору ознак нечитабельний.
+                  Fraud Detection використовує <span className="text-amber-400 font-mono">TF-IDF</span> на ~1000+ текстових ознаках з опису claim. Permutation importance для такого простору ознак нечитабельний.
                 </p>
                 <p className="text-xs text-zinc-500 mt-3 text-center max-w-md leading-relaxed">
                   Замість цього модель надає <span className="text-emerald-400 font-semibold">локальну пояснюваність через SHAP</span> на сторінці кожного claim — конкретні слова та числові фактори, що вплинули на конкретний прогноз.
@@ -326,7 +326,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-md lg:col-span-2 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Grid className="h-5 w-5 text-indigo-400" />
+                <Grid className="h-5 w-5 text-amber-400" />
                 <h2 className="text-base font-bold text-white">Confusion Matrix Heatmap</h2>
               </div>
               <p className="text-xs text-zinc-400 mb-4">
@@ -379,7 +379,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-md lg:col-span-3 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <FileImage className="h-5 w-5 text-indigo-400" />
+                <FileImage className="h-5 w-5 text-amber-400" />
                 <h2 className="text-base font-bold text-white">Training Metrics Gallery</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -433,7 +433,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-md lg:col-span-2 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Layers className="h-5 w-5 text-indigo-400" />
+                <Layers className="h-5 w-5 text-amber-400" />
                 <h2 className="text-base font-bold text-white">Recommender Methodology</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
@@ -443,7 +443,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
                 </div>
                 <div>
                   <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">Catalog Size</span>
-                  <p className="text-zinc-300 text-sm mt-0.5 font-bold font-mono text-indigo-400">
+                  <p className="text-zinc-300 text-sm mt-0.5 font-bold font-mono text-amber-400">
                     {recs.n_products_in_catalog || 'N/A'} products
                   </p>
                 </div>
@@ -494,7 +494,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
         {/* Per profile breakdown */}
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-md">
           <div className="flex items-center gap-2 mb-4">
-            <Sparkles className="h-5 w-5 text-indigo-400" />
+            <Sparkles className="h-5 w-5 text-amber-400" />
             <h2 className="text-base font-bold text-white">Demographic Cohort Predictions</h2>
           </div>
           <div className="overflow-x-auto">
@@ -524,7 +524,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
                       <td className="py-3 px-2 text-zinc-200">
                         {topProduct.name || 'N/A'}
                       </td>
-                      <td className="py-3 px-2 text-right font-mono font-bold text-indigo-400">
+                      <td className="py-3 px-2 text-right font-mono font-bold text-amber-400">
                         {topProduct.similarity ? (topProduct.similarity * 100).toFixed(0) : '0'}%
                       </td>
                       <td className="py-3 px-2 text-center">
@@ -567,7 +567,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 pb-4 text-sm font-semibold border-b-2 transition-all cursor-pointer ${
                 isActive 
-                  ? 'border-indigo-500 text-indigo-400' 
+                  ? 'border-amber-500 text-amber-400' 
                   : 'border-transparent text-zinc-500 hover:text-zinc-300'
               }`}
             >

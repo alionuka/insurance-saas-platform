@@ -40,8 +40,8 @@ export default function ForgotPasswordPage() {
       </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="h-12 w-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-            <ShieldCheck className="h-8 w-8 text-indigo-500" />
+          <div className="h-12 w-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+            <ShieldCheck className="h-8 w-8 text-amber-500" />
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
@@ -72,7 +72,7 @@ export default function ForgotPasswordPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent sm:text-sm transition-all"
+                    className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent sm:text-sm transition-all"
                     placeholder={t('auth.emailPlaceholder')}
                   />
                 </div>
@@ -82,7 +82,7 @@ export default function ForgotPasswordPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-amber-600 hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <Loader2 className="h-5 w-5 animate-spin" />

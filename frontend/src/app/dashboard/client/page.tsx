@@ -86,8 +86,8 @@ export default async function ClientDashboardOverview() {
       {/* Stats Overview */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-xl flex items-center gap-4">
-          <div className="h-12 w-12 rounded-xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
-            <FileCheck className="h-6 w-6 text-indigo-400" />
+          <div className="h-12 w-12 rounded-xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
+            <FileCheck className="h-6 w-6 text-amber-400" />
           </div>
           <div>
             <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">{t('dashboard.stats.applications')}</p>
@@ -141,7 +141,7 @@ export default async function ClientDashboardOverview() {
                   <div className="p-4 sm:p-5 flex items-center justify-between hover:bg-zinc-800/50 transition-colors">
                     <div className="flex items-center gap-4 min-w-0">
                       <div className="h-10 w-10 rounded-full bg-zinc-950 border border-zinc-800 flex items-center justify-center shrink-0 group-hover:border-zinc-700 transition-colors">
-                        {item.type === 'APPLICATION' && <FileCheck className="h-4 w-4 text-indigo-400" />}
+                        {item.type === 'APPLICATION' && <FileCheck className="h-4 w-4 text-amber-400" />}
                         {item.type === 'POLICY' && <ShieldCheck className="h-4 w-4 text-blue-400" />}
                         {item.type === 'CLAIM' && <Activity className="h-4 w-4 text-emerald-400" />}
                       </div>

@@ -19,7 +19,7 @@ export default function NotFound() {
           </Link>
           <Link 
             href="/dashboard/client"
-            className="px-6 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-indigo-500/20 w-full sm:w-auto"
+            className="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-amber-500/20 w-full sm:w-auto"
           >
             Go to Dashboard
           </Link>

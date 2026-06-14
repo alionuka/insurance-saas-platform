@@ -37,7 +37,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
         <ShieldAlert className="h-12 w-12 text-rose-500 mb-4" />
         <h2 className="text-xl font-bold text-white mb-2">Access Restricted</h2>
         <p className="text-zinc-400 max-w-md">You do not have permission to view this policy.</p>
-        <Link href="/dashboard/client" className="mt-6 text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors uppercase tracking-widest">
+        <Link href="/dashboard/client" className="mt-6 text-sm font-bold text-amber-400 hover:text-amber-300 transition-colors uppercase tracking-widest">
           Return to Dashboard
         </Link>
       </div>
@@ -50,7 +50,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
         <ShieldAlert className="h-12 w-12 text-zinc-700 mb-4" />
         <h2 className="text-xl font-bold text-white mb-2">Policy Not Found</h2>
         <p className="text-zinc-400 max-w-md">The policy you are looking for does not exist or has been removed.</p>
-        <Link href="/dashboard/client" className="mt-6 text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors uppercase tracking-widest">
+        <Link href="/dashboard/client" className="mt-6 text-sm font-bold text-amber-400 hover:text-amber-300 transition-colors uppercase tracking-widest">
           Return to Dashboard
         </Link>
       </div>
@@ -60,7 +60,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
   if (status !== 200 || !policy) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500 mb-4"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mb-4"></div>
         <p className="text-zinc-400">An error occurred while loading policy details.</p>
       </div>
     );
@@ -90,7 +90,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
       {/* Hero Section */}
       <div className="relative overflow-hidden rounded-3xl bg-zinc-900 border border-zinc-800 p-8 md:p-10">
         <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4">
-          <div className="h-64 w-64 rounded-full bg-indigo-500/5 blur-3xl"></div>
+          <div className="h-64 w-64 rounded-full bg-amber-500/5 blur-3xl"></div>
         </div>
         
         <div className="relative flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -118,7 +118,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
             {policy.status === 'ACTIVE' && (
               <Link
                 href={`/dashboard/client/claims?policyId=${policy.id}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-indigo-500/20"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-amber-500/20"
               >
                 <Activity className="h-4 w-4" />
                 File a Claim
@@ -167,8 +167,8 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
         </div>
 
         <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl flex items-center gap-4">
-          <div className="h-10 w-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-            <CheckCircle2 className="h-5 w-5 text-indigo-400" />
+          <div className="h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+            <CheckCircle2 className="h-5 w-5 text-amber-400" />
           </div>
           <div>
             <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider">Status</p>
@@ -252,7 +252,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-zinc-800 border border-zinc-700 text-xs text-zinc-300 hover:text-white hover:border-zinc-600 transition-colors"
                             >
-                              <FileText className="h-3 w-3 text-indigo-400" />
+                              <FileText className="h-3 w-3 text-amber-400" />
                               {doc.filename}
                             </a>
                           ))}
@@ -266,7 +266,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
               <div className="bg-zinc-900/50 border border-zinc-800 border-dashed rounded-2xl p-12 text-center">
                 <Activity className="h-10 w-10 text-zinc-700 mx-auto mb-4" />
                 <p className="text-zinc-500">No claims filed yet against this policy.</p>
-                <Link href="/dashboard/client" className="mt-4 inline-block text-xs font-bold text-indigo-400 hover:text-indigo-300 transition-colors uppercase tracking-widest">
+                <Link href="/dashboard/client" className="mt-4 inline-block text-xs font-bold text-amber-400 hover:text-amber-300 transition-colors uppercase tracking-widest">
                   File a Claim →
                 </Link>
               </div>
@@ -277,7 +277,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
         {/* Payment History Sidebar */}
         <div className="space-y-6">
           <div className="flex items-center gap-3">
-            <CreditCard className="h-5 w-5 text-indigo-500" />
+            <CreditCard className="h-5 w-5 text-amber-500" />
             <h2 className="text-xl font-bold text-white">Payment History</h2>
           </div>
 

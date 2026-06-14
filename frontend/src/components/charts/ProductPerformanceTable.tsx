@@ -30,7 +30,7 @@ export default function ProductPerformanceTable({ rows }: { rows: ProductRow[] }
     return (
       <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
         <div className="flex items-center gap-2 mb-2">
-          <Package className="h-5 w-5 text-indigo-400" />
+          <Package className="h-5 w-5 text-amber-400" />
           <h3 className="text-lg font-bold text-white">Performance per Product</h3>
         </div>
         <p className="text-sm text-zinc-500 mt-4">No products to compare yet.</p>
@@ -46,7 +46,7 @@ export default function ProductPerformanceTable({ rows }: { rows: ProductRow[] }
     <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
       <div className="px-6 py-4 border-b border-zinc-800 bg-zinc-900/50">
         <div className="flex items-center gap-2">
-          <Package className="h-5 w-5 text-indigo-400" />
+          <Package className="h-5 w-5 text-amber-400" />
           <h3 className="text-lg font-bold text-white">Performance per Product</h3>
         </div>
         <p className="text-xs text-zinc-500 mt-1">

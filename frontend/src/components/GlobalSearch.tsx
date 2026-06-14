@@ -156,7 +156,7 @@ export default function GlobalSearch() {
             onChange={(e) => setQuery(e.target.value)}
             className="flex-1 bg-transparent border-none text-white focus:outline-none placeholder:text-zinc-500 text-lg"
           />
-          {isLoading && <Loader2 className="h-5 w-5 text-indigo-500 animate-spin" />}
+          {isLoading && <Loader2 className="h-5 w-5 text-amber-500 animate-spin" />}
           <div className="ml-3 px-2 py-1 bg-zinc-800 rounded text-[10px] font-mono font-bold text-zinc-500 uppercase">
             ESC
           </div>
@@ -185,11 +185,11 @@ export default function GlobalSearch() {
                       onClick={() => setIsOpen(false)}
                       className="flex items-center gap-3 p-3 rounded-xl hover:bg-zinc-800/50 transition-colors group"
                     >
-                      <div className="h-10 w-10 rounded-lg bg-indigo-500/10 flex items-center justify-center shrink-0 border border-indigo-500/20 group-hover:border-indigo-500/40">
-                        <FileText className="h-5 w-5 text-indigo-400" />
+                      <div className="h-10 w-10 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20 group-hover:border-amber-500/40">
+                        <FileText className="h-5 w-5 text-amber-400" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-white group-hover:text-indigo-400 transition-colors">{res.title}</p>
+                        <p className="text-sm font-medium text-white group-hover:text-amber-400 transition-colors">{res.title}</p>
                         <p className="text-xs text-zinc-500 mt-0.5">{res.subtitle}</p>
                       </div>
                     </Link>

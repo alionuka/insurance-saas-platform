@@ -58,7 +58,7 @@ export default async function CompanySettingsPage() {
     <div className="max-w-3xl space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-          <Palette className="h-7 w-7 text-indigo-400" />
+          <Palette className="h-7 w-7 text-amber-400" />
           Tenant Branding
         </h1>
         <p className="text-zinc-400 mt-1 text-sm">
@@ -81,7 +81,7 @@ export default async function CompanySettingsPage() {
         initialValues={{
           name: company.name,
           description: company.description ?? '',
-          primaryColor: company.primaryColor ?? '#6366f1',
+          primaryColor: company.primaryColor ?? '#f59e0b',
           logoUrl: company.logoUrl ?? null,
         }}
       />

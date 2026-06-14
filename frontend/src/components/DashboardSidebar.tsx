@@ -240,7 +240,7 @@ export default function DashboardSidebar() {
         {/* Brand + header tools */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-zinc-800 shrink-0">
           <div className="flex items-center min-w-0">
-            <ShieldCheck className="h-6 w-6 text-indigo-500 mr-2 shrink-0" />
+            <ShieldCheck className="h-6 w-6 text-amber-500 mr-2 shrink-0" />
             <span className="text-xl font-semibold tracking-tight text-white truncate hidden md:block">
               {t('sidebar.brand')}
             </span>
@@ -283,14 +283,14 @@ export default function DashboardSidebar() {
                   onClick={() => setIsOpen(false)}
                   className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors relative ${
                     isActive
-                      ? 'bg-indigo-500/10 text-indigo-400'
+                      ? 'bg-amber-500/10 text-amber-400'
                       : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200'
                   }`}
                 >
                   {isActive && (
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-indigo-500 rounded-r-full" />
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-amber-500 rounded-r-full" />
                   )}
-                  <Icon className={`mr-3 h-5 w-5 shrink-0 ${isActive ? 'text-indigo-400' : 'text-zinc-500'}`} />
+                  <Icon className={`mr-3 h-5 w-5 shrink-0 ${isActive ? 'text-amber-400' : 'text-zinc-500'}`} />
                   <span className="truncate">{t(item.labelKey)}</span>
                 </Link>
               );
@@ -302,7 +302,7 @@ export default function DashboardSidebar() {
         <div className="p-4 border-t border-zinc-800 shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center min-w-0 pr-3">
-              <div className="h-9 w-9 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center overflow-hidden text-xs font-bold text-indigo-400 shrink-0">
+              <div className="h-9 w-9 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center overflow-hidden text-xs font-bold text-amber-400 shrink-0">
                 {user?.avatarUrl ? (
                   <img
                     src={user.avatarUrl}
@@ -339,7 +339,7 @@ export default function DashboardSidebar() {
         </div>
 
         {/* Drag-to-resize handle — invisible 4px strip on the right edge.
-            Hover reveals a subtle indigo line so the affordance is
+            Hover reveals a subtle amber line so the affordance is
             discoverable. Double-click resets to default width. Desktop
             only — mobile uses the drawer pattern. */}
         <div
@@ -352,7 +352,7 @@ export default function DashboardSidebar() {
           className="hidden md:block absolute top-0 right-0 h-full w-1.5 cursor-col-resize group z-[60]"
         >
           {/* Visible accent on hover */}
-          <div className="absolute inset-y-0 right-0 w-px bg-zinc-800 group-hover:bg-indigo-500 group-hover:w-0.5 transition-all" />
+          <div className="absolute inset-y-0 right-0 w-px bg-zinc-800 group-hover:bg-amber-500 group-hover:w-0.5 transition-all" />
         </div>
       </aside>
 

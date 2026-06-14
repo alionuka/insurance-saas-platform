@@ -172,7 +172,7 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
               maxLength={100}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm"
+              className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500 sm:text-sm"
             />
           </div>
 
@@ -196,8 +196,8 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
                 value={primaryColor}
                 onChange={(e) => setPrimaryColor(e.target.value)}
                 pattern="^#[0-9a-fA-F]{6}$"
-                className="flex-1 px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="#6366f1"
+                className="flex-1 px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                placeholder="#f59e0b"
               />
             </div>
           </div>
@@ -216,7 +216,7 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
             maxLength={500}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm resize-none"
+            className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500 sm:text-sm resize-none"
             placeholder="Short tagline shown to customers — what makes your company different?"
           />
           <p className="text-[11px] text-zinc-500 mt-1">

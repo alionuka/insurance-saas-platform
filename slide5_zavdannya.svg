@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" font-family="Arial, sans-serif">
+  <rect width="1920" height="1080" fill="#FFFFFF"/>
+  
+  <!-- Title -->
+  <text x="960" y="160" text-anchor="middle" font-size="68" font-weight="bold" fill="#1E2A47">Завдання</text>
+  
+  <!-- Subtitle (small line) -->
+  <line x1="900" y1="195" x2="1020" y2="195" stroke="#1F5170" stroke-width="3"/>
+
+  <circle cx="164" cy="304" r="44" fill="#1F5170"/>
+  <text x="164" y="322" text-anchor="middle" font-size="42" font-weight="bold" fill="#FFFFFF">1</text>
+  <text x="238" y="295" font-size="32" fill="#2D3748">Розробити серверну частину з базою</text>
+  <text x="238" y="345" font-size="32" fill="#2D3748">даних для обробки заявок, полісів,</text>
+  <text x="238" y="395" font-size="32" fill="#2D3748">виплат і платежів</text>
+
+  <circle cx="164" cy="544" r="44" fill="#1F5170"/>
+  <text x="164" y="562" text-anchor="middle" font-size="42" font-weight="bold" fill="#FFFFFF">2</text>
+  <text x="238" y="535" font-size="32" fill="#2D3748">Реалізувати механізм авторизації та</text>
+  <text x="238" y="585" font-size="32" fill="#2D3748">розмежування ролей користувачів</text>
+
+  <circle cx="164" cy="784" r="44" fill="#1F5170"/>
+  <text x="164" y="802" text-anchor="middle" font-size="42" font-weight="bold" fill="#FFFFFF">3</text>
+  <text x="238" y="775" font-size="32" fill="#2D3748">Натренувати та інтегрувати моделі</text>
+  <text x="238" y="825" font-size="32" fill="#2D3748">машинного навчання з обґрунтуванням</text>
+  <text x="238" y="875" font-size="32" fill="#2D3748">рішень</text>
+
+  <circle cx="1044" cy="304" r="44" fill="#1F5170"/>
+  <text x="1044" y="322" text-anchor="middle" font-size="42" font-weight="bold" fill="#FFFFFF">4</text>
+  <text x="1118" y="295" font-size="32" fill="#2D3748">Розробити інтерфейс клієнта і агента</text>
+  <text x="1118" y="345" font-size="32" fill="#2D3748">з відображенням оцінок моделі</text>
+
+  <circle cx="1044" cy="544" r="44" fill="#1F5170"/>
+  <text x="1044" y="562" text-anchor="middle" font-size="42" font-weight="bold" fill="#FFFFFF">5</text>
+  <text x="1118" y="535" font-size="32" fill="#2D3748">Розробити інтерфейси адміністратора</text>
+  <text x="1118" y="585" font-size="32" fill="#2D3748">страхової компанії та адміністратора</text>
+  <text x="1118" y="635" font-size="32" fill="#2D3748">платформи</text>
+
+  <circle cx="1044" cy="784" r="44" fill="#1F5170"/>
+  <text x="1044" y="802" text-anchor="middle" font-size="42" font-weight="bold" fill="#FFFFFF">6</text>
+  <text x="1118" y="775" font-size="32" fill="#2D3748">Реалізувати двомовний інтерфейс з</text>
+  <text x="1118" y="825" font-size="32" fill="#2D3748">підтримкою захисту персональних даних</text>
+</svg>

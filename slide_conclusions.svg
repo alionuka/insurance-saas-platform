@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" font-family="Arial, sans-serif">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<text x="960" y="130" text-anchor="middle" font-size="56" font-weight="bold" fill="#1E2A47">Висновки</text>
+<line x1="890" y1="160" x2="1030" y2="160" stroke="#1F5170" stroke-width="3"/>
+<rect x="100" y="200" width="840" height="200" fill="#F4F7F9" stroke="#CBD5E0" stroke-width="1" rx="10"/>
+<circle cx="150" cy="250" r="32" fill="#1F5170"/>
+<text x="150" y="263" text-anchor="middle" font-size="34" font-weight="bold" fill="#FFFFFF">1</text>
+<text x="200" y="292" font-size="22" fill="#2D3748">Розроблено серверну частину з базою даних для обробки заявок,</text>
+<text x="200" y="324" font-size="22" fill="#2D3748">полісів, виплат і платежів на основі NestJS та PostgreSQL.</text>
+<rect x="980" y="200" width="840" height="200" fill="#F4F7F9" stroke="#CBD5E0" stroke-width="1" rx="10"/>
+<circle cx="1030" cy="250" r="32" fill="#1F5170"/>
+<text x="1030" y="263" text-anchor="middle" font-size="34" font-weight="bold" fill="#FFFFFF">2</text>
+<text x="1080" y="292" font-size="22" fill="#2D3748">Реалізовано механізм авторизації з JWT та розмежуванням прав</text>
+<text x="1080" y="324" font-size="22" fill="#2D3748">доступу для чотирьох ролей користувачів.</text>
+<rect x="100" y="424" width="840" height="200" fill="#F4F7F9" stroke="#CBD5E0" stroke-width="1" rx="10"/>
+<circle cx="150" cy="474" r="32" fill="#1F5170"/>
+<text x="150" y="487" text-anchor="middle" font-size="34" font-weight="bold" fill="#FFFFFF">3</text>
+<text x="200" y="500" font-size="22" fill="#2D3748">Натреновано три моделі машинного навчання з поясненням рішень</text>
+<text x="200" y="532" font-size="22" fill="#2D3748">за методом SHAP: оцінка ризику (ROC-AUC = 0,78) та виявлення</text>
+<text x="200" y="564" font-size="22" fill="#2D3748">шахрайства (ROC-AUC = 0,91).</text>
+<rect x="980" y="424" width="840" height="200" fill="#F4F7F9" stroke="#CBD5E0" stroke-width="1" rx="10"/>
+<circle cx="1030" cy="474" r="32" fill="#1F5170"/>
+<text x="1030" y="487" text-anchor="middle" font-size="34" font-weight="bold" fill="#FFFFFF">4</text>
+<text x="1080" y="516" font-size="22" fill="#2D3748">Розроблено інтерфейс клієнта та агента з відображенням оцінок</text>
+<text x="1080" y="548" font-size="22" fill="#2D3748">моделі та пояснень для прийняття рішень.</text>
+<rect x="100" y="648" width="840" height="200" fill="#F4F7F9" stroke="#CBD5E0" stroke-width="1" rx="10"/>
+<circle cx="150" cy="698" r="32" fill="#1F5170"/>
+<text x="150" y="711" text-anchor="middle" font-size="34" font-weight="bold" fill="#FFFFFF">5</text>
+<text x="200" y="724" font-size="22" fill="#2D3748">Розроблено інтерфейси адміністратора компанії та адміністратора</text>
+<text x="200" y="756" font-size="22" fill="#2D3748">платформи з функціями керування, аналітики та моніторингу</text>
+<text x="200" y="788" font-size="22" fill="#2D3748">моделей.</text>
+<rect x="980" y="648" width="840" height="200" fill="#F4F7F9" stroke="#CBD5E0" stroke-width="1" rx="10"/>
+<circle cx="1030" cy="698" r="32" fill="#1F5170"/>
+<text x="1030" y="711" text-anchor="middle" font-size="34" font-weight="bold" fill="#FFFFFF">6</text>
+<text x="1080" y="740" font-size="22" fill="#2D3748">Реалізовано двомовний інтерфейс (українська та англійська) з</text>
+<text x="1080" y="772" font-size="22" fill="#2D3748">підтримкою вимог захисту персональних даних.</text>
+<rect x="100" y="890" width="1720" height="130" fill="#E6EDF1" stroke="#1F5170" stroke-width="2" rx="10"/>
+<text x="130" y="928" font-size="22" font-weight="bold" fill="#1E2A47">Практична цінність</text>
+<text x="130" y="958" font-size="20" fill="#2D3748">Систему розгорнуто за адресою insurance-saas-platform.vercel.app як працюючий прототип, що демонструє запропонований підхід до побудови</text>
+<text x="130" y="988" font-size="20" fill="#2D3748">мультитенантних страхових платформ з пояснюваним машинним навчанням.</text>
+</svg>

@@ -80,7 +80,7 @@ export default async function ProfilePage() {
       return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
     }
     if (action.includes('APPLICATION') || action.includes('CLAIM')) {
-      return 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20';
+      return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
     }
     if (action.includes('PAYMENT')) {
       return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
@@ -92,9 +92,9 @@ export default async function ProfilePage() {
     <div className="max-w-4xl space-y-8 pb-12">
       {/* Hero Section */}
       <div className="flex flex-col md:flex-row md:items-center gap-6 bg-zinc-900 border border-zinc-800 p-8 rounded-xl relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-2 bg-indigo-500" />
+        <div className="absolute top-0 left-0 w-full h-2 bg-amber-500" />
         <div className="flex flex-col items-center gap-3 shrink-0">
-          <div className="h-24 w-24 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center overflow-hidden">
+          <div className="h-24 w-24 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center overflow-hidden">
             {user.avatarUrl ? (
               <img
                 src={user.avatarUrl}
@@ -102,7 +102,7 @@ export default async function ProfilePage() {
                 className="h-full w-full object-cover rounded-full"
               />
             ) : (
-              <span className="text-3xl font-bold text-indigo-400">{getInitials()}</span>
+              <span className="text-3xl font-bold text-amber-400">{getInitials()}</span>
             )}
           </div>
           <AvatarUploadButton />
@@ -126,7 +126,7 @@ export default async function ProfilePage() {
           {/* Account Info */}
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
             <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-              <UserCircle className="h-5 w-5 text-indigo-400" />
+              <UserCircle className="h-5 w-5 text-amber-400" />
               {t('profile.accountInformation')}
             </h2>
 
@@ -153,18 +153,18 @@ export default async function ProfilePage() {
 
             {user.role === 'CUSTOMER' && (
               <div className="grid grid-cols-3 gap-3 mb-6 pb-6 border-b border-zinc-800/60">
-                <div className="bg-indigo-500/5 border border-indigo-500/20 rounded-lg p-3">
-                  <p className="text-[10px] text-indigo-400 uppercase font-bold tracking-wider mb-1">Age</p>
+                <div className="bg-amber-500/5 border border-amber-500/20 rounded-lg p-3">
+                  <p className="text-[10px] text-amber-400 uppercase font-bold tracking-wider mb-1">Age</p>
                   <p className="text-white font-semibold text-lg">{user.age ?? '—'}</p>
                   <p className="text-[9px] text-zinc-500 mt-1">used by Risk ML</p>
                 </div>
-                <div className="bg-indigo-500/5 border border-indigo-500/20 rounded-lg p-3">
-                  <p className="text-[10px] text-indigo-400 uppercase font-bold tracking-wider mb-1">Credit Score</p>
+                <div className="bg-amber-500/5 border border-amber-500/20 rounded-lg p-3">
+                  <p className="text-[10px] text-amber-400 uppercase font-bold tracking-wider mb-1">Credit Score</p>
                   <p className="text-white font-semibold text-lg">{user.creditScore ?? '—'}</p>
                   <p className="text-[9px] text-zinc-500 mt-1">used by Risk ML</p>
                 </div>
-                <div className="bg-indigo-500/5 border border-indigo-500/20 rounded-lg p-3">
-                  <p className="text-[10px] text-indigo-400 uppercase font-bold tracking-wider mb-1">Annual Income</p>
+                <div className="bg-amber-500/5 border border-amber-500/20 rounded-lg p-3">
+                  <p className="text-[10px] text-amber-400 uppercase font-bold tracking-wider mb-1">Annual Income</p>
                   <p className="text-white font-semibold text-lg">{user.annualIncome != null ? `$${Number(user.annualIncome).toLocaleString()}` : '—'}</p>
                   <p className="text-[9px] text-zinc-500 mt-1">used by Risk + Recs</p>
                 </div>
@@ -177,7 +177,7 @@ export default async function ProfilePage() {
           {/* Security */}
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
             <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-              <Shield className="h-5 w-5 text-indigo-400" />
+              <Shield className="h-5 w-5 text-amber-400" />
               {t('profile.security')}
             </h2>
             <p className="text-xs text-zinc-500 mb-6">{t('profile.securityHint')}</p>
@@ -193,7 +193,7 @@ export default async function ProfilePage() {
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl flex flex-col h-full">
           <div className="p-6 border-b border-zinc-800">
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <Activity className="h-5 w-5 text-indigo-400" />
+              <Activity className="h-5 w-5 text-amber-400" />
               {t('profile.recentActivity')}
             </h2>
           </div>

@@ -103,7 +103,7 @@ export default function RegisterCompanyPage() {
           {t('auth.forCustomersPrompt')}{' '}
           <Link
             href="/auth/sign-up"
-            className="font-medium text-indigo-400 hover:text-indigo-300"
+            className="font-medium text-amber-400 hover:text-amber-300"
           >
             {t('auth.customerSignUpHere')}
           </Link>
@@ -339,7 +339,7 @@ export default function RegisterCompanyPage() {
           {t('auth.signInSubtitle')}{' '}
           <Link
             href="/auth/sign-in"
-            className="font-medium text-indigo-400 hover:text-indigo-300"
+            className="font-medium text-amber-400 hover:text-amber-300"
           >
             {t('auth.haveAccountPrompt')}
           </Link>

@@ -43,13 +43,13 @@ export default function Home() {
   }, [t]);
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-indigo-500/30 overflow-x-hidden">
+    <main className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-amber-500/30 overflow-x-hidden">
       {/* ─── Sticky nav ───────────────────────────────────────────────── */}
       <nav className="sticky top-0 z-50 border-b border-slate-900/80 bg-slate-950/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center">
-              <ShieldCheck className="h-4 w-4 text-indigo-400" />
+            <div className="h-8 w-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
+              <ShieldCheck className="h-4 w-4 text-amber-400" />
             </div>
             <span className="text-base font-bold tracking-tight">
               InsurSaaS
@@ -90,7 +90,7 @@ export default function Home() {
         {/* Background grid + orbs */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
         <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 pointer-events-none">
-          <div className="h-[500px] w-[500px] rounded-full bg-indigo-600/20 blur-[120px]" />
+          <div className="h-[500px] w-[500px] rounded-full bg-amber-600/20 blur-[120px]" />
         </div>
         <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 pointer-events-none">
           <div className="h-[500px] w-[500px] rounded-full bg-emerald-600/15 blur-[120px]" />
@@ -108,7 +108,7 @@ export default function Home() {
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.05] mb-8">
             {t("landing.heroLine1")}{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-400 to-emerald-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-cyan-400 to-emerald-400">
               {t("landing.heroBrand")}
             </span>
           </h1>
@@ -190,7 +190,7 @@ export default function Home() {
               {
                 icon: Users,
                 title: t("landing.roleCustomerTitle"),
-                color: "indigo",
+                color: "amber",
                 bullets: [
                   t("landing.roleCustomerBullet1"),
                   t("landing.roleCustomerBullet2"),
@@ -210,7 +210,7 @@ export default function Home() {
               {
                 icon: Building2,
                 title: t("landing.roleCompanyTitle"),
-                color: "amber",
+                color: "rose",
                 bullets: [
                   t("landing.roleCompanyBullet1"),
                   t("landing.roleCompanyBullet2"),
@@ -220,10 +220,10 @@ export default function Home() {
             ].map((role) => {
               const Icon = role.icon;
               const colorClasses: Record<string, string> = {
-                indigo: "bg-indigo-500/10 border-indigo-500/30 text-indigo-400",
+                amber: "bg-amber-500/10 border-amber-500/30 text-amber-400",
                 emerald:
                   "bg-emerald-500/10 border-emerald-500/30 text-emerald-400",
-                amber: "bg-amber-500/10 border-amber-500/30 text-amber-400",
+                rose: "bg-rose-500/10 border-rose-500/30 text-rose-400",
               };
               return (
                 <div
@@ -307,8 +307,8 @@ export default function Home() {
                   key={f.title}
                   className="bg-slate-950/60 p-8 hover:bg-slate-900/60 transition-colors"
                 >
-                  <div className="h-10 w-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4">
-                    <Icon className="h-5 w-5 text-indigo-400" />
+                  <div className="h-10 w-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-4">
+                    <Icon className="h-5 w-5 text-amber-400" />
                   </div>
                   <h3 className="font-bold text-white mb-2 text-lg">
                     {f.title}
@@ -340,7 +340,7 @@ export default function Home() {
 
           {loading && (
             <div className="flex justify-center items-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500" />
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500" />
             </div>
           )}
 
@@ -384,11 +384,11 @@ export default function Home() {
                         ) : (
                           <ShieldCheck
                             className="h-5 w-5"
-                            style={{ color: brand ?? "#818cf8" }}
+                            style={{ color: brand ?? "#fbbf24" }}
                           />
                         )}
                       </div>
-                      <span className="px-2.5 py-0.5 rounded text-[10px] font-bold text-indigo-300 border border-indigo-500/20 bg-indigo-500/5 uppercase tracking-widest">
+                      <span className="px-2.5 py-0.5 rounded text-[10px] font-bold text-amber-300 border border-amber-500/20 bg-amber-500/5 uppercase tracking-widest">
                         {product.type}
                       </span>
                     </div>
@@ -409,7 +409,7 @@ export default function Home() {
                     <Link
                       href="/auth/sign-in"
                       className="mt-5 w-full py-2.5 px-4 rounded-xl text-white text-sm font-bold transition-all flex items-center justify-center gap-1.5 hover:opacity-90"
-                      style={{ backgroundColor: brand ?? "#6366f1" }}
+                      style={{ backgroundColor: brand ?? "#f59e0b" }}
                     >
                       {t("landing.applyNow")}
                       <ArrowRight className="h-3.5 w-3.5" />
@@ -448,7 +448,7 @@ export default function Home() {
 
       {/* ─── Final CTA ───────────────────────────────────────────────── */}
       <section className="py-24 border-t border-slate-900 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/5 via-transparent to-emerald-600/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-600/5 via-transparent to-emerald-600/5" />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
             {t("landing.finalCtaTitle")}
@@ -481,8 +481,8 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="h-7 w-7 rounded-md bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center">
-                  <ShieldCheck className="h-3.5 w-3.5 text-indigo-400" />
+                <div className="h-7 w-7 rounded-md bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
+                  <ShieldCheck className="h-3.5 w-3.5 text-amber-400" />
                 </div>
                 <span className="text-sm font-bold tracking-tight">
                   InsurSaaS

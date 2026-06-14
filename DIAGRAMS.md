@@ -13,10 +13,10 @@ PlantUML extension). Експортуй у PNG/SVG і встав у слайди
 
 ### 1A. Діаграма використання — клієнтська частина
 
-Покажи на слайді **6** (замість моїх bullet-списків). Customer + Guest разом.
+Покажи на слайді **6** (замість моїх bullet-списків). Клієнт + неавторизований користувач разом. Повністю українською, без англіцизмів.
 
 ```plantuml
-@startuml InsurSaaS_Customer
+@startuml Клієнтська_частина
 left to right direction
 skinparam packageStyle rectangle
 skinparam shadowing false
@@ -29,26 +29,26 @@ skinparam UsecaseBorderColor #64748B
 skinparam ArrowColor #475569
 
 actor "Неавторизований\nкористувач" as Guest
-actor "Клієнт\n(Customer)" as Customer
+actor "Клієнт" as Customer
 
 Customer --|> Guest
 
-rectangle "Клієнтська частина InsurSaaS" {
-  usecase "Перегляд лендингу" as UC1
+rectangle "Клієнтська частина платформи" {
+  usecase "Перегляд\nголовної сторінки" as UC1
   usecase "Перегляд каталогу\nстрахових продуктів" as UC2
-  usecase "Реєстрація" as UC3
+  usecase "Реєстрація\nоблікового запису" as UC3
   usecase "Автентифікація" as UC4
   usecase "Скидання паролю" as UC5
-  usecase "Розрахунок тарифу\n(ML quote)" as UC6
-  usecase "Подача заявки" as UC7
-  usecase "Перегляд SHAP-\nпояснення оцінки" as UC8
-  usecase "Оплата полісу\n(Stripe)" as UC9
-  usecase "Подача виплати" as UC10
+  usecase "Розрахунок\nстрахового тарифу" as UC6
+  usecase "Подача заявки\nна страхування" as UC7
+  usecase "Перегляд пояснення\nоцінки ризику" as UC8
+  usecase "Оплата страхового\nполісу" as UC9
+  usecase "Подача заяви\nна виплату" as UC10
   usecase "Завантаження\nдокументів" as UC11
-  usecase "Персональні ML-\nрекомендації" as UC12
-  usecase "Редагування профілю\n+ фото" as UC13
-  usecase "GDPR експорт даних" as UC14
-  usecase "GDPR видалення\nакаунту" as UC15
+  usecase "Персональні\nрекомендації\nпродуктів" as UC12
+  usecase "Редагування\nпрофілю" as UC13
+  usecase "Експорт\nперсональних даних" as UC14
+  usecase "Видалення\nоблікового запису" as UC15
 }
 
 Guest --> UC1

@@ -91,7 +91,7 @@ function SuccessContent() {
         <div className="mt-6 text-center">
           <Link
             href="/auth/sign-in"
-            className="inline-flex items-center gap-2 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors"
           >
             {t('auth.pendingBackToSignIn')}
             <ArrowRight className="h-4 w-4" />

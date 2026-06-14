@@ -49,7 +49,7 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
         <ShieldAlert className="h-16 w-16 text-rose-500" />
         <h1 className="text-2xl font-bold text-white">Access Denied</h1>
         <p className="text-zinc-400">You do not have permission to view this claim.</p>
-        <Link href="/dashboard/agent" className="text-indigo-400 hover:text-indigo-300 font-medium">
+        <Link href="/dashboard/agent" className="text-amber-400 hover:text-amber-300 font-medium">
           Return to Dashboard
         </Link>
       </div>
@@ -62,7 +62,7 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
         <AlertTriangle className="h-16 w-16 text-amber-500" />
         <h1 className="text-2xl font-bold text-white">Claim Not Found</h1>
         <p className="text-zinc-400">The claim you are looking for does not exist.</p>
-        <Link href="/dashboard/agent" className="text-indigo-400 hover:text-indigo-300 font-medium">
+        <Link href="/dashboard/agent" className="text-amber-400 hover:text-amber-300 font-medium">
           Return to Dashboard
         </Link>
       </div>
@@ -172,7 +172,7 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
       {fraud && (
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 md:p-8">
           <div className="flex items-center gap-2 mb-6">
-            <ShieldAlert className="h-5 w-5 text-indigo-400" />
+            <ShieldAlert className="h-5 w-5 text-amber-400" />
             <h2 className="text-lg font-semibold text-white">Fraud Assessment</h2>
           </div>
           

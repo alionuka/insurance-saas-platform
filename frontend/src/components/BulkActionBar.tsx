@@ -11,7 +11,7 @@ type BulkAction = {
 };
 
 const variantClasses: Record<string, string> = {
-  primary: 'bg-indigo-500 hover:bg-indigo-600 shadow-indigo-500/20',
+  primary: 'bg-amber-500 hover:bg-amber-600 shadow-amber-500/20',
   success: 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/20',
   danger: 'bg-rose-500 hover:bg-rose-600 shadow-rose-500/20',
   warning: 'bg-amber-500 hover:bg-amber-600 shadow-amber-500/20 text-black',
@@ -55,7 +55,7 @@ export default function BulkActionBar({
           {/* Actions */}
           {isProcessing ? (
             <div className="flex items-center gap-2 text-sm text-zinc-400">
-              <Loader2 className="h-4 w-4 animate-spin text-indigo-400" />
+              <Loader2 className="h-4 w-4 animate-spin text-amber-400" />
               Processing...
             </div>
           ) : (

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 402" font-family="Times New Roman, serif">
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<line x1="280" y1="51" x2="485" y2="201" stroke="#000000" stroke-width="0.96"/>
+<ellipse cx="155" cy="51" rx="125" ry="21" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="155" y="56" text-anchor="middle" font-size="13" fill="#000000">Авторизація в системі</text>
+<line x1="280" y1="111" x2="485" y2="201" stroke="#000000" stroke-width="0.96"/>
+<ellipse cx="155" cy="111" rx="125" ry="21" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="155" y="116" text-anchor="middle" font-size="13" fill="#000000">Налаштування брендингу компанії</text>
+<line x1="280" y1="171" x2="485" y2="201" stroke="#000000" stroke-width="0.96"/>
+<ellipse cx="155" cy="171" rx="125" ry="21" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="155" y="176" text-anchor="middle" font-size="13" fill="#000000">Перегляд страхових полісів компанії</text>
+<line x1="280" y1="231" x2="485" y2="201" stroke="#000000" stroke-width="0.96"/>
+<ellipse cx="155" cy="231" rx="125" ry="21" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="155" y="236" text-anchor="middle" font-size="13" fill="#000000">Створення страхових продуктів</text>
+<line x1="280" y1="291" x2="485" y2="201" stroke="#000000" stroke-width="0.96"/>
+<ellipse cx="155" cy="291" rx="125" ry="21" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="155" y="296" text-anchor="middle" font-size="13" fill="#000000">Редагування страхових продуктів</text>
+<line x1="280" y1="351" x2="485" y2="201" stroke="#000000" stroke-width="0.96"/>
+<ellipse cx="155" cy="351" rx="125" ry="21" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="155" y="356" text-anchor="middle" font-size="13" fill="#000000">Архівування страхових продуктів</text>
+<line x1="515" y1="201" x2="720" y2="51" stroke="#000000" stroke-width="0.96"/>
+<ellipse cx="845" cy="51" rx="125" ry="21" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="845" y="56" text-anchor="middle" font-size="13" fill="#000000">Перегляд BI-аналітики портфеля у real-time</text>
+<line x1="515" y1="201" x2="720" y2="111" stroke="#000000" stroke-width="0.96"/>
+<ellipse cx="845" cy="111" rx="125" ry="21" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="845" y="116" text-anchor="middle" font-size="13" fill="#000000">Перегляд показників ефективності продуктів</text>
+<line x1="515" y1="201" x2="720" y2="171" stroke="#000000" stroke-width="0.96"/>
+<ellipse cx="845" cy="171" rx="125" ry="21" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="845" y="176" text-anchor="middle" font-size="13" fill="#000000">Перегляд коефіцієнтів збитковості</text>
+<line x1="515" y1="201" x2="720" y2="231" stroke="#000000" stroke-width="0.96"/>
+<ellipse cx="845" cy="231" rx="125" ry="21" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="845" y="236" text-anchor="middle" font-size="13" fill="#000000">Перегляд топу чинників ризику</text>
+<line x1="515" y1="201" x2="720" y2="291" stroke="#000000" stroke-width="0.96"/>
+<ellipse cx="845" cy="291" rx="125" ry="21" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="845" y="296" text-anchor="middle" font-size="13" fill="#000000">Перегляд топу чинників шахрайства</text>
+<line x1="515" y1="201" x2="720" y2="351" stroke="#000000" stroke-width="0.96"/>
+<ellipse cx="845" cy="351" rx="125" ry="21" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="845" y="356" text-anchor="middle" font-size="13" fill="#000000">Управління користувачами компанії</text>
+<circle cx="500" cy="171" r="10" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<line x1="500" y1="181" x2="500" y2="216" stroke="#000000" stroke-width="1.2"/>
+<line x1="485" y1="196" x2="515" y2="196" stroke="#000000" stroke-width="1.2"/>
+<line x1="500" y1="216" x2="488" y2="236" stroke="#000000" stroke-width="1.2"/>
+<line x1="500" y1="216" x2="512" y2="236" stroke="#000000" stroke-width="1.2"/>
+<text x="500" y="256" text-anchor="middle" font-size="14" font-weight="bold" fill="#000000">Адмін компанії</text>
+</svg>

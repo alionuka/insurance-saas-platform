@@ -167,14 +167,14 @@ export default async function AdminCompaniesPage() {
                       key={company.id}
                       className="grid grid-cols-6 hover:bg-zinc-800/30 hover:border-zinc-700 transition-colors items-center px-6 py-4 group"
                     >
-                      <div className="col-span-2 font-bold text-white group-hover:text-indigo-400 transition-colors truncate">
+                      <div className="col-span-2 font-bold text-white group-hover:text-amber-400 transition-colors truncate">
                         {company.name}
                       </div>
                       <div className="col-span-1 text-zinc-400 font-mono text-xs">
                         {company.country || '—'}
                       </div>
                       <div className="col-span-1 text-center">
-                        <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold rounded-md bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                        <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20">
                           {company.products?.length ?? 0}
                         </span>
                       </div>

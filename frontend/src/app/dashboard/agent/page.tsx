@@ -75,7 +75,7 @@ export default async function AgentOverviewPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
           <div className="flex items-center gap-3 mb-2">
-            <FileText className="h-5 w-5 text-indigo-400" />
+            <FileText className="h-5 w-5 text-amber-400" />
             <h3 className="font-medium text-zinc-300">{t('dashboard.pendingApps')}</h3>
           </div>
           <p className="text-3xl font-bold text-white">{pendingApps}</p>
@@ -110,7 +110,7 @@ export default async function AgentOverviewPage() {
             {allActivity.map((item: any) => (
               <div key={`${item.type}-${item.id}`} className="flex items-start gap-4 p-4 rounded-lg bg-zinc-950/50 border border-zinc-800/50">
                 <div className="h-10 w-10 rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center shrink-0">
-                  {item.type === 'APPLICATION' ? <FileText className="h-5 w-5 text-indigo-400" /> : <Activity className="h-5 w-5 text-emerald-400" />}
+                  {item.type === 'APPLICATION' ? <FileText className="h-5 w-5 text-amber-400" /> : <Activity className="h-5 w-5 text-emerald-400" />}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">

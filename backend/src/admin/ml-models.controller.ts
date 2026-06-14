@@ -1,10 +1,19 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
+  ApiParam,
 } from '@nestjs/swagger';
+import type { Response } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -58,10 +67,56 @@ export class MlModelsController {
       risk,
       fraud,
       recommendations,
-      // Frontend serves plots statically from /ml-plots (synced from ml-service/training/plots/).
-      // We do NOT proxy plots through ml-service URL because in production ML_SERVICE_URL
-      // points to Railway's internal network which is not reachable from the user's browser.
-      plotsBaseUrl: '/ml-plots',
+      // Plots are proxied through this backend (see GET /admin/ml-models/plots/:filename).
+      // The backend fetches them from the ml-service over Railway's internal network and
+      // streams them to the browser, so we never expose the ml-service publicly.
+      plotsBaseUrl: '/admin/ml-models/plots',
     };
+  }
+
+  @Get('plots/:filename')
+  @ApiOperation({
+    summary:
+      'Proxy a training plot PNG from the ml-service (platform admin only)',
+  })
+  @ApiParam({
+    name: 'filename',
+    description:
+      'PNG plot filename, e.g. risk_roc_curves.png, fraud_confusion_matrix.png',
+  })
+  @ApiResponse({ status: 200, description: 'PNG image streamed' })
+  @ApiResponse({ status: 401, description: 'Missing or invalid auth token' })
+  @ApiResponse({ status: 403, description: 'Forbidden — platform admin only' })
+  @ApiResponse({ status: 404, description: 'Plot not found' })
+  async getPlot(
+    @Param('filename') filename: string,
+    @Res() res: Response,
+  ): Promise<void> {
+    // Defensive: only allow simple lowercase PNG filenames — no path traversal.
+    if (!/^[a-z0-9_]+\.png$/i.test(filename)) {
+      throw new NotFoundException('Invalid plot filename');
+    }
+
+    const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+
+    try {
+      const upstream = await fetch(`${mlServiceUrl}/plots/${filename}`, {
+        signal: AbortSignal.timeout(5000),
+      });
+
+      if (!upstream.ok || !upstream.body) {
+        throw new NotFoundException('Plot not found');
+      }
+
+      res.setHeader('Content-Type', 'image/png');
+      res.setHeader('Cache-Control', 'public, max-age=3600');
+
+      const buffer = Buffer.from(await upstream.arrayBuffer());
+      res.send(buffer);
+    } catch (err) {
+      if (err instanceof NotFoundException) throw err;
+      console.error(`Failed to proxy plot ${filename}:`, err);
+      throw new NotFoundException('Plot not available');
+    }
   }
 }

@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" font-family="Arial, sans-serif">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<text x="960" y="90" text-anchor="middle" font-size="38" font-weight="bold" fill="#1E2A47">Діаграма використання — адміністратори</text>
+<line x1="960" y1="140" x2="960" y2="1010" stroke="#CBD5E0" stroke-width="1.5" stroke-dasharray="6,6"/>
+<line x1="380" y1="477" x2="454" y2="570" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="205" cy="477" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="205" y="473" text-anchor="middle" font-size="15" fill="#1E2A47">Налаштування</text>
+<text x="205" y="493" text-anchor="middle" font-size="15" fill="#1E2A47">брендингу компанії</text>
+<line x1="380" y1="539" x2="454" y2="570" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="205" cy="539" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="205" y="535" text-anchor="middle" font-size="15" fill="#1E2A47">Перегляд страхових</text>
+<text x="205" y="555" text-anchor="middle" font-size="15" fill="#1E2A47">полісів компанії</text>
+<line x1="380" y1="601" x2="454" y2="570" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="205" cy="601" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="205" y="597" text-anchor="middle" font-size="15" fill="#1E2A47">Створення та</text>
+<text x="205" y="617" text-anchor="middle" font-size="15" fill="#1E2A47">редагування продуктів</text>
+<line x1="380" y1="663" x2="454" y2="570" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="205" cy="663" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="205" y="659" text-anchor="middle" font-size="15" fill="#1E2A47">Архівування</text>
+<text x="205" y="679" text-anchor="middle" font-size="15" fill="#1E2A47">страхових продуктів</text>
+<line x1="506" y1="570" x2="580" y2="477" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="755" cy="477" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="755" y="473" text-anchor="middle" font-size="15" fill="#1E2A47">Перегляд аналітики портфеля</text>
+<text x="755" y="493" text-anchor="middle" font-size="15" fill="#1E2A47">у реальному часі</text>
+<line x1="506" y1="570" x2="580" y2="539" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="755" cy="539" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="755" y="535" text-anchor="middle" font-size="15" fill="#1E2A47">Перегляд топ-чинників</text>
+<text x="755" y="555" text-anchor="middle" font-size="15" fill="#1E2A47">ризику та шахрайства</text>
+<line x1="506" y1="570" x2="580" y2="601" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="755" cy="601" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="755" y="597" text-anchor="middle" font-size="15" fill="#1E2A47">Перегляд</text>
+<text x="755" y="617" text-anchor="middle" font-size="15" fill="#1E2A47">коефіцієнтів збитковості</text>
+<line x1="506" y1="570" x2="580" y2="663" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="755" cy="663" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="755" y="659" text-anchor="middle" font-size="15" fill="#1E2A47">Управління</text>
+<text x="755" y="679" text-anchor="middle" font-size="15" fill="#1E2A47">користувачами компанії</text>
+<circle cx="480" cy="522" r="19" fill="#FFFFFF" stroke="#1F5170" stroke-width="2.5"/>
+<line x1="480" y1="541" x2="480" y2="592" stroke="#1F5170" stroke-width="2.5"/>
+<line x1="454" y1="563" x2="506" y2="563" stroke="#1F5170" stroke-width="2.5"/>
+<line x1="480" y1="592" x2="459" y2="624" stroke="#1F5170" stroke-width="2.5"/>
+<line x1="480" y1="592" x2="501" y2="624" stroke="#1F5170" stroke-width="2.5"/>
+<text x="480" y="655" text-anchor="middle" font-size="22" font-weight="bold" fill="#1E2A47">Адміністратор</text>
+<text x="480" y="682" text-anchor="middle" font-size="22" font-weight="bold" fill="#1E2A47">компанії</text>
+<line x1="1340" y1="446" x2="1414" y2="570" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="1165" cy="446" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="1165" y="442" text-anchor="middle" font-size="15" fill="#1E2A47">Управління</text>
+<text x="1165" y="462" text-anchor="middle" font-size="15" fill="#1E2A47">реєстрацією компаній</text>
+<line x1="1340" y1="508" x2="1414" y2="570" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="1165" cy="508" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="1165" y="513" text-anchor="middle" font-size="16" fill="#1E2A47">Верифікація страхових компаній</text>
+<line x1="1340" y1="570" x2="1414" y2="570" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="1165" cy="570" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="1165" y="566" text-anchor="middle" font-size="15" fill="#1E2A47">Затвердження та</text>
+<text x="1165" y="586" text-anchor="middle" font-size="15" fill="#1E2A47">призупинення тенантів</text>
+<line x1="1340" y1="632" x2="1414" y2="570" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="1165" cy="632" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="1165" y="628" text-anchor="middle" font-size="15" fill="#1E2A47">Управління користувачами</text>
+<text x="1165" y="648" text-anchor="middle" font-size="15" fill="#1E2A47">всіх ролей</text>
+<line x1="1340" y1="694" x2="1414" y2="570" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="1165" cy="694" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="1165" y="699" text-anchor="middle" font-size="16" fill="#1E2A47">Аналітика по всіх компаніях</text>
+<line x1="1466" y1="570" x2="1540" y2="477" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="1715" cy="477" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="1715" y="482" text-anchor="middle" font-size="16" fill="#1E2A47">Глобальний пошук по платформі</text>
+<line x1="1466" y1="570" x2="1540" y2="539" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="1715" cy="539" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="1715" y="544" text-anchor="middle" font-size="16" fill="#1E2A47">Перегляд журналу аудиту дій</text>
+<line x1="1466" y1="570" x2="1540" y2="601" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="1715" cy="601" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="1715" y="597" text-anchor="middle" font-size="15" fill="#1E2A47">Перегляд результатів</text>
+<text x="1715" y="617" text-anchor="middle" font-size="15" fill="#1E2A47">крос-валідації моделей</text>
+<line x1="1466" y1="570" x2="1540" y2="663" stroke="#1F5170" stroke-width="1.5"/>
+<ellipse cx="1715" cy="663" rx="175" ry="25" fill="#FFFFFF" stroke="#1F5170" stroke-width="2"/>
+<text x="1715" y="659" text-anchor="middle" font-size="15" fill="#1E2A47">Перегляд метрик</text>
+<text x="1715" y="679" text-anchor="middle" font-size="15" fill="#1E2A47">моделей машинного навчання</text>
+<circle cx="1440" cy="522" r="19" fill="#FFFFFF" stroke="#1F5170" stroke-width="2.5"/>
+<line x1="1440" y1="541" x2="1440" y2="592" stroke="#1F5170" stroke-width="2.5"/>
+<line x1="1414" y1="563" x2="1466" y2="563" stroke="#1F5170" stroke-width="2.5"/>
+<line x1="1440" y1="592" x2="1419" y2="624" stroke="#1F5170" stroke-width="2.5"/>
+<line x1="1440" y1="592" x2="1461" y2="624" stroke="#1F5170" stroke-width="2.5"/>
+<text x="1440" y="655" text-anchor="middle" font-size="22" font-weight="bold" fill="#1E2A47">Адміністратор</text>
+<text x="1440" y="682" text-anchor="middle" font-size="22" font-weight="bold" fill="#1E2A47">платформи</text>
+</svg>

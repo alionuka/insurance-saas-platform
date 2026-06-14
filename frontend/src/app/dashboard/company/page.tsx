@@ -91,7 +91,7 @@ export default async function CompanyDashboard() {
     // This will trigger the logout effect in the layout or client components
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
         <p className="mt-4 text-zinc-400">Session expired. Redirecting...</p>
       </div>
     );
@@ -263,7 +263,7 @@ export default async function CompanyDashboard() {
         </div>
         <div className="flex items-center space-x-2">
           <span className="text-xs text-zinc-500 uppercase tracking-widest font-bold">Scope: </span>
-          <span className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+          <span className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
             <ShieldCheck className="w-4 h-4 mr-2" />
             Authenticated Tenant
           </span>
@@ -277,8 +277,8 @@ export default async function CompanyDashboard() {
           className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 hover:border-zinc-700 transition-colors group"
         >
           <div className="flex items-center gap-4">
-            <div className="h-10 w-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center group-hover:bg-indigo-500/20 transition-colors">
-              <Package className="h-5 w-5 text-indigo-400" />
+            <div className="h-10 w-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center group-hover:bg-amber-500/20 transition-colors">
+              <Package className="h-5 w-5 text-amber-400" />
             </div>
             <div>
               <p className="text-sm font-bold text-white">Manage Products</p>

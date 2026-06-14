@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" font-family="Arial, sans-serif">
+  <rect width="1920" height="1080" fill="#FFFFFF"/>
+  
+  <text x="960" y="150" text-anchor="middle" font-size="62" font-weight="bold" fill="#1E2A47">Функціональні можливості</text>
+  
+  <line x1="890" y1="180" x2="1030" y2="180" stroke="#1F5170" stroke-width="3"/>
+
+  <circle cx="138" cy="298" r="22" fill="#1F5170"/>
+  <path d="M 127 298 L 135 306 L 150 290" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="185" y="308" font-size="30" fill="#2D3748">Реєстрація та авторизація для</text>
+  <text x="185" y="352" font-size="30" fill="#2D3748">чотирьох ролей користувачів</text>
+
+  <circle cx="138" cy="428" r="22" fill="#1F5170"/>
+  <path d="M 127 428 L 135 436 L 150 420" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="185" y="438" font-size="30" fill="#2D3748">Каталог страхових продуктів з</text>
+  <text x="185" y="482" font-size="30" fill="#2D3748">розрахунком тарифу</text>
+
+  <circle cx="138" cy="558" r="22" fill="#1F5170"/>
+  <path d="M 127 558 L 135 566 L 150 550" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="185" y="568" font-size="30" fill="#2D3748">Подача заявки з автоматичною</text>
+  <text x="185" y="612" font-size="30" fill="#2D3748">оцінкою ризику та поясненням</text>
+
+  <circle cx="138" cy="688" r="22" fill="#1F5170"/>
+  <path d="M 127 688 L 135 696 L 150 680" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="185" y="698" font-size="30" fill="#2D3748">Онлайн-оплата полісу з автоматичною</text>
+  <text x="185" y="742" font-size="30" fill="#2D3748">активацією</text>
+
+  <circle cx="138" cy="818" r="22" fill="#1F5170"/>
+  <path d="M 127 818 L 135 826 L 150 810" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="185" y="828" font-size="30" fill="#2D3748">Подача заяви на виплату з</text>
+  <text x="185" y="872" font-size="30" fill="#2D3748">виявленням шахрайства</text>
+
+  <circle cx="1018" cy="298" r="22" fill="#1F5170"/>
+  <path d="M 1007 298 L 1015 306 L 1030 290" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1065" y="308" font-size="30" fill="#2D3748">Персональні рекомендації страхових</text>
+  <text x="1065" y="352" font-size="30" fill="#2D3748">продуктів</text>
+
+  <circle cx="1018" cy="428" r="22" fill="#1F5170"/>
+  <path d="M 1007 428 L 1015 436 L 1030 420" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1065" y="438" font-size="30" fill="#2D3748">Аналітична панель страхової</text>
+  <text x="1065" y="482" font-size="30" fill="#2D3748">компанії</text>
+
+  <circle cx="1018" cy="558" r="22" fill="#1F5170"/>
+  <path d="M 1007 558 L 1015 566 L 1030 550" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1065" y="568" font-size="30" fill="#2D3748">Підтримка кількох компаній з</text>
+  <text x="1065" y="612" font-size="30" fill="#2D3748">ізоляцією даних та брендингом</text>
+
+  <circle cx="1018" cy="688" r="22" fill="#1F5170"/>
+  <path d="M 1007 688 L 1015 696 L 1030 680" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1065" y="698" font-size="30" fill="#2D3748">Відповідність вимогам захисту</text>
+  <text x="1065" y="742" font-size="30" fill="#2D3748">персональних даних</text>
+
+  <circle cx="1018" cy="818" r="22" fill="#1F5170"/>
+  <path d="M 1007 818 L 1015 826 L 1030 810" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1065" y="828" font-size="30" fill="#2D3748">Двомовний інтерфейс (українська та</text>
+  <text x="1065" y="872" font-size="30" fill="#2D3748">англійська)</text>
+</svg>

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" font-family="Arial, sans-serif">
+  <rect width="1920" height="1080" fill="#FFFFFF"/>
+  
+  <!-- Title -->
+  <text x="960" y="160" text-anchor="middle" font-size="62" font-weight="bold" fill="#1E2A47">Тестування</text>
+  <line x1="890" y1="190" x2="1030" y2="190" stroke="#1F5170" stroke-width="3"/>
+
+  <!-- Stat card 1 -->
+  <rect x="100" y="200" width="553" height="220" fill="white" stroke="#E6EDF1" stroke-width="2" rx="8"/>
+  <text x="376" y="315" text-anchor="middle" font-size="110" font-weight="bold" fill="#1F5170">88</text>
+  <text x="376" y="385" text-anchor="middle" font-size="28" fill="#718096">тестів усього</text>
+
+  <!-- Stat card 2 -->
+  <rect x="683" y="200" width="553" height="220" fill="white" stroke="#E6EDF1" stroke-width="2" rx="8"/>
+  <text x="959" y="315" text-anchor="middle" font-size="110" font-weight="bold" fill="#1F5170">100%</text>
+  <text x="959" y="385" text-anchor="middle" font-size="28" fill="#718096">успішно пройдено</text>
+
+  <!-- Stat card 3 -->
+  <rect x="1266" y="200" width="553" height="220" fill="white" stroke="#E6EDF1" stroke-width="2" rx="8"/>
+  <text x="1542" y="315" text-anchor="middle" font-size="110" font-weight="bold" fill="#1F5170">3</text>
+  <text x="1542" y="385" text-anchor="middle" font-size="28" fill="#718096">рівні тестування</text>
+
+  <!-- Table header -->
+  <rect x="100" y="510" width="1720" height="65" fill="#1F5170" rx="6"/>
+  <text x="130" y="552" font-size="26" font-weight="bold" fill="white">Тип тестування</text>
+  <text x="761" y="552" text-anchor="middle" font-size="26" font-weight="bold" fill="white">К-сть</text>
+  <text x="903" y="552" font-size="26" font-weight="bold" fill="white">Покриття</text>
+  <rect x="100" y="575" width="1720" height="110" fill="#E6EDF1"/>
+  <text x="130" y="613" font-size="22" fill="#2D3748">Модульне тестування серверної</text>
+  <text x="130" y="651" font-size="22" fill="#2D3748">частини</text>
+  <text x="761" y="640" text-anchor="middle" font-size="28" font-weight="bold" fill="#1F5170">10</text>
+  <text x="903" y="613" font-size="22" fill="#2D3748">бізнес-логіка сервісів</text>
+  <rect x="100" y="685" width="1720" height="110" fill="#F4F7F9"/>
+  <text x="130" y="723" font-size="22" fill="#2D3748">Наскрізне тестування серверної</text>
+  <text x="130" y="761" font-size="22" fill="#2D3748">частини</text>
+  <text x="761" y="750" text-anchor="middle" font-size="28" font-weight="bold" fill="#1F5170">72</text>
+  <text x="903" y="723" font-size="22" fill="#2D3748">усі модулі: автентифікація, заявки, поліси, виплати,</text>
+  <text x="903" y="761" font-size="22" fill="#2D3748">платежі, продукти, адміністрування</text>
+  <rect x="100" y="795" width="1720" height="110" fill="#E6EDF1"/>
+  <text x="130" y="833" font-size="22" fill="#2D3748">Сценарне тестування клієнтської</text>
+  <text x="130" y="871" font-size="22" fill="#2D3748">частини (Playwright)</text>
+  <text x="761" y="860" text-anchor="middle" font-size="28" font-weight="bold" fill="#1F5170">6</text>
+  <text x="903" y="833" font-size="22" fill="#2D3748">сценарії взаємодії всіх ролей користувачів</text>
+  <rect x="100" y="905" width="1720" height="75" fill="#C9D8E0" rx="6"/>
+  <text x="130" y="952" font-size="26" font-weight="bold" fill="#1E2A47">Загалом</text>
+  <text x="761" y="952" text-anchor="middle" font-size="28" font-weight="bold" fill="#1E2A47">88</text>
+  <text x="903" y="952" font-size="26" font-weight="bold" fill="#1E2A47">100% пройдено</text>
+  <text x="960" y="1045" text-anchor="middle" font-size="22" fill="#718096" font-style="italic">Окремо проведено аудит якості клієнтської частини за методикою Lighthouse</text>
+</svg>

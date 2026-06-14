@@ -78,7 +78,7 @@ export default async function AdminDashboard() {
   if (data.status === 401) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
         <p className="mt-4 text-zinc-400">Session expired. Redirecting...</p>
       </div>
     );
@@ -118,7 +118,7 @@ export default async function AdminDashboard() {
     { name: 'Pending', value: appStatusCounts['PENDING'] || 0, color: '#fbbf24' },
     { name: 'Approved', value: appStatusCounts['APPROVED'] || 0, color: '#34d399' },
     { name: 'Rejected', value: appStatusCounts['REJECTED'] || 0, color: '#fb7185' },
-    { name: 'Under Review', value: appStatusCounts['UNDER_REVIEW'] || 0, color: '#818cf8' },
+    { name: 'Under Review', value: appStatusCounts['UNDER_REVIEW'] || 0, color: '#fbbf24' },
   ];
 
   // Chart data: Claims by Status
@@ -167,8 +167,8 @@ export default async function AdminDashboard() {
           className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 hover:border-zinc-700 transition-colors group"
         >
           <div className="flex items-center gap-4">
-            <div className="h-10 w-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center group-hover:bg-indigo-500/20 transition-colors">
-              <UserPlus className="h-5 w-5 text-indigo-400" />
+            <div className="h-10 w-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center group-hover:bg-amber-500/20 transition-colors">
+              <UserPlus className="h-5 w-5 text-amber-400" />
             </div>
             <div>
               <p className="text-sm font-bold text-white">Manage Users</p>
@@ -198,7 +198,7 @@ export default async function AdminDashboard() {
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Tenants</span>
-            <Database className="h-4 w-4 text-indigo-500" />
+            <Database className="h-4 w-4 text-amber-500" />
           </div>
           <p className="text-xl font-bold text-white"><CountUpNumber value={totalCompanies} /></p>
         </div>
@@ -230,7 +230,7 @@ export default async function AdminDashboard() {
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-wider">Policies</span>
-            <ShieldCheck className="h-4 w-4 text-indigo-400" />
+            <ShieldCheck className="h-4 w-4 text-amber-400" />
           </div>
           <p className="text-xl font-bold text-white"><CountUpNumber value={totalPolicies} /></p>
         </div>
@@ -266,7 +266,7 @@ export default async function AdminDashboard() {
         {/* Companies Section */}
         <section className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl">
           <div className="px-6 py-4 border-b border-zinc-800 bg-zinc-900/50 flex items-center gap-2">
-            <Database className="h-5 w-5 text-indigo-400" />
+            <Database className="h-5 w-5 text-amber-400" />
             <h2 className="text-lg font-bold text-white">Platform Tenants</h2>
           </div>
           <div className="p-0 overflow-x-auto">
@@ -283,7 +283,7 @@ export default async function AdminDashboard() {
                   <tr key={company.id} className="hover:bg-zinc-800/30 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-indigo-400">
+                        <div className="h-9 w-9 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-amber-400">
                           {company.name.substring(0, 2).toUpperCase()}
                         </div>
                         <p className="font-bold text-white">{company.name}</p>

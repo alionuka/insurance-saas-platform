@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 520" font-family="Arial, sans-serif">
+  <rect width="1400" height="520" fill="#FFFFFF"/>
+  <circle cx="214" cy="180" r="110" fill="none" stroke="#1F5170" stroke-width="9"/>
+  <text x="214" y="208" text-anchor="middle" font-size="80" font-weight="bold" fill="#1E2A47">99</text>
+  <text x="214" y="380" text-anchor="middle" font-size="32" fill="#2D3748">Продуктивність</text>
+  <circle cx="538" cy="180" r="110" fill="none" stroke="#1F5170" stroke-width="9"/>
+  <text x="538" y="208" text-anchor="middle" font-size="80" font-weight="bold" fill="#1E2A47">96</text>
+  <text x="538" y="380" text-anchor="middle" font-size="32" fill="#2D3748">Доступність</text>
+  <circle cx="862" cy="180" r="110" fill="none" stroke="#1F5170" stroke-width="9"/>
+  <text x="862" y="208" text-anchor="middle" font-size="80" font-weight="bold" fill="#1E2A47">96</text>
+  <text x="862" y="360" text-anchor="middle" font-size="32" fill="#2D3748">Дотримання</text>
+  <text x="862" y="402" text-anchor="middle" font-size="32" fill="#2D3748">найкращих практик</text>
+  <circle cx="1186" cy="180" r="110" fill="none" stroke="#1F5170" stroke-width="9"/>
+  <text x="1186" y="208" text-anchor="middle" font-size="80" font-weight="bold" fill="#1E2A47">100</text>
+  <text x="1186" y="360" text-anchor="middle" font-size="32" fill="#2D3748">Пошукова</text>
+  <text x="1186" y="402" text-anchor="middle" font-size="32" fill="#2D3748">оптимізація</text>
+</svg>

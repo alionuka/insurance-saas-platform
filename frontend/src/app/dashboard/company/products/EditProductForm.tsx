@@ -119,7 +119,7 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
               required
               value={formData.name}
               onChange={handleChange}
-              className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-900 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm"
+              className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-900 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-sm"
             />
           </div>
         </div>
@@ -136,7 +136,7 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
               name="type"
               value={formData.type}
               onChange={handleChange}
-              className="block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-900 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm cursor-pointer appearance-none"
+              className="block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-900 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-sm cursor-pointer appearance-none"
             >
               <option value="LIFE">Life Insurance</option>
               <option value="AUTO">Auto Insurance</option>
@@ -162,7 +162,7 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
               required
               value={formData.basePremium}
               onChange={handleChange}
-              className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-900 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm"
+              className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-900 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-sm"
             />
           </div>
         </div>
@@ -180,7 +180,7 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
               rows={2}
               value={formData.description}
               onChange={handleChange}
-              className="appearance-none block w-full pl-10 pr-3 py-1.5 border border-zinc-800 rounded-lg bg-zinc-900 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm resize-none"
+              className="appearance-none block w-full pl-10 pr-3 py-1.5 border border-zinc-800 rounded-lg bg-zinc-900 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-sm resize-none"
               placeholder="Brief description..."
             />
           </div>
@@ -199,7 +199,7 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
         <button
           type="submit"
           disabled={loading}
-          className="flex items-center gap-1.5 px-4 py-2 border border-transparent rounded-lg text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all disabled:opacity-50"
+          className="flex items-center gap-1.5 px-4 py-2 border border-transparent rounded-lg text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all disabled:opacity-50"
         >
           {loading && <Loader2 className="h-3 w-3 animate-spin" />}
           Save Changes

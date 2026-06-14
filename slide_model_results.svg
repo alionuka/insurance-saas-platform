@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" font-family="Arial, sans-serif">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<rect x="100" y="30" width="835" height="260" fill="#FFFFFF" stroke="#1F5170" stroke-width="3" rx="14"/>
+<rect x="100" y="30" width="835" height="55" fill="#1F5170" rx="14"/>
+<rect x="100" y="55" width="835" height="30" fill="#1F5170"/>
+<text x="517" y="68" text-anchor="middle" font-size="26" font-weight="bold" fill="white">Оцінка ризику клієнта</text>
+<text x="517" y="130" text-anchor="middle" font-size="19" fill="#718096" letter-spacing="2">ROC-AUC</text>
+<text x="517" y="220" text-anchor="middle" font-size="100" font-weight="bold" fill="#1F5170">0,78</text>
+<text x="517" y="265" text-anchor="middle" font-size="22" font-weight="500" fill="#1E2A47">Gradient Boosting</text>
+<rect x="985" y="30" width="835" height="260" fill="#FFFFFF" stroke="#1F5170" stroke-width="3" rx="14"/>
+<rect x="985" y="30" width="835" height="55" fill="#1F5170" rx="14"/>
+<rect x="985" y="55" width="835" height="30" fill="#1F5170"/>
+<text x="1402" y="68" text-anchor="middle" font-size="26" font-weight="bold" fill="white">Виявлення шахрайства</text>
+<text x="1402" y="130" text-anchor="middle" font-size="19" fill="#718096" letter-spacing="2">ROC-AUC</text>
+<text x="1402" y="220" text-anchor="middle" font-size="100" font-weight="bold" fill="#1F5170">0,91</text>
+<text x="1402" y="265" text-anchor="middle" font-size="22" font-weight="500" fill="#1E2A47">Логістична регресія + TF-IDF</text>
+<text x="960" y="350" text-anchor="middle" font-size="20" fill="#718096" font-style="italic">Порівняння алгоритмів для моделі оцінки ризику</text>
+<line x1="280" y1="810.0" x2="1690" y2="810.0" stroke="#E2E8F0" stroke-width="1"/>
+<text x="270" y="816.0" text-anchor="end" font-size="18" fill="#718096">0.0</text>
+<line x1="280" y1="727.7777777777778" x2="1690" y2="727.7777777777778" stroke="#E2E8F0" stroke-width="1"/>
+<text x="270" y="733.7777777777778" text-anchor="end" font-size="18" fill="#718096">0.2</text>
+<line x1="280" y1="645.5555555555555" x2="1690" y2="645.5555555555555" stroke="#E2E8F0" stroke-width="1"/>
+<text x="270" y="651.5555555555555" text-anchor="end" font-size="18" fill="#718096">0.4</text>
+<line x1="280" y1="563.3333333333334" x2="1690" y2="563.3333333333334" stroke="#E2E8F0" stroke-width="1"/>
+<text x="270" y="569.3333333333334" text-anchor="end" font-size="18" fill="#718096">0.6</text>
+<line x1="280" y1="481.1111111111111" x2="1690" y2="481.1111111111111" stroke="#E2E8F0" stroke-width="1"/>
+<text x="270" y="487.1111111111111" text-anchor="end" font-size="18" fill="#718096">0.8</text>
+<rect x="401" y="497.55555555555554" width="80" height="312.44444444444446" fill="#1F5170" rx="3"/>
+<text x="441" y="487.55555555555554" text-anchor="middle" font-size="20" font-weight="bold" fill="#1E2A47">0.76</text>
+<rect x="496" y="493.44444444444446" width="80" height="316.55555555555554" fill="#3B82F6" rx="3"/>
+<text x="536" y="483.44444444444446" text-anchor="middle" font-size="20" font-weight="bold" fill="#1E2A47">0.77</text>
+<rect x="591" y="616.7777777777778" width="80" height="193.22222222222217" fill="#7DD3FC" rx="3"/>
+<text x="631" y="606.7777777777778" text-anchor="middle" font-size="20" font-weight="bold" fill="#1E2A47">0.47</text>
+<text x="536" y="840" text-anchor="middle" font-size="22" fill="#2D3748">Логістична регресія</text>
+<rect x="874" y="497.55555555555554" width="80" height="312.44444444444446" fill="#1F5170" rx="3"/>
+<text x="914" y="487.55555555555554" text-anchor="middle" font-size="20" font-weight="bold" fill="#1E2A47">0.76</text>
+<rect x="969" y="493.44444444444446" width="80" height="316.55555555555554" fill="#3B82F6" rx="3"/>
+<text x="1009" y="483.44444444444446" text-anchor="middle" font-size="20" font-weight="bold" fill="#1E2A47">0.77</text>
+<rect x="1064" y="616.7777777777778" width="80" height="193.22222222222217" fill="#7DD3FC" rx="3"/>
+<text x="1104" y="606.7777777777778" text-anchor="middle" font-size="20" font-weight="bold" fill="#1E2A47">0.47</text>
+<text x="1009" y="840" text-anchor="middle" font-size="22" fill="#2D3748">Випадковий ліс</text>
+<rect x="1347" y="497.55555555555554" width="80" height="312.44444444444446" fill="#1F5170" rx="3"/>
+<text x="1387" y="487.55555555555554" text-anchor="middle" font-size="20" font-weight="bold" fill="#1E2A47">0.76</text>
+<rect x="1442" y="489.3333333333333" width="80" height="320.6666666666667" fill="#3B82F6" rx="3"/>
+<text x="1482" y="479.3333333333333" text-anchor="middle" font-size="20" font-weight="bold" fill="#1E2A47">0.78</text>
+<rect x="1537" y="612.6666666666666" width="80" height="197.33333333333337" fill="#7DD3FC" rx="3"/>
+<text x="1577" y="602.6666666666666" text-anchor="middle" font-size="20" font-weight="bold" fill="#1E2A47">0.48</text>
+<text x="1482" y="840" text-anchor="middle" font-size="22" font-weight="bold" fill="#1F5170">Gradient Boosting</text>
+<text x="1482" y="868" text-anchor="middle" font-size="16" fill="#1F5170" font-style="italic">(обраний)</text>
+<rect x="300" y="381" width="28" height="20" fill="#1F5170" rx="3"/>
+<text x="338" y="399" font-size="18" fill="#2D3748">ROC-AUC (крос-валідація)</text>
+<rect x="654" y="381" width="28" height="20" fill="#3B82F6" rx="3"/>
+<text x="692" y="399" font-size="18" fill="#2D3748">ROC-AUC (тестова вибірка)</text>
+<rect x="1019" y="381" width="28" height="20" fill="#7DD3FC" rx="3"/>
+<text x="1057" y="399" font-size="18" fill="#2D3748">F1 (тестова вибірка)</text>
+<text x="960" y="1030" text-anchor="middle" font-size="20" fill="#2D3748" font-style="italic">Для пояснення рішень моделей реалізовано механізм SHAP</text>
+</svg>

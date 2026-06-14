@@ -52,7 +52,7 @@ export default function ProductsTable({ products }: ProductsTableProps) {
                 <React.Fragment key={product.id}>
                   <tr className={`hover:bg-zinc-800/30 transition-colors group ${isEditing ? 'bg-zinc-950/40' : ''}`}>
                     <td className="px-6 py-4">
-                      <p className="font-bold text-white group-hover:text-indigo-400 transition-colors">
+                      <p className="font-bold text-white group-hover:text-amber-400 transition-colors">
                         {product.name}
                       </p>
                     </td>
@@ -76,7 +76,7 @@ export default function ProductsTable({ products }: ProductsTableProps) {
                           onClick={() => setEditingProductId(isEditing ? null : product.id)}
                           className={`p-2 rounded-lg border transition-all ${
                             isEditing
-                              ? 'bg-indigo-600 border-indigo-500 text-white'
+                              ? 'bg-amber-600 border-amber-500 text-white'
                               : 'bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:text-white hover:bg-zinc-800'
                           }`}
                           title="Edit Product"

@@ -63,7 +63,7 @@ export default async function ClientApplicationsPage(props: Props) {
                 <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex items-start gap-4">
                     <div className="h-12 w-12 rounded-xl bg-zinc-800 flex items-center justify-center border border-zinc-700 flex-shrink-0">
-                      <FileCheck className="h-6 w-6 text-indigo-400" />
+                      <FileCheck className="h-6 w-6 text-amber-400" />
                     </div>
                     <div>
                       <h3 className="font-bold text-white text-lg">{app.product?.name || t('clientApps.unknownProduct')}</h3>

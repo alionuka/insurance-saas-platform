@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 530" font-family="Arial, sans-serif">
+  <rect width="700" height="530" fill="#FFFFFF"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="700" height="90" fill="#1F5170"/>
+  <text x="32" y="57" font-size="32" font-weight="bold" fill="#FFFFFF">Категорія</text>
+  <text x="510" y="57" font-size="32" font-weight="bold" fill="#FFFFFF">Бали</text>
+  <rect x="0" y="90" width="700" height="110" fill="#E6EDF1"/>
+  <text x="32" y="159" font-size="28" fill="#1E2A47">Продуктивність</text>
+  <text x="510" y="159" font-size="28" fill="#1E2A47">99</text>
+  <rect x="0" y="200" width="700" height="110" fill="#F4F7F9"/>
+  <text x="32" y="269" font-size="28" fill="#1E2A47">Доступність</text>
+  <text x="510" y="269" font-size="28" fill="#1E2A47">96</text>
+  <rect x="0" y="310" width="700" height="110" fill="#E6EDF1"/>
+  <text x="32" y="359" font-size="28" fill="#1E2A47">Дотримання</text>
+  <text x="32" y="397" font-size="28" fill="#1E2A47">найкращих практик</text>
+  <text x="510" y="379" font-size="28" fill="#1E2A47">96</text>
+  <rect x="0" y="420" width="700" height="110" fill="#F4F7F9"/>
+  <text x="32" y="469" font-size="28" fill="#1E2A47">Пошукова</text>
+  <text x="32" y="507" font-size="28" fill="#1E2A47">оптимізація</text>
+  <text x="510" y="489" font-size="28" fill="#1E2A47">100</text>
+</svg>

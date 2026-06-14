@@ -142,7 +142,7 @@ export default function BrowseProductsGrid({
                       ) : (
                         <Package
                           className="h-5 w-5"
-                          style={{ color: brandColor ?? '#818cf8' }}
+                          style={{ color: brandColor ?? '#fbbf24' }}
                         />
                       )}
                     </div>

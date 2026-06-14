@@ -23,8 +23,8 @@ export default function DashboardEntry() {
 
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center text-center">
-      <div className="h-16 w-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-6">
-        <Loader2 className="h-8 w-8 text-indigo-500 animate-spin" />
+      <div className="h-16 w-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-6">
+        <Loader2 className="h-8 w-8 text-amber-500 animate-spin" />
       </div>
       <h1 className="text-2xl font-bold text-white mb-2">Redirecting to your dashboard...</h1>
       <p className="text-zinc-400">Please wait while we verify your access.</p>
