@@ -372,12 +372,12 @@ export default function OnboardingTour() {
         aria-modal="true"
         aria-labelledby="onboarding-title"
         style={tooltipStyle}
-        className="bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl shadow-amber-500/10 p-6"
+        className="bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl shadow-teal-500/10 p-6"
       >
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-              <Sparkles className="h-4 w-4 text-amber-400" />
+            <div className="h-8 w-8 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center">
+              <Sparkles className="h-4 w-4 text-teal-400" />
             </div>
             <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">
               {t('onboarding.stepCounter')
@@ -406,9 +406,9 @@ export default function OnboardingTour() {
               key={i}
               className={`h-1 rounded-full transition-all ${
                 i === stepIndex
-                  ? 'bg-amber-500 w-6'
+                  ? 'bg-teal-500 w-6'
                   : i < stepIndex
-                  ? 'bg-amber-500/40 w-1.5'
+                  ? 'bg-teal-500/40 w-1.5'
                   : 'bg-zinc-700 w-1.5'
               }`}
             />
@@ -434,7 +434,7 @@ export default function OnboardingTour() {
             )}
             <button
               onClick={advance}
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-lg transition-colors shadow-lg shadow-amber-500/20"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-white bg-teal-500 hover:bg-teal-600 rounded-lg transition-colors shadow-lg shadow-teal-500/20"
             >
               {isLast ? (
                 <>

@@ -85,7 +85,7 @@ export default function CreateProductForm() {
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-2xl shadow-xl overflow-hidden">
       <div className="p-6 border-b border-zinc-800 bg-zinc-900/50 flex items-center gap-2">
-        <Plus className="h-5 w-5 text-amber-400" />
+        <Plus className="h-5 w-5 text-teal-400" />
         <h2 className="text-lg font-bold text-white">Register New Product</h2>
       </div>
 
@@ -109,7 +109,7 @@ export default function CreateProductForm() {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all sm:text-sm"
+                  className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all sm:text-sm"
                   placeholder="Premium Life Plus"
                 />
               </div>
@@ -128,7 +128,7 @@ export default function CreateProductForm() {
                   name="type"
                   value={formData.type}
                   onChange={handleChange}
-                  className="block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all sm:text-sm appearance-none cursor-pointer"
+                  className="block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all sm:text-sm appearance-none cursor-pointer"
                 >
                   <option value="LIFE">Life Insurance</option>
                   <option value="AUTO">Auto Insurance</option>
@@ -156,7 +156,7 @@ export default function CreateProductForm() {
                 required
                 value={formData.basePremium}
                 onChange={handleChange}
-                className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all sm:text-sm"
+                className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all sm:text-sm"
                 placeholder="0.00"
               />
             </div>
@@ -176,7 +176,7 @@ export default function CreateProductForm() {
                 rows={3}
                 value={formData.description}
                 onChange={handleChange}
-                className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all sm:text-sm resize-none"
+                className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-zinc-800 rounded-xl bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all sm:text-sm resize-none"
                 placeholder="Briefly describe the product coverage..."
               />
             </div>
@@ -186,7 +186,7 @@ export default function CreateProductForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-amber-600 hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-amber-900/20"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-teal-900/20"
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />

@@ -109,7 +109,7 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
               name="firstName"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+              className="w-full pl-10 pr-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
               required
             />
           </div>
@@ -124,7 +124,7 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
               name="lastName"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+              className="w-full pl-10 pr-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
               required
             />
           </div>
@@ -141,7 +141,7 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
                 placeholder="e.g. 30"
                 min="18"
                 max="100"
-                className="w-full px-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
               />
             </div>
 
@@ -154,7 +154,7 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
                 placeholder="e.g. 700"
                 min="300"
                 max="850"
-                className="w-full px-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
               />
             </div>
 
@@ -167,7 +167,7 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
                 placeholder="e.g. 75000"
                 min="0"
                 step="any"
-                className="w-full px-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
               />
             </div>
           </>
@@ -177,7 +177,7 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 mt-4"
+        className="w-full bg-teal-500 hover:bg-teal-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 mt-4"
       >
         {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
         Save Profile Changes

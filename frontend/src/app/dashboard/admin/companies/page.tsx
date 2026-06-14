@@ -73,11 +73,11 @@ export default async function AdminCompaniesPage() {
       {pending.length > 0 && (
         <section>
           <div className="flex items-center gap-2 mb-3">
-            <Clock className="h-5 w-5 text-amber-400" />
+            <Clock className="h-5 w-5 text-teal-400" />
             <h2 className="text-lg font-semibold text-white">
               Pending Verification
             </h2>
-            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20">
               {pending.length}
             </span>
           </div>
@@ -91,12 +91,12 @@ export default async function AdminCompaniesPage() {
             {pending.map((company) => (
               <div
                 key={company.id}
-                className="bg-zinc-900 border border-amber-500/30 rounded-xl p-5 shadow-lg"
+                className="bg-zinc-900 border border-teal-500/30 rounded-xl p-5 shadow-lg"
               >
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                   <div className="flex items-start gap-4 flex-1 min-w-0">
-                    <div className="h-12 w-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                      <Building2 className="h-6 w-6 text-amber-400" />
+                    <div className="h-12 w-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center shrink-0">
+                      <Building2 className="h-6 w-6 text-teal-400" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="font-bold text-white text-lg truncate">
@@ -167,14 +167,14 @@ export default async function AdminCompaniesPage() {
                       key={company.id}
                       className="grid grid-cols-6 hover:bg-zinc-800/30 hover:border-zinc-700 transition-colors items-center px-6 py-4 group"
                     >
-                      <div className="col-span-2 font-bold text-white group-hover:text-amber-400 transition-colors truncate">
+                      <div className="col-span-2 font-bold text-white group-hover:text-teal-400 transition-colors truncate">
                         {company.name}
                       </div>
                       <div className="col-span-1 text-zinc-400 font-mono text-xs">
                         {company.country || '—'}
                       </div>
                       <div className="col-span-1 text-center">
-                        <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                        <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold rounded-md bg-teal-500/10 text-teal-400 border border-teal-500/20">
                           {company.products?.length ?? 0}
                         </span>
                       </div>

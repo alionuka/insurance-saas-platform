@@ -25,7 +25,7 @@ const TYPE_STYLES: Record<string, string> = {
   AUTO: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
   HEALTH: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
   LIFE: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  PROPERTY: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  PROPERTY: 'bg-teal-500/10 text-teal-400 border-teal-500/20',
 };
 
 export default function RecommendedProducts() {

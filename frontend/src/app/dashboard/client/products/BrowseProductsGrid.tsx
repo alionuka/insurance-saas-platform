@@ -26,7 +26,7 @@ const TYPE_STYLES: Record<string, string> = {
   AUTO: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
   HEALTH: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
   LIFE: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  PROPERTY: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  PROPERTY: 'bg-teal-500/10 text-teal-400 border-teal-500/20',
   TRAVEL: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
 };
 
@@ -142,7 +142,7 @@ export default function BrowseProductsGrid({
                       ) : (
                         <Package
                           className="h-5 w-5"
-                          style={{ color: brandColor ?? '#fbbf24' }}
+                          style={{ color: brandColor ?? '#2dd4bf' }}
                         />
                       )}
                     </div>

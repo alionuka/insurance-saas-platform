@@ -67,7 +67,7 @@ export default function StatusUpdateForm({ claimId, currentStatus }: { claimId: 
             value={status}
             onChange={(e) => setStatus(e.target.value)}
             disabled={loading}
-            className="w-full bg-zinc-950 border border-zinc-700 text-white rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+            className="w-full bg-zinc-950 border border-zinc-700 text-white rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500/50"
           >
             {CLAIM_STATUSES.map((s) => (
               <option key={s} value={s}>{s}</option>
@@ -77,7 +77,7 @@ export default function StatusUpdateForm({ claimId, currentStatus }: { claimId: 
         <button
           type="submit"
           disabled={loading || status === currentStatus}
-          className="w-full sm:w-auto px-6 py-2.5 bg-amber-600 hover:bg-amber-700 disabled:bg-zinc-800 disabled:text-zinc-500 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 min-w-[140px]"
+          className="w-full sm:w-auto px-6 py-2.5 bg-teal-600 hover:bg-teal-700 disabled:bg-zinc-800 disabled:text-zinc-500 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 min-w-[140px]"
         >
           {loading ? (
             <><Loader2 className="h-4 w-4 animate-spin" /> Updating...</>

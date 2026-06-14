@@ -41,8 +41,8 @@ export default async function MlModelsDashboardPage() {
       {/* Header section */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div className="flex items-center gap-4">
-          <div className="h-12 w-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-            <Brain className="h-6 w-6 text-amber-400" />
+          <div className="h-12 w-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center shrink-0">
+            <Brain className="h-6 w-6 text-teal-400" />
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-white">ML Model Methodology</h1>

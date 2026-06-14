@@ -90,7 +90,7 @@ export default function GdprPanel() {
     <>
       <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
         <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-          <ShieldAlert className="h-5 w-5 text-amber-400" />
+          <ShieldAlert className="h-5 w-5 text-teal-400" />
           Privacy & Data Rights
         </h2>
         <p className="text-xs text-zinc-500 mb-6">

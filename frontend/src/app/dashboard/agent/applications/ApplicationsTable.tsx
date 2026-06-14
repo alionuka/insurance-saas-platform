@@ -173,7 +173,7 @@ export default function ApplicationsTable({
       <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
         <div className="px-6 py-4 border-b border-zinc-800 flex justify-between items-center">
           <h2 className="text-lg font-medium text-white">Applications Queue</h2>
-          <span className="bg-amber-500/10 text-amber-400 text-xs px-2.5 py-1 rounded-full font-medium">
+          <span className="bg-teal-500/10 text-teal-400 text-xs px-2.5 py-1 rounded-full font-medium">
             {filteredApplications.length} total
           </span>
         </div>
@@ -186,7 +186,7 @@ export default function ApplicationsTable({
                     type="checkbox"
                     checked={allSelected}
                     onChange={toggleSelectAll}
-                    className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-amber-500 focus:ring-amber-500/20 focus:ring-offset-0 cursor-pointer accent-amber-500"
+                    className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-teal-500 focus:ring-teal-500/20 focus:ring-offset-0 cursor-pointer accent-teal-500"
                   />
                 </th>
                 <th className="px-6 py-3 font-medium">Customer</th>
@@ -205,7 +205,7 @@ export default function ApplicationsTable({
                     key={app.id}
                     className={`transition-colors ${
                       isSelected
-                        ? 'bg-amber-500/5'
+                        ? 'bg-teal-500/5'
                         : successAppId === app.id
                         ? 'bg-emerald-500/5'
                         : 'hover:bg-zinc-800/50'
@@ -217,7 +217,7 @@ export default function ApplicationsTable({
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => toggleSelection(app.id)}
-                        className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-amber-500 focus:ring-amber-500/20 focus:ring-offset-0 cursor-pointer accent-amber-500"
+                        className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-teal-500 focus:ring-teal-500/20 focus:ring-offset-0 cursor-pointer accent-teal-500"
                       />
                     </td>
 
@@ -229,7 +229,7 @@ export default function ApplicationsTable({
                             <User className="h-4 w-4 text-zinc-400 group-hover:text-zinc-300" />
                           </div>
                           <div>
-                            <div className="text-sm font-medium text-white group-hover:text-amber-400 transition-colors">
+                            <div className="text-sm font-medium text-white group-hover:text-teal-400 transition-colors">
                               {app.user
                                 ? `${app.user.firstName} ${app.user.lastName}`
                                 : `#${app.id.substring(0, 8)}`}

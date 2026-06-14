@@ -51,7 +51,7 @@ export default async function BrowseProductsPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-          <Package className="h-7 w-7 text-amber-400" />
+          <Package className="h-7 w-7 text-teal-400" />
           {t('clientProducts.title')}
         </h1>
         <p className="text-zinc-400 mt-1 text-sm">

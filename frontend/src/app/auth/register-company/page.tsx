@@ -89,8 +89,8 @@ export default function RegisterCompanyPage() {
       </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-xl">
         <div className="flex justify-center">
-          <div className="h-12 w-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-            <Building2 className="h-8 w-8 text-amber-400" />
+          <div className="h-12 w-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center">
+            <Building2 className="h-8 w-8 text-teal-400" />
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
@@ -103,7 +103,7 @@ export default function RegisterCompanyPage() {
           {t('auth.forCustomersPrompt')}{' '}
           <Link
             href="/auth/sign-up"
-            className="font-medium text-amber-400 hover:text-amber-300"
+            className="font-medium text-teal-400 hover:text-teal-300"
           >
             {t('auth.customerSignUpHere')}
           </Link>
@@ -113,8 +113,8 @@ export default function RegisterCompanyPage() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-xl">
         <div className="bg-zinc-900 py-8 px-6 shadow-xl border border-zinc-800 sm:rounded-2xl sm:px-10">
           {/* KYC disclaimer banner */}
-          <div className="mb-6 p-3 rounded-lg bg-amber-500/5 border border-amber-500/20 flex gap-3 text-xs text-amber-300/80">
-            <FileCheck className="h-4 w-4 shrink-0 mt-0.5 text-amber-400" />
+          <div className="mb-6 p-3 rounded-lg bg-teal-500/5 border border-teal-500/20 flex gap-3 text-xs text-teal-300/80">
+            <FileCheck className="h-4 w-4 shrink-0 mt-0.5 text-teal-400" />
             <p className="leading-relaxed">
               {t('auth.kycNotice')}
             </p>
@@ -150,7 +150,7 @@ export default function RegisterCompanyPage() {
                     maxLength={100}
                     value={formData.companyName}
                     onChange={handleChange}
-                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent sm:text-sm"
+                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent sm:text-sm"
                     placeholder={t('auth.companyNamePlaceholder')}
                   />
                 </div>
@@ -172,7 +172,7 @@ export default function RegisterCompanyPage() {
                       maxLength={100}
                       value={formData.licenseNumber}
                       onChange={handleChange}
-                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent sm:text-sm"
+                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent sm:text-sm"
                       placeholder="IL-2024-INS-12345"
                     />
                   </div>
@@ -196,7 +196,7 @@ export default function RegisterCompanyPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, country: e.target.value.toUpperCase() })
                       }
-                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent sm:text-sm"
+                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent sm:text-sm"
                       placeholder="UA"
                     />
                   </div>
@@ -218,7 +218,7 @@ export default function RegisterCompanyPage() {
                     maxLength={30}
                     value={formData.contactPhone}
                     onChange={handleChange}
-                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent sm:text-sm"
+                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent sm:text-sm"
                     placeholder="+380 44 555 0000"
                   />
                 </div>
@@ -246,7 +246,7 @@ export default function RegisterCompanyPage() {
                       required
                       value={formData.firstName}
                       onChange={handleChange}
-                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent sm:text-sm"
+                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent sm:text-sm"
                     />
                   </div>
                 </div>
@@ -262,7 +262,7 @@ export default function RegisterCompanyPage() {
                       required
                       value={formData.lastName}
                       onChange={handleChange}
-                      className="appearance-none block w-full px-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent sm:text-sm"
+                      className="appearance-none block w-full px-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent sm:text-sm"
                     />
                   </div>
                 </div>
@@ -283,7 +283,7 @@ export default function RegisterCompanyPage() {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent sm:text-sm"
+                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent sm:text-sm"
                     placeholder={t('auth.emailPlaceholder')}
                   />
                 </div>
@@ -306,7 +306,7 @@ export default function RegisterCompanyPage() {
                     maxLength={72}
                     value={formData.password}
                     onChange={handleChange}
-                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent sm:text-sm"
+                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-zinc-800 rounded-lg bg-zinc-950 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent sm:text-sm"
                     placeholder={t('auth.passwordPlaceholder')}
                   />
                 </div>
@@ -317,7 +317,7 @@ export default function RegisterCompanyPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center items-center gap-2 py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-amber-600 hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center items-center gap-2 py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-teal-600 hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
@@ -339,7 +339,7 @@ export default function RegisterCompanyPage() {
           {t('auth.signInSubtitle')}{' '}
           <Link
             href="/auth/sign-in"
-            className="font-medium text-amber-400 hover:text-amber-300"
+            className="font-medium text-teal-400 hover:text-teal-300"
           >
             {t('auth.haveAccountPrompt')}
           </Link>

@@ -136,7 +136,7 @@ export default async function ClientClaimsPage(props: Props) {
                 <StopClickPropagation>
                 <div className="px-5 pb-4 border-t border-zinc-800/50">
                   <details className="group">
-                    <summary className="list-none cursor-pointer py-2 flex items-center gap-2 text-[10px] text-zinc-500 hover:text-amber-400 uppercase font-bold tracking-tight transition-colors">
+                    <summary className="list-none cursor-pointer py-2 flex items-center gap-2 text-[10px] text-zinc-500 hover:text-teal-400 uppercase font-bold tracking-tight transition-colors">
                       <span className="group-open:rotate-90 transition-transform">▶</span>
                       {t('clientClaims.supportingDocuments')}
                     </summary>

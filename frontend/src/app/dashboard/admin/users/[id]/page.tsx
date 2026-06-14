@@ -9,8 +9,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const roleColors: Record<string, string> = {
   CUSTOMER: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
   AGENT: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  COMPANY_ADMIN: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-  PLATFORM_ADMIN: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  COMPANY_ADMIN: 'bg-teal-500/10 text-teal-400 border-teal-500/20',
+  PLATFORM_ADMIN: 'bg-teal-500/10 text-teal-400 border-teal-500/20',
 };
 
 async function getUser(id: string) {
@@ -43,7 +43,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
   if (status === 401) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
         <p className="mt-4 text-zinc-400">Session expired. Redirecting...</p>
       </div>
     );
@@ -75,7 +75,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
     <div className="max-w-5xl space-y-6">
       <Link
         href="/dashboard/admin/users"
-        className="inline-flex items-center text-sm font-medium text-zinc-400 hover:text-amber-400 transition-colors"
+        className="inline-flex items-center text-sm font-medium text-zinc-400 hover:text-teal-400 transition-colors"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
         Back to Users
@@ -83,7 +83,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
 
       {/* Hero */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 md:p-8 flex items-start gap-5 shadow-xl">
-        <div className="h-16 w-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-2xl font-bold text-amber-400 shrink-0">
+        <div className="h-16 w-16 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-2xl font-bold text-teal-400 shrink-0">
           {initials}
         </div>
         <div className="flex-1 min-w-0">
@@ -172,8 +172,8 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
               {/* Stats Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                    <FileText className="h-5 w-5 text-amber-400" />
+                  <div className="h-12 w-12 rounded-full bg-teal-500/10 border border-teal-500/20 flex items-center justify-center shrink-0">
+                    <FileText className="h-5 w-5 text-teal-400" />
                   </div>
                   <div>
                     <p className="text-sm text-zinc-400">Applications</p>
@@ -190,8 +190,8 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                   </div>
                 </div>
                 <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                    <Activity className="h-5 w-5 text-amber-400" />
+                  <div className="h-12 w-12 rounded-full bg-teal-500/10 border border-teal-500/20 flex items-center justify-center shrink-0">
+                    <Activity className="h-5 w-5 text-teal-400" />
                   </div>
                   <div>
                     <p className="text-sm text-zinc-400">Open Claims</p>
@@ -204,7 +204,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-md">
                 <div className="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
                   <h3 className="text-md font-bold text-white">Recent Applications</h3>
-                  <span className="bg-amber-500/10 text-amber-400 text-xs px-2.5 py-1 rounded-full font-medium">
+                  <span className="bg-teal-500/10 text-teal-400 text-xs px-2.5 py-1 rounded-full font-medium">
                     {applications.length} Total
                   </span>
                 </div>
@@ -219,7 +219,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                         <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
                           app.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
                           app.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' :
-                          'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                          'bg-teal-500/10 text-teal-400 border-teal-500/20'
                         }`}>
                           {app.status}
                         </span>
@@ -250,7 +250,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                         <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
                           pol.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
                           pol.status === 'CANCELLED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' :
-                          'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                          'bg-teal-500/10 text-teal-400 border-teal-500/20'
                         }`}>
                           {pol.status.replace('_', ' ')}
                         </span>
@@ -281,7 +281,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                         <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
                           claim.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
                           claim.status === 'DENIED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' :
-                          'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                          'bg-teal-500/10 text-teal-400 border-teal-500/20'
                         }`}>
                           {claim.status.replace('_', ' ')}
                         </span>

@@ -34,7 +34,7 @@ export default async function AgentPolicyDetailPage({ params }: { params: Promis
         <ShieldAlert className="h-12 w-12 text-rose-500 mb-4" />
         <h2 className="text-xl font-bold text-white mb-2">Access Restricted</h2>
         <p className="text-zinc-400 max-w-md">You do not have permission to view this policy.</p>
-        <Link href="/dashboard/agent/applications" className="mt-6 text-sm font-bold text-amber-400 hover:text-amber-300 transition-colors uppercase tracking-widest">
+        <Link href="/dashboard/agent/applications" className="mt-6 text-sm font-bold text-teal-400 hover:text-teal-300 transition-colors uppercase tracking-widest">
           Back to Applications
         </Link>
       </div>
@@ -47,7 +47,7 @@ export default async function AgentPolicyDetailPage({ params }: { params: Promis
         <ShieldAlert className="h-12 w-12 text-zinc-700 mb-4" />
         <h2 className="text-xl font-bold text-white mb-2">Policy Not Found</h2>
         <p className="text-zinc-400 max-w-md">The policy you are looking for does not exist or has been removed.</p>
-        <Link href="/dashboard/agent/applications" className="mt-6 text-sm font-bold text-amber-400 hover:text-amber-300 transition-colors uppercase tracking-widest">
+        <Link href="/dashboard/agent/applications" className="mt-6 text-sm font-bold text-teal-400 hover:text-teal-300 transition-colors uppercase tracking-widest">
           Back to Applications
         </Link>
       </div>
@@ -57,7 +57,7 @@ export default async function AgentPolicyDetailPage({ params }: { params: Promis
   if (status !== 200 || !policy) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mb-4"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500 mb-4"></div>
         <p className="text-zinc-400">An error occurred while loading policy details.</p>
       </div>
     );
@@ -66,7 +66,7 @@ export default async function AgentPolicyDetailPage({ params }: { params: Promis
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'ACTIVE': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-      case 'PENDING_PAYMENT': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+      case 'PENDING_PAYMENT': return 'bg-teal-500/10 text-teal-400 border-teal-500/20';
       case 'EXPIRED': return 'bg-zinc-800 text-zinc-500 border-zinc-700';
       case 'CANCELLED': return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
       default: return 'bg-zinc-800 text-zinc-500 border-zinc-700';
@@ -89,7 +89,7 @@ export default async function AgentPolicyDetailPage({ params }: { params: Promis
       {/* Hero */}
       <div className="relative overflow-hidden rounded-3xl bg-zinc-900 border border-zinc-800 p-8 md:p-10">
         <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4">
-          <div className="h-64 w-64 rounded-full bg-amber-500/5 blur-3xl"></div>
+          <div className="h-64 w-64 rounded-full bg-teal-500/5 blur-3xl"></div>
         </div>
 
         <div className="relative flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -140,8 +140,8 @@ export default async function AgentPolicyDetailPage({ params }: { params: Promis
         </div>
 
         <div className="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl flex items-center gap-4">
-          <div className="h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-            <CheckCircle2 className="h-5 w-5 text-amber-400" />
+          <div className="h-10 w-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center">
+            <CheckCircle2 className="h-5 w-5 text-teal-400" />
           </div>
           <div>
             <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider">Status</p>
@@ -164,7 +164,7 @@ export default async function AgentPolicyDetailPage({ params }: { params: Promis
       {customer && (
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
           <div className="flex items-center gap-2 mb-4">
-            <UserCircle className="h-5 w-5 text-amber-400" />
+            <UserCircle className="h-5 w-5 text-teal-400" />
             <h2 className="text-lg font-bold text-white">Policy Holder</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -247,7 +247,7 @@ export default async function AgentPolicyDetailPage({ params }: { params: Promis
         {/* Payments sidebar */}
         <div className="space-y-6">
           <div className="flex items-center gap-3">
-            <CreditCard className="h-5 w-5 text-amber-500" />
+            <CreditCard className="h-5 w-5 text-teal-500" />
             <h2 className="text-xl font-bold text-white">Payment History</h2>
           </div>
 
@@ -276,7 +276,7 @@ export default async function AgentPolicyDetailPage({ params }: { params: Promis
                           <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase border ${
                             payment.status === 'SUCCEEDED' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
                             payment.status === 'FAILED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' :
-                            'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                            'bg-teal-500/10 text-teal-400 border-teal-500/20'
                           }`}>
                             {payment.status}
                           </span>

@@ -164,11 +164,11 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
     <div className="p-4 bg-zinc-950/50 border border-zinc-800 rounded-lg mt-2 space-y-4">
       <div className="flex items-center justify-between">
         <h4 className="text-sm font-bold text-zinc-300 uppercase tracking-tight flex items-center gap-2">
-          <FileText className="h-4 w-4 text-amber-400" />
+          <FileText className="h-4 w-4 text-teal-400" />
           Supporting Documents
         </h4>
         {canUpload && (
-          <label className="cursor-pointer bg-amber-600 hover:bg-amber-500 text-white text-[10px] font-bold uppercase py-1.5 px-3 rounded flex items-center gap-2 transition-colors disabled:opacity-50">
+          <label className="cursor-pointer bg-teal-600 hover:bg-teal-500 text-white text-[10px] font-bold uppercase py-1.5 px-3 rounded flex items-center gap-2 transition-colors disabled:opacity-50">
             {uploading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />}
             Upload File
             <input
@@ -201,7 +201,7 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
                     href={doc.url} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-sm font-medium text-white hover:text-amber-400 transition-colors truncate block max-w-xs flex items-center gap-2"
+                    className="text-sm font-medium text-white hover:text-teal-400 transition-colors truncate block max-w-xs flex items-center gap-2"
                   >
                     {doc.filename}
                     <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />

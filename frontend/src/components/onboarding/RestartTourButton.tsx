@@ -16,7 +16,7 @@ export default function RestartTourButton() {
   return (
     <button
       onClick={handleClick}
-      className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-amber-300 bg-zinc-800/50 hover:bg-amber-500/10 border border-zinc-700 hover:border-amber-500/30 px-3 py-1.5 rounded-lg transition-colors"
+      className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-teal-300 bg-zinc-800/50 hover:bg-teal-500/10 border border-zinc-700 hover:border-teal-500/30 px-3 py-1.5 rounded-lg transition-colors"
       title={t('onboarding.buttons.restart')}
     >
       <Sparkles className="h-3.5 w-3.5" />

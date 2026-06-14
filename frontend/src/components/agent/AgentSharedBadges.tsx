@@ -125,7 +125,7 @@ export function StatusSelect<T extends string>({
         key={currentStatus} /* re-mount so defaultValue reflects server value */
         defaultValue={currentStatus}
         onChange={(e) => onChange(e.target.value as T)}
-        className="text-xs bg-zinc-950 border border-zinc-700 text-white rounded-md px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer hover:border-zinc-500 transition-colors"
+        className="text-xs bg-zinc-950 border border-zinc-700 text-white rounded-md px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-teal-500 cursor-pointer hover:border-zinc-500 transition-colors"
       >
         {options.map((s) => (
           <option key={s} value={s}>

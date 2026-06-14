@@ -58,7 +58,7 @@ export default async function CompanySettingsPage() {
     <div className="max-w-3xl space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
-          <Palette className="h-7 w-7 text-amber-400" />
+          <Palette className="h-7 w-7 text-teal-400" />
           Tenant Branding
         </h1>
         <p className="text-zinc-400 mt-1 text-sm">
@@ -70,7 +70,7 @@ export default async function CompanySettingsPage() {
       </div>
 
       {company.status === 'PENDING_VERIFICATION' && (
-        <div className="p-4 rounded-lg bg-amber-500/5 border border-amber-500/30 text-sm text-amber-200/80">
+        <div className="p-4 rounded-lg bg-teal-500/5 border border-teal-500/30 text-sm text-teal-200/80">
           Your tenant is still pending verification. Branding changes are
           saved, but they only become visible once a platform administrator
           activates your account.
@@ -81,7 +81,7 @@ export default async function CompanySettingsPage() {
         initialValues={{
           name: company.name,
           description: company.description ?? '',
-          primaryColor: company.primaryColor ?? '#f59e0b',
+          primaryColor: company.primaryColor ?? '#14b8a6',
           logoUrl: company.logoUrl ?? null,
         }}
       />
@@ -127,7 +127,7 @@ export default async function CompanySettingsPage() {
                   company.status === 'ACTIVE'
                     ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
                     : company.status === 'PENDING_VERIFICATION'
-                      ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                      ? 'bg-teal-500/10 text-teal-400 border-teal-500/20'
                       : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
                 }`}
               >

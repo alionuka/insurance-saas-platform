@@ -55,7 +55,7 @@ export default function PolicyPaymentButton({ policyId, amount }: PolicyPaymentB
     <button
       onClick={handlePay}
       disabled={loading}
-      className="flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold uppercase py-2 px-4 rounded-lg transition-colors disabled:opacity-50"
+      className="flex items-center gap-2 bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold uppercase py-2 px-4 rounded-lg transition-colors disabled:opacity-50"
     >
       {loading ? (
         <Loader2 className="h-4 w-4 animate-spin" />

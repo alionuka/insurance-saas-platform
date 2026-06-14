@@ -38,7 +38,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
   if (result.status === 401) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
         <p className="mt-4 text-zinc-400">Session expired. Redirecting...</p>
       </div>
     );
@@ -66,7 +66,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
   const getRiskLevelColor = (level: string) => {
     switch (level) {
       case 'LOW': return 'text-emerald-400';
-      case 'MEDIUM': return 'text-amber-400';
+      case 'MEDIUM': return 'text-teal-400';
       case 'HIGH': return 'text-rose-400';
       default: return 'text-zinc-400';
     }
@@ -76,7 +76,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
     <div className="max-w-5xl space-y-6">
       <Link 
         href="/dashboard/agent/applications"
-        className="inline-flex items-center text-sm font-medium text-zinc-400 hover:text-amber-400 transition-colors"
+        className="inline-flex items-center text-sm font-medium text-zinc-400 hover:text-teal-400 transition-colors"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
         Back to Applications
@@ -85,8 +85,8 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
       {/* Hero */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl">
         <div className="flex items-start gap-4">
-          <div className="h-16 w-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-            <FileText className="h-8 w-8 text-amber-400" />
+          <div className="h-16 w-16 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center shrink-0">
+            <FileText className="h-8 w-8 text-teal-400" />
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-3">
@@ -110,7 +110,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
           {/* Customer Info Card */}
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-md">
             <div className="flex items-center gap-2 mb-4">
-              <UserIcon className="h-5 w-5 text-amber-400" />
+              <UserIcon className="h-5 w-5 text-teal-400" />
               <h2 className="text-lg font-bold text-white">Customer Profile</h2>
             </div>
             {user ? (
@@ -153,7 +153,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
                       Status: <span className="text-emerald-400 font-medium">{policy.status.replace('_', ' ')}</span>
                     </p>
                     <p className="text-sm text-zinc-300">
-                      Premium: <span className="text-amber-400 font-bold">{formatCurrency(policy.premiumAmount)}</span>
+                      Premium: <span className="text-teal-400 font-bold">{formatCurrency(policy.premiumAmount)}</span>
                     </p>
                   </div>
                 ) : (
@@ -170,7 +170,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
             {policy && (
               <Link
                 href={`/dashboard/agent/policies/${policy.id}`}
-                className="inline-flex justify-center items-center px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-amber-500/20 shrink-0"
+                className="inline-flex justify-center items-center px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-teal-500/20 shrink-0"
               >
                 View Policy
               </Link>
@@ -183,7 +183,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
           {/* Risk Assessment Card (Larger/Prominent) */}
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-md flex flex-col">
             <div className="flex items-center gap-2 mb-4">
-              <ShieldAlert className="h-5 w-5 text-amber-400" />
+              <ShieldAlert className="h-5 w-5 text-teal-400" />
               <h2 className="text-lg font-bold text-white">Risk Assessment</h2>
             </div>
             {risk ? (
@@ -224,7 +224,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
           {/* Product Info Card (Compact) */}
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-md">
             <div className="flex items-center gap-2 mb-4">
-              <Box className="h-5 w-5 text-amber-400" />
+              <Box className="h-5 w-5 text-teal-400" />
               <h2 className="text-lg font-bold text-white">Product Info</h2>
             </div>
             {product ? (
@@ -239,7 +239,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
                 </div>
                 <div>
                   <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Base Premium</p>
-                  <p className="text-amber-400 mt-1 font-bold">{formatCurrency(product.basePremium)}</p>
+                  <p className="text-teal-400 mt-1 font-bold">{formatCurrency(product.basePremium)}</p>
                 </div>
               </div>
             ) : (

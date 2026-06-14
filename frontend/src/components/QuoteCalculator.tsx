@@ -137,7 +137,7 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
       case 'LOW':
         return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
       case 'MEDIUM':
-        return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+        return 'bg-teal-500/10 text-teal-400 border-teal-500/20';
       case 'HIGH':
         return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
       default:
@@ -149,8 +149,8 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
     <div className="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl">
       <div className="p-6 border-b border-zinc-800 bg-zinc-900/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-            <Calculator className="h-5 w-5 text-amber-400" />
+          <div className="h-10 w-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center">
+            <Calculator className="h-5 w-5 text-teal-400" />
           </div>
           <div>
             <h2 className="text-lg font-bold text-white leading-tight">{t('clientQuote.personalizedQuote')}</h2>
@@ -169,7 +169,7 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
               id="product-select"
               value={selectedProductId}
               onChange={handleProductChange}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all cursor-pointer appearance-none"
+              className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all cursor-pointer appearance-none"
             >
               <option value="">{t('clientQuote.selectProduct')}</option>
               {products.map((product) => (
@@ -183,7 +183,7 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
           <button
             onClick={calculateQuote}
             disabled={!selectedProductId || loading}
-            className="w-full py-4 px-6 rounded-2xl bg-amber-600 hover:bg-amber-500 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed font-bold text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-900/20 active:scale-[0.98]"
+            className="w-full py-4 px-6 rounded-2xl bg-teal-600 hover:bg-teal-500 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed font-bold text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-teal-900/20 active:scale-[0.98]"
           >
             {loading ? (
               <>
@@ -234,7 +234,7 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
             </div>
 
             <div className="pt-4 border-t border-zinc-800 flex gap-3">
-              <Info className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+              <Info className="h-4 w-4 text-teal-400 shrink-0 mt-0.5" />
               <p className="text-xs text-zinc-400 leading-relaxed italic">
                 "{quote.explanation}"
               </p>
