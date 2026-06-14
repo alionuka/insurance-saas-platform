@@ -5,9 +5,10 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 type DataPoint = { date: string; count: number };
 
 const COLORS: Record<string, { stroke: string; fill: string }> = {
-  blue: { stroke: '#60a5fa', fill: '#60a5fa' },
-  emerald: { stroke: '#34d399', fill: '#34d399' },
-  rose: { stroke: '#fb7185', fill: '#fb7185' },
+  // Royal-blue brand stroke + warm accents — all readable on white.
+  blue: { stroke: '#003da5', fill: '#003da5' },
+  emerald: { stroke: '#059669', fill: '#10b981' },
+  rose: { stroke: '#e11d48', fill: '#fb7185' },
 };
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -46,19 +47,19 @@ export default function ActivityLineChart({ data, title, color = 'blue' }: { dat
             </defs>
             <CartesianGrid
               strokeDasharray="3 3"
-              stroke="#27272a"
+              stroke="#e2e8f0"
               horizontal={true}
               vertical={false}
             />
             <XAxis
               dataKey="date"
-              tick={{ fontSize: 10, fill: '#71717a' }}
+              tick={{ fontSize: 10, fill: '#64748b' }}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
               allowDecimals={false}
-              tick={{ fontSize: 10, fill: '#71717a' }}
+              tick={{ fontSize: 10, fill: '#64748b' }}
               axisLine={false}
               tickLine={false}
             />

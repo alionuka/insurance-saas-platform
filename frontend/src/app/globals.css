@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
+/* Editorial serif for headlines — gives the Bloomberg / WSJ / Lloyd's
+ * feel. Used via `font-serif` (defined in @theme) or `.font-serif`. */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap');
+
 /* ─────────────────────────────────────────────────────────────
  * Light "classic insurance" theme — AXA / Allianz / State Farm feel.
- * Off-white background, deep navy accent, no dark variant.
+ * Royal Blue (Pantone 286 / Yale Blue) — true royal without purple cast.
  * ───────────────────────────────────────────────────────────── */
 :root {
   --background: #f8fafc;       /* slate-50 — off-white, paper-like */
@@ -13,8 +17,12 @@
   --border-strong: #cbd5e1;    /* slate-300 — interactive borders */
   --text-secondary: #475569;   /* slate-600 — body copy */
   --text-muted: #64748b;       /* slate-500 — captions / labels */
-  --accent: #1d4ed8;           /* blue-700 — deep navy primary */
-  --accent-hover: #1e40af;     /* blue-800 — pressed / hover */
+
+  /* Royal navy palette (Pantone 286 / Yale family).
+   * The Tailwind `blue-*` palette in v4 is overridden by @theme below,
+   * so `bg-blue-700` everywhere in the app paints this colour automatically. */
+  --accent: #003da5;           /* Pantone 286 — UN / Yale royal blue */
+  --accent-hover: #002f6c;     /* Yale Blue (deeper) */
 }
 
 @theme inline {
@@ -22,6 +30,21 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+
+  /* Override Tailwind's default `blue-*` palette with a clean royal navy.
+   * This means every `bg-blue-700`, `text-blue-700`, `border-blue-700`
+   * across the codebase resolves to the brand royal without TSX edits. */
+  --color-blue-50: #eef3fb;
+  --color-blue-100: #d6e2f4;
+  --color-blue-200: #adc5e9;
+  --color-blue-300: #84a7dd;
+  --color-blue-400: #4a7ec8;
+  --color-blue-500: #2a62b3;
+  --color-blue-600: #1750a0;
+  --color-blue-700: #003da5;   /* canonical royal */
+  --color-blue-800: #002f6c;
+  --color-blue-900: #001d40;
 }
 
 body {
@@ -29,6 +52,12 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), 'Inter', Arial, Helvetica, sans-serif;
   font-feature-settings: 'ss01', 'cv11';   /* refined letterforms */
+}
+
+/* Editorial heading utility — opt-in serif for marquee titles */
+.font-serif {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  letter-spacing: -0.015em;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -183,14 +212,14 @@ body {
     box-shadow 0.2s ease;
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.2) inset,
-    0 2px 6px -1px rgba(29, 78, 216, 0.25);
+    0 2px 6px -1px rgba(0, 61, 165, 0.25);
 }
 .btn-primary:hover {
   background: var(--accent-hover);
   transform: translateY(-1px);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.2) inset,
-    0 6px 16px -4px rgba(29, 78, 216, 0.35);
+    0 6px 16px -4px rgba(0, 61, 165, 0.35);
 }
 .btn-primary:active {
   transform: translateY(0);
@@ -242,7 +271,7 @@ html {
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(29, 78, 216, 0.5);
+  background: rgba(0, 61, 165, 0.5);
   background-clip: padding-box;
 }
 
