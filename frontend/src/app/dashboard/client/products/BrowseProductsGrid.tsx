@@ -23,11 +23,11 @@ type Product = {
 };
 
 const TYPE_STYLES: Record<string, string> = {
-  AUTO: 'bg-blue-700/10 text-blue-700 border-blue-700/20',
-  HEALTH: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  LIFE: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  PROPERTY: 'bg-blue-700/10 text-blue-700 border-blue-700/20',
-  TRAVEL: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
+  AUTO: 'bg-blue-50 text-blue-700 border-blue-200',
+  HEALTH: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  LIFE: 'bg-amber-50 text-amber-700 border-amber-200',
+  PROPERTY: 'bg-blue-50 text-blue-700 border-blue-200',
+  TRAVEL: 'bg-rose-50 text-rose-700 border-rose-200',
 };
 
 const TYPE_LABELS: Record<string, string> = {

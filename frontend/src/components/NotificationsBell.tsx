@@ -96,7 +96,7 @@ export default function NotificationsBell() {
       return <CreditCard className="h-4 w-4 text-emerald-400" />;
     }
     if (type.includes('policy')) {
-      return <BookOpen className="h-4 w-4 text-purple-400" />;
+      return <BookOpen className="h-4 w-4 text-blue-700" />;
     }
     if (type.includes('document')) {
       return <FileText className="h-4 w-4 text-slate-600" />;

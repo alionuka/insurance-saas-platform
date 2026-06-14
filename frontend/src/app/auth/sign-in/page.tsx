@@ -25,10 +25,10 @@ function SignInPageContent() {
   // `role` is consumed by Playwright via data-testid — keeping it stable
   // (English) means the e2e suite doesn't break when the UI switches to UK.
   const DEMO_ACCOUNTS = [
-    { role: 'CUSTOMER', label: t('auth.demoCustomer'), email: 'alice.customer@example.com', icon: User, color: 'bg-blue-700/5 text-blue-700 border-blue-700/20 hover:bg-blue-700/10' },
-    { role: 'AGENT', label: t('auth.demoAgent'), email: 'emily.agent@example.com', icon: UserCheck, color: 'bg-emerald-500/5 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10' },
-    { role: 'COMPANY_ADMIN', label: t('auth.demoCompanyAdmin'), email: 'sarah.admin@example.com', icon: Building2, color: 'bg-blue-700/5 text-blue-700 border-blue-700/20 hover:bg-blue-700/10' },
-    { role: 'PLATFORM_ADMIN', label: t('auth.demoPlatform'), email: 'admin@insurance-saas.com', icon: Crown, color: 'bg-purple-500/5 text-purple-400 border-purple-500/20 hover:bg-purple-500/10' },
+    { role: 'CUSTOMER', label: t('auth.demoCustomer'), email: 'alice.customer@example.com', icon: User, color: 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100' },
+    { role: 'AGENT', label: t('auth.demoAgent'), email: 'emily.agent@example.com', icon: UserCheck, color: 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100' },
+    { role: 'COMPANY_ADMIN', label: t('auth.demoCompanyAdmin'), email: 'sarah.admin@example.com', icon: Building2, color: 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100' },
+    { role: 'PLATFORM_ADMIN', label: t('auth.demoPlatform'), email: 'admin@insurance-saas.com', icon: Crown, color: 'bg-slate-100 text-slate-900 border-slate-300 hover:bg-slate-200' },
   ];
 
   const performLogin = async (targetEmail: string, targetPassword: string) => {

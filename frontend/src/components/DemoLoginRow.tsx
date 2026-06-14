@@ -24,13 +24,16 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
  */
 type Variant = 'landing' | 'compact';
 
+// Light-theme role swatches — soft tints, strong text. Each role has a
+// distinct hue so demo users can be told apart at a glance, but all of
+// them sit calmly on the off-white landing page.
 const ACCOUNTS = [
   {
     role: 'CUSTOMER' as const,
     labelKey: 'auth.demoCustomer',
     email: 'alice.customer@example.com',
     icon: User,
-    color: 'bg-blue-700/5 text-blue-700 border-blue-700/30 hover:bg-blue-700/15',
+    color: 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100',
   },
   {
     role: 'AGENT' as const,
@@ -38,7 +41,7 @@ const ACCOUNTS = [
     email: 'emily.agent@example.com',
     icon: UserCheck,
     color:
-      'bg-emerald-500/5 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/15',
+      'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100',
   },
   {
     role: 'COMPANY_ADMIN' as const,
@@ -46,7 +49,7 @@ const ACCOUNTS = [
     email: 'sarah.admin@example.com',
     icon: Building2,
     color:
-      'bg-blue-700/5 text-blue-700 border-blue-700/30 hover:bg-blue-700/15',
+      'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100',
   },
   {
     role: 'PLATFORM_ADMIN' as const,
@@ -54,7 +57,7 @@ const ACCOUNTS = [
     email: 'admin@insurance-saas.com',
     icon: Crown,
     color:
-      'bg-purple-500/5 text-purple-400 border-purple-500/30 hover:bg-purple-500/15',
+      'bg-slate-100 text-slate-900 border-slate-300 hover:bg-slate-200',
   },
 ];
 

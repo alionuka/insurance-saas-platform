@@ -170,7 +170,7 @@ export default function ClaimSubmissionForm({ policies, preselectPolicyId }: Cla
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-100 disabled:text-slate-500 text-slate-900 font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/20"
+            className="w-full bg-blue-700 hover:bg-blue-800 disabled:bg-slate-100 disabled:text-slate-500 text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2 shadow-md"
           >
             {isLoading ? (
               <>

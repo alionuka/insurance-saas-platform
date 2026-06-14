@@ -243,7 +243,7 @@ export default function QuoteCalculator({ products }: QuoteCalculatorProps) {
             <button
               onClick={submitApplication}
               disabled={applying}
-              className="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed font-bold text-slate-900 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/20 active:scale-[0.98]"
+              className="w-full py-4 px-6 rounded-lg bg-blue-700 hover:bg-blue-800 disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed font-bold text-white transition-all flex items-center justify-center gap-2 shadow-md active:scale-[0.98]"
             >
               {applying ? (
                 <>

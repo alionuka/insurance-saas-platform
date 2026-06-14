@@ -21,11 +21,13 @@ interface RecommendationsResponse {
   explanation: string;
 }
 
+// Light-theme product-type pills. Soft tinted backgrounds with strong
+// darker text for legibility on white/off-white surfaces.
 const TYPE_STYLES: Record<string, string> = {
-  AUTO: 'bg-blue-700/10 text-blue-700 border-blue-700/20',
-  HEALTH: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  LIFE: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  PROPERTY: 'bg-blue-700/10 text-blue-700 border-blue-700/20',
+  AUTO: 'bg-blue-50 text-blue-700 border-blue-200',
+  HEALTH: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  LIFE: 'bg-amber-50 text-amber-700 border-amber-200',
+  PROPERTY: 'bg-blue-50 text-blue-700 border-blue-200',
 };
 
 export default function RecommendedProducts() {
@@ -115,8 +117,8 @@ export default function RecommendedProducts() {
   return (
     <div className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-2xl">
       <div className="p-6 border-b border-slate-200 bg-white/50 flex items-center gap-3">
-        <div className="h-10 w-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
-          <Sparkles className="h-5 w-5 text-purple-400" />
+        <div className="h-10 w-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center">
+          <Sparkles className="h-5 w-5 text-blue-700" />
         </div>
         <div>
           <h2 className="text-lg font-bold text-slate-900 leading-tight">Recommended for You</h2>
@@ -135,7 +137,7 @@ export default function RecommendedProducts() {
         )}
 
         {error && !loading && (
-          <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center gap-3 text-sm text-rose-400">
+          <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 flex items-center gap-3 text-sm text-rose-700">
             <AlertCircle className="h-5 w-5 shrink-0" />
             <p className="font-medium">{error}</p>
           </div>
@@ -170,13 +172,13 @@ export default function RecommendedProducts() {
                   <div className="mt-auto pt-3 border-t border-slate-200">
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-slate-500 font-medium">Match score</span>
-                      <span className="text-purple-400 font-mono font-bold">
+                      <span className="text-blue-700 font-mono font-bold">
                         {(product.similarity * 100).toFixed(0)}%
                       </span>
                     </div>
-                    <div className="mt-2 h-1.5 bg-white rounded-full overflow-hidden">
+                    <div className="mt-2 h-1.5 bg-slate-200 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-purple-500 rounded-full transition-all"
+                        className="h-full bg-blue-700 rounded-full transition-all"
                         style={{ width: `${Math.min(100, product.similarity * 100)}%` }}
                       />
                     </div>
@@ -184,7 +186,7 @@ export default function RecommendedProducts() {
                   <button
                     onClick={() => submitApplication(product.productId)}
                     disabled={applyingProductId !== null}
-                    className="mt-3 w-full py-2 px-3 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed text-xs font-bold text-slate-900 transition-colors flex items-center justify-center gap-1.5"
+                    className="mt-3 w-full py-2 px-3 rounded-lg bg-blue-700 hover:bg-blue-800 disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed text-xs font-bold text-white transition-colors flex items-center justify-center gap-1.5 shadow-sm"
                   >
                     {applyingProductId === product.productId ? (
                       <>
@@ -203,7 +205,7 @@ export default function RecommendedProducts() {
             </div>
 
             <div className="pt-3 flex gap-2 text-xs text-slate-500 italic leading-relaxed">
-              <Sparkles className="h-3.5 w-3.5 text-purple-400 shrink-0 mt-0.5" />
+              <Sparkles className="h-3.5 w-3.5 text-blue-700 shrink-0 mt-0.5" />
               <p>{data.explanation}</p>
             </div>
           </div>

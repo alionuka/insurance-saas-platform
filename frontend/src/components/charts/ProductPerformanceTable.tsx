@@ -14,10 +14,10 @@ export type ProductRow = {
 
 const TYPE_COLOR: Record<string, string> = {
   AUTO: 'text-blue-700',
-  HEALTH: 'text-emerald-400',
-  LIFE: 'text-purple-400',
+  HEALTH: 'text-emerald-700',
+  LIFE: 'text-amber-700',
   PROPERTY: 'text-blue-700',
-  TRAVEL: 'text-rose-400',
+  TRAVEL: 'text-rose-700',
 };
 
 function formatCurrency(n: number): string {

@@ -58,7 +58,7 @@ export default function ApproveCompanyButton({
       onClick={handleApprove}
       disabled={loading}
       data-testid={`approve-company-${companyId}`}
-      className="shrink-0 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed text-sm font-bold text-slate-900 transition-colors shadow-lg shadow-emerald-900/20"
+      className="shrink-0 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed text-sm font-bold text-white transition-colors shadow-md"
     >
       {loading ? (
         <Loader2 className="h-4 w-4 animate-spin" />

@@ -10,11 +10,14 @@ type BulkAction = {
   icon: React.ElementType;
 };
 
+// All bulk-action buttons render white text on a saturated background.
+// Variants pick the brand role: primary = royal navy, success = forest
+// green, danger = burgundy red, warning = amber.
 const variantClasses: Record<string, string> = {
-  primary: 'bg-blue-700 hover:bg-blue-600 shadow-blue-500/20',
-  success: 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/20',
-  danger: 'bg-rose-500 hover:bg-rose-600 shadow-rose-500/20',
-  warning: 'bg-blue-700 hover:bg-blue-600 shadow-blue-500/20 text-black',
+  primary: 'bg-blue-700 hover:bg-blue-800 text-white shadow-sm',
+  success: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm',
+  danger: 'bg-rose-600 hover:bg-rose-700 text-white shadow-sm',
+  warning: 'bg-amber-600 hover:bg-amber-700 text-white shadow-sm',
 };
 
 export default function BulkActionBar({
