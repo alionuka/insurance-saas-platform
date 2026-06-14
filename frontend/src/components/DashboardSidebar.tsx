@@ -247,7 +247,9 @@ export default function DashboardSidebar() {
             </span>
           </div>
 
-          {/* Header tools — locale switcher moved to footer to free crowding here. */}
+          {/* Header tools — system-level controls (search, theme, notifications)
+              live here. User-identity controls (avatar, locale, logout) live in
+              the footer. Keeps each row visually coherent. */}
           <div className="flex items-center gap-2">
             <button
               data-tour="global-search"
@@ -261,6 +263,7 @@ export default function DashboardSidebar() {
               <Search className="h-3.5 w-3.5" />
               <kbd className="font-mono bg-slate-100 dark:bg-slate-800 px-1 rounded text-[9px] font-bold hidden xl:inline">⌘K</kbd>
             </button>
+            <ThemeToggle variant="menu" />
             <div data-tour="notifications">
               <NotificationsBell />
             </div>
@@ -324,7 +327,6 @@ export default function DashboardSidebar() {
               </div>
             </div>
             <div className="flex items-center gap-1.5 shrink-0">
-              <ThemeToggle variant="menu" />
               <LocaleSwitcher variant="nav" />
               <button
                 onClick={() => {
