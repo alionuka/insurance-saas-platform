@@ -21,6 +21,7 @@ import { getProducts, InsuranceProduct } from "@/lib/api";
 import { useT } from "@/i18n/LocaleProvider";
 import LocaleSwitcher from "@/i18n/LocaleSwitcher";
 import DemoLoginRow from "@/components/DemoLoginRow";
+import ThemeToggle from "@/theme/ThemeToggle";
 
 export default function Home() {
   const { t } = useT();
@@ -43,34 +44,35 @@ export default function Home() {
   }, [t]);
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-700/15 overflow-x-hidden">
+    <main className="min-h-screen bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 font-sans selection:bg-blue-700/15 overflow-x-hidden transition-colors">
       {/* ─── Sticky nav ───────────────────────────────────────────────── */}
-      <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white/85 backdrop-blur-md">
+      <nav className="sticky top-0 z-50 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/85 dark:bg-slate-900/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-lg bg-blue-700 flex items-center justify-center shadow-sm">
               <ShieldCheck className="h-4 w-4 text-white" />
             </div>
-            <span className="text-base font-bold tracking-tight text-slate-900">
+            <span className="text-base font-bold tracking-tight text-slate-900 dark:text-slate-100">
               InsurSaaS
             </span>
           </div>
-          <div className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600">
-            <a href="#roles" className="hover:text-blue-700 transition-colors">
+          <div className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600 dark:text-slate-400">
+            <a href="#roles" className="hover:text-blue-700 dark:hover:text-blue-400 transition-colors">
               {t("landing.navRoles")}
             </a>
-            <a href="#features" className="hover:text-blue-700 transition-colors">
+            <a href="#features" className="hover:text-blue-700 dark:hover:text-blue-400 transition-colors">
               {t("landing.navFeatures")}
             </a>
-            <a href="#products" className="hover:text-blue-700 transition-colors">
+            <a href="#products" className="hover:text-blue-700 dark:hover:text-blue-400 transition-colors">
               {t("landing.navProducts")}
             </a>
           </div>
           <div className="flex items-center gap-3">
+            <ThemeToggle variant="pill" />
             <LocaleSwitcher variant="landing" />
             <Link
               href="/auth/sign-in"
-              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-semibold text-slate-700 hover:text-blue-700 transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-400 transition-colors"
             >
               {t("landing.navSignIn")}
             </Link>
@@ -86,32 +88,32 @@ export default function Home() {
       </nav>
 
       {/* ─── Hero ────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden pt-20 pb-24 lg:pt-32 lg:pb-32 bg-gradient-to-b from-white via-slate-50 to-slate-100/40">
+      <section className="relative overflow-hidden pt-20 pb-24 lg:pt-32 lg:pb-32 bg-gradient-to-b from-white via-slate-50 to-slate-100/40 dark:from-[#070d20] dark:via-[#060b1a] dark:to-[#050917]">
         {/* Editorial: faint dot-grid + a single tasteful navy radial.
             No floating orbs — they're the giveaway "AI" vibe. */}
         <div className="absolute inset-0 bg-dot-grid [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
         <div className="absolute top-0 right-0 -translate-y-24 translate-x-1/4 pointer-events-none">
-          <div className="h-[600px] w-[600px] rounded-full bg-blue-100/60 blur-[140px]" />
+          <div className="h-[600px] w-[600px] rounded-full bg-blue-100/60 dark:bg-blue-500/10 blur-[140px]" />
         </div>
 
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Link
             href="/auth/register-company"
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-semibold text-blue-700 mb-8 hover:bg-blue-100 transition-colors group"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 text-xs font-semibold text-blue-700 dark:text-blue-300 mb-8 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors group"
           >
-            <ShieldCheck className="h-3.5 w-3.5 text-blue-700" />
+            <ShieldCheck className="h-3.5 w-3.5 text-blue-700 dark:text-blue-300" />
             {t("landing.heroNewBadge")}
             <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
           </Link>
 
-          <h1 className="font-serif text-5xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tight leading-[1.05] mb-8 text-slate-900">
+          <h1 className="font-serif text-5xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tight leading-[1.05] mb-8 text-slate-900 dark:text-slate-100">
             {t("landing.heroLine1")}{" "}
-            <span className="text-blue-700 italic">
+            <span className="text-blue-700 dark:text-blue-400 italic">
               {t("landing.heroBrand")}
             </span>
           </h1>
 
-          <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-600 mb-10 leading-relaxed">
+          <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed">
             {t("landing.heroSubtitle")}
           </p>
 
@@ -125,14 +127,14 @@ export default function Home() {
             </Link>
             <Link
               href="/auth/sign-in"
-              className="px-7 py-3.5 rounded-md bg-white text-slate-900 border border-slate-300 hover:border-blue-700 hover:text-blue-700 font-semibold transition-all hover:-translate-y-0.5 inline-flex items-center justify-center"
+              className="px-7 py-3.5 rounded-md bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 hover:border-blue-700 dark:hover:border-blue-400 hover:text-blue-700 dark:hover:text-blue-400 font-semibold transition-all hover:-translate-y-0.5 inline-flex items-center justify-center"
             >
               {t("landing.ctaSecondary")}
             </Link>
           </div>
 
           {/* Stats strip */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-200 border border-slate-200 rounded-xl overflow-hidden max-w-4xl mx-auto shadow-sm">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-200 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden max-w-4xl mx-auto shadow-sm">
             {[
               {
                 value: t("landing.heroStat1Value"),
@@ -153,12 +155,12 @@ export default function Home() {
             ].map((s) => (
               <div
                 key={s.label}
-                className="bg-white px-4 py-6 flex flex-col items-center"
+                className="bg-white dark:bg-slate-900 px-4 py-6 flex flex-col items-center"
               >
-                <span className="text-2xl md:text-3xl font-black text-blue-700 tracking-tight">
+                <span className="text-2xl md:text-3xl font-black text-blue-700 dark:text-blue-400 tracking-tight">
                   {s.value}
                 </span>
-                <span className="text-[10px] md:text-xs uppercase tracking-widest text-slate-500 font-bold mt-1 text-center">
+                <span className="text-[10px] md:text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 font-bold mt-1 text-center">
                   {s.label}
                 </span>
               </div>
@@ -172,29 +174,29 @@ export default function Home() {
       </section>
 
       {/* ─── Trust strip — classic insurance / banking signal row ────── */}
-      <section className="bg-white border-y border-slate-200">
+      <section className="bg-white dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold text-center mb-4">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 font-bold text-center mb-4">
             {t("landing.trustHeading")}
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-sm text-slate-600">
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-sm text-slate-600 dark:text-slate-300">
             <span className="inline-flex items-center gap-2">
-              <Lock className="h-4 w-4 text-blue-700" />
+              <Lock className="h-4 w-4 text-blue-700 dark:text-blue-400" />
               <span className="font-semibold">GDPR-Compliant</span>
             </span>
-            <span className="hidden md:block h-4 w-px bg-slate-300" />
+            <span className="hidden md:block h-4 w-px bg-slate-300 dark:bg-slate-700" />
             <span className="inline-flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-blue-700" />
+              <ShieldCheck className="h-4 w-4 text-blue-700 dark:text-blue-400" />
               <span className="font-semibold">Multi-tenant Isolation</span>
             </span>
-            <span className="hidden md:block h-4 w-px bg-slate-300" />
+            <span className="hidden md:block h-4 w-px bg-slate-300 dark:bg-slate-700" />
             <span className="inline-flex items-center gap-2">
-              <Brain className="h-4 w-4 text-blue-700" />
+              <Brain className="h-4 w-4 text-blue-700 dark:text-blue-400" />
               <span className="font-semibold">SHAP-Explainable AI</span>
             </span>
-            <span className="hidden md:block h-4 w-px bg-slate-300" />
+            <span className="hidden md:block h-4 w-px bg-slate-300 dark:bg-slate-700" />
             <span className="inline-flex items-center gap-2">
-              <ActivitySquare className="h-4 w-4 text-blue-700" />
+              <ActivitySquare className="h-4 w-4 text-blue-700 dark:text-blue-400" />
               <span className="font-semibold">Full Audit Trail</span>
             </span>
           </div>
@@ -202,13 +204,13 @@ export default function Home() {
       </section>
 
       {/* ─── Role-based section ──────────────────────────────────────── */}
-      <section id="roles" className="py-24 border-t border-slate-200 bg-white">
+      <section id="roles" className="py-24 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-serif text-3xl md:text-5xl font-bold tracking-tight mb-4 text-slate-900">
+            <h2 className="font-serif text-3xl md:text-5xl font-bold tracking-tight mb-4 text-slate-900 dark:text-slate-100">
               {t("landing.roleSectionTitle")}
             </h2>
-            <p className="text-lg text-slate-600 leading-relaxed">
+            <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
               {t("landing.roleSectionSubtitle")}
             </p>
           </div>
@@ -263,14 +265,14 @@ export default function Home() {
                   >
                     <Icon className="h-6 w-6" />
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-4">
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4">
                     {role.title}
                   </h3>
                   <ul className="space-y-3">
                     {role.bullets.map((b) => (
                       <li
                         key={b}
-                        className="flex items-start gap-2.5 text-slate-700 text-sm leading-relaxed"
+                        className="flex items-start gap-2.5 text-slate-700 dark:text-slate-300 text-sm leading-relaxed"
                       >
                         <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
                         <span>{b}</span>
@@ -285,18 +287,18 @@ export default function Home() {
       </section>
 
       {/* ─── Features grid ───────────────────────────────────────────── */}
-      <section id="features" className="py-24 border-t border-slate-200 bg-slate-50">
+      <section id="features" className="py-24 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#060b1a]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-serif text-3xl md:text-5xl font-bold tracking-tight mb-4 text-slate-900">
+            <h2 className="font-serif text-3xl md:text-5xl font-bold tracking-tight mb-4 text-slate-900 dark:text-slate-100">
               {t("landing.featuresTitle")}
             </h2>
-            <p className="text-lg text-slate-600 leading-relaxed">
+            <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
               {t("landing.featuresSubtitle")}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-slate-200 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-slate-200 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
             {[
               {
                 icon: Brain,
@@ -333,15 +335,15 @@ export default function Home() {
               return (
                 <div
                   key={f.title}
-                  className="group bg-white p-8 hover:bg-slate-50 transition-colors duration-200"
+                  className="group bg-white dark:bg-slate-900 p-8 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-200"
                 >
                   <div className="h-10 w-10 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center mb-4 transition-transform group-hover:scale-105">
                     <Icon className="h-5 w-5 text-blue-700" />
                   </div>
-                  <h3 className="font-bold text-slate-900 mb-2 text-lg">
+                  <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-2 text-lg">
                     {f.title}
                   </h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                     {f.desc}
                   </p>
                 </div>
@@ -354,14 +356,14 @@ export default function Home() {
       {/* ─── Products section (existing, polished) ──────────────────── */}
       <section
         id="products"
-        className="py-24 border-t border-slate-200 relative bg-white"
+        className="py-24 border-t border-slate-200 dark:border-slate-800 relative bg-white dark:bg-slate-900"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-serif text-3xl md:text-5xl font-bold tracking-tight mb-4 text-slate-900">
+            <h2 className="font-serif text-3xl md:text-5xl font-bold tracking-tight mb-4 text-slate-900 dark:text-slate-100">
               {t("landing.productsHeading")}
             </h2>
-            <p className="text-lg text-slate-600 leading-relaxed">
+            <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
               {t("landing.productsSubtitle")}
             </p>
           </div>
@@ -385,7 +387,7 @@ export default function Home() {
                 return (
                   <div
                     key={product.id}
-                    className="group p-6 rounded-2xl bg-white/40 border border-slate-200 hover:border-slate-300 transition-all  hover:-translate-y-1 flex flex-col relative overflow-hidden"
+                    className="group p-6 rounded-2xl bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 hover:border-slate-300 transition-all  hover:-translate-y-1 flex flex-col relative overflow-hidden"
                   >
                     {brand && (
                       <div
@@ -396,7 +398,7 @@ export default function Home() {
                     )}
                     <div className="flex justify-between items-start mb-5">
                       <div
-                        className="h-10 w-10 rounded-lg border border-slate-200 flex items-center justify-center overflow-hidden"
+                        className="h-10 w-10 rounded-lg border border-slate-200 dark:border-slate-800 flex items-center justify-center overflow-hidden"
                         style={{
                           backgroundColor: brand ? brand + "15" : "rgba(99,102,241,0.1)",
                         }}
@@ -420,17 +422,17 @@ export default function Home() {
                         {product.type}
                       </span>
                     </div>
-                    <h3 className="text-lg font-bold text-slate-900 mb-1">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">
                       {product.name}
                     </h3>
                     <p className="text-xs font-semibold text-blue-700 mb-4">
                       {product.company.name}
                     </p>
-                    <p className="text-sm text-slate-600 leading-relaxed flex-grow line-clamp-3">
+                    <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed flex-grow line-clamp-3">
                       {product.description || t("landing.noDescription")}
                     </p>
                     {product.basePremium > 0 && (
-                      <p className="text-slate-900 text-sm font-bold mt-4">
+                      <p className="text-slate-900 dark:text-slate-100 text-sm font-bold mt-4">
                         {t("landing.fromPrice")} ${product.basePremium}/month
                       </p>
                     )}
@@ -451,7 +453,7 @@ export default function Home() {
       </section>
 
       {/* ─── Final CTA — deep navy banner (banking confidence) ──────── */}
-      <section className="py-24 border-t border-slate-200 relative overflow-hidden bg-blue-700">
+      <section className="py-24 border-t border-slate-200 dark:border-slate-800 relative overflow-hidden bg-blue-700">
         <div className="absolute inset-0 bg-line-grid opacity-[0.08] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_50%,black,transparent)]" />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-serif text-3xl md:text-5xl font-bold tracking-tight mb-4 text-white">
@@ -463,7 +465,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row justify-center gap-3">
             <Link
               href="/auth/sign-in"
-              className="px-7 py-3.5 rounded-md bg-white text-blue-700 font-semibold hover:bg-slate-100 transition-all inline-flex items-center justify-center gap-2 shadow-md"
+              className="px-7 py-3.5 rounded-md bg-white dark:bg-slate-900 text-blue-700 font-semibold hover:bg-slate-100 transition-all inline-flex items-center justify-center gap-2 shadow-md"
             >
               {t("landing.finalCtaPrimary")}
               <ArrowRight className="h-4 w-4" />
@@ -480,7 +482,7 @@ export default function Home() {
       </section>
 
       {/* ─── Footer ──────────────────────────────────────────────────── */}
-      <footer className="border-t border-slate-200 py-12">
+      <footer className="border-t border-slate-200 dark:border-slate-800 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
@@ -492,29 +494,29 @@ export default function Home() {
                   InsurSaaS
                 </span>
               </div>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                 {t("landing.heroSubtitle").slice(0, 90)}…
               </p>
             </div>
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-3">
                 {t("landing.footerProduct")}
               </h4>
-              <ul className="space-y-2 text-sm text-slate-400">
+              <ul className="space-y-2 text-sm text-slate-400 dark:text-slate-500">
                 <li>
-                  <a href="#features" className="hover:text-slate-900 transition-colors">
+                  <a href="#features" className="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">
                     {t("landing.navFeatures")}
                   </a>
                 </li>
                 <li>
-                  <a href="#products" className="hover:text-slate-900 transition-colors">
+                  <a href="#products" className="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">
                     {t("landing.navProducts")}
                   </a>
                 </li>
                 <li>
                   <Link
                     href="/auth/register-company"
-                    className="hover:text-slate-900 transition-colors"
+                    className="hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
                   >
                     {t("auth.companySignUpHere")}
                   </Link>
@@ -522,16 +524,16 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-3">
                 {t("landing.footerDocs")}
               </h4>
-              <ul className="space-y-2 text-sm text-slate-400">
+              <ul className="space-y-2 text-sm text-slate-400 dark:text-slate-500">
                 <li>
                   <a
                     href="https://backend-production-2cce.up.railway.app/api/docs"
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-slate-900 transition-colors"
+                    className="hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
                   >
                     {t("landing.footerSwagger")}
                   </a>
@@ -541,7 +543,7 @@ export default function Home() {
                     href="https://github.com/alionuka/insurance-saas-platform/blob/main/ARCHITECTURE.md"
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-slate-900 transition-colors"
+                    className="hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
                   >
                     {t("landing.footerArchitecture")}
                   </a>
@@ -551,7 +553,7 @@ export default function Home() {
                     href="https://github.com/alionuka/insurance-saas-platform/blob/main/COMPLIANCE.md"
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-slate-900 transition-colors"
+                    className="hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
                   >
                     {t("landing.footerCompliance")}
                   </a>
@@ -559,16 +561,16 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-3">
                 {t("landing.footerCompany")}
               </h4>
-              <ul className="space-y-2 text-sm text-slate-400">
+              <ul className="space-y-2 text-sm text-slate-400 dark:text-slate-500">
                 <li>
                   <a
                     href="https://github.com/alionuka/insurance-saas-platform"
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-slate-900 transition-colors"
+                    className="hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
                   >
                     GitHub
                   </a>
@@ -576,7 +578,7 @@ export default function Home() {
                 <li>
                   <Link
                     href="/auth/sign-up"
-                    className="hover:text-slate-900 transition-colors"
+                    className="hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
                   >
                     {t("landing.ctaPrimary")}
                   </Link>
@@ -584,7 +586,7 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-slate-200 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600">
+          <div className="border-t border-slate-200 dark:border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600 dark:text-slate-400">
             <p>© 2026 {t("landing.footerCopyright")}</p>
             <div className="flex items-center gap-4">
               <span>Next.js 16 · NestJS 11 · FastAPI · scikit-learn</span>

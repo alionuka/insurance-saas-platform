@@ -27,6 +27,7 @@ import NotificationsBell from '@/components/NotificationsBell';
 import GlobalSearch from '@/components/GlobalSearch';
 import { useT } from '@/i18n/LocaleProvider';
 import LocaleSwitcher from '@/i18n/LocaleSwitcher';
+import ThemeToggle from '@/theme/ThemeToggle';
 
 type NavItem = {
   href: string;
@@ -323,6 +324,7 @@ export default function DashboardSidebar() {
               </div>
             </div>
             <div className="flex items-center gap-1.5 shrink-0">
+              <ThemeToggle variant="menu" />
               <LocaleSwitcher variant="nav" />
               <button
                 onClick={() => {

@@ -20,6 +20,12 @@ export const LOCALES: Locale[] = ['en', 'uk'];
 type Dictionary = Record<string, any>;
 
 const en: Dictionary = {
+  theme: {
+    label: 'Theme',
+    light: 'Light',
+    dark: 'Dark',
+    system: 'System',
+  },
   common: {
     signIn: 'Sign in',
     signOut: 'Sign Out',
@@ -471,6 +477,12 @@ const en: Dictionary = {
 };
 
 const uk: Dictionary = {
+  theme: {
+    label: 'Тема',
+    light: 'Світла',
+    dark: 'Темна',
+    system: 'Системна',
+  },
   common: {
     signIn: 'Увійти',
     signOut: 'Вийти',

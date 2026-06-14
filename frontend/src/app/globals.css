@@ -4,6 +4,12 @@
  * feel. Used via `font-serif` (defined in @theme) or `.font-serif`. */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap');
 
+/* Enable Tailwind v4 `dark:` modifier when <html> carries the .dark class.
+ * Required because Tailwind v4 defaults to media-query dark mode; we
+ * need an explicit class so the ThemeToggle can flip themes on click,
+ * not just when the OS preference changes. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ─────────────────────────────────────────────────────────────
  * Light "classic insurance" theme — AXA / Allianz / State Farm feel.
  * Royal Blue (Pantone 286 / Yale Blue) — true royal without purple cast.
@@ -23,6 +29,27 @@
    * so `bg-blue-700` everywhere in the app paints this colour automatically. */
   --accent: #003da5;           /* Pantone 286 — UN / Yale royal blue */
   --accent-hover: #002f6c;     /* Yale Blue (deeper) */
+}
+
+/* ─────────────────────────────────────────────────────────────
+ * Dark theme — sophisticated navy-tinted dark surfaces inspired
+ * by Bloomberg Terminal / IB trading dashboards. NOT pure black.
+ * Royal accent is brightened (#4a7ec8) for legibility on deep
+ * surfaces while preserving the same hue family as light mode.
+ * ───────────────────────────────────────────────────────────── */
+.dark {
+  --background: #060b1a;       /* deep navy-tinted near-black */
+  --foreground: #f1f5f9;       /* slate-100 — primary text */
+  --surface: #0f172a;          /* slate-900 — card surface */
+  --surface-muted: #1e293b;    /* slate-800 — alt rows / hover */
+  --border: #1e293b;           /* slate-800 — hairline */
+  --border-strong: #334155;    /* slate-700 — interactive */
+  --text-secondary: #cbd5e1;   /* slate-300 — body copy */
+  --text-muted: #94a3b8;       /* slate-400 — captions */
+
+  /* Brightened royal palette for dark surfaces — same family, more lift */
+  --accent: #4a7ec8;
+  --accent-hover: #6ea0e0;
 }
 
 @theme inline {
@@ -58,6 +85,13 @@ body {
 .font-serif {
   font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
   letter-spacing: -0.015em;
+}
+
+/* In dark mode brighten the canonical royal `blue-700` so text and
+ * filled buttons remain legible against deep navy surfaces. */
+.dark {
+  --color-blue-700: #4a7ec8;
+  --color-blue-800: #6ea0e0;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -107,6 +141,15 @@ body {
   );
   background-size: 1000px 100%;
   animation: shimmer 2s linear infinite;
+}
+.dark .animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(30, 41, 59, 0) 0%,
+    rgba(51, 65, 85, 0.8) 50%,
+    rgba(30, 41, 59, 0) 100%
+  );
+  background-size: 1000px 100%;
 }
 
 /* Gradient text sweep */

@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import "./globals.css";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
 import type { Locale } from "@/i18n/messages";
+import { ThemeProvider, THEME_BOOT_SCRIPT } from "@/theme/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,23 +38,35 @@ export default async function RootLayout({
     <html
       lang={initialLocale}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      // Theme boot script writes here on the server-rendered HTML, then the
+      // inline <script> runs pre-paint to set the right `.dark` class.
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
-        <LocaleProvider initialLocale={initialLocale}>
-          {children}
-        </LocaleProvider>
-        <Toaster
-          richColors
-          closeButton
-          position="bottom-right"
-          theme="light"
-          toastOptions={{
-            classNames: {
-              toast:
-                'border border-slate-200 shadow-[0_8px_30px_-4px_rgba(15,23,42,0.12)]',
-            },
-          }}
+      <head>
+        {/* No-FOUC theme boot — must run BEFORE the body paints. */}
+        <script
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }}
         />
+      </head>
+      <body className="min-h-full flex flex-col">
+        <ThemeProvider>
+          <LocaleProvider initialLocale={initialLocale}>
+            {children}
+          </LocaleProvider>
+          <Toaster
+            richColors
+            closeButton
+            position="bottom-right"
+            theme="system"
+            toastOptions={{
+              classNames: {
+                toast:
+                  'border border-slate-200 dark:border-slate-700 shadow-[0_8px_30px_-4px_rgba(15,23,42,0.12)]',
+              },
+            }}
+          />
+        </ThemeProvider>
       </body>
     </html>
   );
