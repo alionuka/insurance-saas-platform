@@ -413,21 +413,26 @@ export class AuthService {
   }
 
   async refreshAccessToken(refresh_token: string) {
-    // Find all non-revoked, non-expired refresh tokens
+    // Fetch candidate refresh tokens WITHOUT `include: { user }`.
+    //
+    // Why: Prisma resolves `include` as a second SELECT (`user WHERE id IN
+    // (...)`), and our schema's `User → RefreshToken` cascade can delete
+    // rows between those two queries when the e2e suite runs in parallel.
+    // Prisma then throws PrismaClientUnknownRequestError ("Field user is
+    // required to return data, got null") because the relation is non-null
+    // in the schema but momentarily empty in the second SELECT. Loading
+    // the user separately, only AFTER we identify the matching token,
+    // sidesteps that race entirely and gives us a clean 401 path if the
+    // owning user really was deleted.
     const tokensInDb = await this.prisma.refreshToken.findMany({
       where: {
         revokedAt: null,
         expiresAt: { gt: new Date() },
       },
-      include: {
-        user: true,
-      },
     });
 
     // Compare via bcrypt.compare against tokenHash
-    let matchedToken: Prisma.RefreshTokenGetPayload<{
-      include: { user: true };
-    }> | null = null;
+    let matchedToken: (typeof tokensInDb)[number] | null = null;
     for (const tokenRecord of tokensInDb) {
       const isMatch = await bcrypt.compare(
         refresh_token,
@@ -443,24 +448,38 @@ export class AuthService {
       throw new UnauthorizedException('Invalid or expired refresh token');
     }
 
-    // REVOKE the matched token (set revokedAt=now)
+    // Load the owning user for the matched token only. If the user has
+    // since been deleted (orphan token from concurrent cleanup), revoke
+    // the row and treat the refresh as unauthorized.
+    const user = await this.prisma.user.findUnique({
+      where: { id: matchedToken.userId },
+    });
+    if (!user) {
+      await this.prisma.refreshToken.update({
+        where: { id: matchedToken.id },
+        data: { revokedAt: new Date() },
+      });
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+
+    // REVOKE the matched token (set revokedAt=now) — one-time-use rotation
     await this.prisma.refreshToken.update({
       where: { id: matchedToken.id },
       data: { revokedAt: new Date() },
     });
 
     // Issue a NEW pair via issueTokens (rotation)
-    const newTokens = await this.issueTokens(matchedToken.user);
+    const newTokens = await this.issueTokens(user);
 
     return {
       ...newTokens,
       user: {
-        id: matchedToken.user.id,
-        email: matchedToken.user.email,
-        firstName: matchedToken.user.firstName,
-        lastName: matchedToken.user.lastName,
-        role: matchedToken.user.role,
-        avatarUrl: matchedToken.user.avatarUrl,
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        avatarUrl: user.avatarUrl,
       },
     };
   }
