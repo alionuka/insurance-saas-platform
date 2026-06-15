@@ -156,17 +156,17 @@ export default function ClaimsTable({
   }, { all: 0 });
 
   const statusFilterOptions = [
-    { value: 'all', label: 'All Statuses', count: statusCounts['all'] },
-    { value: 'FILED', label: 'Filed', count: statusCounts['FILED'] || 0 },
-    { value: 'IN_PROGRESS', label: 'In Progress', count: statusCounts['IN_PROGRESS'] || 0 },
-    { value: 'APPROVED', label: 'Approved', count: statusCounts['APPROVED'] || 0 },
-    { value: 'DENIED', label: 'Denied', count: statusCounts['DENIED'] || 0 },
+    { value: 'all', label: t('filters.allStatuses'), count: statusCounts['all'] },
+    { value: 'FILED', label: translateStatus(t, 'FILED'), count: statusCounts['FILED'] || 0 },
+    { value: 'IN_PROGRESS', label: translateStatus(t, 'IN_PROGRESS'), count: statusCounts['IN_PROGRESS'] || 0 },
+    { value: 'APPROVED', label: translateStatus(t, 'APPROVED'), count: statusCounts['APPROVED'] || 0 },
+    { value: 'DENIED', label: translateStatus(t, 'DENIED'), count: statusCounts['DENIED'] || 0 },
   ];
 
   const fraudFilterOptions = [
-    { value: 'all', label: 'All Risk Levels', count: fraudCounts['all'] },
-    { value: 'NORMAL', label: 'Normal', count: fraudCounts['NORMAL'] || 0 },
-    { value: 'SUSPICIOUS', label: 'Suspicious', count: fraudCounts['SUSPICIOUS'] || 0 },
+    { value: 'all', label: t('filters.allRiskLevels'), count: fraudCounts['all'] },
+    { value: 'NORMAL', label: t('filters.normal'), count: fraudCounts['NORMAL'] || 0 },
+    { value: 'SUSPICIOUS', label: t('filters.suspicious'), count: fraudCounts['SUSPICIOUS'] || 0 },
   ];
 
   const handleFilterChange = (key: string, val: string) => {
@@ -201,7 +201,7 @@ export default function ClaimsTable({
         <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
           <h2 className="text-lg font-medium text-slate-900 dark:text-slate-100">{t('claimsTable.investigationQueue')}</h2>
           <span className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs px-2.5 py-1 rounded-full font-medium">
-            {filteredClaims.length} total
+            {filteredClaims.length} {t('filters.total')}
           </span>
         </div>
         <div className="overflow-x-auto">

@@ -18,6 +18,7 @@ import {
 import FilterPills from '@/components/ui/FilterPills';
 import BulkActionBar from '@/components/BulkActionBar';
 import { useT } from '@/i18n/LocaleProvider';
+import { translateStatus } from '@/i18n/translateStatus';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
@@ -145,12 +146,15 @@ export default function ApplicationsTable({
     return acc;
   }, { all: 0 });
 
+  // Filter pill labels flow through translateStatus so they flip with
+  // the active locale. "all" is a UI-level sentinel; translate via the
+  // shared filters.all key.
   const filterOptions = [
-    { value: 'all', label: 'All', count: counts['all'] },
-    { value: 'PENDING', label: 'Pending', count: counts['PENDING'] || 0 },
-    { value: 'APPROVED', label: 'Approved', count: counts['APPROVED'] || 0 },
-    { value: 'REJECTED', label: 'Rejected', count: counts['REJECTED'] || 0 },
-    { value: 'UNDER_REVIEW', label: 'Under Review', count: counts['UNDER_REVIEW'] || 0 },
+    { value: 'all', label: t('filters.all'), count: counts['all'] },
+    { value: 'PENDING', label: translateStatus(t, 'PENDING'), count: counts['PENDING'] || 0 },
+    { value: 'APPROVED', label: translateStatus(t, 'APPROVED'), count: counts['APPROVED'] || 0 },
+    { value: 'REJECTED', label: translateStatus(t, 'REJECTED'), count: counts['REJECTED'] || 0 },
+    { value: 'UNDER_REVIEW', label: translateStatus(t, 'UNDER_REVIEW'), count: counts['UNDER_REVIEW'] || 0 },
   ];
 
   const handleFilterChange = (val: string) => {
@@ -176,7 +180,7 @@ export default function ApplicationsTable({
         <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
           <h2 className="text-lg font-medium text-slate-900 dark:text-slate-100">{t('tail.applicationsQueue')}</h2>
           <span className="bg-blue-700/10 text-blue-700 text-xs px-2.5 py-1 rounded-full font-medium">
-            {filteredApplications.length} total
+            {filteredApplications.length} {t('filters.total')}
           </span>
         </div>
         <div className="overflow-x-auto">
@@ -191,9 +195,9 @@ export default function ApplicationsTable({
                     className="h-4 w-4 rounded border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-blue-500 focus:ring-blue-500/20 focus:ring-offset-0 cursor-pointer accent-blue-500"
                   />
                 </th>
-                <th className="px-6 py-3 font-medium">Customer</th>
+                <th className="px-6 py-3 font-medium">{t('filters.customer')}</th>
                 <th className="px-6 py-3 font-medium">{t('tail.productCompany')}</th>
-                <th className="px-6 py-3 font-medium">Risk</th>
+                <th className="px-6 py-3 font-medium">{t('filters.risk')}</th>
                 <th className="px-6 py-3 font-medium">{t('tail.currentStatus')}</th>
                 <th className="px-6 py-3 font-medium">{t('tail.updateStatus')}</th>
               </tr>

@@ -594,6 +594,10 @@ const en: Dictionary = {
     shortTRAVEL: 'TRAVEL',
     shortOTHER: 'OTHER',
   },
+  agentBadges: {
+    saving: 'Saving…',
+    updateFailed: 'Update failed',
+  },
   productForm: {
     createTitle: 'Register New Product',
     productName: 'Product Name',
@@ -1110,6 +1114,14 @@ const en: Dictionary = {
     policyAwaitingPayment: 'Awaiting Payment',
     policyExpired: 'Expired',
     policyCancelled: 'Cancelled',
+    // Used by agent tables (ApplicationsTable, ClaimsTable)
+    allStatuses: 'All Statuses',
+    allRiskLevels: 'All Risk Levels',
+    normal: 'Normal',
+    suspicious: 'Suspicious',
+    total: 'total',
+    customer: 'Customer',
+    risk: 'Risk',
   },
   onboarding: {
     buttons: {
@@ -1743,6 +1755,10 @@ const uk: Dictionary = {
     shortTRAVEL: 'ПОДОРОЖ',
     shortOTHER: 'ІНШЕ',
   },
+  agentBadges: {
+    saving: 'Збереження…',
+    updateFailed: 'Не вдалося оновити',
+  },
   productForm: {
     createTitle: 'Зареєструвати новий продукт',
     productName: 'Назва продукту',
@@ -2258,6 +2274,14 @@ const uk: Dictionary = {
     policyAwaitingPayment: 'Очікують оплату',
     policyExpired: 'Прострочені',
     policyCancelled: 'Скасовані',
+    // Для таблиць агента
+    allStatuses: 'Усі статуси',
+    allRiskLevels: 'Усі рівні ризику',
+    normal: 'Нормальний',
+    suspicious: 'Підозрілий',
+    total: 'усього',
+    customer: 'Клієнт',
+    risk: 'Ризик',
   },
   onboarding: {
     buttons: {

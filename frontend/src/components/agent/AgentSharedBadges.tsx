@@ -9,6 +9,8 @@ import {
   Loader2,
   AlertCircle,
 } from 'lucide-react';
+import { useT } from '@/i18n/LocaleProvider';
+import { translateStatus, translateRiskLevel } from '@/i18n/translateStatus';
 
 export const APPLICATION_STATUSES = ['PENDING', 'UNDER_REVIEW', 'APPROVED', 'REJECTED'] as const;
 export const CLAIM_STATUSES = ['FILED', 'IN_PROGRESS', 'APPROVED', 'DENIED'] as const;
@@ -37,6 +39,7 @@ export function StatusBadge({
   status: string;
   colorMap: Record<string, string>;
 }) {
+  const { t } = useT();
   const color = colorMap[status] ?? 'bg-zinc-500/10 text-slate-600 border-zinc-500/20';
   return (
     <span
@@ -47,12 +50,13 @@ export function StatusBadge({
       {(status === 'REJECTED' || status === 'DENIED') && <XCircle className="w-3 h-3" />}
       {status === 'UNDER_REVIEW' && <TrendingUp className="w-3 h-3" />}
       {status === 'IN_PROGRESS' && <Loader2 className="w-3 h-3" />}
-      {status.replace('_', ' ')}
+      {translateStatus(t, status)}
     </span>
   );
 }
 
 export function RiskBadge({ score, level }: { score: number | null; level: string | null }) {
+  const { t } = useT();
   if (score === null) return <span className="text-xs text-slate-500 dark:text-slate-400">N/A</span>;
   const high = score > 70;
   const med = score > 40;
@@ -71,16 +75,24 @@ export function RiskBadge({ score, level }: { score: number | null; level: strin
         >
           {score.toFixed(0)}
         </span>
-        {level && <span className="ml-1 text-[10px] text-slate-500 dark:text-slate-400 uppercase">{level}</span>}
+        {level && <span className="ml-1 text-[10px] text-slate-500 dark:text-slate-400 uppercase">{translateRiskLevel(t, level)}</span>}
       </div>
     </div>
   );
 }
 
 export function FraudBadge({ score, flag }: { score: number | null; flag: string | null }) {
+  const { t } = useT();
   if (score === null) return <span className="text-xs text-slate-500 dark:text-slate-400">N/A</span>;
   const high = score > 75;
   const med = score > 40;
+  // Reuse the risk-level translation keys for the High/Med/Low short
+  // labels — they're semantically the same concept in this UI.
+  const label = high
+    ? translateRiskLevel(t, 'HIGH')
+    : med
+    ? translateRiskLevel(t, 'MEDIUM')
+    : translateRiskLevel(t, 'LOW');
   return (
     <div className="flex flex-col gap-0.5">
       <span
@@ -90,7 +102,7 @@ export function FraudBadge({ score, flag }: { score: number | null; flag: string
                   'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20'}`}
       >
         {high && <ShieldAlert className="w-3 h-3" />}
-        {high ? 'High' : med ? 'Med' : 'Low'} ({score.toFixed(0)})
+        {label} ({score.toFixed(0)})
       </span>
       {flag && (
         <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wide">{flag}</span>
@@ -112,10 +124,11 @@ export function StatusSelect<T extends string>({
   hasError: boolean;
   onChange: (val: T) => void;
 }) {
+  const { t } = useT();
   if (isLoading) {
     return (
       <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 text-xs">
-        <Loader2 className="h-4 w-4 animate-spin" /> Saving…
+        <Loader2 className="h-4 w-4 animate-spin" /> {t('agentBadges.saving')}
       </span>
     );
   }
@@ -129,13 +142,13 @@ export function StatusSelect<T extends string>({
       >
         {options.map((s) => (
           <option key={s} value={s}>
-            {s.replace('_', ' ')}
+            {translateStatus(t, s)}
           </option>
         ))}
       </select>
       {hasError && (
         <span className="text-[10px] text-red-400 flex items-center gap-0.5">
-          <AlertCircle className="h-3 w-3" /> Update failed
+          <AlertCircle className="h-3 w-3" /> {t('agentBadges.updateFailed')}
         </span>
       )}
     </div>
