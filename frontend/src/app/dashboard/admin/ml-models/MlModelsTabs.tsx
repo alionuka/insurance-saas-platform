@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { 
-  Brain, 
-  Target, 
-  BarChart3, 
-  Grid, 
-  FileImage, 
-  CheckCircle2, 
+import {
+  Brain,
+  Target,
+  BarChart3,
+  Grid,
+  FileImage,
+  CheckCircle2,
   Sparkles,
   Award,
   AlertCircle,
@@ -15,6 +15,7 @@ import {
   Activity,
   Layers
 } from 'lucide-react';
+import { useT } from '@/i18n/LocaleProvider';
 import { 
   BarChart, 
   Bar, 
@@ -35,13 +36,14 @@ type GalleryImageProps = {
 };
 
 function GalleryImage({ src, alt, caption }: GalleryImageProps) {
+  const { t } = useT();
   const [hasError, setHasError] = useState(false);
 
   if (hasError) {
     return (
       <div className="bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-xl h-56 flex flex-col items-center justify-center text-center p-4">
         <FileImage className="h-8 w-8 text-slate-300 mb-2" />
-        <p className="text-xs text-slate-500 dark:text-slate-400">Plot not available</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400">{t('ml.plotUnavailable')}</p>
         <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1 max-w-[180px] break-all">{alt}</p>
       </div>
     );
@@ -53,7 +55,7 @@ function GalleryImage({ src, alt, caption }: GalleryImageProps) {
       target="_blank"
       rel="noopener noreferrer"
       className="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-lg ring-1 ring-zinc-800 hover:ring-blue-500/40 hover:shadow-blue-500/10 transition-all flex flex-col"
-      title="Натисніть, щоб відкрити в повному розмірі"
+      title={t('ml.openFullSize')}
     >
       <div className="p-4 flex items-center justify-center h-64 bg-white dark:bg-slate-900">
         <img
@@ -73,31 +75,36 @@ function GalleryImage({ src, alt, caption }: GalleryImageProps) {
 }
 
 const CustomPermutationTooltip = ({ active, payload }: any) => {
+  // Tooltip is rendered by Recharts outside React tree, but useT works fine
+  // here because Recharts mounts it into the same root with full context.
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { t } = useT();
   if (!active || !payload?.length) return null;
   const data = payload[0].payload;
   return (
     <div className="bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 shadow-2xl text-left">
       <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{data.feature}</p>
       <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-        Mean decrease in AUC:{' '}
+        {t('ml.meanDecreaseAuc')}{' '}
         <span className="text-blue-700 font-bold font-mono">
           {data.mean.toFixed(4)}
         </span>
       </p>
       <p className="text-[10px] text-slate-500 dark:text-slate-400">
-        Std dev: <span className="font-mono">{data.std.toFixed(4)}</span>
+        {t('ml.stdDev')} <span className="font-mono">{data.std.toFixed(4)}</span>
       </p>
     </div>
   );
 };
 
 export default function MlModelsTabs({ data }: { data: any }) {
+  const { t } = useT();
   const [activeTab, setActiveTab] = useState<'risk' | 'fraud' | 'recommendations'>('risk');
 
   const tabs = [
-    { id: 'risk', label: 'Risk Prediction', icon: Brain },
-    { id: 'fraud', label: 'Fraud Detection', icon: Target },
-    { id: 'recommendations', label: 'Recommendations', icon: Sparkles },
+    { id: 'risk', label: t('ml.tabRisk'), icon: Brain },
+    { id: 'fraud', label: t('ml.tabFraud'), icon: Target },
+    { id: 'recommendations', label: t('ml.tabRecommendations'), icon: Sparkles },
   ] as const;
 
   const renderRiskOrFraudTab = (type: 'risk' | 'fraud') => {
@@ -112,8 +119,8 @@ export default function MlModelsTabs({ data }: { data: any }) {
       return (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-12 text-center shadow-md">
           <AlertCircle className="mx-auto h-8 w-8 text-blue-500 mb-3" />
-          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider mb-2">Metrics Offline</h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400">No telemetry or metric definitions found for {type} model.</p>
+          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider mb-2">{t('ml.metricsOffline')}</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{t('ml.noTelemetry').replace('{type}', type)}</p>
         </div>
       );
     }
@@ -137,30 +144,30 @@ export default function MlModelsTabs({ data }: { data: any }) {
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <Layers className="h-5 w-5 text-blue-700" />
-                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Model Methodology</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">{t('ml.methodology')}</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
                 <div>
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Best Model Architecture</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">{t('ml.bestArchitecture')}</span>
                   <p className="text-slate-900 dark:text-slate-100 font-medium text-sm mt-0.5">{best_model || metrics.best_pipeline || 'N/A'}</p>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">CV Strategy</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">{t('ml.cvStrategy')}</span>
                   <p className="text-slate-700 dark:text-slate-300 text-xs mt-0.5 font-mono">{methodology?.cv_strategy || 'N/A'}</p>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Hyperparameter Search</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">{t('ml.hyperparameterSearch')}</span>
                   <p className="text-slate-700 dark:text-slate-300 text-xs mt-0.5">{methodology?.hyperparameter_search || 'N/A'}</p>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Selection Criterion</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">{t('ml.selectionCriterion')}</span>
                   <p className="text-slate-700 dark:text-slate-300 text-xs mt-0.5">{methodology?.best_model_selection_criterion || methodology?.best_pipeline_selection_criterion || 'N/A'}</p>
                 </div>
               </div>
             </div>
             {methodology?.ablation_design && (
               <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/60">
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Ablation Study Design</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">{t('ml.ablationStudy')}</span>
                 <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 italic leading-relaxed">"{methodology.ablation_design}"</p>
               </div>
             )}
@@ -171,9 +178,9 @@ export default function MlModelsTabs({ data }: { data: any }) {
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <Award className="h-5 w-5 text-blue-700" />
-                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Optimal Hyperparameters</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">{t('ml.optimalHyperparams')}</h2>
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mb-4">Refit grid search optimal settings for highest generalization score.</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-4">{t('ml.optimalHyperparamsDesc')}</p>
               <div className="flex flex-wrap gap-2">
                 {best_params && Object.entries(best_params).length > 0 ? (
                   Object.entries(best_params).map(([key, val]: any) => (
@@ -188,7 +195,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
                     </div>
                   ))
                 ) : (
-                  <p className="text-xs text-slate-500 dark:text-slate-400 italic">No hyperparameters found.</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 italic">{t('ml.noHyperparams')}</p>
                 )}
               </div>
             </div>
@@ -206,17 +213,17 @@ export default function MlModelsTabs({ data }: { data: any }) {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <BarChart3 className="h-5 w-5 text-blue-700" />
-                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Classifier Comparison</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">{t('ml.classifierComparison')}</h2>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
                     <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">
-                      <th className="pb-3 pr-2">Pipeline Architecture</th>
-                      <th className="pb-3 px-2 text-right">CV Mean AUC</th>
-                      <th className="pb-3 px-2 text-right">CV Std</th>
-                      <th className="pb-3 px-2 text-right">Test AUC</th>
-                      <th className="pb-3 pl-2 text-right">Test F1</th>
+                      <th className="pb-3 pr-2">{t('ml.colPipeline')}</th>
+                      <th className="pb-3 px-2 text-right">{t('ml.colCvMeanAuc')}</th>
+                      <th className="pb-3 px-2 text-right">{t('ml.colCvStd')}</th>
+                      <th className="pb-3 px-2 text-right">{t('ml.colTestAuc')}</th>
+                      <th className="pb-3 pl-2 text-right">{t('ml.colTestF1')}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-800/60">
@@ -254,7 +261,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
             <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/60 flex items-center gap-4 text-[10px] text-slate-500 dark:text-slate-400 font-mono">
               <div className="flex items-center gap-1.5">
                 <div className="h-2.5 w-2.5 rounded bg-blue-700/10 border border-blue-700/30"></div>
-                <span>Best Cross-Validated Pipeline</span>
+                <span>{t('ml.bestCvPipeline')}</span>
               </div>
             </div>
           </div>
@@ -264,10 +271,10 @@ export default function MlModelsTabs({ data }: { data: any }) {
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <Activity className="h-5 w-5 text-blue-700" />
-                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Permutation Importance</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">{t('ml.permutationImportance')}</h2>
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-400 mb-4">
-                Mean decrease in test ROC-AUC score under random feature permutation.
+                {t('ml.permutationDesc')}
               </p>
             </div>
             {permutation_importance && permutation_importance.length > 0 ? (
@@ -308,12 +315,12 @@ export default function MlModelsTabs({ data }: { data: any }) {
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center p-6 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
                 <AlertCircle className="h-6 w-6 text-blue-500/70 mb-3" />
-                <p className="text-sm text-slate-700 dark:text-slate-300 text-center font-medium">Не застосовується для текстових моделей</p>
+                <p className="text-sm text-slate-700 dark:text-slate-300 text-center font-medium">{t('ml.notApplicableTextModels')}</p>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 text-center max-w-md leading-relaxed">
-                  Fraud Detection використовує <span className="text-blue-700 font-mono">TF-IDF</span> на ~1000+ текстових ознаках з опису claim. Permutation importance для такого простору ознак нечитабельний.
+                  {t('ml.fraudUsesTfidf')} <span className="text-blue-700 font-mono">TF-IDF</span> {t('ml.fraudUsesTfidfRest')}
                 </p>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-3 text-center max-w-md leading-relaxed">
-                  Замість цього модель надає <span className="text-emerald-700 dark:text-emerald-400 font-semibold">локальну пояснюваність через SHAP</span> на сторінці кожного claim — конкретні слова та числові фактори, що вплинули на конкретний прогноз.
+                  {t('ml.insteadShap')} <span className="text-emerald-700 dark:text-emerald-400 font-semibold">{t('ml.insteadShapBold')}</span> {t('ml.insteadShapRest')}
                 </p>
               </div>
             )}
@@ -327,49 +334,49 @@ export default function MlModelsTabs({ data }: { data: any }) {
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <Grid className="h-5 w-5 text-blue-700" />
-                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Confusion Matrix Heatmap</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">{t('ml.confusionMatrix')}</h2>
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-400 mb-4">
-                Testing fold classification results. Metrics calculated from the confusion matrix.
+                {t('ml.confusionDesc')}
               </p>
               <div className="grid grid-cols-2 gap-3 aspect-square max-w-[240px] mx-auto w-full">
                 <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 flex flex-col items-center justify-center text-center">
-                  <span className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide">True Negative</span>
+                  <span className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide">{t('ml.trueNegative')}</span>
                   <span className="text-2xl font-bold font-mono text-emerald-700 dark:text-emerald-400 mt-1">{tn}</span>
-                  <span className="text-[9px] text-slate-600 dark:text-slate-400 mt-0.5">Predicted Safe<br/>Actual Safe</span>
+                  <span className="text-[9px] text-slate-600 dark:text-slate-400 mt-0.5">{t('ml.predictedSafe')}<br/>{t('ml.actualSafe')}</span>
                 </div>
                 <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl p-3 flex flex-col items-center justify-center text-center">
-                  <span className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide">False Positive</span>
+                  <span className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide">{t('ml.falsePositive')}</span>
                   <span className="text-2xl font-bold font-mono text-rose-700 dark:text-rose-400 mt-1">{fp}</span>
-                  <span className="text-[9px] text-slate-600 dark:text-slate-400 mt-0.5">Predicted Risk<br/>Actual Safe</span>
+                  <span className="text-[9px] text-slate-600 dark:text-slate-400 mt-0.5">{t('ml.predictedRisk')}<br/>{t('ml.actualSafe')}</span>
                 </div>
                 <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl p-3 flex flex-col items-center justify-center text-center">
-                  <span className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide">False Negative</span>
+                  <span className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide">{t('ml.falseNegative')}</span>
                   <span className="text-2xl font-bold font-mono text-rose-700 dark:text-rose-400 mt-1">{fn}</span>
-                  <span className="text-[9px] text-slate-600 dark:text-slate-400 mt-0.5">Predicted Safe<br/>Actual Risk</span>
+                  <span className="text-[9px] text-slate-600 dark:text-slate-400 mt-0.5">{t('ml.predictedSafe')}<br/>{t('ml.actualRisk')}</span>
                 </div>
                 <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 flex flex-col items-center justify-center text-center">
-                  <span className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide">True Positive</span>
+                  <span className="text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide">{t('ml.truePositive')}</span>
                   <span className="text-2xl font-bold font-mono text-emerald-700 dark:text-emerald-400 mt-1">{tp}</span>
-                  <span className="text-[9px] text-slate-600 dark:text-slate-400 mt-0.5">Predicted Risk<br/>Actual Risk</span>
+                  <span className="text-[9px] text-slate-600 dark:text-slate-400 mt-0.5">{t('ml.predictedRisk')}<br/>{t('ml.actualRisk')}</span>
                 </div>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4 mt-6 pt-4 border-t border-slate-200 dark:border-slate-800/60 text-xs font-mono">
               <div>
-                <span className="text-slate-500 dark:text-slate-400 block">Accuracy:</span>
+                <span className="text-slate-500 dark:text-slate-400 block">{t('ml.accuracyLabel')}</span>
                 <span className="text-slate-800 dark:text-slate-200 font-bold">{(accuracy * 100).toFixed(1)}%</span>
               </div>
               <div>
-                <span className="text-slate-500 dark:text-slate-400 block">Precision:</span>
+                <span className="text-slate-500 dark:text-slate-400 block">{t('ml.precisionLabel')}</span>
                 <span className="text-slate-800 dark:text-slate-200 font-bold">{(precision * 100).toFixed(1)}%</span>
               </div>
               <div>
-                <span className="text-slate-500 dark:text-slate-400 block">Recall:</span>
+                <span className="text-slate-500 dark:text-slate-400 block">{t('ml.recallLabel')}</span>
                 <span className="text-slate-800 dark:text-slate-200 font-bold">{(recall * 100).toFixed(1)}%</span>
               </div>
               <div>
-                <span className="text-slate-500 dark:text-slate-400 block">F1-Score:</span>
+                <span className="text-slate-500 dark:text-slate-400 block">{t('ml.f1Label')}</span>
                 <span className="text-slate-800 dark:text-slate-200 font-bold">{(f1 * 100).toFixed(1)}%</span>
               </div>
             </div>
@@ -380,29 +387,29 @@ export default function MlModelsTabs({ data }: { data: any }) {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <FileImage className="h-5 w-5 text-blue-700" />
-                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Training Metrics Gallery</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">{t('ml.metricsGallery')}</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <GalleryImage 
                   src={`${plotsBaseUrl}/${type}_cv_distribution.png`}
                   alt={`${type}_cv_distribution.png`}
-                  caption="Cross-Validation AUC Distribution"
+                  caption={t('ml.cvAucDist')}
                 />
                 <GalleryImage 
                   src={`${plotsBaseUrl}/${type}_roc_curves.png`}
                   alt={`${type}_roc_curves.png`}
-                  caption="ROC Curves on Test Partition"
+                  caption={t('ml.rocCurves')}
                 />
                 <GalleryImage 
                   src={`${plotsBaseUrl}/${type}_confusion_matrix.png`}
                   alt={`${type}_confusion_matrix.png`}
-                  caption="Model Confusion Matrix Grid"
+                  caption={t('ml.confusionMatrixGrid')}
                 />
               </div>
             </div>
             <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/60 flex items-center gap-2 text-[10px] text-slate-500 dark:text-slate-400">
               <InfoIcon className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
-              <span>Plots loaded on demand. Re-generates dynamically upon model retraining scripts executions.</span>
+              <span>{t('ml.plotsLoadHint')}</span>
             </div>
           </div>
         </div>
@@ -418,7 +425,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-12 text-center shadow-md">
           <AlertCircle className="mx-auto h-8 w-8 text-blue-500 mb-3" />
           <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider mb-2">Metrics Offline</h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400">No recommendation model metrics details available.</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{t('ml.noRecsDetails')}</p>
         </div>
       );
     }
@@ -434,25 +441,25 @@ export default function MlModelsTabs({ data }: { data: any }) {
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <Layers className="h-5 w-5 text-blue-700" />
-                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Recommender Methodology</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">{t('ml.recsMethodology')}</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
                 <div>
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Filtering Paradigm</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">{t('ml.filteringParadigm')}</span>
                   <p className="text-slate-900 dark:text-slate-100 font-medium text-sm mt-0.5">{recs.approach || 'Content-Based Filtering'}</p>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Catalog Size</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">{t('ml.catalogSize')}</span>
                   <p className="text-slate-700 dark:text-slate-300 text-sm mt-0.5 font-bold font-mono text-blue-700">
-                    {recs.n_products_in_catalog || 'N/A'} products
+                    {recs.n_products_in_catalog || 'N/A'} {t('ml.catalogSuffix')}
                   </p>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Vocabulary Size</span>
-                  <p className="text-slate-700 dark:text-slate-300 text-sm mt-0.5 font-mono">{recs.tfidf_vocabulary_size || '200'} words</p>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">{t('ml.vocabSize')}</span>
+                  <p className="text-slate-700 dark:text-slate-300 text-sm mt-0.5 font-mono">{recs.tfidf_vocabulary_size || '200'} {t('ml.vocabSuffix')}</p>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">TF-IDF N-Gram range</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">{t('ml.tfidfNgram')}</span>
                   <p className="text-slate-700 dark:text-slate-300 text-sm mt-0.5 font-mono">
                     {recs.tfidf_ngram_range ? `(${recs.tfidf_ngram_range.join(', ')})` : '(1, 2)'}
                   </p>
@@ -460,7 +467,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
               </div>
             </div>
             <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/60 text-xs text-slate-500 dark:text-slate-400 font-mono">
-              <span>Catalog consists of Auto, Health, Life, and Property premium products.</span>
+              <span>{t('ml.catalogNote')}</span>
             </div>
           </div>
 
@@ -469,14 +476,14 @@ export default function MlModelsTabs({ data }: { data: any }) {
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <Target className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
-                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Demographic Accuracy</h2>
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">{t('ml.demoAccuracy')}</h2>
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-400 mb-4">
-                Demographic profile match accuracy against expected target product category.
+                {t('ml.demoAccuracyDesc')}
               </p>
               <div className="flex items-end gap-1 mb-2">
                 <span className="text-4xl font-bold font-mono text-emerald-700 dark:text-emerald-400">{(accuracy * 100).toFixed(0)}</span>
-                <span className="text-sm text-slate-500 dark:text-slate-400 font-bold mb-1">% Match</span>
+                <span className="text-sm text-slate-500 dark:text-slate-400 font-bold mb-1">{t('ml.matchSuffix')}</span>
               </div>
               <div className="w-full bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-full h-2">
                 <div 
@@ -486,7 +493,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
               </div>
             </div>
             <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-4">
-              Tested on 5 key representative customer cohorts.
+              {t('ml.testedOnCohorts')}
             </span>
           </div>
         </div>
@@ -495,18 +502,18 @@ export default function MlModelsTabs({ data }: { data: any }) {
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md">
           <div className="flex items-center gap-2 mb-4">
             <Sparkles className="h-5 w-5 text-blue-700" />
-            <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Demographic Cohort Predictions</h2>
+            <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">{t('ml.cohortPredictions')}</h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">
-                  <th className="pb-3 pr-2">Profile Group</th>
-                  <th className="pb-3 px-2">Interest Query Keywords</th>
-                  <th className="pb-3 px-2">Top Recommendation Match</th>
-                  <th className="pb-3 px-2 text-right">Similarity</th>
-                  <th className="pb-3 px-2 text-center">Expected Type</th>
-                  <th className="pb-3 pl-2 text-center">Match</th>
+                  <th className="pb-3 pr-2">{t('ml.colProfileGroup')}</th>
+                  <th className="pb-3 px-2">{t('ml.colInterestKeywords')}</th>
+                  <th className="pb-3 px-2">{t('ml.colTopMatch')}</th>
+                  <th className="pb-3 px-2 text-right">{t('ml.colSimilarity')}</th>
+                  <th className="pb-3 px-2 text-center">{t('ml.colExpectedType')}</th>
+                  <th className="pb-3 pl-2 text-center">{t('ml.colMatch')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800/60">
@@ -535,11 +542,11 @@ export default function MlModelsTabs({ data }: { data: any }) {
                       <td className="py-3 pl-2 text-center">
                         {matched ? (
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
-                            Match
+                            {t('ml.pillMatch')}
                           </span>
                         ) : (
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-700/10 text-blue-700 border border-blue-700/20">
-                            Misaligned
+                            {t('ml.pillMisaligned')}
                           </span>
                         )}
                       </td>
