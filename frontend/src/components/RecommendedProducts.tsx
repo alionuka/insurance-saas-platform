@@ -30,6 +30,15 @@ const TYPE_STYLES: Record<string, string> = {
   LIFE: 'bg-amber-50 text-amber-700 border-amber-200',
   PROPERTY: 'bg-blue-50 text-blue-700 border-blue-200',
 };
+// Localised short codes for the small type pill on each ranked card.
+const TYPE_SHORT_KEYS: Record<string, string> = {
+  AUTO: 'productTypes.shortAUTO',
+  HEALTH: 'productTypes.shortHEALTH',
+  LIFE: 'productTypes.shortLIFE',
+  PROPERTY: 'productTypes.shortPROPERTY',
+  TRAVEL: 'productTypes.shortTRAVEL',
+  OTHER: 'productTypes.shortOTHER',
+};
 
 export default function RecommendedProducts() {
   const router = useRouter();
@@ -197,7 +206,7 @@ export default function RecommendedProducts() {
                         TYPE_STYLES[product.type] ?? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'
                       }`}
                     >
-                      {product.type}
+                      {TYPE_SHORT_KEYS[product.type] ? t(TYPE_SHORT_KEYS[product.type]) : product.type}
                     </span>
                   </div>
                   <div className="mt-auto pt-3 border-t border-slate-200 dark:border-slate-800">
@@ -237,7 +246,32 @@ export default function RecommendedProducts() {
 
             <div className="pt-3 flex gap-2 text-xs text-slate-500 dark:text-slate-400 italic leading-relaxed">
               <Sparkles className="h-3.5 w-3.5 text-blue-700 shrink-0 mt-0.5" />
-              <p>{data.explanation}</p>
+              <p>{
+                // Reconstruct the ML explanation in the active locale.
+                // Backend always sends it in English; we have the same
+                // structured data (top match name + similarity, ranked
+                // products by type) and can build a parallel UK string
+                // without a round-trip. Falls back to the raw backend
+                // sentence if our data is unexpectedly missing.
+                (() => {
+                  const top = data.rankedProducts?.[0];
+                  if (!top) return data.explanation;
+                  // Build a unique type list in the active locale via the
+                  // short codes used on the badges (HEALTH → ЗДОРОВʼЯ).
+                  const types = Array.from(
+                    new Set(data.rankedProducts.map((p) => p.type)),
+                  )
+                    .slice(0, 3)
+                    .map((typ) =>
+                      TYPE_SHORT_KEYS[typ] ? t(TYPE_SHORT_KEYS[typ]) : typ,
+                    )
+                    .join(', ');
+                  return t('recommendations.explanationTemplate')
+                    .replace('{topName}', top.name)
+                    .replace('{sim}', top.similarity.toFixed(2))
+                    .replace('{types}', types);
+                })()
+              }</p>
             </div>
           </div>
         )}

@@ -43,6 +43,15 @@ const TYPE_LABEL_KEYS: Record<string, string> = {
   TRAVEL: 'productTypes.TRAVEL',
   OTHER: 'productTypes.OTHER',
 };
+// Short uppercase code shown on the small pill next to the full label.
+const TYPE_SHORT_KEYS: Record<string, string> = {
+  AUTO: 'productTypes.shortAUTO',
+  HEALTH: 'productTypes.shortHEALTH',
+  LIFE: 'productTypes.shortLIFE',
+  PROPERTY: 'productTypes.shortPROPERTY',
+  TRAVEL: 'productTypes.shortTRAVEL',
+  OTHER: 'productTypes.shortOTHER',
+};
 
 export default function BrowseProductsGrid({
   groupedProducts,
@@ -108,7 +117,7 @@ export default function BrowseProductsGrid({
                   TYPE_STYLES[type] ?? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'
                 }`}
               >
-                {type}
+                {TYPE_SHORT_KEYS[type] ? t(TYPE_SHORT_KEYS[type]) : type}
               </span>
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
                 {TYPE_LABEL_KEYS[type] ? t(TYPE_LABEL_KEYS[type]) : type}
@@ -166,7 +175,7 @@ export default function BrowseProductsGrid({
                         'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'
                       }`}
                     >
-                      {product.type}
+                      {TYPE_SHORT_KEYS[product.type] ? t(TYPE_SHORT_KEYS[product.type]) : product.type}
                     </span>
                   </div>
 

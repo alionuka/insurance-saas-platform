@@ -586,6 +586,13 @@ const en: Dictionary = {
     TRAVEL: 'Travel Insurance',
     OTHER: 'Other',
     productsSuffix: 'products',
+    // Short codes shown on small pills next to the full label.
+    shortAUTO: 'AUTO',
+    shortHEALTH: 'HEALTH',
+    shortLIFE: 'LIFE',
+    shortPROPERTY: 'PROPERTY',
+    shortTRAVEL: 'TRAVEL',
+    shortOTHER: 'OTHER',
   },
   productForm: {
     createTitle: 'Register New Product',
@@ -1018,6 +1025,13 @@ const en: Dictionary = {
     submittedDesc: 'Redirecting you to your application…',
     submitFailed: 'Could not submit application',
     submitFailedDesc: 'Please try again in a moment.',
+    // Localized ML-recommendation explanation. Backend returns an English
+    // sentence; we reconstruct a parallel UK sentence on the frontend
+    // from the same structured data (top match name + similarity score,
+    // recommended product type codes). Placeholders: {topName}, {sim},
+    // {types}.
+    explanationTemplate:
+      'Content-based ranking with TF-IDF + cosine similarity. Top match: {topName} (similarity {sim}). Recommended product types: {types}.',
   },
   gdpr: {
     title: 'Privacy & Data Rights',
@@ -1721,6 +1735,13 @@ const uk: Dictionary = {
     TRAVEL: 'Туристичне страхування',
     OTHER: 'Інше',
     productsSuffix: 'продуктів',
+    // Короткі коди на маленьких бейджах поруч з повною назвою.
+    shortAUTO: 'АВТО',
+    shortHEALTH: 'ЗДОРОВ\'Я',
+    shortLIFE: 'ЖИТТЯ',
+    shortPROPERTY: 'МАЙНО',
+    shortTRAVEL: 'ПОДОРОЖ',
+    shortOTHER: 'ІНШЕ',
   },
   productForm: {
     createTitle: 'Зареєструвати новий продукт',
@@ -2153,6 +2174,11 @@ const uk: Dictionary = {
     submittedDesc: 'Перенаправляємо до вашої заявки…',
     submitFailed: 'Не вдалося подати заявку',
     submitFailedDesc: 'Спробуйте знову за хвилинку.',
+    // Локалізоване ML-пояснення рекомендацій. Бекенд повертає речення
+    // англійською; на фронті ми реконструюємо паралельне UK-речення з
+    // тих самих структурованих даних. Плейсхолдери: {topName}, {sim}, {types}.
+    explanationTemplate:
+      'Контент-base ранжування TF-IDF + cosine similarity. Найкращий збіг: {topName} (схожість {sim}). Рекомендовані типи продуктів: {types}.',
   },
   gdpr: {
     title: 'Конфіденційність і права на дані',
