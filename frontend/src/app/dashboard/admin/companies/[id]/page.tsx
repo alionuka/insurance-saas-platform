@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Building2, Package, ShieldCheck, Activity, DollarSign, Info } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -31,7 +32,8 @@ async function fetchWithToken(endpoint: string) {
 
 export default async function AdminCompanyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  
+  const { t } = await getT();
+
   // Fetch data in parallel
   const [compRes, prodRes, polRes, claimRes] = await Promise.all([
     fetchWithToken(`/companies/${id}`),
@@ -44,7 +46,7 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
-        <p className="mt-4 text-slate-600 dark:text-slate-400">Session expired. Redirecting...</p>
+        <p className="mt-4 text-slate-600 dark:text-slate-400">{t('dashboard.sessionExpired')}</p>
       </div>
     );
   }
@@ -56,8 +58,8 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
   if (compRes.status !== 200 || !compRes.data) {
     return (
       <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
-        <h2 className="text-lg font-semibold">Error Loading Company</h2>
-        <p className="text-sm mt-1">We couldn't fetch the company details. Please try again later.</p>
+        <h2 className="text-lg font-semibold">{t('companies.errorLoadCompany')}</h2>
+        <p className="text-sm mt-1">{t('companies.errorLoadCompanyDesc')}</p>
       </div>
     );
   }
@@ -93,7 +95,7 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
         className="inline-flex items-center text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-blue-700 transition-colors"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to Companies
+        {t('companies.backToCompanies')}
       </Link>
 
       {/* Hero */}
@@ -103,7 +105,7 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
         </div>
         <div className="flex-1">
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">{company.name}</h1>
-          <p className="text-slate-600 dark:text-slate-400 mt-1">Tenant since {formatDate(company.createdAt)}</p>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">{t('companies.tenantSince')} {formatDate(company.createdAt)}</p>
         </div>
       </div>
 
@@ -114,7 +116,7 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
             <Package className="h-5 w-5 text-blue-700" />
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Total Products</p>
+            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">{t('companies.totalProducts')}</p>
             <p className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-0.5">{companyProducts.length}</p>
           </div>
         </div>
@@ -124,7 +126,7 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
             <ShieldCheck className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Active Policies</p>
+            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">{t('companies.activePolicies')}</p>
             <p className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-0.5">{activePolicies.length}</p>
           </div>
         </div>
@@ -134,7 +136,7 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
             <Activity className="h-5 w-5 text-blue-700" />
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Open Claims</p>
+            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">{t('companies.openClaims')}</p>
             <p className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-0.5">{openClaims.length}</p>
           </div>
         </div>
@@ -144,7 +146,7 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
             <DollarSign className="h-5 w-5 text-slate-700 dark:text-slate-300" />
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Total Premium</p>
+            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">{t('companies.totalPremium')}</p>
             <p className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-0.5">{formatCurrency(totalPremium)}</p>
           </div>
         </div>
@@ -156,21 +158,21 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md">
             <div className="flex items-center gap-2 mb-4 border-b border-slate-200 dark:border-slate-800 pb-4">
               <Info className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Company Info</h2>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('companies.companyInfo')}</h2>
             </div>
             <div className="space-y-4">
               <div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Name</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('companies.nameLabel')}</p>
                 <p className="text-slate-900 dark:text-slate-100 font-medium mt-1">{company.name}</p>
               </div>
               <div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Description</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('companies.descLabel')}</p>
                 <p className="text-slate-700 dark:text-slate-300 mt-1 text-sm leading-relaxed">
-                  {company.description || <span className="italic text-slate-500 dark:text-slate-400">No description provided.</span>}
+                  {company.description || <span className="italic text-slate-500 dark:text-slate-400">{t('companies.noDescProvided')}</span>}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Registration Date</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('companies.registrationDate')}</p>
                 <p className="text-slate-700 dark:text-slate-300 mt-1 text-sm">{formatDate(company.createdAt)}</p>
               </div>
             </div>
@@ -181,19 +183,19 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
         <div className="lg:col-span-2">
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-md">
             <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Registered Products</h2>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('companies.registeredProducts')}</h2>
               <span className="bg-blue-700/10 text-blue-700 text-xs px-2.5 py-1 rounded-full font-medium">
-                {companyProducts.length} Total
+                {companyProducts.length} {t('companies.totalLabel')}
               </span>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
                   <tr>
-                    <th className="px-6 py-3">Product Name</th>
-                    <th className="px-6 py-3">Type</th>
-                    <th className="px-6 py-3 text-right">Base Premium</th>
-                    <th className="px-6 py-3 text-right">Created At</th>
+                    <th className="px-6 py-3">{t('companies.colProductName')}</th>
+                    <th className="px-6 py-3">{t('companies.colTypeLabel')}</th>
+                    <th className="px-6 py-3 text-right">{t('companies.colBasePremium')}</th>
+                    <th className="px-6 py-3 text-right">{t('companies.colCreatedAt')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-800">
@@ -219,7 +221,7 @@ export default async function AdminCompanyDetailPage({ params }: { params: Promi
                   ) : (
                     <tr>
                       <td colSpan={4} className="px-6 py-10 text-center text-slate-500 dark:text-slate-400 text-sm italic">
-                        No products registered for this company.
+                        {t('companies.noProductsRegistered')}
                       </td>
                     </tr>
                   )}

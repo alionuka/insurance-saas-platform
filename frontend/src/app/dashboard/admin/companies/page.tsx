@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { formatDate } from '@/lib/formatDate';
 import ApproveCompanyButton from './ApproveCompanyButton';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -52,6 +53,7 @@ async function getCompanies(): Promise<Company[]> {
 
 export default async function AdminCompaniesPage() {
   const companies = await getCompanies();
+  const { t } = await getT();
   const pending = companies.filter((c) => c.status === 'PENDING_VERIFICATION');
   const active = companies.filter((c) => c.status === 'ACTIVE');
   const suspended = companies.filter((c) => c.status === 'SUSPENDED');
@@ -60,11 +62,10 @@ export default async function AdminCompaniesPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-          All Companies
+          {t('companies.allCompanies')}
         </h1>
         <p className="text-slate-600 dark:text-slate-400 mt-1 text-sm">
-          Manage tenant organizations on the platform — review KYC submissions,
-          approve onboarding, and audit existing tenants.
+          {t('companies.allCompaniesDesc')}
         </p>
       </div>
 
@@ -75,16 +76,14 @@ export default async function AdminCompaniesPage() {
           <div className="flex items-center gap-2 mb-3">
             <Clock className="h-5 w-5 text-blue-700" />
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-              Pending Verification
+              {t('companies.pendingVerification')}
             </h2>
             <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-700/10 text-blue-700 border border-blue-700/20">
               {pending.length}
             </span>
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
-            New tenants awaiting KYC review. In production these would
-            require compliance team sign-off; for this thesis demo a single
-            click here flips the tenant to ACTIVE.
+            {t('companies.pendingDesc')}
           </p>
 
           <div className="space-y-3">
@@ -103,26 +102,26 @@ export default async function AdminCompaniesPage() {
                         {company.name}
                       </h3>
                       <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                        Submitted {formatDate(company.createdAt)}
+                        {t('companies.submittedOn')} {formatDate(company.createdAt)}
                       </p>
                       <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                         <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
                           <FileCheck className="h-3 w-3 text-slate-400 dark:text-slate-500 shrink-0" />
-                          <span className="text-slate-500 dark:text-slate-400">Licence:</span>
+                          <span className="text-slate-500 dark:text-slate-400">{t('companies.licence')}</span>
                           <span className="text-slate-900 dark:text-slate-100 font-mono truncate">
                             {company.licenseNumber || '—'}
                           </span>
                         </div>
                         <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
                           <Globe className="h-3 w-3 text-slate-400 dark:text-slate-500 shrink-0" />
-                          <span className="text-slate-500 dark:text-slate-400">Country:</span>
+                          <span className="text-slate-500 dark:text-slate-400">{t('companies.country')}</span>
                           <span className="text-slate-900 dark:text-slate-100 font-mono">
                             {company.country || '—'}
                           </span>
                         </div>
                         <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 min-w-0">
                           <Phone className="h-3 w-3 text-slate-400 dark:text-slate-500 shrink-0" />
-                          <span className="text-slate-500 dark:text-slate-400">Phone:</span>
+                          <span className="text-slate-500 dark:text-slate-400">{t('companies.phone')}</span>
                           <span className="text-slate-900 dark:text-slate-100 font-mono truncate">
                             {company.contactPhone || '—'}
                           </span>
@@ -143,7 +142,7 @@ export default async function AdminCompaniesPage() {
       <section>
         <div className="flex items-center gap-2 mb-3">
           <CheckCircle2 className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Active Tenants</h2>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{t('companies.activeTenants')}</h2>
           <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
             {active.length}
           </span>
@@ -154,11 +153,11 @@ export default async function AdminCompaniesPage() {
             <div className="p-0 overflow-x-auto">
               <div className="w-full text-left text-sm min-w-[800px] flex flex-col">
                 <div className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider grid grid-cols-6 px-6 py-3 border-b border-slate-200 dark:border-slate-800">
-                  <div className="col-span-2">Name</div>
-                  <div className="col-span-1">Country</div>
-                  <div className="col-span-1 text-center">Products</div>
-                  <div className="col-span-1 text-center">Status</div>
-                  <div className="col-span-1 text-right">Created</div>
+                  <div className="col-span-2">{t('companies.colName')}</div>
+                  <div className="col-span-1">{t('companies.colCountry')}</div>
+                  <div className="col-span-1 text-center">{t('companies.colProducts')}</div>
+                  <div className="col-span-1 text-center">{t('companies.colStatus')}</div>
+                  <div className="col-span-1 text-right">{t('companies.colCreated')}</div>
                 </div>
                 <div className="divide-y divide-zinc-800 flex flex-col">
                   {active.map((company) => (
@@ -181,7 +180,7 @@ export default async function AdminCompaniesPage() {
                       <div className="col-span-1 text-center">
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold rounded uppercase tracking-wider bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
                           <CheckCircle2 className="h-2.5 w-2.5" />
-                          Active
+                          {t('companies.statusActive')}
                         </span>
                       </div>
                       <div className="col-span-1 text-right text-slate-500 dark:text-slate-400 font-mono text-xs">
@@ -196,8 +195,8 @@ export default async function AdminCompaniesPage() {
         ) : (
           <EmptyState
             icon={Building2}
-            title="No active tenants yet"
-            description="Approved companies will appear here."
+            title={t('companies.noActive')}
+            description={t('companies.noActiveDesc')}
           />
         )}
       </section>
@@ -207,7 +206,7 @@ export default async function AdminCompaniesPage() {
         <section>
           <div className="flex items-center gap-2 mb-3">
             <AlertTriangle className="h-5 w-5 text-rose-700 dark:text-rose-400" />
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Suspended</h2>
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{t('companies.suspended')}</h2>
             <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/20">
               {suspended.length}
             </span>
@@ -217,7 +216,7 @@ export default async function AdminCompaniesPage() {
               <div key={c.id} className="py-1">
                 {c.name} —{' '}
                 <span className="text-slate-400 dark:text-slate-500 text-xs">
-                  suspended {formatDate(c.createdAt)}
+                  {t('companies.suspendedOn')} {formatDate(c.createdAt)}
                 </span>
               </div>
             ))}

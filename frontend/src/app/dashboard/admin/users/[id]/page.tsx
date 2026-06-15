@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, UserCircle, Mail, Shield, Building2, Calendar, FileText, ShieldCheck, Activity, CreditCard, TrendingUp } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -39,12 +40,13 @@ async function getUser(id: string) {
 export default async function AdminUserDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const { user, status } = await getUser(id);
+  const { t } = await getT();
 
   if (status === 401) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
-        <p className="mt-4 text-slate-600 dark:text-slate-400">Session expired. Redirecting...</p>
+        <p className="mt-4 text-slate-600 dark:text-slate-400">{t('dashboard.sessionExpired')}</p>
       </div>
     );
   }
@@ -56,8 +58,8 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
   if (status !== 200 || !user) {
     return (
       <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
-        <h2 className="text-lg font-semibold">Error Loading User</h2>
-        <p className="text-sm mt-1">We couldn&apos;t fetch the user details. Please try again later.</p>
+        <h2 className="text-lg font-semibold">{t('users.errorLoadUser')}</h2>
+        <p className="text-sm mt-1">{t('users.errorLoadUserDesc')}</p>
       </div>
     );
   }
@@ -78,7 +80,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
         className="inline-flex items-center text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-blue-700 transition-colors"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to Users
+        {t('users.backToUsers')}
       </Link>
 
       {/* Hero */}
@@ -106,48 +108,48 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md">
             <div className="flex items-center gap-2 mb-4 border-b border-slate-200 dark:border-slate-800 pb-4">
               <UserCircle className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Account Info</h2>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('users.accountInfo')}</h2>
             </div>
             <div className="space-y-4">
               <div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Email</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('users.emailLabel')}</p>
                 <p className="text-slate-900 dark:text-slate-100 font-mono text-sm mt-1">{user.email}</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">First Name</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('users.firstNameLabel')}</p>
                   <p className="text-slate-900 dark:text-slate-100 text-sm mt-1">{user.firstName}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Last Name</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('users.lastNameLabel')}</p>
                   <p className="text-slate-900 dark:text-slate-100 text-sm mt-1">{user.lastName}</p>
                 </div>
               </div>
               <div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Role</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('users.roleLabel')}</p>
                 <p className="text-slate-900 dark:text-slate-100 text-sm mt-1">{user.role.replace('_', ' ')}</p>
               </div>
               {user.age != null && (
                 <div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Age</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('users.ageLabel')}</p>
                   <p className="text-slate-900 dark:text-slate-100 text-sm mt-1">{user.age}</p>
                 </div>
               )}
               {user.annualIncome != null && (
                 <div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Annual Income</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('users.annualIncomeLabel')}</p>
                   <p className="text-slate-900 dark:text-slate-100 text-sm mt-1">{formatCurrency(user.annualIncome)}</p>
                 </div>
               )}
               {user.creditScore != null && (
                 <div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Credit Score</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('users.creditScoreLabel')}</p>
                   <p className="text-slate-900 dark:text-slate-100 text-sm mt-1">{user.creditScore}</p>
                 </div>
               )}
               {user.company && (
                 <div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Company</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('users.companyLabel')}</p>
                   <p className="text-slate-900 dark:text-slate-100 text-sm mt-1 flex items-center gap-1.5">
                     <Building2 className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
                     {user.company.name}
@@ -155,7 +157,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                 </div>
               )}
               <div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Member Since</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('users.memberSince')}</p>
                 <p className="text-slate-700 dark:text-slate-300 text-sm mt-1 flex items-center gap-1.5">
                   <Calendar className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
                   {formatDate(user.createdAt)}
@@ -176,7 +178,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                     <FileText className="h-5 w-5 text-blue-700" />
                   </div>
                   <div>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Applications</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">{t('users.applicationsLabel')}</p>
                     <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{applications.length}</p>
                   </div>
                 </div>
@@ -185,7 +187,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                     <ShieldCheck className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
                   </div>
                   <div>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Active Policies</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">{t('users.activePoliciesLabel')}</p>
                     <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{activePolicies.length}</p>
                   </div>
                 </div>
@@ -194,7 +196,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                     <Activity className="h-5 w-5 text-blue-700" />
                   </div>
                   <div>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Open Claims</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">{t('users.openClaimsLabel')}</p>
                     <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{openClaims.length}</p>
                   </div>
                 </div>
@@ -203,9 +205,9 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
               {/* Applications Summary */}
               <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-md">
                 <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                  <h3 className="text-md font-bold text-slate-900 dark:text-slate-100">Recent Applications</h3>
+                  <h3 className="text-md font-bold text-slate-900 dark:text-slate-100">{t('users.recentApplications')}</h3>
                   <span className="bg-blue-700/10 text-blue-700 text-xs px-2.5 py-1 rounded-full font-medium">
-                    {applications.length} Total
+                    {applications.length} {t('users.totalSuffix')}
                   </span>
                 </div>
                 {applications.length > 0 ? (
@@ -213,7 +215,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                     {applications.slice(0, 5).map((app: any) => (
                       <div key={app.id} className="px-6 py-3 flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-slate-900 dark:text-slate-100 font-medium">{app.product?.name || 'Application'}</p>
+                          <p className="text-sm text-slate-900 dark:text-slate-100 font-medium">{app.product?.name || t('users.application')}</p>
                           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{formatDate(app.createdAt)}</p>
                         </div>
                         <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
@@ -227,16 +229,16 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                     ))}
                   </div>
                 ) : (
-                  <div className="px-6 py-8 text-center text-slate-500 dark:text-slate-400 text-sm italic">No applications</div>
+                  <div className="px-6 py-8 text-center text-slate-500 dark:text-slate-400 text-sm italic">{t('users.noApplications')}</div>
                 )}
               </div>
 
               {/* Policies Summary */}
               <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-md">
                 <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                  <h3 className="text-md font-bold text-slate-900 dark:text-slate-100">Policies</h3>
+                  <h3 className="text-md font-bold text-slate-900 dark:text-slate-100">{t('users.policiesHeader')}</h3>
                   <span className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs px-2.5 py-1 rounded-full font-medium">
-                    {policies.length} Total
+                    {policies.length} {t('users.totalSuffix')}
                   </span>
                 </div>
                 {policies.length > 0 ? (
@@ -244,7 +246,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                     {policies.slice(0, 5).map((pol: any) => (
                       <div key={pol.id} className="px-6 py-3 flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-slate-900 dark:text-slate-100 font-medium">{pol.product?.name || 'Policy'}</p>
+                          <p className="text-sm text-slate-900 dark:text-slate-100 font-medium">{pol.product?.name || t('users.policy')}</p>
                           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-mono">{pol.policyNumber}</p>
                         </div>
                         <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
@@ -258,16 +260,16 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                     ))}
                   </div>
                 ) : (
-                  <div className="px-6 py-8 text-center text-slate-500 dark:text-slate-400 text-sm italic">No policies</div>
+                  <div className="px-6 py-8 text-center text-slate-500 dark:text-slate-400 text-sm italic">{t('users.noPolicies')}</div>
                 )}
               </div>
 
               {/* Claims Summary */}
               <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-md">
                 <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                  <h3 className="text-md font-bold text-slate-900 dark:text-slate-100">Claims</h3>
+                  <h3 className="text-md font-bold text-slate-900 dark:text-slate-100">{t('users.claimsHeader')}</h3>
                   <span className="bg-rose-500/10 text-rose-700 dark:text-rose-400 text-xs px-2.5 py-1 rounded-full font-medium">
-                    {claims.length} Total
+                    {claims.length} {t('users.totalSuffix')}
                   </span>
                 </div>
                 {claims.length > 0 ? (
@@ -275,7 +277,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                     {claims.slice(0, 5).map((claim: any) => (
                       <div key={claim.id} className="px-6 py-3 flex items-center justify-between">
                         <div>
-                          <p className="text-sm text-slate-900 dark:text-slate-100 font-medium truncate max-w-xs">{claim.description || 'Claim'}</p>
+                          <p className="text-sm text-slate-900 dark:text-slate-100 font-medium truncate max-w-xs">{claim.description || t('users.claim')}</p>
                           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{formatDate(claim.createdAt)} · {formatCurrency(claim.amount)}</p>
                         </div>
                         <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
@@ -289,7 +291,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                     ))}
                   </div>
                 ) : (
-                  <div className="px-6 py-8 text-center text-slate-500 dark:text-slate-400 text-sm italic">No claims</div>
+                  <div className="px-6 py-8 text-center text-slate-500 dark:text-slate-400 text-sm italic">{t('users.noClaims')}</div>
                 )}
               </div>
             </>
@@ -298,10 +300,9 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
               <div className="h-16 w-16 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center mx-auto mb-4">
                 <Shield className="h-8 w-8 text-slate-500 dark:text-slate-400" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">Staff Account</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">{t('users.staffAccount')}</h3>
               <p className="text-slate-600 dark:text-slate-400 text-sm max-w-md mx-auto leading-relaxed">
-                This is a <span className="font-semibold text-slate-900 dark:text-slate-100">{user.role.replace('_', ' ')}</span> account.
-                Staff accounts manage platform resources but do not have personal applications, policies, or claims.
+                {t('users.staffDesc').replace('{role}', user.role.replace('_', ' '))}
               </p>
             </div>
           )}

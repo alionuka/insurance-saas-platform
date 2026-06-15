@@ -18,6 +18,7 @@ import {
 } from '@/components/agent/AgentSharedBadges';
 import FilterPills from '@/components/ui/FilterPills';
 import BulkActionBar from '@/components/BulkActionBar';
+import { useT } from '@/i18n/LocaleProvider';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
@@ -27,6 +28,7 @@ export default function ClaimsTable({
   initialClaims: any[];
 }) {
   const router = useRouter();
+  const { t } = useT();
   const searchParams = useSearchParams();
   const currentStatus = searchParams.get('status') || 'all';
   const currentFraud = searchParams.get('fraud') || 'all';
@@ -196,7 +198,7 @@ export default function ClaimsTable({
 
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
-          <h2 className="text-lg font-medium text-slate-900 dark:text-slate-100">Claims Investigation Queue</h2>
+          <h2 className="text-lg font-medium text-slate-900 dark:text-slate-100">{t('claimsTable.investigationQueue')}</h2>
           <span className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs px-2.5 py-1 rounded-full font-medium">
             {filteredClaims.length} total
           </span>
@@ -213,12 +215,12 @@ export default function ClaimsTable({
                     className="h-4 w-4 rounded border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-blue-500 focus:ring-blue-500/20 focus:ring-offset-0 cursor-pointer accent-blue-500"
                   />
                 </th>
-                <th className="px-6 py-3 font-medium">Customer / Description</th>
-                <th className="px-6 py-3 font-medium">Policy / Product</th>
+                <th className="px-6 py-3 font-medium">{t('claimsTable.colCustomer')}</th>
+                <th className="px-6 py-3 font-medium">{t('claimsTable.colPolicy')}</th>
                 <th className="px-6 py-3 font-medium">Amount</th>
-                <th className="px-6 py-3 font-medium">Fraud Assessment</th>
-                <th className="px-6 py-3 font-medium">Current Status</th>
-                <th className="px-6 py-3 font-medium">Update Status</th>
+                <th className="px-6 py-3 font-medium">{t('claimsTable.colFraud')}</th>
+                <th className="px-6 py-3 font-medium">{t('claimsTable.colCurrent')}</th>
+                <th className="px-6 py-3 font-medium">{t('claimsTable.colUpdate')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-800">
@@ -291,7 +293,7 @@ export default function ClaimsTable({
                             <div className="text-[10px] text-slate-500 dark:text-slate-400 uppercase">{company?.name ?? '—'}</div>
                           </>
                         ) : (
-                          <span className="text-xs text-slate-500 dark:text-slate-400 italic">No policy linked</span>
+                          <span className="text-xs text-slate-500 dark:text-slate-400 italic">{t('claimsTable.noPolicy')}</span>
                         )}
                       </div>
                     </td>
