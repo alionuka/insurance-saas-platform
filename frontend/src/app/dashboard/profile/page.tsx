@@ -6,7 +6,7 @@ import EditProfileForm from './EditProfileForm';
 import RestartTourButton from '@/components/onboarding/RestartTourButton';
 import GdprPanel from './GdprPanel';
 import { getT } from '@/i18n/getT';
-import { translateAuditAction, translateResourceType } from '@/i18n/translateStatus';
+import { translateAuditAction, translateResourceType, translateRole } from '@/i18n/translateStatus';
 import AvatarUploadButton from './AvatarUploadButton';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -113,7 +113,7 @@ export default async function ProfilePage() {
           <p className="text-slate-600 dark:text-slate-400 mt-1">{user.email}</p>
           <div className="mt-3">
             <span className={`text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider border ${getRoleBadgeColor(user.role)}`}>
-              {user.role.replace('_', ' ')}
+              {translateRole(t, user.role)}
             </span>
           </div>
         </div>
@@ -138,7 +138,7 @@ export default async function ProfilePage() {
               </div>
               <div>
                 <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider mb-1">{t('profile.role')}</p>
-                <p className="text-slate-900 dark:text-slate-100 font-medium">{user.role}</p>
+                <p className="text-slate-900 dark:text-slate-100 font-medium">{translateRole(t, user.role)}</p>
               </div>
               <div>
                 <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider mb-1">{t('profile.memberSince')}</p>

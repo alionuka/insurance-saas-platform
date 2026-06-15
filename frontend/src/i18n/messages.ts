@@ -585,6 +585,7 @@ const en: Dictionary = {
     PROPERTY: 'Property Insurance',
     TRAVEL: 'Travel Insurance',
     OTHER: 'Other',
+    productsSuffix: 'products',
   },
   productForm: {
     createTitle: 'Register New Product',
@@ -1719,6 +1720,7 @@ const uk: Dictionary = {
     PROPERTY: 'Страхування майна',
     TRAVEL: 'Туристичне страхування',
     OTHER: 'Інше',
+    productsSuffix: 'продуктів',
   },
   productForm: {
     createTitle: 'Зареєструвати новий продукт',

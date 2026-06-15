@@ -303,7 +303,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
               </div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">{t('users.staffAccount')}</h3>
               <p className="text-slate-600 dark:text-slate-400 text-sm max-w-md mx-auto leading-relaxed">
-                {t('users.staffDesc').replace('{role}', user.role.replace('_', ' '))}
+                {t('users.staffDesc').replace('{role}', translateRole(t, user.role))}
               </p>
             </div>
           )}

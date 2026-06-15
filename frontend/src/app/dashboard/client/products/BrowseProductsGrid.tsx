@@ -31,13 +31,17 @@ const TYPE_STYLES: Record<string, string> = {
   TRAVEL: 'bg-rose-50 text-rose-700 border-rose-200',
 };
 
-const TYPE_LABELS: Record<string, string> = {
-  AUTO: 'Auto Insurance',
-  HEALTH: 'Health Insurance',
-  LIFE: 'Life Insurance',
-  PROPERTY: 'Property Insurance',
-  TRAVEL: 'Travel Insurance',
-  OTHER: 'Other',
+// Map a backend product type code to a localised i18n key. The label
+// itself comes from `t(productTypes.<TYPE>)` so the heading flips with
+// the locale; if a new code arrives that we haven't translated yet, we
+// fall back to the raw code so nothing silently disappears.
+const TYPE_LABEL_KEYS: Record<string, string> = {
+  AUTO: 'productTypes.AUTO',
+  HEALTH: 'productTypes.HEALTH',
+  LIFE: 'productTypes.LIFE',
+  PROPERTY: 'productTypes.PROPERTY',
+  TRAVEL: 'productTypes.TRAVEL',
+  OTHER: 'productTypes.OTHER',
 };
 
 export default function BrowseProductsGrid({
@@ -77,15 +81,15 @@ export default function BrowseProductsGrid({
           logout();
           return;
         }
-        throw new Error(json.message || 'Failed to submit application');
+        throw new Error(json.message || t('recommendations.submitFailed'));
       }
-      toast.success('Application submitted', {
-        description: 'Redirecting you to your application…',
+      toast.success(t('recommendations.submitted'), {
+        description: t('recommendations.submittedDesc'),
       });
       router.push(`/dashboard/client/applications/${json.id}`);
     } catch (err: any) {
-      toast.error('Could not submit application', {
-        description: err.message || 'Please try again in a moment.',
+      toast.error(t('recommendations.submitFailed'), {
+        description: err.message || t('recommendations.submitFailedDesc'),
       });
       setApplyingProductId(null);
     }
@@ -107,9 +111,9 @@ export default function BrowseProductsGrid({
                 {type}
               </span>
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                {TYPE_LABELS[type] ?? type}
+                {TYPE_LABEL_KEYS[type] ? t(TYPE_LABEL_KEYS[type]) : type}
               </h2>
-              <span className="text-xs text-slate-400 dark:text-slate-500 font-mono">{products.length} products</span>
+              <span className="text-xs text-slate-400 dark:text-slate-500 font-mono">{products.length} {t('productTypes.productsSuffix')}</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
