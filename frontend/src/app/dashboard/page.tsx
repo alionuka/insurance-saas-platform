@@ -4,8 +4,10 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getStoredUser, getDashboardRedirect, UserRole } from '@/lib/auth';
 import { Loader2 } from 'lucide-react';
+import { useT } from '@/i18n/LocaleProvider';
 
 export default function DashboardEntry() {
+  const { t } = useT();
   const router = useRouter();
 
   useEffect(() => {
@@ -26,8 +28,8 @@ export default function DashboardEntry() {
       <div className="h-16 w-16 rounded-2xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center mb-6">
         <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
       </div>
-      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">Redirecting to your dashboard...</h1>
-      <p className="text-slate-600 dark:text-slate-400">Please wait while we verify your access.</p>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">{t('finale.redirectingDash')}</h1>
+      <p className="text-slate-600 dark:text-slate-400">{t('finale.pleaseWait')}</p>
     </div>
   );
 }

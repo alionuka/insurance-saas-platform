@@ -110,7 +110,7 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
 
       const newDoc = await res.json();
       setDocuments((prev) => [newDoc, ...prev]);
-      toast.success('Document uploaded');
+      toast.success(t('finale.docUploaded'));
       // Reset input
       e.target.value = '';
     } catch (err: any) {
@@ -141,7 +141,7 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
 
             if (!res.ok) throw new Error('Delete failed');
             setDocuments((prev) => prev.filter((d) => d.id !== docId));
-            toast.success('Document deleted');
+            toast.success(t('finale.docDeleted'));
           } catch (err: any) {
             toast.error(err.message);
           }
@@ -216,7 +216,7 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
                   <button 
                     onClick={() => handleDelete(doc.id)}
                     className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-rose-400 transition-colors"
-                    title="Delete document"
+                    title={t('finale.deleteDocAttr')}
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -225,7 +225,7 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
                   href={doc.url} 
                   download 
                   className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
-                  title="Download"
+                  title={t('finale.downloadAttr')}
                 >
                   <Download className="h-4 w-4" />
                 </a>

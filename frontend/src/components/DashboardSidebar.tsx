@@ -217,7 +217,7 @@ export default function DashboardSidebar() {
       <button
         onClick={() => setIsOpen(true)}
         className="md:hidden fixed top-4 left-4 z-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/50 shadow-lg"
-        aria-label="Open sidebar"
+        aria-label={t('finale.openSidebar')}
       >
         <Menu className="h-5 w-5" />
       </button>
@@ -352,8 +352,8 @@ export default function DashboardSidebar() {
           onDoubleClick={resetWidth}
           role="separator"
           aria-orientation="vertical"
-          aria-label="Resize sidebar (drag, double-click to reset)"
-          title="Drag to resize · double-click to reset"
+          aria-label={t('finale.resizeSidebar')}
+          title={t('finale.dragResize')}
           className="hidden md:block absolute top-0 right-0 h-full w-1.5 cursor-col-resize group z-[60]"
         >
           {/* Visible accent on hover */}

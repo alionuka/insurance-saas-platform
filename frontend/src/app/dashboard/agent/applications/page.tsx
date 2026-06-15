@@ -40,7 +40,7 @@ export default async function AgentApplicationsPage() {
       ) : (
         <EmptyState 
           icon={FileText} 
-          title="No applications" 
+          title={t('finale.notApplicationsAttr')} 
           description="There are no applications waiting for review." 
         />
       )}

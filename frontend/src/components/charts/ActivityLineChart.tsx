@@ -1,6 +1,7 @@
 'use client';
 
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useT } from '@/i18n/LocaleProvider';
 
 type DataPoint = { date: string; count: number };
 
@@ -22,13 +23,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export default function ActivityLineChart({ data, title, color = 'blue' }: { data: DataPoint[]; title?: string; color?: string }) {
+  const { t } = useT();
   const palette = COLORS[color] ?? COLORS.blue;
 
   if (data.length === 0) {
     return (
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md flex flex-col items-center justify-center min-h-[280px]">
         {title && <h3 className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-4">{title}</h3>}
-        <p className="text-sm text-slate-400 dark:text-slate-500">No activity data available</p>
+        <p className="text-sm text-slate-400 dark:text-slate-500">{t('finale.noActivityData')}</p>
       </div>
     );
   }

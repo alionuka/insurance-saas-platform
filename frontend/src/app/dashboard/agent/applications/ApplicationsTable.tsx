@@ -80,7 +80,7 @@ export default function ApplicationsTable({
   async function bulkUpdateStatus(status: ApplicationStatus) {
     const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
     if (!token) {
-      toast.error('Not authenticated');
+      toast.error(t('finale.notAuthenticated'));
       return;
     }
 

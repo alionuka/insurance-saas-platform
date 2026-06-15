@@ -17,11 +17,11 @@ export default function ChangePasswordForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword.length < 8) {
-      toast.error('New password must be at least 8 characters long');
+      toast.error(t('finale.pwTooShortLong'));
       return;
     }
     if (newPassword !== confirmPassword) {
-      toast.error('New passwords do not match');
+      toast.error(t('finale.pwMismatchToast'));
       return;
     }
 
@@ -29,14 +29,14 @@ export default function ChangePasswordForm() {
 
     try {
       await apiClient.post('/auth/change-password', { currentPassword, newPassword });
-      toast.success('Password updated successfully');
+      toast.success(t('finale.pwUpdatedToast'));
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
     } catch (err: any) {
       const message = err.response?.data?.message || 'An unexpected error occurred. Please try again.';
-      if (err.response?.status === 401 && message === 'Current password is incorrect') {
-        toast.error('Current password is incorrect');
+      if (err.response?.status === 401 && message === t('finale.pwWrongCurrent')) {
+        toast.error(t('finale.pwWrongCurrent'));
       } else {
         toast.error(message);
       }

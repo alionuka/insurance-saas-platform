@@ -1,6 +1,7 @@
 'use client';
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { useT } from '@/i18n/LocaleProvider';
 
 type PieData = { name: string; value: number; color: string };
 
@@ -16,13 +17,14 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 export default function StatusPieChart({ data, title }: { data: PieData[]; title?: string }) {
+  const { t } = useT();
   const total = data.reduce((sum, d) => sum + d.value, 0);
 
   if (total === 0) {
     return (
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md flex flex-col items-center justify-center min-h-[280px]">
         {title && <h3 className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-4">{title}</h3>}
-        <p className="text-sm text-slate-400 dark:text-slate-500">No data yet</p>
+        <p className="text-sm text-slate-400 dark:text-slate-500">{t('finale.noDataYet')}</p>
       </div>
     );
   }

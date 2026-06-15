@@ -598,6 +598,78 @@ const en: Dictionary = {
     saving: 'Saving…',
     updateFailed: 'Update failed',
   },
+  finale: {
+    // Settings page
+    noCompanyFound: 'No company found',
+    tenantBranding: 'Tenant Branding',
+    customiseHow: 'Customise how customers see your company.',
+    registrationRecord: 'Registration record',
+    licenceNumber: 'Licence number',
+    compliancePhoneLabel: 'Compliance phone',
+    tenantStatusLabel: 'Tenant status',
+    // Trust strip
+    gdprCompliant: 'GDPR-Compliant',
+    multiTenantIsolation: 'Multi-tenant Isolation',
+    shapExplainable: 'SHAP-Explainable AI',
+    fullAuditTrail: 'Full Audit Trail',
+    // Admin users page
+    nameCol: 'Name',
+    emailCol: 'Email',
+    roleCol: 'Role',
+    noUsersAttr: 'No users found',
+    // Change password
+    pwTooShortLong: 'New password must be at least 8 characters long',
+    pwMismatchToast: 'New passwords do not match',
+    pwUpdatedToast: 'Password updated successfully',
+    pwWrongCurrent: 'Current password is incorrect',
+    // Delete product
+    confirmDeletion: 'Confirm Deletion',
+    sureDelete: 'Are you sure you want to delete',
+    cancelBtn: 'Cancel',
+    deleteProductAttr: 'Delete Product',
+    // Company tables
+    customerCol: 'Customer',
+    statusCol: 'Status',
+    premiumCol: 'Premium',
+    amountCol: 'Amount',
+    noPoliciesFound: 'No policies found',
+    noClaimsFound: 'No claims found',
+    // Claim documents
+    docUploaded: 'Document uploaded',
+    docDeleted: 'Document deleted',
+    deleteDocAttr: 'Delete document',
+    downloadAttr: 'Download',
+    // Products table
+    typeCol: 'Type',
+    descriptionCol: 'Description',
+    editProductAttr: 'Edit Product',
+    // Sidebar
+    openSidebar: 'Open sidebar',
+    resizeSidebar: 'Resize sidebar (drag, double-click to reset)',
+    dragResize: 'Drag to resize · double-click to reset',
+    // Dashboard router
+    redirectingDash: 'Redirecting to your dashboard...',
+    pleaseWait: 'Please wait while we verify your access.',
+    // Company approve
+    approveBtn: 'Approve',
+    sessionExpiredSignIn: 'Session expired — please sign in again',
+    // Generic
+    notAuthenticated: 'Not authenticated',
+    statusUpdatedSuccess: 'Status updated successfully',
+    processing: 'Processing...',
+    clearSelection: 'Clear selection',
+    valueColon: 'Value:',
+    noFraudContrib: 'No fraud contributions available.',
+    noContribExplain: 'No contribution explanations available.',
+    metricsOfflineFinal: 'Metrics Offline',
+    notApplicationsAttr: 'No applications',
+    notClaimsAttr: 'No claims',
+    notificationsAttr: 'Notifications',
+    searchPh: 'Search applications, claims, or policies...',
+    noDataYet: 'No data yet',
+    noActivityData: 'No activity data available',
+    closeTour: 'Close tour',
+  },
   productForm: {
     createTitle: 'Register New Product',
     productName: 'Product Name',
@@ -1758,6 +1830,78 @@ const uk: Dictionary = {
   agentBadges: {
     saving: 'Збереження…',
     updateFailed: 'Не вдалося оновити',
+  },
+  finale: {
+    // Сторінка налаштувань
+    noCompanyFound: 'Компанію не знайдено',
+    tenantBranding: 'Брендинг тенанта',
+    customiseHow: 'Налаштуйте як клієнти бачать вашу компанію.',
+    registrationRecord: 'Реєстраційні дані',
+    licenceNumber: 'Номер ліцензії',
+    compliancePhoneLabel: 'Контактний телефон',
+    tenantStatusLabel: 'Статус тенанта',
+    // Trust strip
+    gdprCompliant: 'GDPR-сумісність',
+    multiTenantIsolation: 'Multi-tenant ізоляція',
+    shapExplainable: 'SHAP-пояснюваний ШІ',
+    fullAuditTrail: 'Повний аудит-журнал',
+    // Сторінка адмін-користувачі
+    nameCol: 'Імʼя',
+    emailCol: 'Email',
+    roleCol: 'Роль',
+    noUsersAttr: 'Користувачів не знайдено',
+    // Зміна паролю
+    pwTooShortLong: 'Новий пароль має містити щонайменше 8 символів',
+    pwMismatchToast: 'Нові паролі не співпадають',
+    pwUpdatedToast: 'Пароль успішно оновлено',
+    pwWrongCurrent: 'Поточний пароль невірний',
+    // Видалити продукт
+    confirmDeletion: 'Підтвердження видалення',
+    sureDelete: 'Ви впевнені, що хочете видалити',
+    cancelBtn: 'Скасувати',
+    deleteProductAttr: 'Видалити продукт',
+    // Таблиці компанії
+    customerCol: 'Клієнт',
+    statusCol: 'Статус',
+    premiumCol: 'Премія',
+    amountCol: 'Сума',
+    noPoliciesFound: 'Полісів не знайдено',
+    noClaimsFound: 'Виплат не знайдено',
+    // Документи виплат
+    docUploaded: 'Документ завантажено',
+    docDeleted: 'Документ видалено',
+    deleteDocAttr: 'Видалити документ',
+    downloadAttr: 'Завантажити',
+    // Таблиця продуктів
+    typeCol: 'Тип',
+    descriptionCol: 'Опис',
+    editProductAttr: 'Редагувати продукт',
+    // Sidebar
+    openSidebar: 'Відкрити sidebar',
+    resizeSidebar: 'Змінити розмір sidebar (тягніть, подвійний клік — скинути)',
+    dragResize: 'Тягніть для зміни розміру · подвійний клік — скинути',
+    // Перенаправлення дашборду
+    redirectingDash: 'Перенаправлення до дашборду…',
+    pleaseWait: 'Зачекайте, поки ми перевіримо ваш доступ.',
+    // Approve компанії
+    approveBtn: 'Схвалити',
+    sessionExpiredSignIn: 'Сесія завершена — увійдіть знову',
+    // Загальні
+    notAuthenticated: 'Не авторизовано',
+    statusUpdatedSuccess: 'Статус успішно оновлено',
+    processing: 'Обробка…',
+    clearSelection: 'Скинути вибір',
+    valueColon: 'Значення:',
+    noFraudContrib: 'Внесків фрауду немає.',
+    noContribExplain: 'Пояснень внесків немає.',
+    metricsOfflineFinal: 'Метрики недоступні',
+    notApplicationsAttr: 'Заявок немає',
+    notClaimsAttr: 'Виплат немає',
+    notificationsAttr: 'Сповіщення',
+    searchPh: 'Пошук серед заявок, виплат або полісів…',
+    noDataYet: 'Даних ще немає',
+    noActivityData: 'Дані про активність недоступні',
+    closeTour: 'Закрити тур',
   },
   productForm: {
     createTitle: 'Зареєструвати новий продукт',

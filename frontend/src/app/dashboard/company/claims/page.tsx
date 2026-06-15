@@ -45,9 +45,9 @@ export default async function CompanyClaimsPage() {
               <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
                 <tr>
                   <th className="px-6 py-3">{t('tail.claimId')}</th>
-                  <th className="px-6 py-3">Customer</th>
-                  <th className="px-6 py-3 text-right">Amount</th>
-                  <th className="px-6 py-3 text-center">Status</th>
+                  <th className="px-6 py-3">{t('finale.customerCol')}</th>
+                  <th className="px-6 py-3 text-right">{t('finale.amountCol')}</th>
+                  <th className="px-6 py-3 text-center">{t('finale.statusCol')}</th>
                   <th className="px-6 py-3 text-right">{t('tail.fraudScore')}</th>
                   <th className="px-6 py-3 text-right">{t('tail.filedDate')}</th>
                 </tr>
@@ -102,7 +102,7 @@ export default async function CompanyClaimsPage() {
       ) : (
         <EmptyState 
           icon={Activity} 
-          title="No claims found" 
+          title={t('finale.noClaimsFound')} 
           description="There are no claims filed against your company." 
         />
       )}

@@ -40,9 +40,9 @@ export default function ProductsTable({ products }: ProductsTableProps) {
           <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
             <tr>
               <th className="px-6 py-3">{t('tail.productName')}</th>
-              <th className="px-6 py-3">Type</th>
+              <th className="px-6 py-3">{t('finale.typeCol')}</th>
               <th className="px-6 py-3">{t('tail.basePremium')}</th>
-              <th className="px-6 py-3">Description</th>
+              <th className="px-6 py-3">{t('finale.descriptionCol')}</th>
               <th className="px-6 py-3 text-right">{t('tail.actions')}</th>
             </tr>
           </thead>
@@ -81,7 +81,7 @@ export default function ProductsTable({ products }: ProductsTableProps) {
                               ? 'bg-blue-600 border-blue-700 text-white'
                               : 'bg-slate-100 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
                           }`}
-                          title="Edit Product"
+                          title={t('finale.editProductAttr')}
                         >
                           <Edit2 className="h-4 w-4" />
                         </button>

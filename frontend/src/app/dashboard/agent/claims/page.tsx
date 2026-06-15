@@ -40,7 +40,7 @@ export default async function AgentClaimsPage() {
       ) : (
         <EmptyState 
           icon={Activity} 
-          title="No claims" 
+          title={t('finale.notClaimsAttr')} 
           description="There are no claims waiting for investigation." 
         />
       )}

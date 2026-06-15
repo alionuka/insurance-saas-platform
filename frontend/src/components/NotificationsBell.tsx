@@ -111,7 +111,7 @@ export default function NotificationsBell() {
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className="relative p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-        aria-label="Notifications"
+        aria-label={t('finale.notificationsAttr')}
       >
         <Bell className="h-5 w-5" />
         {unreadCount > 0 && (

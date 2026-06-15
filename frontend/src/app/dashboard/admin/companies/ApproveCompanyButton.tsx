@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { CheckCircle2, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useT } from '@/i18n/LocaleProvider';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -20,6 +21,7 @@ export default function ApproveCompanyButton({
   companyId: string;
   companyName: string;
 }) {
+  const { t } = useT();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -29,7 +31,7 @@ export default function ApproveCompanyButton({
       const token =
         typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
       if (!token) {
-        toast.error('Session expired — please sign in again');
+        toast.error(t('finale.sessionExpiredSignIn'));
         return;
       }
       const res = await fetch(`${API_URL}/companies/${companyId}/approve`, {
@@ -65,7 +67,7 @@ export default function ApproveCompanyButton({
       ) : (
         <>
           <CheckCircle2 className="h-4 w-4" />
-          Approve
+          {t('finale.approveBtn')}
         </>
       )}
     </button>

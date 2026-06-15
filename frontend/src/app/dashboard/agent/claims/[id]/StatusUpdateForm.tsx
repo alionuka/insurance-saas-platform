@@ -26,7 +26,7 @@ export default function StatusUpdateForm({ claimId, currentStatus }: { claimId: 
 
     const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
     if (!token) {
-      toast.error('Not authenticated');
+      toast.error(t('finale.notAuthenticated'));
       setLoading(false);
       return;
     }
@@ -48,7 +48,7 @@ export default function StatusUpdateForm({ claimId, currentStatus }: { claimId: 
 
       if (!res.ok) throw new Error('Failed to update status');
 
-      toast.success('Status updated successfully');
+      toast.success(t('finale.statusUpdatedSuccess'));
       router.refresh();
     } catch (err: any) {
       toast.error(err.message || 'Failed to update claim status');

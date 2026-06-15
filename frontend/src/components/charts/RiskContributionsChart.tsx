@@ -1,6 +1,7 @@
 'use client';
 
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer } from 'recharts';
+import { useT } from '@/i18n/LocaleProvider';
 
 export type FeatureContribution = {
   feature: string;
@@ -9,6 +10,8 @@ export type FeatureContribution = {
 };
 
 const CustomTooltip = ({ active, payload }: any) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { t } = useT();
   if (!active || !payload?.length) return null;
   const data = payload[0].payload;
   const sign = data.contribution >= 0 ? '+' : '';
@@ -16,7 +19,7 @@ const CustomTooltip = ({ active, payload }: any) => {
     <div className="bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 shadow-2xl text-left">
       <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{data.feature}</p>
       <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-        Value: <span className="text-slate-800 dark:text-slate-200 font-medium font-mono">{data.value}</span>
+        {t('finale.valueColon')} <span className="text-slate-800 dark:text-slate-200 font-medium font-mono">{data.value}</span>
       </p>
       <p className="text-xs text-slate-600 dark:text-slate-400">
         Impact:{' '}
@@ -29,10 +32,11 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 export default function RiskContributionsChart({ contributions }: { contributions: FeatureContribution[] }) {
+  const { t } = useT();
   if (!contributions || contributions.length === 0) {
     return (
       <div className="flex items-center justify-center p-6 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
-        <p className="text-xs text-slate-500 dark:text-slate-400">No contribution explanations available.</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400">{t('finale.noContribExplain')}</p>
       </div>
     );
   }

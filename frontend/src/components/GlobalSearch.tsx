@@ -153,7 +153,7 @@ export default function GlobalSearch() {
           <input
             ref={inputRef}
             type="text"
-            placeholder="Search applications, claims, or policies..."
+            placeholder={t('finale.searchPh')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="flex-1 bg-transparent border-none text-slate-900 dark:text-slate-100 focus:outline-none placeholder:text-slate-500 text-lg"

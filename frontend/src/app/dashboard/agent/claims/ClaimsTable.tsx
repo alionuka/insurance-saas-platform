@@ -82,7 +82,7 @@ export default function ClaimsTable({
   async function bulkUpdateStatus(status: ClaimStatus) {
     const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
     if (!token) {
-      toast.error('Not authenticated');
+      toast.error(t('finale.notAuthenticated'));
       return;
     }
 
@@ -218,7 +218,7 @@ export default function ClaimsTable({
                 </th>
                 <th className="px-6 py-3 font-medium">{t('claimsTable.colCustomer')}</th>
                 <th className="px-6 py-3 font-medium">{t('claimsTable.colPolicy')}</th>
-                <th className="px-6 py-3 font-medium">Amount</th>
+                <th className="px-6 py-3 font-medium">{t('finale.amountCol')}</th>
                 <th className="px-6 py-3 font-medium">{t('claimsTable.colFraud')}</th>
                 <th className="px-6 py-3 font-medium">{t('claimsTable.colCurrent')}</th>
                 <th className="px-6 py-3 font-medium">{t('claimsTable.colUpdate')}</th>

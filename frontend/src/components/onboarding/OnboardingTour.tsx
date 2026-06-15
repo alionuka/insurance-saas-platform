@@ -388,7 +388,7 @@ export default function OnboardingTour() {
           <button
             onClick={finish}
             className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors p-1 -mr-1 rounded"
-            aria-label="Close tour"
+            aria-label={t('finale.closeTour')}
           >
             <X className="h-4 w-4" />
           </button>

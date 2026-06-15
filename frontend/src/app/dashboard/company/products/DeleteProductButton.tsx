@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Trash2, AlertTriangle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { logout } from '@/lib/auth';
+import { useT } from '@/i18n/LocaleProvider';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -14,6 +15,7 @@ interface DeleteProductButtonProps {
 }
 
 export default function DeleteProductButton({ productId, productName, onDeleted }: DeleteProductButtonProps) {
+  const { t } = useT();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -64,7 +66,7 @@ export default function DeleteProductButton({ productId, productName, onDeleted 
       <button
         onClick={() => setIsOpen(true)}
         className="p-2 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-500 hover:bg-rose-500 hover:text-slate-900 dark:hover:text-slate-100 transition-all shadow-sm"
-        title="Delete Product"
+        title={t('finale.deleteProductAttr')}
       >
         <Trash2 className="h-4 w-4" />
       </button>
@@ -76,12 +78,12 @@ export default function DeleteProductButton({ productId, productName, onDeleted 
               <div className="h-10 w-10 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
                 <AlertTriangle className="h-5 w-5" />
               </div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Confirm Deletion</h2>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('finale.confirmDeletion')}</h2>
             </div>
 
             <div className="p-6">
               <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-                Are you sure you want to delete <strong className="text-slate-900 dark:text-slate-100">"{productName}"</strong>? This action cannot be undone.
+                {t('finale.sureDelete')} <strong className="text-slate-900 dark:text-slate-100">"{productName}"</strong>? This action cannot be undone.
               </p>
             </div>
 
@@ -92,7 +94,7 @@ export default function DeleteProductButton({ productId, productName, onDeleted 
                 disabled={loading}
                 className="px-4 py-2 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 rounded-xl text-sm font-bold transition-all disabled:opacity-50"
               >
-                Cancel
+                {t('finale.cancelBtn')}
               </button>
               <button
                 type="button"

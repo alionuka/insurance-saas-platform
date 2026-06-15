@@ -22,6 +22,7 @@ import { useT } from "@/i18n/LocaleProvider";
 import LocaleSwitcher from "@/i18n/LocaleSwitcher";
 import DemoLoginRow from "@/components/DemoLoginRow";
 import ThemeToggle from "@/theme/ThemeToggle";
+import { getT } from '@/i18n/getT';
 
 export default function Home() {
   const { t } = useT();
@@ -182,22 +183,22 @@ export default function Home() {
           <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-sm text-slate-600 dark:text-slate-300">
             <span className="inline-flex items-center gap-2">
               <Lock className="h-4 w-4 text-blue-700 dark:text-blue-400" />
-              <span className="font-semibold">GDPR-Compliant</span>
+              <span className="font-semibold">{t('finale.gdprCompliant')}</span>
             </span>
             <span className="hidden md:block h-4 w-px bg-slate-300 dark:bg-slate-700" />
             <span className="inline-flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-blue-700 dark:text-blue-400" />
-              <span className="font-semibold">Multi-tenant Isolation</span>
+              <span className="font-semibold">{t('finale.multiTenantIsolation')}</span>
             </span>
             <span className="hidden md:block h-4 w-px bg-slate-300 dark:bg-slate-700" />
             <span className="inline-flex items-center gap-2">
               <Brain className="h-4 w-4 text-blue-700 dark:text-blue-400" />
-              <span className="font-semibold">SHAP-Explainable AI</span>
+              <span className="font-semibold">{t('finale.shapExplainable')}</span>
             </span>
             <span className="hidden md:block h-4 w-px bg-slate-300 dark:bg-slate-700" />
             <span className="inline-flex items-center gap-2">
               <ActivitySquare className="h-4 w-4 text-blue-700 dark:text-blue-400" />
-              <span className="font-semibold">Full Audit Trail</span>
+              <span className="font-semibold">{t('finale.fullAuditTrail')}</span>
             </span>
           </div>
         </div>

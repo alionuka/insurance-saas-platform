@@ -45,11 +45,11 @@ export default async function CompanyPoliciesPage() {
               <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
                 <tr>
                   <th className="px-6 py-3">{t('tail.policyNumber')}</th>
-                  <th className="px-6 py-3">Customer</th>
+                  <th className="px-6 py-3">{t('finale.customerCol')}</th>
                   <th className="px-6 py-3">{t('tail.productLabel')}</th>
-                  <th className="px-6 py-3 text-center">Status</th>
+                  <th className="px-6 py-3 text-center">{t('finale.statusCol')}</th>
                   <th className="px-6 py-3 text-right">{t('tail.startDate')}</th>
-                  <th className="px-6 py-3 text-right">Premium</th>
+                  <th className="px-6 py-3 text-right">{t('finale.premiumCol')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800">
@@ -88,7 +88,7 @@ export default async function CompanyPoliciesPage() {
       ) : (
         <EmptyState 
           icon={ShieldCheck} 
-          title="No policies found" 
+          title={t('finale.noPoliciesFound')} 
           description="There are no active policies for your company." 
         />
       )}

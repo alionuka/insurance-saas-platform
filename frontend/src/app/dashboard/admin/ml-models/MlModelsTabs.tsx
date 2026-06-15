@@ -424,7 +424,7 @@ export default function MlModelsTabs({ data }: { data: any }) {
       return (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-12 text-center shadow-md">
           <AlertCircle className="mx-auto h-8 w-8 text-blue-500 mb-3" />
-          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider mb-2">Metrics Offline</h3>
+          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider mb-2">{t('finale.metricsOfflineFinal')}</h3>
           <p className="text-xs text-slate-500 dark:text-slate-400">{t('ml.noRecsDetails')}</p>
         </div>
       );

@@ -106,9 +106,9 @@ export default async function ManageUsersPage(props: Props) {
               <table className="w-full text-left text-sm min-w-[800px]">
                 <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
                   <tr>
-                    <th className="px-6 py-3">Name</th>
-                    <th className="px-6 py-3">Email</th>
-                    <th className="px-6 py-3">Role</th>
+                    <th className="px-6 py-3">{t('finale.nameCol')}</th>
+                    <th className="px-6 py-3">{t('finale.emailCol')}</th>
+                    <th className="px-6 py-3">{t('finale.roleCol')}</th>
                     <th className="px-6 py-3">{t('tail.company')}</th>
                     <th className="px-6 py-3 text-right">{t('tail.joined')}</th>
                   </tr>
@@ -149,7 +149,7 @@ export default async function ManageUsersPage(props: Props) {
         ) : (
           <EmptyState
             icon={Users}
-            title="No users found"
+            title={t('finale.noUsersAttr')}
             description="No users match the current filter."
           />
         )}

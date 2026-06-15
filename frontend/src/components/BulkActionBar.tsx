@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, Loader2 } from 'lucide-react';
+import { useT } from '@/i18n/LocaleProvider';
 
 type BulkAction = {
   label: string;
@@ -31,6 +32,7 @@ export default function BulkActionBar({
   actions: BulkAction[];
   isProcessing?: boolean;
 }) {
+  const { t } = useT();
   return (
     <AnimatePresence>
       {selectedCount > 0 && (
@@ -49,7 +51,7 @@ export default function BulkActionBar({
             <button
               onClick={onClearSelection}
               className="h-5 w-5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
-              title="Clear selection"
+              title={t('finale.clearSelection')}
             >
               <X className="h-3 w-3" />
             </button>
@@ -59,7 +61,7 @@ export default function BulkActionBar({
           {isProcessing ? (
             <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
               <Loader2 className="h-4 w-4 animate-spin text-blue-700" />
-              Processing...
+              {t('finale.processing')}
             </div>
           ) : (
             <div className="flex items-center gap-2">
