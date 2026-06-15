@@ -669,6 +669,7 @@ const en: Dictionary = {
     noDataYet: 'No data yet',
     noActivityData: 'No activity data available',
     closeTour: 'Close tour',
+    accessForbiddenStaff: 'You do not have permission to access this page. Staff account management is restricted to Platform Administrators only.',
   },
   productForm: {
     createTitle: 'Register New Product',
@@ -1194,6 +1195,7 @@ const en: Dictionary = {
     total: 'total',
     customer: 'Customer',
     risk: 'Risk',
+    allRoles: 'All Roles',
   },
   onboarding: {
     buttons: {
@@ -1902,6 +1904,7 @@ const uk: Dictionary = {
     noDataYet: 'Даних ще немає',
     noActivityData: 'Дані про активність недоступні',
     closeTour: 'Закрити тур',
+    accessForbiddenStaff: 'У вас немає доступу до цієї сторінки. Керування акаунтами персоналу обмежено для адміністраторів платформи.',
   },
   productForm: {
     createTitle: 'Зареєструвати новий продукт',
@@ -2426,6 +2429,7 @@ const uk: Dictionary = {
     total: 'усього',
     customer: 'Клієнт',
     risk: 'Ризик',
+    allRoles: 'Усі ролі',
   },
   onboarding: {
     buttons: {

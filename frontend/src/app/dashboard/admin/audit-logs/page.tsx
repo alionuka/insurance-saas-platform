@@ -2,6 +2,7 @@ import { ScrollText, ShieldX, Clock, User, Box, FileText, ChevronRight } from 'l
 import { formatDate } from '@/lib/formatDate';
 import { cookies } from 'next/headers';
 import { getT } from '@/i18n/getT';
+import { translateAuditAction, translateResourceType, translateRole } from '@/i18n/translateStatus';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -99,7 +100,7 @@ export default async function AuditLogPage() {
                   </td>
                   <td className="px-6 py-4">
                     <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase border ${getActionColor(log.action)}`}>
-                      {log.action.replace(/_/g, ' ')}
+                      {translateAuditAction(t, log.action)}
                     </span>
                   </td>
                   <td className="px-6 py-4">
@@ -110,7 +111,7 @@ export default async function AuditLogPage() {
                       </div>
                       {log.actorRole && (
                         <span className="text-[9px] text-slate-500 dark:text-slate-400 uppercase font-black tracking-widest mt-0.5">
-                          {log.actorRole}
+                          {translateRole(t, log.actorRole)}
                         </span>
                       )}
                     </div>
@@ -120,7 +121,7 @@ export default async function AuditLogPage() {
                       <div className="flex flex-col">
                         <div className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 text-xs font-mono">
                           <Box className="h-3 w-3 text-slate-400 dark:text-slate-500" />
-                          {log.resourceType}
+                          {translateResourceType(t, log.resourceType)}
                         </div>
                         {log.resourceId && (
                           <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-0.5">

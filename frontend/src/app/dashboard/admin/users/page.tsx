@@ -78,7 +78,7 @@ export default async function ManageUsersPage(props: Props) {
         </div>
         <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">{t('tail.accessForbidden')}</h2>
         <p className="text-slate-600 dark:text-slate-400 text-center max-w-md">
-          You do not have permission to access this page. Staff account management is restricted to Platform Administrators only.
+          {t('finale.accessForbiddenStaff')}
         </p>
       </div>
     );
