@@ -2,6 +2,7 @@
 
 import * as Sentry from '@sentry/nextjs';
 import { useEffect } from 'react';
+import { useT } from '@/i18n/LocaleProvider';
 
 export default function GlobalError({
   error,
@@ -10,6 +11,7 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const { t } = useT();
   useEffect(() => {
     Sentry.captureException(error);
   }, [error]);
@@ -18,16 +20,12 @@ export default function GlobalError({
     <html lang="en">
       <body className="bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100">
         <div className="min-h-screen flex flex-col items-center justify-center p-8">
-          <h1 className="text-4xl font-bold mb-4">Something went wrong</h1>
-          <p className="text-slate-600 dark:text-slate-400 mb-6 text-center max-w-md">
-            An unexpected error occurred. Our team has been notified.
-          </p>
+          <h1 className="text-4xl font-bold mb-4">{t('tail.somethingWrong')}</h1>
+          <p className="text-slate-600 dark:text-slate-400 mb-6 text-center max-w-md">{t('tail.globalErrorMsg')}</p>
           <button
             onClick={reset}
             className="px-6 py-3 bg-blue-700 hover:bg-blue-600 rounded-lg text-sm font-medium transition-colors"
-          >
-            Try Again
-          </button>
+          >{t('tail.tryAgain')}</button>
         </div>
       </body>
     </html>

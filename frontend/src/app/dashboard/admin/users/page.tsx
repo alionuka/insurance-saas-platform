@@ -5,6 +5,7 @@ import CreateUserForm from './CreateUserForm';
 import UsersFilters from './UsersFilters';
 import EmptyState from '@/components/ui/EmptyState';
 import { formatDate } from '@/lib/formatDate';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -62,6 +63,7 @@ async function getPageData(roleFilter?: string) {
 type Props = { searchParams: Promise<{ [key: string]: string | string[] | undefined }> };
 
 export default async function ManageUsersPage(props: Props) {
+  const { t } = await getT();
   const searchParams = await props.searchParams;
   const roleFilter = typeof searchParams.role === 'string' ? searchParams.role : undefined;
 
@@ -73,7 +75,7 @@ export default async function ManageUsersPage(props: Props) {
         <div className="h-16 w-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4">
           <ShieldAlert className="h-10 w-10 text-rose-500" />
         </div>
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">Access Forbidden</h2>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">{t('tail.accessForbidden')}</h2>
         <p className="text-slate-600 dark:text-slate-400 text-center max-w-md">
           You do not have permission to access this page. Staff account management is restricted to Platform Administrators only.
         </p>
@@ -88,10 +90,8 @@ export default async function ManageUsersPage(props: Props) {
           <Users className="h-6 w-6 text-blue-500" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">User Management</h1>
-          <p className="text-slate-600 dark:text-slate-400 mt-1">
-            View all platform users and create new staff accounts.
-          </p>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">{t('tail.userManagement')}</h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">{t('tail.userManagementDesc')}</p>
         </div>
       </div>
 
@@ -108,8 +108,8 @@ export default async function ManageUsersPage(props: Props) {
                     <th className="px-6 py-3">Name</th>
                     <th className="px-6 py-3">Email</th>
                     <th className="px-6 py-3">Role</th>
-                    <th className="px-6 py-3">Company</th>
-                    <th className="px-6 py-3 text-right">Joined</th>
+                    <th className="px-6 py-3">{t('tail.company')}</th>
+                    <th className="px-6 py-3 text-right">{t('tail.joined')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-800">

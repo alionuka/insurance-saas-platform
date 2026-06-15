@@ -2,6 +2,7 @@
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Brain } from 'lucide-react';
+import { useT } from '@/i18n/LocaleProvider';
 
 export type RiskDriver = {
   feature: string;
@@ -10,13 +11,14 @@ export type RiskDriver = {
 };
 
 const CustomTooltip = ({ active, payload }: any) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { t } = useT();
   if (!active || !payload?.length) return null;
   const data = payload[0].payload;
   return (
     <div className="bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 shadow-2xl text-left">
       <p className="text-xs font-bold text-slate-900 dark:text-slate-100">{data.feature}</p>
-      <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-        Cumulative impact: <span className="text-blue-700 font-mono font-bold">{data.totalImpact.toFixed(1)} pts</span>
+      <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">{t('tail.cumulativeImpact')}<span className="text-blue-700 font-mono font-bold">{data.totalImpact.toFixed(1)} pts</span>
       </p>
       <p className="text-xs text-slate-500 dark:text-slate-400">
         Across {data.occurrences} prediction{data.occurrences === 1 ? '' : 's'}
@@ -26,16 +28,17 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 export default function TopRiskDriversChart({ drivers }: { drivers: RiskDriver[] }) {
+  const { t } = useT();
   if (!drivers || drivers.length === 0) {
     return (
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 h-full">
         <div className="flex items-center gap-2 mb-2">
           <Brain className="h-5 w-5 text-blue-700" />
-          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Top Risk Drivers</h3>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('tail.topRiskDrivers')}</h3>
         </div>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">Aggregated ML feature contributions across portfolio</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">{t('tail.riskAggregatedDesc')}</p>
         <div className="flex items-center justify-center h-[220px] border border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
-          <p className="text-sm text-slate-500 dark:text-slate-400">No risk assessments yet.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">{t('tail.noRiskAssessments')}</p>
         </div>
       </div>
     );
@@ -48,9 +51,9 @@ export default function TopRiskDriversChart({ drivers }: { drivers: RiskDriver[]
     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 h-full">
       <div className="flex items-center gap-2 mb-2">
         <Brain className="h-5 w-5 text-blue-700" />
-        <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Top Risk Drivers</h3>
+        <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('tail.topRiskDrivers')}</h3>
       </div>
-      <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">Cumulative ML feature impact (SHAP) across all assessed applications</p>
+      <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">{t('tail.riskCumulativeDesc')}</p>
 
       <div className="h-[240px] w-full">
         <ResponsiveContainer width="100%" height="100%">

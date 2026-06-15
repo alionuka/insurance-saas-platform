@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import ApplicationsTable from './ApplicationsTable';
 import EmptyState from '@/components/ui/EmptyState';
 import { FileText } from 'lucide-react';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -24,13 +25,14 @@ async function getApplications() {
 }
 
 export default async function AgentApplicationsPage() {
+  const { t } = await getT();
   const applications = await getApplications();
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Applications Queue</h1>
-        <p className="text-slate-600 dark:text-slate-400 mt-1 text-sm">Review and update application statuses.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">{t('tail.applicationsQueue')}</h1>
+        <p className="text-slate-600 dark:text-slate-400 mt-1 text-sm">{t('tail.appQueueDesc')}</p>
       </div>
 
       {applications.length > 0 ? (

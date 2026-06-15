@@ -346,9 +346,7 @@ export default function ClaimsTable({
                     <td colSpan={7} className="px-6 py-0 border-b border-slate-200 dark:border-slate-800">
                       <details className="group">
                         <summary className="list-none cursor-pointer py-3 flex items-center gap-2 text-[10px] text-slate-500 dark:text-slate-400 hover:text-blue-700 uppercase font-bold tracking-tight transition-colors">
-                          <ChevronRight className="h-3 w-3 group-open:rotate-90 transition-transform" />
-                          Supporting Documents
-                        </summary>
+                          <ChevronRight className="h-3 w-3 group-open:rotate-90 transition-transform" />{t('tail.supportingDocuments')}</summary>
                         <div className="pb-6">
                           <ClaimDocuments claimId={claim.id} canUpload={false} />
                         </div>
@@ -360,9 +358,7 @@ export default function ClaimsTable({
               })}
               {filteredClaims.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-6 py-10 text-center text-slate-500 dark:text-slate-400 text-sm">
-                    No claims found.
-                  </td>
+                  <td colSpan={7} className="px-6 py-10 text-center text-slate-500 dark:text-slate-400 text-sm">{t('tail.noClaimsTable')}</td>
                 </tr>
               )}
             </tbody>

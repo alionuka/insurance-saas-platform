@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import ClaimsTable from './ClaimsTable';
 import EmptyState from '@/components/ui/EmptyState';
 import { Activity } from 'lucide-react';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -24,13 +25,14 @@ async function getClaims() {
 }
 
 export default async function AgentClaimsPage() {
+  const { t } = await getT();
   const claims = await getClaims();
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Claims Queue</h1>
-        <p className="text-slate-600 dark:text-slate-400 mt-1 text-sm">Investigate and update claim statuses.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">{t('tail.claimsQueue')}</h1>
+        <p className="text-slate-600 dark:text-slate-400 mt-1 text-sm">{t('tail.claimsQueueDesc')}</p>
       </div>
 
       {claims.length > 0 ? (

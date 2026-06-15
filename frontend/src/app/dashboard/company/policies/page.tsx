@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import EmptyState from '@/components/ui/EmptyState';
 import { ShieldCheck } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -26,13 +27,14 @@ async function getPolicies() {
 }
 
 export default async function CompanyPoliciesPage() {
+  const { t } = await getT();
   const policies = await getPolicies();
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Company Policies</h1>
-        <p className="text-slate-600 dark:text-slate-400 mt-1 text-sm">Active policies issued by your company.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">{t('tail.companyPolicies')}</h1>
+        <p className="text-slate-600 dark:text-slate-400 mt-1 text-sm">{t('tail.companyPoliciesDesc')}</p>
       </div>
 
       {policies.length > 0 ? (
@@ -41,11 +43,11 @@ export default async function CompanyPoliciesPage() {
             <table className="w-full text-left text-sm min-w-[800px]">
               <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
                 <tr>
-                  <th className="px-6 py-3">Policy Number</th>
+                  <th className="px-6 py-3">{t('tail.policyNumber')}</th>
                   <th className="px-6 py-3">Customer</th>
-                  <th className="px-6 py-3">Product</th>
+                  <th className="px-6 py-3">{t('tail.productLabel')}</th>
                   <th className="px-6 py-3 text-center">Status</th>
-                  <th className="px-6 py-3 text-right">Start Date</th>
+                  <th className="px-6 py-3 text-right">{t('tail.startDate')}</th>
                   <th className="px-6 py-3 text-right">Premium</th>
                 </tr>
               </thead>

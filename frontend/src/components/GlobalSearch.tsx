@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Search, FileText, Activity, ShieldCheck, Loader2 } from 'lucide-react';
 import { formatDate } from '@/lib/formatDate';
+import { useT } from '@/i18n/LocaleProvider';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
@@ -17,6 +18,7 @@ type SearchResult = {
 };
 
 export default function GlobalSearch() {
+  const { t } = useT();
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<{ applications: SearchResult[], claims: SearchResult[], policies: SearchResult[] }>({
@@ -167,7 +169,7 @@ export default function GlobalSearch() {
           {!query.trim() ? (
             <div className="py-12 text-center text-slate-500 dark:text-slate-400">
               <Search className="h-8 w-8 mx-auto mb-3 opacity-20" />
-              <p>Type to search across your applications, claims, and policies.</p>
+              <p>{t('tail.typeToSearch')}</p>
             </div>
           ) : totalResults === 0 && !isLoading ? (
             <div className="py-12 text-center text-slate-500 dark:text-slate-400">
@@ -177,7 +179,7 @@ export default function GlobalSearch() {
             <>
               {results.applications.length > 0 && (
                 <div className="space-y-2">
-                  <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-2">Applications</h3>
+                  <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-2">{t('tail.applicationsQueue')}</h3>
                   {results.applications.map((res) => (
                     <Link
                       key={res.id}
@@ -199,7 +201,7 @@ export default function GlobalSearch() {
 
               {results.claims.length > 0 && (
                 <div className="space-y-2">
-                  <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-2">Claims</h3>
+                  <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-2">{t('users.claimsHeader')}</h3>
                   {results.claims.map((res) => (
                     <Link
                       key={res.id}
@@ -221,7 +223,7 @@ export default function GlobalSearch() {
 
               {results.policies.length > 0 && (
                 <div className="space-y-2">
-                  <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-2">Policies</h3>
+                  <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-2">{t('users.policiesHeader')}</h3>
                   {results.policies.map((res) => (
                     <Link
                       key={res.id}

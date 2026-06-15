@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { logout } from '@/lib/auth';
+import { useT } from '@/i18n/LocaleProvider';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const CLAIM_STATUSES = ['FILED', 'IN_PROGRESS', 'APPROVED', 'DENIED'];
 
 export default function StatusUpdateForm({ claimId, currentStatus }: { claimId: string; currentStatus: string }) {
+  const { t } = useT();
   const router = useRouter();
   const [status, setStatus] = useState(currentStatus);
   const [loading, setLoading] = useState(false);
@@ -57,12 +59,10 @@ export default function StatusUpdateForm({ claimId, currentStatus }: { claimId: 
 
   return (
     <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 md:p-8">
-      <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Update Claim Status</h2>
+      <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">{t('tail.updateClaimStatus')}</h2>
       <div className="flex flex-col sm:flex-row gap-4 items-end">
         <div className="flex-1 w-full">
-          <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2 uppercase tracking-wider">
-            Current Status
-          </label>
+          <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2 uppercase tracking-wider">{t('tail.currentStatus')}</label>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
@@ -80,7 +80,7 @@ export default function StatusUpdateForm({ claimId, currentStatus }: { claimId: 
           className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 disabled:text-slate-500 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 min-w-[140px]"
         >
           {loading ? (
-            <><Loader2 className="h-4 w-4 animate-spin" /> Updating...</>
+            <><Loader2 className="h-4 w-4 animate-spin" />{t('tail.updating')}</>
           ) : (
             'Update Status'
           )}

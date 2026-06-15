@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { Package, FileCheck, Loader2, Building2 } from 'lucide-react';
 import { formatCurrency } from '@/lib/formatDate';
 import { logout } from '@/lib/auth';
+import { useT } from '@/i18n/LocaleProvider';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
@@ -46,6 +47,7 @@ export default function BrowseProductsGrid({
   groupedProducts: Record<string, Product[]>;
   typeOrder: string[];
 }) {
+  const { t } = useT();
   const router = useRouter();
   const [applyingProductId, setApplyingProductId] = useState<string | null>(null);
 
@@ -178,9 +180,7 @@ export default function BrowseProductsGrid({
 
                   <div className="pt-3 border-t border-slate-200 dark:border-slate-800/50">
                     <div className="flex items-baseline justify-between mb-3">
-                      <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">
-                        Base premium
-                      </span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('tail.basePremium')}</span>
                       <div className="text-right">
                         <span className="text-xl font-bold text-blue-700">
                           {formatCurrency(product.basePremium)}
@@ -200,12 +200,12 @@ export default function BrowseProductsGrid({
                       {applyingProductId === product.id ? (
                         <>
                           <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                          <span>Submitting…</span>
+                          <span>{t('tail.submittingApp')}</span>
                         </>
                       ) : (
                         <>
                           <FileCheck className="h-3.5 w-3.5" />
-                          <span>Apply for this Product</span>
+                          <span>{t('tail.applyForProduct')}</span>
                         </>
                       )}
                     </button>

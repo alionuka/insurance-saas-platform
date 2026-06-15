@@ -6,6 +6,7 @@ import { formatCurrency } from '@/lib/formatDate';
 import EditProductForm from './EditProductForm';
 import DeleteProductButton from './DeleteProductButton';
 import { useRouter } from 'next/navigation';
+import { useT } from '@/i18n/LocaleProvider';
 
 interface Product {
   id: string;
@@ -20,6 +21,7 @@ interface ProductsTableProps {
 }
 
 export default function ProductsTable({ products }: ProductsTableProps) {
+  const { t } = useT();
   const router = useRouter();
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
 
@@ -31,17 +33,17 @@ export default function ProductsTable({ products }: ProductsTableProps) {
   return (
     <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xl">
       <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Active Products</h2>
+        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('tail.activeProducts')}</h2>
       </div>
       <div className="p-0 overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
             <tr>
-              <th className="px-6 py-3">Product Name</th>
+              <th className="px-6 py-3">{t('tail.productName')}</th>
               <th className="px-6 py-3">Type</th>
-              <th className="px-6 py-3">Base Premium</th>
+              <th className="px-6 py-3">{t('tail.basePremium')}</th>
               <th className="px-6 py-3">Description</th>
-              <th className="px-6 py-3 text-right">Actions</th>
+              <th className="px-6 py-3 text-right">{t('tail.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-800">
@@ -110,9 +112,7 @@ export default function ProductsTable({ products }: ProductsTableProps) {
 
             {products.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400 italic">
-                  No products yet — create your first one below.
-                </td>
+                <td colSpan={5} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400 italic">{t('tail.noProductsYet')}</td>
               </tr>
             )}
           </tbody>

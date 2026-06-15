@@ -4,6 +4,7 @@ import Link from 'next/link';
 import CreateProductForm from './CreateProductForm';
 import ProductsTable from './ProductsTable';
 import { formatCurrency } from '@/lib/formatDate';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -34,6 +35,7 @@ async function getMyProducts() {
 }
 
 export default async function CompanyProductsPage() {
+  const { t } = await getT();
   const { products, status } = await getMyProducts();
 
   if (status === 401 || status === 403) {
@@ -42,7 +44,7 @@ export default async function CompanyProductsPage() {
         <div className="h-16 w-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4">
           <ShieldAlert className="h-10 w-10 text-rose-500" />
         </div>
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">Access Forbidden</h2>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">{t('tail.accessForbidden')}</h2>
         <p className="text-slate-600 dark:text-slate-400 text-center max-w-md">
           You do not have permission to access this page. Product management is restricted to Company Administrators.
         </p>
@@ -58,17 +60,15 @@ export default async function CompanyProductsPage() {
             <Package className="h-6 w-6 text-blue-500" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Product Catalog</h1>
-            <p className="text-slate-600 dark:text-slate-400 mt-1">Manage insurance products for your company.</p>
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">{t('tail.productCatalog')}</h1>
+            <p className="text-slate-600 dark:text-slate-400 mt-1">{t('tail.productCatalogDesc')}</p>
           </div>
         </div>
         <Link 
           href="/dashboard/company"
           className="flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
         >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Dashboard
-        </Link>
+          <ArrowLeft className="h-4 w-4" />{t('tail.backToDashboard')}</Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

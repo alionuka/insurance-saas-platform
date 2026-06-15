@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Bell, ShieldCheck, FileText, CreditCard, Activity, ShieldAlert, BookOpen } from 'lucide-react';
 import { formatDate } from '@/lib/formatDate';
 import { logout } from '@/lib/auth';
+import { useT } from '@/i18n/LocaleProvider';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
@@ -15,6 +16,7 @@ type AuditLog = {
 };
 
 export default function NotificationsBell() {
+  const { t } = useT();
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -122,14 +124,12 @@ export default function NotificationsBell() {
       {isOpen && (
         <div className="absolute left-0 mt-2 w-80 max-h-[500px] overflow-y-auto bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl z-[60] flex flex-col">
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-800 shrink-0 sticky top-0 bg-white dark:bg-slate-900/95 backdrop-blur z-10">
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Notifications</h3>
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t('tail.notifications')}</h3>
             {unreadCount > 0 && (
               <button 
                 onClick={handleMarkAllAsRead}
                 className="text-xs text-blue-700 hover:text-blue-600 transition-colors font-medium"
-              >
-                Mark all as read
-              </button>
+              >{t('tail.markAllRead')}</button>
             )}
           </div>
           
@@ -153,7 +153,7 @@ export default function NotificationsBell() {
             ) : (
               <div className="py-8 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
                 <Bell className="h-8 w-8 mb-2 opacity-20" />
-                <p className="text-sm">No activity yet.</p>
+                <p className="text-sm">{t('tail.noActivityYet')}</p>
               </div>
             )}
           </div>

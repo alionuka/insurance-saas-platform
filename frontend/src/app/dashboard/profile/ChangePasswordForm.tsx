@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { Lock, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import apiClient from '@/lib/api-client';
+import { useT } from '@/i18n/LocaleProvider';
 
 export default function ChangePasswordForm() {
+  const { t } = useT();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -46,7 +48,7 @@ export default function ChangePasswordForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Current Password</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('tail.currentPassword')}</label>
         <div className="relative">
           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500 dark:text-slate-400" />
           <input
@@ -60,7 +62,7 @@ export default function ChangePasswordForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">New Password</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('tail.newPassword')}</label>
         <div className="relative">
           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500 dark:text-slate-400" />
           <input
@@ -75,7 +77,7 @@ export default function ChangePasswordForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Confirm New Password</label>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('tail.confirmNewPassword')}</label>
         <div className="relative">
           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500 dark:text-slate-400" />
           <input

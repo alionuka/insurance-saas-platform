@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { AlertCircle } from 'lucide-react';
+import { useT } from '@/i18n/LocaleProvider';
 
 export default function GlobalError({
   error,
@@ -11,6 +12,7 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const { t } = useT();
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -21,16 +23,12 @@ export default function GlobalError({
         <div className="h-20 w-20 rounded-full bg-rose-500/10 flex items-center justify-center mb-6">
           <AlertCircle className="h-10 w-10 text-rose-500" />
         </div>
-        <h2 className="text-2xl font-bold">Something went wrong</h2>
-        <p className="text-slate-600 dark:text-slate-400 mt-2 mb-6 leading-relaxed">
-          We encountered an unexpected error while trying to process your request.
-        </p>
+        <h2 className="text-2xl font-bold">{t('tail.somethingWrong')}</h2>
+        <p className="text-slate-600 dark:text-slate-400 mt-2 mb-6 leading-relaxed">{t('tail.errorMsg')}</p>
 
         {error.message && (
           <details className="w-full text-left bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 mb-8">
-            <summary className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-700 dark:hover:text-slate-300">
-              Error Details
-            </summary>
+            <summary className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:text-slate-700 dark:hover:text-slate-300">{t('tail.errorDetails')}</summary>
             <p className="text-sm font-mono text-rose-700 dark:text-rose-400 mt-3 whitespace-pre-wrap break-all">
               {error.message}
             </p>
@@ -41,15 +39,11 @@ export default function GlobalError({
           <button 
             onClick={() => reset()}
             className="px-6 py-2.5 bg-blue-700 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-blue-500/20 w-full sm:w-auto"
-          >
-            Try again
-          </button>
+          >{t('tail.tryAgain')}</button>
           <Link 
             href="/"
             className="px-6 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 text-sm font-medium rounded-lg transition-colors w-full sm:w-auto"
-          >
-            Go Home
-          </Link>
+          >{t('tail.goHome')}</Link>
         </div>
       </div>
     </div>

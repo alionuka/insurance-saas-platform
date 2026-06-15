@@ -90,14 +90,14 @@ export default async function AgentOverviewPage() {
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5">
           <div className="flex items-center gap-3 mb-2">
             <ShieldAlert className="h-5 w-5 text-rose-700 dark:text-rose-400" />
-            <h3 className="font-medium text-slate-700 dark:text-slate-300">High-Risk Apps</h3>
+            <h3 className="font-medium text-slate-700 dark:text-slate-300">{t('tail.highRiskApps')}</h3>
           </div>
           <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{highRiskApps}</p>
         </div>
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5">
           <div className="flex items-center gap-3 mb-2">
             <AlertTriangle className="h-5 w-5 text-blue-700" />
-            <h3 className="font-medium text-slate-700 dark:text-slate-300">Suspicious Claims</h3>
+            <h3 className="font-medium text-slate-700 dark:text-slate-300">{t('tail.suspiciousClaims')}</h3>
           </div>
           <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{suspiciousClaims}</p>
         </div>
@@ -142,11 +142,11 @@ export default async function AgentOverviewPage() {
         </div>
 
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
-          <h2 className="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">Risk Distribution</h2>
+          <h2 className="text-lg font-medium text-slate-900 dark:text-slate-100 mb-4">{t('tail.riskDistribution')}</h2>
           <div className="space-y-6">
             <div className="space-y-2">
               <div className="flex justify-between text-xs">
-                <span className="text-emerald-700 dark:text-emerald-400 font-medium">Low Risk</span>
+                <span className="text-emerald-700 dark:text-emerald-400 font-medium">{t('tail.lowRisk')}</span>
                 <span className="text-slate-600 dark:text-slate-400">{lowRisk}</span>
               </div>
               <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
@@ -155,7 +155,7 @@ export default async function AgentOverviewPage() {
             </div>
             <div className="space-y-2">
               <div className="flex justify-between text-xs">
-                <span className="text-blue-700 font-medium">Medium Risk</span>
+                <span className="text-blue-700 font-medium">{t('tail.mediumRisk')}</span>
                 <span className="text-slate-600 dark:text-slate-400">{medRisk}</span>
               </div>
               <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
@@ -164,7 +164,7 @@ export default async function AgentOverviewPage() {
             </div>
             <div className="space-y-2">
               <div className="flex justify-between text-xs">
-                <span className="text-rose-700 dark:text-rose-400 font-medium">High Risk</span>
+                <span className="text-rose-700 dark:text-rose-400 font-medium">{t('tail.highRisk')}</span>
                 <span className="text-slate-600 dark:text-slate-400">{highRisk}</span>
               </div>
               <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">

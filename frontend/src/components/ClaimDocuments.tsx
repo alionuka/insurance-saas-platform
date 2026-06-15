@@ -5,6 +5,7 @@ import { FileText, Upload, X, Loader2, Download, ExternalLink } from 'lucide-rea
 import { toast } from 'sonner';
 import { formatDate } from '@/lib/formatDate';
 import { logout } from '@/lib/auth';
+import { useT } from '@/i18n/LocaleProvider';
 
 interface ClaimDocument {
   id: string;
@@ -28,6 +29,7 @@ interface ClaimDocumentsProps {
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
 export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsProps) {
+  const { t } = useT();
   const [documents, setDocuments] = useState<ClaimDocument[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -164,9 +166,7 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
     <div className="p-4 bg-slate-50 dark:bg-[#060b1a]/50 border border-slate-200 dark:border-slate-800 rounded-lg mt-2 space-y-4">
       <div className="flex items-center justify-between">
         <h4 className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-tight flex items-center gap-2">
-          <FileText className="h-4 w-4 text-blue-700" />
-          Supporting Documents
-        </h4>
+          <FileText className="h-4 w-4 text-blue-700" />{t('tail.supportingDocuments')}</h4>
         {canUpload && (
           <label className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold uppercase py-1.5 px-3 rounded flex items-center gap-2 transition-colors disabled:opacity-50">
             {uploading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />}
@@ -234,9 +234,7 @@ export default function ClaimDocuments({ claimId, canUpload }: ClaimDocumentsPro
           ))}
         </div>
       ) : (
-        <div className="py-8 text-center border border-slate-200 dark:border-slate-800 border-dashed rounded text-slate-500 dark:text-slate-400 text-xs italic">
-          No documents uploaded yet.
-        </div>
+        <div className="py-8 text-center border border-slate-200 dark:border-slate-800 border-dashed rounded text-slate-500 dark:text-slate-400 text-xs italic">{t('tail.noDocumentsYet')}</div>
       )}
     </div>
   );

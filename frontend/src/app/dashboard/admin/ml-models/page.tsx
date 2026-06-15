@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Brain, ShieldAlert } from 'lucide-react';
 import MlModelsTabs from './MlModelsTabs';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -30,6 +31,7 @@ async function getMlModelsData() {
 }
 
 export default async function MlModelsDashboardPage() {
+  const { t } = await getT();
   const { data, forbidden } = await getMlModelsData();
 
   if (forbidden) {
@@ -45,8 +47,8 @@ export default async function MlModelsDashboardPage() {
             <Brain className="h-6 w-6 text-blue-700" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">ML Model Methodology</h1>
-            <p className="text-slate-600 dark:text-slate-400 mt-1">Metrics, training performance, and explainability artifacts</p>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">{t('tail.mlModelMethodology')}</h1>
+            <p className="text-slate-600 dark:text-slate-400 mt-1">{t('tail.mlModelMethodologyDesc')}</p>
           </div>
         </div>
       </div>
@@ -58,7 +60,7 @@ export default async function MlModelsDashboardPage() {
           <div className="mx-auto h-12 w-12 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4">
             <ShieldAlert className="h-6 w-6 text-red-400" />
           </div>
-          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">Metrics Not Available</h2>
+          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">{t('tail.metricsNotAvail')}</h2>
           <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
             The machine learning service metrics are currently offline or cannot be parsed. Please check if the ML service is running.
           </p>
