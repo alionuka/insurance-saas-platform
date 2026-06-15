@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2, Upload, Save } from 'lucide-react';
 import { toast } from 'sonner';
+import { useT } from '@/i18n/LocaleProvider';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -24,6 +25,7 @@ interface Props {
  */
 export default function CompanyBrandingForm({ initialValues }: Props) {
   const router = useRouter();
+  const { t } = useT();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [name, setName] = useState(initialValues.name);
   const [description, setDescription] = useState(initialValues.description);
@@ -51,14 +53,14 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
       });
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.message || 'Failed to save branding');
+        throw new Error(data.message || t('brandingForm.saveFailedDetail'));
       }
-      toast.success('Branding updated', {
-        description: 'Customer-facing surfaces will reflect the change.',
+      toast.success(t('brandingForm.updateSuccess'), {
+        description: t('brandingForm.updateDesc'),
       });
       router.refresh();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to save');
+      toast.error(err instanceof Error ? err.message : t('brandingForm.saveFailed'));
     } finally {
       setSavingFields(false);
     }
@@ -68,7 +70,7 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > 2 * 1024 * 1024) {
-      toast.error('Logo too large — max 2 MB');
+      toast.error(t('brandingForm.logoTooLarge'));
       return;
     }
     setUploadingLogo(true);
@@ -82,13 +84,13 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
       });
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.message || 'Failed to upload logo');
+        throw new Error(data.message || t('brandingForm.uploadFailedDetail'));
       }
       setLogoUrl(data.logoUrl);
-      toast.success('Logo uploaded');
+      toast.success(t('brandingForm.logoUploaded'));
       router.refresh();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Upload failed');
+      toast.error(err instanceof Error ? err.message : t('brandingForm.uploadFailed'));
     } finally {
       setUploadingLogo(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -99,7 +101,7 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-6">
       {/* Logo section */}
       <div>
-        <label className="block text-sm font-bold text-slate-900 dark:text-slate-100 mb-2">Logo</label>
+        <label className="block text-sm font-bold text-slate-900 dark:text-slate-100 mb-2">{t('brandingForm.logoLabel')}</label>
         <div className="flex items-center gap-4">
           <div
             className="h-20 w-20 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#060b1a] flex items-center justify-center overflow-hidden shrink-0"
@@ -145,10 +147,10 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
               ) : (
                 <Upload className="h-4 w-4" />
               )}
-              {logoUrl ? 'Replace logo' : 'Upload logo'}
+              {logoUrl ? t('brandingForm.replaceLogo') : t('brandingForm.uploadLogo')}
             </button>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2">
-              PNG, JPEG, WebP, or SVG. Max 2 MB. Square ratio works best.
+              {t('brandingForm.fileHelp')}
             </p>
           </div>
         </div>
@@ -162,7 +164,7 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
               htmlFor="company-name"
               className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
             >
-              Company name
+              {t('brandingForm.companyName')}
             </label>
             <input
               id="company-name"
@@ -181,7 +183,7 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
               htmlFor="primary-color"
               className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
             >
-              Primary colour
+              {t('brandingForm.primaryColor')}
             </label>
             <div className="flex items-center gap-3">
               <input
@@ -208,7 +210,7 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
             htmlFor="company-description"
             className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
           >
-            Description
+            {t('brandingForm.description')}
           </label>
           <textarea
             id="company-description"
@@ -217,10 +219,10 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="w-full px-3 py-2 bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm resize-none"
-            placeholder="Short tagline shown to customers — what makes your company different?"
+            placeholder={t('brandingForm.descPlaceholder')}
           />
           <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-            {description.length} / 500 characters
+            {description.length}{t('brandingForm.charactersOf')}
           </p>
         </div>
 
@@ -235,7 +237,7 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
           ) : (
             <>
               <Save className="h-4 w-4" />
-              Save branding
+              {t('brandingForm.saveBtn')}
             </>
           )}
         </button>

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Package, Loader2, DollarSign, Type, FileText } from 'lucide-react';
 import { toast } from 'sonner';
 import { logout } from '@/lib/auth';
+import { useT } from '@/i18n/LocaleProvider';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -20,6 +21,7 @@ interface EditProductFormProps {
 }
 
 export default function EditProductForm({ product, onSaved, onCancel }: EditProductFormProps) {
+  const { t } = useT();
   const [formData, setFormData] = useState({
     name: product.name,
     type: product.type,
@@ -36,13 +38,13 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
     e.preventDefault();
 
     if (!formData.name.trim()) {
-      toast.error('Product name is required');
+      toast.error(t('productForm.nameRequired'));
       return;
     }
 
     const premium = parseFloat(formData.basePremium);
     if (isNaN(premium) || premium < 0) {
-      toast.error('Base premium must be at least 0');
+      toast.error(t('productForm.premiumNonneg'));
       return;
     }
 
@@ -90,13 +92,13 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
           logout();
           return;
         }
-        throw new Error(data.message || 'Failed to update product');
+        throw new Error(data.message || t('productForm.updateFailed'));
       }
 
-      toast.success(`Product ${data.name} updated successfully`);
+      toast.success(t('productForm.updatedSuccess').replace('{name}', data.name));
       onSaved();
     } catch (err: any) {
-      toast.error(err.message || 'An error occurred during submission');
+      toast.error(err.message || t('productForm.submitError'));
     } finally {
       setLoading(false);
     }
@@ -107,7 +109,7 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-            Product Name
+            {t('productForm.productName')}
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -126,7 +128,7 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
 
         <div>
           <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-            Product Type
+            {t('productForm.productType')}
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -138,17 +140,17 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
               onChange={handleChange}
               className="block w-full pl-10 pr-3 py-2 border border-slate-200 dark:border-slate-800 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm cursor-pointer appearance-none"
             >
-              <option value="LIFE">Life Insurance</option>
-              <option value="AUTO">Auto Insurance</option>
-              <option value="HEALTH">Health Insurance</option>
-              <option value="PROPERTY">Property Insurance</option>
+              <option value="LIFE">{t('productTypes.LIFE')}</option>
+              <option value="AUTO">{t('productTypes.AUTO')}</option>
+              <option value="HEALTH">{t('productTypes.HEALTH')}</option>
+              <option value="PROPERTY">{t('productTypes.PROPERTY')}</option>
             </select>
           </div>
         </div>
 
         <div>
           <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-            Base Monthly Premium ($)
+            {t('productForm.basePremiumLabel')}
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -169,7 +171,7 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
 
         <div>
           <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-            Description
+            {t('productForm.descriptionLabel')}
           </label>
           <div className="relative">
             <div className="absolute top-2.5 left-3 flex items-center pointer-events-none">
@@ -181,7 +183,7 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
               value={formData.description}
               onChange={handleChange}
               className="appearance-none block w-full pl-10 pr-3 py-1.5 border border-slate-200 dark:border-slate-800 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm resize-none"
-              placeholder="Brief description..."
+              placeholder={t('productForm.briefDescription')}
             />
           </div>
         </div>
@@ -194,7 +196,7 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
           disabled={loading}
           className="px-4 py-2 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 rounded-lg text-xs font-bold transition-all disabled:opacity-50"
         >
-          Cancel
+          {t('productForm.cancel')}
         </button>
         <button
           type="submit"
@@ -202,7 +204,7 @@ export default function EditProductForm({ product, onSaved, onCancel }: EditProd
           className="flex items-center gap-1.5 px-4 py-2 border border-transparent rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50"
         >
           {loading && <Loader2 className="h-3 w-3 animate-spin" />}
-          Save Changes
+          {t('productForm.saveChanges')}
         </button>
       </div>
     </form>

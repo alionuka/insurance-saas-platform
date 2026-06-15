@@ -5,9 +5,11 @@ import { Package, Plus, Loader2, DollarSign, Type, FileText } from 'lucide-react
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/lib/auth';
+import { useT } from '@/i18n/LocaleProvider';
 
 export default function CreateProductForm() {
   const router = useRouter();
+  const { t } = useT();
   const [formData, setFormData] = useState({
     name: '',
     type: 'LIFE',
@@ -27,13 +29,13 @@ export default function CreateProductForm() {
 
 
     if (!formData.name) {
-      toast.error('Product name is required');
+      toast.error(t('productForm.nameRequired'));
       setLoading(false);
       return;
     }
 
     if (parseFloat(formData.basePremium) < 0) {
-      toast.error('Base premium must be at least 0');
+      toast.error(t('productForm.premiumNonneg'));
       setLoading(false);
       return;
     }
@@ -64,10 +66,10 @@ export default function CreateProductForm() {
           logout();
           return;
         }
-        throw new Error(data.message || 'Failed to create product');
+        throw new Error(data.message || t('productForm.createFailed'));
       }
 
-      toast.success(`Product ${data.name} (${data.type}) registered successfully`);
+      toast.success(t('productForm.createdSuccess').replace('{name}', data.name).replace('{type}', data.type));
       setFormData({
         name: '',
         type: 'LIFE',
@@ -76,7 +78,7 @@ export default function CreateProductForm() {
       });
       router.refresh();
     } catch (err: any) {
-      toast.error(err.message || 'An error occurred during submission');
+      toast.error(err.message || t('productForm.submitError'));
     } finally {
       setLoading(false);
     }
@@ -86,7 +88,7 @@ export default function CreateProductForm() {
     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl overflow-hidden">
       <div className="p-6 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 flex items-center gap-2">
         <Plus className="h-5 w-5 text-blue-700" />
-        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Register New Product</h2>
+        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('productForm.createTitle')}</h2>
       </div>
 
       <div className="p-8">
@@ -96,7 +98,7 @@ export default function CreateProductForm() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">
-                Product Name
+                {t('productForm.productName')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -110,14 +112,14 @@ export default function CreateProductForm() {
                   value={formData.name}
                   onChange={handleChange}
                   className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
-                  placeholder="Premium Life Plus"
+                  placeholder={t('productForm.productNamePlaceholder')}
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="type" className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">
-                Product Type
+                {t('productForm.productType')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -130,10 +132,10 @@ export default function CreateProductForm() {
                   onChange={handleChange}
                   className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm appearance-none cursor-pointer"
                 >
-                  <option value="LIFE">Life Insurance</option>
-                  <option value="AUTO">Auto Insurance</option>
-                  <option value="HEALTH">Health Insurance</option>
-                  <option value="PROPERTY">Property Insurance</option>
+                  <option value="LIFE">{t('productTypes.LIFE')}</option>
+                  <option value="AUTO">{t('productTypes.AUTO')}</option>
+                  <option value="HEALTH">{t('productTypes.HEALTH')}</option>
+                  <option value="PROPERTY">{t('productTypes.PROPERTY')}</option>
                 </select>
               </div>
             </div>
@@ -141,7 +143,7 @@ export default function CreateProductForm() {
 
           <div>
             <label htmlFor="basePremium" className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">
-              Base Monthly Premium ($)
+              {t('productForm.basePremiumLabel')}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -164,7 +166,7 @@ export default function CreateProductForm() {
 
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">
-              Description (Optional)
+              {t('productForm.descriptionOptional')}
             </label>
             <div className="relative">
               <div className="absolute top-3 left-3 flex items-center pointer-events-none">
@@ -177,7 +179,7 @@ export default function CreateProductForm() {
                 value={formData.description}
                 onChange={handleChange}
                 className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm resize-none"
-                placeholder="Briefly describe the product coverage..."
+                placeholder={t('productForm.descriptionPlaceholder')}
               />
             </div>
           </div>
@@ -191,7 +193,7 @@ export default function CreateProductForm() {
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
-                'Register Product'
+                t('productForm.registerBtn')
               )}
             </button>
           </div>

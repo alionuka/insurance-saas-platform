@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2, User } from 'lucide-react';
 import { toast } from 'sonner';
+import { useT } from '@/i18n/LocaleProvider';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -22,7 +23,8 @@ interface EditProfileFormProps {
 
 export default function EditProfileForm({ initialValues, isCustomer }: EditProfileFormProps) {
   const router = useRouter();
-  
+  const { t } = useT();
+
   const [firstName, setFirstName] = useState(initialValues.firstName || '');
   const [lastName, setLastName] = useState(initialValues.lastName || '');
   const [age, setAge] = useState<string>(initialValues.age !== undefined && initialValues.age !== null ? String(initialValues.age) : '');
@@ -35,11 +37,11 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
     e.preventDefault();
 
     if (!firstName.trim()) {
-      toast.error('First name is required');
+      toast.error(t('profileForm.firstNameReq'));
       return;
     }
     if (!lastName.trim()) {
-      toast.error('Last name is required');
+      toast.error(t('profileForm.lastNameReq'));
       return;
     }
 
@@ -52,7 +54,7 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
       if (age !== '') {
         const parsedAge = parseInt(age, 10);
         if (isNaN(parsedAge) || parsedAge < 18 || parsedAge > 100) {
-          toast.error('Age must be an integer between 18 and 100');
+          toast.error(t('profileForm.ageRange'));
           return;
         }
         payload.age = parsedAge;
@@ -63,7 +65,7 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
       if (annualIncome !== '') {
         const parsedIncome = parseFloat(annualIncome);
         if (isNaN(parsedIncome) || parsedIncome < 0) {
-          toast.error('Annual income must be a number greater than or equal to 0');
+          toast.error(t('profileForm.incomeRange'));
           return;
         }
         payload.annualIncome = parsedIncome;
@@ -74,7 +76,7 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
       if (creditScore !== '') {
         const parsedScore = parseInt(creditScore, 10);
         if (isNaN(parsedScore) || parsedScore < 300 || parsedScore > 850) {
-          toast.error('Credit score must be an integer between 300 and 850');
+          toast.error(t('profileForm.creditScoreRange'));
           return;
         }
         payload.creditScore = parsedScore;
@@ -87,10 +89,10 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
 
     try {
       await apiClient.patch('/auth/me', payload);
-      toast.success('Profile updated successfully');
+      toast.success(t('profileForm.updateSuccess'));
       router.refresh();
     } catch (err: any) {
-      const message = err.response?.data?.message || 'An unexpected error occurred. Please try again.';
+      const message = err.response?.data?.message || t('profileForm.updateError');
       toast.error(message);
     } finally {
       setIsLoading(false);
@@ -101,7 +103,7 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">First Name</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('userForm.firstName')}</label>
           <div className="relative">
             <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500 dark:text-slate-400" />
             <input
@@ -116,7 +118,7 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Last Name</label>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('userForm.lastName')}</label>
           <div className="relative">
             <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500 dark:text-slate-400" />
             <input
@@ -133,12 +135,12 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
         {isCustomer && (
           <>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Age</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('dashboard.age')}</label>
               <input
                 type="number"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
-                placeholder="e.g. 30"
+                placeholder={t('profileForm.agePh')}
                 min="18"
                 max="100"
                 className="w-full px-4 py-2 bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -146,12 +148,12 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Credit Score</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('dashboard.creditScore')}</label>
               <input
                 type="number"
                 value={creditScore}
                 onChange={(e) => setCreditScore(e.target.value)}
-                placeholder="e.g. 700"
+                placeholder={t('profileForm.creditScorePh')}
                 min="300"
                 max="850"
                 className="w-full px-4 py-2 bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -159,12 +161,12 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
             </div>
 
             <div className="col-span-1 md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Annual Income ($)</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('profileForm.annualIncomeLabel')}</label>
               <input
                 type="number"
                 value={annualIncome}
                 onChange={(e) => setAnnualIncome(e.target.value)}
-                placeholder="e.g. 75000"
+                placeholder={t('profileForm.incomePh')}
                 min="0"
                 step="any"
                 className="w-full px-4 py-2 bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -180,7 +182,7 @@ export default function EditProfileForm({ initialValues, isCustomer }: EditProfi
         className="w-full bg-blue-700 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 mt-4"
       >
         {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-        Save Profile Changes
+        {t('profileForm.saveBtn')}
       </button>
     </form>
   );

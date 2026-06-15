@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Mail, Lock, User, ShieldCheck, Loader2, Building2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { logout } from '@/lib/auth';
+import { useT } from '@/i18n/LocaleProvider';
 
 interface Company {
   id: string;
@@ -15,6 +16,7 @@ interface CreateUserFormProps {
 }
 
 export default function CreateUserForm({ companies }: CreateUserFormProps) {
+  const { t } = useT();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -45,13 +47,13 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
 
     // Client-side validation
     if (formData.password.length < 8) {
-      toast.error('Password must be at least 8 characters');
+      toast.error(t('userForm.passwordMin'));
       setLoading(false);
       return;
     }
 
     if (formData.role === 'COMPANY_ADMIN' && !formData.companyId) {
-      toast.error('Select a company for COMPANY_ADMIN');
+      toast.error(t('userForm.selectCompanyForAdmin'));
       setLoading(false);
       return;
     }
@@ -83,10 +85,10 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
           logout();
           return;
         }
-        throw new Error(data.message || 'Failed to create user');
+        throw new Error(data.message || t('userForm.createFailed'));
       }
 
-      toast.success(`Account ${data.email} provisioned as ${data.role}`);
+      toast.success(t('userForm.createdSuccess').replace('{email}', data.email).replace('{role}', data.role));
       // Clear personal info but keep role and companyId
       setFormData((prev) => ({
         ...prev,
@@ -96,7 +98,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
         lastName: '',
       }));
     } catch (err: any) {
-      toast.error(err.message || 'An error occurred during submission');
+      toast.error(err.message || t('userForm.submitError'));
     } finally {
       setLoading(false);
     }
@@ -106,7 +108,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl overflow-hidden">
       <div className="p-6 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 flex items-center gap-2">
         <ShieldCheck className="h-5 w-5 text-blue-700" />
-        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Provision New Staff Account</h2>
+        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('userForm.title')}</h2>
       </div>
 
       <div className="p-8">
@@ -116,7 +118,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="firstName" className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">
-                First Name
+                {t('userForm.firstName')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -130,14 +132,14 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
                   value={formData.firstName}
                   onChange={handleChange}
                   className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
-                  placeholder="Jane"
+                  placeholder={t('userForm.firstNamePh')}
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="lastName" className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">
-                Last Name
+                {t('userForm.lastName')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -151,7 +153,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
                   value={formData.lastName}
                   onChange={handleChange}
                   className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
-                  placeholder="Smith"
+                  placeholder={t('userForm.lastNamePh')}
                 />
               </div>
             </div>
@@ -159,7 +161,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">
-              Email Address
+              {t('userForm.emailAddress')}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -173,14 +175,14 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
                 value={formData.email}
                 onChange={handleChange}
                 className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm"
-                placeholder="jane.smith@example.com"
+                placeholder={t('userForm.emailPh')}
               />
             </div>
           </div>
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">
-              Password
+              {t('userForm.password')}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -203,7 +205,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="role" className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">
-                Staff Role
+                {t('userForm.staffRole')}
               </label>
               <select
                 id="role"
@@ -212,16 +214,16 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
                 onChange={handleChange}
                 className="block w-full px-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm appearance-none cursor-pointer"
               >
-                <option value="AGENT">Agent</option>
-                <option value="COMPANY_ADMIN">Company Admin</option>
-                <option value="PLATFORM_ADMIN">Platform Admin</option>
+                <option value="AGENT">{t('userForm.roleAgent')}</option>
+                <option value="COMPANY_ADMIN">{t('userForm.roleCompanyAdmin')}</option>
+                <option value="PLATFORM_ADMIN">{t('userForm.rolePlatformAdmin')}</option>
               </select>
             </div>
 
             {formData.role === 'COMPANY_ADMIN' && (
               <div>
                 <label htmlFor="companyId" className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">
-                  Assigned Company
+                  {t('userForm.assignedCompany')}
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -235,7 +237,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
                     onChange={handleChange}
                     className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-[#060b1a] text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all sm:text-sm appearance-none cursor-pointer"
                   >
-                    <option value="">-- Select a Company --</option>
+                    <option value="">{t('userForm.selectCompany')}</option>
                     {companies.length > 0 ? (
                       companies.map((c) => (
                         <option key={c.id} value={c.id}>
@@ -243,7 +245,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
                         </option>
                       ))
                     ) : (
-                      <option value="" disabled>No companies exist yet.</option>
+                      <option value="" disabled>{t('userForm.noCompaniesYet')}</option>
                     )}
                   </select>
                 </div>
@@ -260,7 +262,7 @@ export default function CreateUserForm({ companies }: CreateUserFormProps) {
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
-                'Create Staff Account'
+                t('userForm.createBtn')
               )}
             </button>
           </div>
