@@ -7,6 +7,7 @@ import StopClickPropagation from '@/components/StopClickPropagation';
 import EmptyState from '@/components/ui/EmptyState';
 import PolicyFilters from './PolicyFilters';
 import { getT } from '@/i18n/getT';
+import { translateStatus } from '@/i18n/translateStatus';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -100,7 +101,7 @@ export default async function ClientPoliciesPage(props: Props) {
                       policy.status === 'PENDING_PAYMENT' ? 'bg-blue-700/10 text-blue-700 border-blue-700/20' :
                       'bg-zinc-500/10 text-slate-600 dark:text-slate-400 border-zinc-500/20'
                     }`}>
-                      {policy.status.replace('_', ' ')}
+                      {translateStatus(t, policy.status)}
                     </span>
                   </div>
                 </div>

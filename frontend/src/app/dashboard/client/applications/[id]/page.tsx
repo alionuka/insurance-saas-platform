@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowLeft, FileText, ShieldAlert, TrendingUp, CheckCircle, ShieldCheck, Box, Calendar } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { getT } from '@/i18n/getT';
+import { translateStatus, translateRiskLevel } from '@/i18n/translateStatus';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -105,7 +106,7 @@ export default async function ClientApplicationDetailPage({ params }: { params: 
               <p className="text-slate-600 dark:text-slate-400 mt-1">{t('dashboard.appHeaderSubtitle')}</p>
             </div>
             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase border ${getStatusPill(app.status)}`}>
-              {app.status.replace('_', ' ')}
+              {translateStatus(t, app.status)}
             </span>
           </div>
         </div>
@@ -162,7 +163,7 @@ export default async function ClientApplicationDetailPage({ params }: { params: 
               </div>
               <div className="mb-4">
                 <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase border bg-slate-50 dark:bg-[#060b1a] ${getRiskLevelColor(risk.riskLevel)} border-current/20`}>
-                  {risk.riskLevel} {t('dashboard.riskSuffix')}
+                  {translateRiskLevel(t, risk.riskLevel)} {t('dashboard.riskSuffix')}
                 </span>
               </div>
               <div className="mt-auto p-4 bg-slate-50 dark:bg-[#060b1a]/50 rounded-lg border border-slate-200 dark:border-slate-800">
@@ -192,7 +193,7 @@ export default async function ClientApplicationDetailPage({ params }: { params: 
                     {t('dashboard.policyNumber')}: <span className="font-mono font-bold text-slate-900 dark:text-slate-100 uppercase">{policy.policyNumber}</span>
                   </p>
                   <p className="text-sm text-slate-700 dark:text-slate-300">
-                    {t('dashboard.statusLabel')}: <span className="text-emerald-700 dark:text-emerald-400 font-medium">{policy.status.replace('_', ' ')}</span>
+                    {t('dashboard.statusLabel')}: <span className="text-emerald-700 dark:text-emerald-400 font-medium">{translateStatus(t, policy.status)}</span>
                   </p>
                   <p className="text-sm text-slate-700 dark:text-slate-300">
                     {t('dashboard.premiumLabel')}: <span className="text-blue-700 font-bold">{formatCurrency(policy.premiumAmount)}</span>

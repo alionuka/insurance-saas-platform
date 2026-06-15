@@ -6,6 +6,7 @@ import { formatDate, formatCurrency } from '@/lib/formatDate';
 import ApplicationStatusUpdateForm from './ApplicationStatusUpdateForm';
 import RiskContributionsChart from '@/components/charts/RiskContributionsChart';
 import { getT } from '@/i18n/getT';
+import { translateStatus, translateRiskLevel } from '@/i18n/translateStatus';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -152,7 +153,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
                       {t('dashboard.policyNumber')}: <span className="font-mono font-bold text-slate-900 dark:text-slate-100 uppercase">{policy.policyNumber}</span>
                     </p>
                     <p className="text-sm text-slate-700 dark:text-slate-300">
-                      {t('dashboard.statusLabel')}: <span className="text-emerald-700 dark:text-emerald-400 font-medium">{policy.status.replace('_', ' ')}</span>
+                      {t('dashboard.statusLabel')}: <span className="text-emerald-700 dark:text-emerald-400 font-medium">{translateStatus(t, policy.status)}</span>
                     </p>
                     <p className="text-sm text-slate-700 dark:text-slate-300">
                       {t('dashboard.premiumLabel')}: <span className="text-blue-700 font-bold">{formatCurrency(policy.premiumAmount)}</span>
@@ -198,7 +199,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
                     <span className="text-sm text-slate-500 dark:text-slate-400 mb-1">/ 100</span>
                   </div>
                   <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase border bg-slate-50 dark:bg-[#060b1a] ${getRiskLevelColor(risk.riskLevel)} border-current/20`}>
-                    {risk.riskLevel}
+                    {translateRiskLevel(t, risk.riskLevel)}
                   </span>
                 </div>
                 <div className="flex-1 flex flex-col justify-between">

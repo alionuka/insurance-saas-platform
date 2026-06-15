@@ -6,6 +6,7 @@ import EditProfileForm from './EditProfileForm';
 import RestartTourButton from '@/components/onboarding/RestartTourButton';
 import GdprPanel from './GdprPanel';
 import { getT } from '@/i18n/getT';
+import { translateAuditAction, translateResourceType } from '@/i18n/translateStatus';
 import AvatarUploadButton from './AvatarUploadButton';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -154,19 +155,19 @@ export default async function ProfilePage() {
             {user.role === 'CUSTOMER' && (
               <div className="grid grid-cols-3 gap-3 mb-6 pb-6 border-b border-slate-200 dark:border-slate-800/60">
                 <div className="bg-blue-700/5 border border-blue-700/20 rounded-lg p-3">
-                  <p className="text-[10px] text-blue-700 uppercase font-bold tracking-wider mb-1">Age</p>
+                  <p className="text-[10px] text-blue-700 uppercase font-bold tracking-wider mb-1">{t('dashboard.age')}</p>
                   <p className="text-slate-900 dark:text-slate-100 font-semibold text-lg">{user.age ?? '—'}</p>
-                  <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-1">used by Risk ML</p>
+                  <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-1">{t('tail.usedByRiskMl')}</p>
                 </div>
                 <div className="bg-blue-700/5 border border-blue-700/20 rounded-lg p-3">
-                  <p className="text-[10px] text-blue-700 uppercase font-bold tracking-wider mb-1">Credit Score</p>
+                  <p className="text-[10px] text-blue-700 uppercase font-bold tracking-wider mb-1">{t('dashboard.creditScore')}</p>
                   <p className="text-slate-900 dark:text-slate-100 font-semibold text-lg">{user.creditScore ?? '—'}</p>
-                  <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-1">used by Risk ML</p>
+                  <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-1">{t('tail.usedByRiskMl')}</p>
                 </div>
                 <div className="bg-blue-700/5 border border-blue-700/20 rounded-lg p-3">
-                  <p className="text-[10px] text-blue-700 uppercase font-bold tracking-wider mb-1">Annual Income</p>
+                  <p className="text-[10px] text-blue-700 uppercase font-bold tracking-wider mb-1">{t('profileForm.annualIncomeLabel')}</p>
                   <p className="text-slate-900 dark:text-slate-100 font-semibold text-lg">{user.annualIncome != null ? `$${Number(user.annualIncome).toLocaleString()}` : '—'}</p>
-                  <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-1">used by Risk + Recs</p>
+                  <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-1">{t('tail.usedByRiskRecs')}</p>
                 </div>
               </div>
             )}
@@ -205,13 +206,13 @@ export default async function ProfilePage() {
                   <div key={log.id} className="p-5 hover:bg-slate-100 dark:hover:bg-slate-800/20 transition-colors">
                     <div className="flex items-center justify-between mb-2">
                       <span className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider border ${getActionColor(log.action)}`}>
-                        {log.action.replace(/_/g, ' ')}
+                        {translateAuditAction(t, log.action)}
                       </span>
                       <span className="text-xs text-slate-500 dark:text-slate-400">{formatDate(log.createdAt)}</span>
                     </div>
                     {log.resourceType && (
                       <p className="text-sm text-slate-600 dark:text-slate-400 font-medium">
-                        {log.resourceType} <span className="text-slate-400 dark:text-slate-500 font-normal">#{log.resourceId?.substring(0, 8)}</span>
+                        {translateResourceType(t, log.resourceType)} <span className="text-slate-400 dark:text-slate-500 font-normal">#{log.resourceId?.substring(0, 8)}</span>
                       </p>
                     )}
                   </div>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { CreditCard, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { logout } from '@/lib/auth';
+import { useT } from '@/i18n/LocaleProvider';
 
 interface PolicyPaymentButtonProps {
   policyId: string;
@@ -13,6 +14,7 @@ interface PolicyPaymentButtonProps {
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
 export default function PolicyPaymentButton({ policyId, amount }: PolicyPaymentButtonProps) {
+  const { t } = useT();
   const [loading, setLoading] = useState(false);
 
   const handlePay = async () => {
@@ -40,7 +42,7 @@ export default function PolicyPaymentButton({ policyId, amount }: PolicyPaymentB
 
       if (!res.ok) {
         const error = await res.json();
-        throw new Error(error.message || 'Failed to initiate payment');
+        throw new Error(error.message || t('tail.paymentInitFailed'));
       }
 
       const { url } = await res.json();
@@ -62,7 +64,7 @@ export default function PolicyPaymentButton({ policyId, amount }: PolicyPaymentB
       ) : (
         <CreditCard className="h-4 w-4" />
       )}
-      Pay Now (${amount.toFixed(2)}/yr)
+      {t('tail.payNow')} (${amount.toFixed(2)}{t('tail.perYear')})
     </button>
   );
 }
