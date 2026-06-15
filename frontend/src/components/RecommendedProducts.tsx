@@ -97,7 +97,17 @@ export default function RecommendedProducts() {
           return;
         }
         if (!res.ok) {
-          throw new Error(`Failed to load recommendations (HTTP ${res.status})`);
+          // Surface the backend's `message` field when available so users
+          // see the helpful "ML Service warming up..." copy on cold starts
+          // instead of a generic HTTP code.
+          let detail = `HTTP ${res.status}`;
+          try {
+            const body = await res.json();
+            if (body?.message) detail = body.message;
+          } catch {
+            /* non-JSON body — keep generic */
+          }
+          throw new Error(detail);
         }
         const json = (await res.json()) as RecommendationsResponse;
         if (!cancelled) setData(json);
@@ -137,9 +147,28 @@ export default function RecommendedProducts() {
         )}
 
         {error && !loading && (
-          <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 flex items-center gap-3 text-sm text-rose-700">
-            <AlertCircle className="h-5 w-5 shrink-0" />
-            <p className="font-medium">{error}</p>
+          <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/30 flex items-start gap-3 text-sm text-rose-700 dark:text-rose-400">
+            <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
+            <div className="flex-1 min-w-0">
+              <p className="font-medium">{error}</p>
+              <button
+                type="button"
+                onClick={() => {
+                  // Re-run the loader by toggling the loading flag and
+                  // calling load() inline. Simpler than lifting state —
+                  // the user clicks at most a couple of times on a cold
+                  // start, then it stays warm.
+                  setError(null);
+                  setLoading(true);
+                  // Trigger a remount via key bump would be cleaner, but
+                  // for thesis scope a soft reload of the panel is fine.
+                  window.location.reload();
+                }}
+                className="mt-2 text-xs font-bold underline underline-offset-2 hover:no-underline"
+              >
+                Retry
+              </button>
+            </div>
           </div>
         )}
 

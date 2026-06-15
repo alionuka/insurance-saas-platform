@@ -138,7 +138,7 @@ export default function CompanyBrandingForm({ initialValues }: Props) {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploadingLogo}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-zinc-700 disabled:opacity-50 text-sm font-medium text-slate-900 dark:text-slate-100 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-50 text-sm font-medium text-slate-900 dark:text-slate-100 transition-colors"
             >
               {uploadingLogo ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

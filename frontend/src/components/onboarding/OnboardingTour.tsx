@@ -409,7 +409,7 @@ export default function OnboardingTour() {
                   ? 'bg-blue-700 w-6'
                   : i < stepIndex
                   ? 'bg-blue-700/40 w-1.5'
-                  : 'bg-zinc-700 w-1.5'
+                  : 'bg-slate-300 dark:bg-slate-700 w-1.5'
               }`}
             />
           ))}
@@ -426,7 +426,7 @@ export default function OnboardingTour() {
             {!isFirst && (
               <button
                 onClick={() => setStepIndex(stepIndex - 1)}
-                className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 bg-slate-100 dark:bg-slate-800 hover:bg-zinc-700 rounded-lg transition-colors"
+                className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
                 {t('onboarding.buttons.back')}
