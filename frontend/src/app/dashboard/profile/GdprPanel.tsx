@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Download, Trash2, AlertTriangle, Loader2, ShieldAlert } from 'lucide-react';
 import { logout } from '@/lib/auth';
+import { useT } from '@/i18n/LocaleProvider';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
 export default function GdprPanel() {
   const router = useRouter();
+  const { t } = useT();
   const [exporting, setExporting] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deletePassword, setDeletePassword] = useState('');
@@ -28,7 +30,7 @@ export default function GdprPanel() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
-        throw new Error('Export failed');
+        throw new Error(t('gdpr.exportFailed'));
       }
       // Trigger file download
       const blob = await res.blob();
@@ -40,11 +42,11 @@ export default function GdprPanel() {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
-      toast.success('Data export downloaded', {
-        description: 'Your personal data has been saved to your downloads folder.',
+      toast.success(t('gdpr.exportSuccess'), {
+        description: t('gdpr.exportSuccessDesc'),
       });
     } catch (err: any) {
-      toast.error('Export failed', { description: err.message });
+      toast.error(t('gdpr.exportFailed'), { description: err.message });
     } finally {
       setExporting(false);
     }
@@ -69,10 +71,10 @@ export default function GdprPanel() {
       });
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.message || 'Deletion failed');
+        throw new Error(data.message || t('gdpr.deleteFailed'));
       }
-      toast.success('Account permanently deleted', {
-        description: 'All your personal data has been removed.',
+      toast.success(t('gdpr.deleteSuccess'), {
+        description: t('gdpr.deleteSuccessDesc'),
       });
       // Clear local session and redirect to landing
       localStorage.removeItem('access_token');
@@ -81,7 +83,7 @@ export default function GdprPanel() {
       document.cookie = 'access_token=; path=/; max-age=0';
       router.push('/');
     } catch (err: any) {
-      toast.error('Deletion failed', { description: err.message });
+      toast.error(t('gdpr.deleteFailed'), { description: err.message });
       setDeleting(false);
     }
   };
@@ -91,10 +93,10 @@ export default function GdprPanel() {
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
         <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2">
           <ShieldAlert className="h-5 w-5 text-blue-700" />
-          Privacy & Data Rights
+          {t('gdpr.title')}
         </h2>
         <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
-          GDPR-compliant data portability and erasure. You control your personal data at all times.
+          {t('gdpr.subtitle')}
         </p>
 
         <div className="space-y-4">
@@ -102,9 +104,9 @@ export default function GdprPanel() {
           <div className="bg-slate-50 dark:bg-[#060b1a]/50 border border-slate-200 dark:border-slate-800 rounded-lg p-4">
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">Export your data</h3>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">{t('gdpr.exportTitle')}</h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                  Download a JSON file with all personal data we hold — profile, applications, policies, claims, payments, audit log. <span className="text-slate-600 dark:text-slate-400 italic">Article 20 — right to data portability.</span>
+                  {t('gdpr.exportDesc')} <span className="text-slate-600 dark:text-slate-400 italic">{t('gdpr.exportArticle')}</span>
                 </p>
               </div>
               <button
@@ -117,7 +119,7 @@ export default function GdprPanel() {
                 ) : (
                   <Download className="h-3.5 w-3.5" />
                 )}
-                Export
+                {t('gdpr.exportButton')}
               </button>
             </div>
           </div>
@@ -126,9 +128,9 @@ export default function GdprPanel() {
           <div className="bg-rose-500/5 border border-rose-500/20 rounded-lg p-4">
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
-                <h3 className="text-sm font-bold text-rose-300">Delete account</h3>
+                <h3 className="text-sm font-bold text-rose-300">{t('gdpr.deleteTitle')}</h3>
                 <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
-                  Permanently delete your account and all linked data. This cannot be undone. <span className="text-slate-600 dark:text-slate-400 italic">Article 17 — right to erasure.</span>
+                  {t('gdpr.deleteDesc')} <span className="text-slate-600 dark:text-slate-400 italic">{t('gdpr.deleteArticle')}</span>
                 </p>
               </div>
               <button
@@ -136,7 +138,7 @@ export default function GdprPanel() {
                 className="shrink-0 inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 rounded-lg transition-colors"
               >
                 <Trash2 className="h-3.5 w-3.5" />
-                Delete
+                {t('gdpr.deleteButton')}
               </button>
             </div>
           </div>
@@ -158,14 +160,13 @@ export default function GdprPanel() {
                 <AlertTriangle className="h-5 w-5 text-rose-700 dark:text-rose-400" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Delete account permanently?</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">This action cannot be undone.</p>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('gdpr.dialogTitle')}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{t('gdpr.dialogSubtitle')}</p>
               </div>
             </div>
 
             <p className="text-sm text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
-              All your applications, policies, claims, and payment history will be permanently removed.
-              Confirm with your current password.
+              {t('gdpr.dialogBody')}
             </p>
 
             <input
@@ -173,7 +174,7 @@ export default function GdprPanel() {
               autoFocus
               value={deletePassword}
               onChange={(e) => setDeletePassword(e.target.value)}
-              placeholder="Current password"
+              placeholder={t('gdpr.passwordPlaceholder')}
               className="w-full bg-slate-50 dark:bg-[#060b1a] border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-rose-500 mb-4"
               disabled={deleting}
             />
@@ -184,22 +185,22 @@ export default function GdprPanel() {
                 disabled={deleting}
                 className="px-4 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-50 rounded-lg transition-colors"
               >
-                Cancel
+                {t('gdpr.cancel')}
               </button>
               <button
                 onClick={handleDelete}
                 disabled={!deletePassword || deleting}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-slate-900 dark:text-slate-100 bg-rose-600 hover:bg-rose-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
               >
                 {deleting ? (
                   <>
                     <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                    Deleting…
+                    {t('gdpr.deleting')}
                   </>
                 ) : (
                   <>
                     <Trash2 className="h-3.5 w-3.5" />
-                    Permanently delete
+                    {t('gdpr.confirmDelete')}
                   </>
                 )}
               </button>

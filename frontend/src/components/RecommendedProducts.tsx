@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Sparkles, Loader2, AlertCircle, Package, FileCheck } from 'lucide-react';
 import { logout } from '@/lib/auth';
+import { useT } from '@/i18n/LocaleProvider';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
@@ -32,6 +33,7 @@ const TYPE_STYLES: Record<string, string> = {
 
 export default function RecommendedProducts() {
   const router = useRouter();
+  const { t } = useT();
   const [data, setData] = useState<RecommendationsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,15 +65,15 @@ export default function RecommendedProducts() {
           logout();
           return;
         }
-        throw new Error(json.message || 'Failed to submit application');
+        throw new Error(json.message || t('recommendations.submitFailed'));
       }
-      toast.success('Application submitted', {
-        description: 'Redirecting you to your application…',
+      toast.success(t('recommendations.submitted'), {
+        description: t('recommendations.submittedDesc'),
       });
       router.push(`/dashboard/client/applications/${json.id}`);
     } catch (err: any) {
-      toast.error('Could not submit application', {
-        description: err.message || 'Please try again in a moment.',
+      toast.error(t('recommendations.submitFailed'), {
+        description: err.message || t('recommendations.submitFailedDesc'),
       });
       setApplyingProductId(null);
     }
@@ -131,9 +133,9 @@ export default function RecommendedProducts() {
           <Sparkles className="h-5 w-5 text-blue-700" />
         </div>
         <div>
-          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 leading-tight">Recommended for You</h2>
+          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 leading-tight">{t('recommendations.title')}</h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
-            Personalised by content-based ML model from our product catalog
+            {t('recommendations.subtitle')}
           </p>
         </div>
       </div>
@@ -142,7 +144,7 @@ export default function RecommendedProducts() {
         {loading && (
           <div className="flex items-center justify-center py-10 text-slate-500 dark:text-slate-400">
             <Loader2 className="h-6 w-6 animate-spin mr-3" />
-            <span className="text-sm">Computing recommendations…</span>
+            <span className="text-sm">{t('recommendations.computing')}</span>
           </div>
         )}
 
@@ -166,7 +168,7 @@ export default function RecommendedProducts() {
                 }}
                 className="mt-2 text-xs font-bold underline underline-offset-2 hover:no-underline"
               >
-                Retry
+                {t('recommendations.retry')}
               </button>
             </div>
           </div>
@@ -185,7 +187,7 @@ export default function RecommendedProducts() {
                       <Package className="h-5 w-5 text-slate-600 dark:text-slate-400" />
                     </div>
                     <span className="text-[9px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-widest">
-                      #{idx + 1} match
+                      #{idx + 1} {t('recommendations.matchBadge')}
                     </span>
                   </div>
                   <div>
@@ -200,7 +202,7 @@ export default function RecommendedProducts() {
                   </div>
                   <div className="mt-auto pt-3 border-t border-slate-200 dark:border-slate-800">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-500 dark:text-slate-400 font-medium">Match score</span>
+                      <span className="text-slate-500 dark:text-slate-400 font-medium">{t('recommendations.matchScore')}</span>
                       <span className="text-blue-700 font-mono font-bold">
                         {(product.similarity * 100).toFixed(0)}%
                       </span>
@@ -220,12 +222,12 @@ export default function RecommendedProducts() {
                     {applyingProductId === product.productId ? (
                       <>
                         <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        <span>Submitting…</span>
+                        <span>{t('recommendations.submitting')}</span>
                       </>
                     ) : (
                       <>
                         <FileCheck className="h-3.5 w-3.5" />
-                        <span>Apply</span>
+                        <span>{t('recommendations.apply')}</span>
                       </>
                     )}
                   </button>
