@@ -92,7 +92,7 @@ export default async function CompanyDashboard() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
-        <p className="mt-4 text-slate-600 dark:text-slate-400">Session expired. Redirecting...</p>
+        <p className="mt-4 text-slate-600 dark:text-slate-400">{t('dashboard.sessionExpired')}</p>
       </div>
     );
   }
@@ -101,8 +101,8 @@ export default async function CompanyDashboard() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 border-2 border-dashed border-rose-900/30 rounded-3xl bg-rose-950/10 text-center">
         <ShieldX className="h-12 w-12 text-rose-500 mb-4" />
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">Access Denied</h2>
-        <p className="text-slate-600 dark:text-slate-400 max-w-md">Your account does not have permission to view the Company Admin workspace.</p>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.accessDenied')}</h2>
+        <p className="text-slate-600 dark:text-slate-400 max-w-md">{t('dashboard.accessDeniedCompany')}</p>
       </div>
     );
   }
@@ -124,19 +124,19 @@ export default async function CompanyDashboard() {
   // Chart data: Policies by Status
   const policyStatusCounts = policies.reduce((acc: any, p: any) => { acc[p.status] = (acc[p.status] || 0) + 1; return acc; }, {});
   const policiesPieData = [
-    { name: 'Active', value: policyStatusCounts['ACTIVE'] || 0, color: '#34d399' },
-    { name: 'Pending Payment', value: policyStatusCounts['PENDING_PAYMENT'] || 0, color: '#60a5fa' },
-    { name: 'Expired', value: policyStatusCounts['EXPIRED'] || 0, color: '#71717a' },
-    { name: 'Cancelled', value: policyStatusCounts['CANCELLED'] || 0, color: '#fb7185' },
+    { name: t('dashboard.statusActive'), value: policyStatusCounts['ACTIVE'] || 0, color: '#34d399' },
+    { name: t('dashboard.statusPendingPayment'), value: policyStatusCounts['PENDING_PAYMENT'] || 0, color: '#60a5fa' },
+    { name: t('dashboard.statusExpired'), value: policyStatusCounts['EXPIRED'] || 0, color: '#71717a' },
+    { name: t('dashboard.statusCancelled'), value: policyStatusCounts['CANCELLED'] || 0, color: '#fb7185' },
   ];
 
   // Chart data: Claims by Status
   const claimStatusCounts = claims.reduce((acc: any, c: any) => { acc[c.status] = (acc[c.status] || 0) + 1; return acc; }, {});
   const claimsPieData = [
-    { name: 'Filed', value: claimStatusCounts['FILED'] || 0, color: '#60a5fa' },
-    { name: 'In Progress', value: claimStatusCounts['IN_PROGRESS'] || 0, color: '#60a5fa' },
-    { name: 'Approved', value: claimStatusCounts['APPROVED'] || 0, color: '#34d399' },
-    { name: 'Denied', value: claimStatusCounts['DENIED'] || 0, color: '#fb7185' },
+    { name: t('dashboard.statusFiled'), value: claimStatusCounts['FILED'] || 0, color: '#60a5fa' },
+    { name: t('dashboard.statusInProgress'), value: claimStatusCounts['IN_PROGRESS'] || 0, color: '#60a5fa' },
+    { name: t('dashboard.statusApproved'), value: claimStatusCounts['APPROVED'] || 0, color: '#34d399' },
+    { name: t('dashboard.statusDenied'), value: claimStatusCounts['DENIED'] || 0, color: '#fb7185' },
   ];
 
   // Chart data: Monthly Premium Revenue (last 6 months)
@@ -158,9 +158,9 @@ export default async function CompanyDashboard() {
     return acc;
   }, {});
   const riskLevelPieData = [
-    { name: 'Low', value: riskLevelCounts['LOW'] || 0, color: '#34d399' },
-    { name: 'Medium', value: riskLevelCounts['MEDIUM'] || 0, color: '#60a5fa' },
-    { name: 'High', value: riskLevelCounts['HIGH'] || 0, color: '#fb7185' },
+    { name: t('riskLevels.low'), value: riskLevelCounts['LOW'] || 0, color: '#34d399' },
+    { name: t('riskLevels.medium'), value: riskLevelCounts['MEDIUM'] || 0, color: '#60a5fa' },
+    { name: t('riskLevels.high'), value: riskLevelCounts['HIGH'] || 0, color: '#fb7185' },
   ];
 
   // BI: Top Risk Drivers — aggregate SHAP feature contributions across all assessed apps
@@ -237,15 +237,11 @@ export default async function CompanyDashboard() {
           </div>
           <div className="flex-1">
             <h2 className="font-bold text-blue-600">
-              Your tenant is awaiting verification
+              {t('dashboard.awaitingVerification')}
             </h2>
             <p className="text-sm text-blue-200/70 mt-1 leading-relaxed">
-              A platform administrator is reviewing your KYC submission. You
-              can browse the dashboard, but product creation and policy
-              activation are disabled until your tenant is marked{' '}
-              <span className="font-bold text-blue-600">ACTIVE</span>. This
-              usually takes 1–3 business days in production; for the thesis
-              demo a platform admin can approve you instantly from{' '}
+              {t('dashboard.coVerifyBody')}{' '}
+              <span className="font-bold text-blue-600">{t('dashboard.coVerifyActive')}</span>. {t('dashboard.coVerifyTimeline')}{' '}
               <span className="font-mono text-[11px] bg-blue-700/10 px-1 py-0.5 rounded">
                 /dashboard/admin/companies
               </span>
@@ -262,10 +258,10 @@ export default async function CompanyDashboard() {
           <p className="text-slate-600 dark:text-slate-400 mt-1">{t('dashboard.companySubtitle')}</p>
         </div>
         <div className="flex items-center space-x-2">
-          <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest font-bold">Scope: </span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest font-bold">{t('dashboard.coScope')} </span>
           <span className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-blue-700/10 text-blue-700 border border-blue-700/20">
             <ShieldCheck className="w-4 h-4 mr-2" />
-            Authenticated Tenant
+            {t('dashboard.coAuthTenant')}
           </span>
         </div>
       </div>
@@ -281,8 +277,8 @@ export default async function CompanyDashboard() {
               <Package className="h-5 w-5 text-blue-700" />
             </div>
             <div>
-              <p className="text-sm font-bold text-slate-900 dark:text-slate-100">Manage Products</p>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-tight">Catalog & Pricing</p>
+              <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{t('dashboard.coManageProducts')}</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-tight">{t('dashboard.coCatalogPricing')}</p>
             </div>
           </div>
         </Link>
@@ -295,10 +291,10 @@ export default async function CompanyDashboard() {
             <div className="h-10 w-10 rounded-xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center">
               <Briefcase className="h-5 w-5 text-blue-700" />
             </div>
-            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Portfolio</span>
+            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('dashboard.coPortfolio')}</span>
           </div>
           <p className="text-2xl font-bold text-slate-900 dark:text-slate-100"><CountUpNumber value={totalApps} /></p>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Total Applications</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{t('dashboard.coTotalApps')}</p>
         </div>
 
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl">
@@ -306,10 +302,10 @@ export default async function CompanyDashboard() {
             <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
               <ShieldCheck className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
             </div>
-            <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Active</span>
+            <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">{t('dashboard.coActive')}</span>
           </div>
           <p className="text-2xl font-bold text-slate-900 dark:text-slate-100"><CountUpNumber value={activePolicies} /></p>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">In-Force Policies</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{t('dashboard.coInForce')}</p>
         </div>
 
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl">
@@ -318,11 +314,11 @@ export default async function CompanyDashboard() {
               <ShieldAlert className="h-5 w-5 text-rose-700 dark:text-rose-400" />
             </div>
             <span className={`text-[10px] font-bold uppercase tracking-wider ${suspiciousClaims > 0 ? 'text-rose-700 dark:text-rose-400 animate-pulse' : 'text-slate-500 dark:text-slate-400'}`}>
-              {suspiciousClaims} Flagged
+              {suspiciousClaims} {t('dashboard.coFlaggedSuffix')}
             </span>
           </div>
           <p className="text-2xl font-bold text-slate-900 dark:text-slate-100"><CountUpNumber value={totalClaims} /></p>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Total Claims Filed</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{t('dashboard.coTotalClaims')}</p>
         </div>
 
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl">
@@ -330,10 +326,10 @@ export default async function CompanyDashboard() {
             <div className="h-10 w-10 rounded-xl bg-blue-700/10 border border-blue-700/20 flex items-center justify-center">
               <TrendingUp className="h-5 w-5 text-blue-700" />
             </div>
-            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Risk Index</span>
+            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('dashboard.coRiskIndex')}</span>
           </div>
           <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{avgRiskScore.toFixed(1)}</p>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Avg Risk Score</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{t('dashboard.coAvgRisk')}</p>
         </div>
       </div>
 
@@ -342,15 +338,15 @@ export default async function CompanyDashboard() {
         <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xl">
           <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 flex items-center gap-2">
             <ShieldCheck className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
-            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Application Pipeline</h2>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('dashboard.coAppPipeline')}</h2>
           </div>
           <div className="p-0 overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
                 <tr>
-                  <th className="px-6 py-3">Customer & Product</th>
-                  <th className="px-6 py-3 text-center">Status</th>
-                  <th className="px-6 py-3 text-right">Risk Score</th>
+                  <th className="px-6 py-3">{t('dashboard.colCustomerProduct')}</th>
+                  <th className="px-6 py-3 text-center">{t('dashboard.colStatus')}</th>
+                  <th className="px-6 py-3 text-right">{t('dashboard.colRiskScore')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800">
@@ -387,7 +383,7 @@ export default async function CompanyDashboard() {
                 })}
                 {applications.length === 0 && (
                   <tr>
-                    <td colSpan={3} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400 italic">No applications found for this tenant.</td>
+                    <td colSpan={3} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400 italic">{t('dashboard.coNoApps')}</td>
                   </tr>
                 )}
               </tbody>
@@ -399,15 +395,15 @@ export default async function CompanyDashboard() {
         <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xl">
           <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 flex items-center gap-2">
             <ShieldAlert className="h-5 w-5 text-rose-700 dark:text-rose-400" />
-            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Claims Monitor</h2>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('dashboard.coClaimsMonitor')}</h2>
           </div>
           <div className="p-0 overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
                 <tr>
-                  <th className="px-6 py-3">Claim Details</th>
-                  <th className="px-6 py-3 text-center">Status</th>
-                  <th className="px-6 py-3 text-right">Fraud Analysis</th>
+                  <th className="px-6 py-3">{t('dashboard.coClaimDetails')}</th>
+                  <th className="px-6 py-3 text-center">{t('dashboard.colStatus')}</th>
+                  <th className="px-6 py-3 text-right">{t('dashboard.colFraudAnalysis')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800">
@@ -447,7 +443,7 @@ export default async function CompanyDashboard() {
                 })}
                 {claims.length === 0 && (
                   <tr>
-                    <td colSpan={3} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400 italic">No claims filed.</td>
+                    <td colSpan={3} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400 italic">{t('dashboard.coNoClaims')}</td>
                   </tr>
                 )}
               </tbody>
@@ -460,20 +456,20 @@ export default async function CompanyDashboard() {
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <StatusPieChart data={policiesPieData} title="Policies by Status" />
-        <StatusPieChart data={claimsPieData} title="Claims by Status" />
-        <ActivityLineChart data={revenueData} title="Monthly Premium Revenue" color="emerald" />
+        <StatusPieChart data={policiesPieData} title={t('dashboard.chartPoliciesByStatus')} />
+        <StatusPieChart data={claimsPieData} title={t('dashboard.chartClaimsByStatus')} />
+        <ActivityLineChart data={revenueData} title={t('dashboard.coRevenue')} color="emerald" />
       </div>
 
       {/* Business Intelligence Section */}
       <div>
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight mb-1">Business Intelligence</h2>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight mb-1">{t('dashboard.coBI')}</h2>
         <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">
-          ML-powered insights derived from your portfolio
+          {t('dashboard.coBIDesc')}
         </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-          <StatusPieChart data={riskLevelPieData} title="Risk Level Distribution" />
+          <StatusPieChart data={riskLevelPieData} title={t('dashboard.coRiskLevel')} />
           <div className="lg:col-span-2">
             <TopRiskDriversChart drivers={topRiskDrivers} />
           </div>
@@ -482,13 +478,13 @@ export default async function CompanyDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <TopFraudDriversChart drivers={topFraudDrivers} />
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col justify-center">
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold mb-2">ML Explainability Coverage</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold mb-2">{t('dashboard.coMLCoverage')}</p>
             <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">
               <CountUpNumber value={appsWithRisk.length} /> + <CountUpNumber value={claims.filter((c: any) => c.fraudAssessments?.[0]).length} />
             </p>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Predictions with SHAP feature contributions
-              <span className="block text-[10px] text-slate-400 dark:text-slate-500 mt-1">Risk model + Fraud model</span>
+              {t('dashboard.coShapDesc')}
+              <span className="block text-[10px] text-slate-400 dark:text-slate-500 mt-1">{t('dashboard.coShapModels')}</span>
             </p>
           </div>
         </div>

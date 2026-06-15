@@ -79,7 +79,7 @@ export default async function AdminDashboard() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
-        <p className="mt-4 text-slate-600 dark:text-slate-400">Session expired. Redirecting...</p>
+        <p className="mt-4 text-slate-600 dark:text-slate-400">{t('dashboard.sessionExpired')}</p>
       </div>
     );
   }
@@ -88,8 +88,8 @@ export default async function AdminDashboard() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 border-2 border-dashed border-rose-900/30 rounded-3xl bg-rose-950/10 text-center">
         <ShieldX className="h-12 w-12 text-rose-500 mb-4" />
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">Access Restricted</h2>
-        <p className="text-slate-600 dark:text-slate-400 max-w-md">Platform administration is restricted to authorized personnel only.</p>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.accessRestricted')}</h2>
+        <p className="text-slate-600 dark:text-slate-400 max-w-md">{t('dashboard.accessRestrictedAdmin')}</p>
       </div>
     );
   }
@@ -112,31 +112,32 @@ export default async function AdminDashboard() {
     ? appsWithRisk.reduce((acc: number, a: any) => acc + a.riskAssessments[0].riskScore, 0) / appsWithRisk.length 
     : 0;
 
-  // Chart data: Applications by Status
+  // Chart data: Applications by Status (labels via t() so the legend matches
+  // the active locale; back-end status code stays the same).
   const appStatusCounts = applications.reduce((acc: any, a: any) => { acc[a.status] = (acc[a.status] || 0) + 1; return acc; }, {});
   const appsPieData = [
-    { name: 'Pending', value: appStatusCounts['PENDING'] || 0, color: '#60a5fa' },
-    { name: 'Approved', value: appStatusCounts['APPROVED'] || 0, color: '#34d399' },
-    { name: 'Rejected', value: appStatusCounts['REJECTED'] || 0, color: '#fb7185' },
-    { name: 'Under Review', value: appStatusCounts['UNDER_REVIEW'] || 0, color: '#60a5fa' },
+    { name: t('dashboard.statusPending'), value: appStatusCounts['PENDING'] || 0, color: '#60a5fa' },
+    { name: t('dashboard.statusApproved'), value: appStatusCounts['APPROVED'] || 0, color: '#34d399' },
+    { name: t('dashboard.statusRejected'), value: appStatusCounts['REJECTED'] || 0, color: '#fb7185' },
+    { name: t('dashboard.statusUnderReview'), value: appStatusCounts['UNDER_REVIEW'] || 0, color: '#60a5fa' },
   ];
 
   // Chart data: Claims by Status
   const claimStatusCounts = claims.reduce((acc: any, c: any) => { acc[c.status] = (acc[c.status] || 0) + 1; return acc; }, {});
   const claimsPieData = [
-    { name: 'Filed', value: claimStatusCounts['FILED'] || 0, color: '#60a5fa' },
-    { name: 'In Progress', value: claimStatusCounts['IN_PROGRESS'] || 0, color: '#60a5fa' },
-    { name: 'Approved', value: claimStatusCounts['APPROVED'] || 0, color: '#34d399' },
-    { name: 'Denied', value: claimStatusCounts['DENIED'] || 0, color: '#fb7185' },
+    { name: t('dashboard.statusFiled'), value: claimStatusCounts['FILED'] || 0, color: '#60a5fa' },
+    { name: t('dashboard.statusInProgress'), value: claimStatusCounts['IN_PROGRESS'] || 0, color: '#60a5fa' },
+    { name: t('dashboard.statusApproved'), value: claimStatusCounts['APPROVED'] || 0, color: '#34d399' },
+    { name: t('dashboard.statusDenied'), value: claimStatusCounts['DENIED'] || 0, color: '#fb7185' },
   ];
 
   // Chart data: Policies by Status
   const policyStatusCounts = policies.reduce((acc: any, p: any) => { acc[p.status] = (acc[p.status] || 0) + 1; return acc; }, {});
   const policiesPieData = [
-    { name: 'Active', value: policyStatusCounts['ACTIVE'] || 0, color: '#34d399' },
-    { name: 'Pending Payment', value: policyStatusCounts['PENDING_PAYMENT'] || 0, color: '#60a5fa' },
-    { name: 'Expired', value: policyStatusCounts['EXPIRED'] || 0, color: '#71717a' },
-    { name: 'Cancelled', value: policyStatusCounts['CANCELLED'] || 0, color: '#fb7185' },
+    { name: t('dashboard.statusActive'), value: policyStatusCounts['ACTIVE'] || 0, color: '#34d399' },
+    { name: t('dashboard.statusPendingPayment'), value: policyStatusCounts['PENDING_PAYMENT'] || 0, color: '#60a5fa' },
+    { name: t('dashboard.statusExpired'), value: policyStatusCounts['EXPIRED'] || 0, color: '#71717a' },
+    { name: t('dashboard.statusCancelled'), value: policyStatusCounts['CANCELLED'] || 0, color: '#fb7185' },
   ];
 
   // Chart data: Activity over last 30 days
@@ -171,8 +172,8 @@ export default async function AdminDashboard() {
               <UserPlus className="h-5 w-5 text-blue-700" />
             </div>
             <div>
-              <p className="text-sm font-bold text-slate-900 dark:text-slate-100">Manage Users</p>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-tight">Create new staff accounts</p>
+              <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{t('dashboard.manageUsers')}</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-tight">{t('dashboard.manageUsersDesc')}</p>
             </div>
           </div>
         </Link>
@@ -186,8 +187,8 @@ export default async function AdminDashboard() {
               <ScrollText className="h-5 w-5 text-slate-600 dark:text-slate-400" />
             </div>
             <div>
-              <p className="text-sm font-bold text-slate-900 dark:text-slate-100">Audit Log</p>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-tight">Compliance event history</p>
+              <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{t('dashboard.auditLog')}</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-tight">{t('dashboard.auditLogDesc')}</p>
             </div>
           </div>
         </Link>
@@ -197,7 +198,7 @@ export default async function AdminDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">Tenants</span>
+            <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">{t('dashboard.statTenants')}</span>
             <Database className="h-4 w-4 text-blue-500" />
           </div>
           <p className="text-xl font-bold text-slate-900 dark:text-slate-100"><CountUpNumber value={totalCompanies} /></p>
@@ -205,7 +206,7 @@ export default async function AdminDashboard() {
         
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">Users</span>
+            <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">{t('dashboard.statUsers')}</span>
             <Users className="h-4 w-4 text-emerald-500" />
           </div>
           <p className="text-xl font-bold text-slate-900 dark:text-slate-100"><CountUpNumber value={totalApplicants} /></p>
@@ -213,7 +214,7 @@ export default async function AdminDashboard() {
 
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">Products</span>
+            <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">{t('dashboard.statProducts')}</span>
             <Package className="h-4 w-4 text-blue-500" />
           </div>
           <p className="text-xl font-bold text-slate-900 dark:text-slate-100"><CountUpNumber value={totalProducts} /></p>
@@ -221,7 +222,7 @@ export default async function AdminDashboard() {
 
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">Apps</span>
+            <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">{t('dashboard.statApps')}</span>
             <ShieldCheck className="h-4 w-4 text-emerald-500" />
           </div>
           <p className="text-xl font-bold text-slate-900 dark:text-slate-100"><CountUpNumber value={totalApps} /></p>
@@ -229,7 +230,7 @@ export default async function AdminDashboard() {
 
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">Policies</span>
+            <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">{t('dashboard.statPolicies')}</span>
             <ShieldCheck className="h-4 w-4 text-blue-700" />
           </div>
           <p className="text-xl font-bold text-slate-900 dark:text-slate-100"><CountUpNumber value={totalPolicies} /></p>
@@ -237,7 +238,7 @@ export default async function AdminDashboard() {
 
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">Claims</span>
+            <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">{t('dashboard.statClaims')}</span>
             <Activity className="h-4 w-4 text-rose-500" />
           </div>
           <p className="text-xl font-bold text-slate-900 dark:text-slate-100"><CountUpNumber value={totalClaims} /></p>
@@ -245,7 +246,7 @@ export default async function AdminDashboard() {
 
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-bold text-rose-700 dark:text-rose-400 tracking-wider">Flagged</span>
+            <span className="text-[10px] uppercase font-bold text-rose-700 dark:text-rose-400 tracking-wider">{t('dashboard.statFlagged')}</span>
             <AlertTriangle className="h-4 w-4 text-rose-500" />
           </div>
           <p className="text-xl font-bold text-rose-700 dark:text-rose-400"><CountUpNumber value={suspiciousClaims} /></p>
@@ -254,28 +255,28 @@ export default async function AdminDashboard() {
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <StatusPieChart data={appsPieData} title="Applications by Status" />
-        <StatusPieChart data={claimsPieData} title="Claims by Status" />
-        <StatusPieChart data={policiesPieData} title="Policies by Status" />
+        <StatusPieChart data={appsPieData} title={t('dashboard.chartAppsByStatus')} />
+        <StatusPieChart data={claimsPieData} title={t('dashboard.chartClaimsByStatus')} />
+        <StatusPieChart data={policiesPieData} title={t('dashboard.chartPoliciesByStatus')} />
       </div>
 
       {/* Activity Line Chart */}
-      <ActivityLineChart data={activityData} title="Platform Activity — Last 30 Days" />
+      <ActivityLineChart data={activityData} title={t('dashboard.chartActivity')} />
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {/* Companies Section */}
         <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xl">
           <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 flex items-center gap-2">
             <Database className="h-5 w-5 text-blue-700" />
-            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Platform Tenants</h2>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('dashboard.platformTenants')}</h2>
           </div>
           <div className="p-0 overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
                 <tr>
-                  <th className="px-6 py-3">Company Details</th>
-                  <th className="px-6 py-3">Description</th>
-                  <th className="px-6 py-3 text-right">Products</th>
+                  <th className="px-6 py-3">{t('dashboard.colCompanyDetails')}</th>
+                  <th className="px-6 py-3">{t('dashboard.colDescription')}</th>
+                  <th className="px-6 py-3 text-right">{t('dashboard.colProducts')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800">
@@ -290,7 +291,7 @@ export default async function AdminDashboard() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-1">{company.description || "No description provided."}</p>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-1">{company.description || t('dashboard.noDescription')}</p>
                     </td>
                     <td className="px-6 py-4 text-right font-mono font-bold text-slate-700 dark:text-slate-300">
                       {products.filter((p: any) => p.companyId === company.id).length}
@@ -306,15 +307,15 @@ export default async function AdminDashboard() {
         <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xl">
           <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 flex items-center gap-2">
             <ShieldCheck className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
-            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Global Application Pipeline</h2>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('dashboard.globalAppPipeline')}</h2>
           </div>
           <div className="p-0 overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
                 <tr>
-                  <th className="px-6 py-3">Customer & Product</th>
-                  <th className="px-6 py-3 text-center">Status</th>
-                  <th className="px-6 py-3 text-right">Risk Score</th>
+                  <th className="px-6 py-3">{t('dashboard.colCustomerProduct')}</th>
+                  <th className="px-6 py-3 text-center">{t('dashboard.colStatus')}</th>
+                  <th className="px-6 py-3 text-right">{t('dashboard.colRiskScore')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800">
@@ -358,16 +359,16 @@ export default async function AdminDashboard() {
         <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xl xl:col-span-2">
           <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 flex items-center gap-2">
             <ShieldAlert className="h-5 w-5 text-rose-700 dark:text-rose-400" />
-            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Global Claims Monitor</h2>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('dashboard.globalClaimsMonitor')}</h2>
           </div>
           <div className="p-0 overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
                 <tr>
-                  <th className="px-6 py-3">Customer & Claim Info</th>
-                  <th className="px-6 py-3">Amount</th>
-                  <th className="px-6 py-3 text-center">Status</th>
-                  <th className="px-6 py-3 text-right">Fraud Analysis</th>
+                  <th className="px-6 py-3">{t('dashboard.colCustomerClaim')}</th>
+                  <th className="px-6 py-3">{t('dashboard.colAmount')}</th>
+                  <th className="px-6 py-3 text-center">{t('dashboard.colStatus')}</th>
+                  <th className="px-6 py-3 text-right">{t('dashboard.colFraudAnalysis')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800">
