@@ -3,6 +3,7 @@ import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import PolicyPaymentButton from '@/components/PolicyPaymentButton';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -30,15 +31,16 @@ async function getPolicy(id: string) {
 export default async function PolicyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const { policy, status } = await getPolicy(id);
+  const { t } = await getT();
 
   if (status === 401 || status === 403) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 border-2 border-dashed border-rose-900/30 rounded-3xl bg-rose-950/10 text-center">
         <ShieldAlert className="h-12 w-12 text-rose-500 mb-4" />
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">Access Restricted</h2>
-        <p className="text-slate-600 dark:text-slate-400 max-w-md">You do not have permission to view this policy.</p>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.accessRestricted')}</h2>
+        <p className="text-slate-600 dark:text-slate-400 max-w-md">{t('dashboard.accessDeniedPolicy')}</p>
         <Link href="/dashboard/client" className="mt-6 text-sm font-bold text-blue-700 hover:text-blue-600 transition-colors uppercase tracking-widest">
-          Return to Dashboard
+          {t('dashboard.returnToDash')}
         </Link>
       </div>
     );
@@ -48,10 +50,10 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 text-center">
         <ShieldAlert className="h-12 w-12 text-slate-300 mb-4" />
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">Policy Not Found</h2>
-        <p className="text-slate-600 dark:text-slate-400 max-w-md">The policy you are looking for does not exist or has been removed.</p>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.policyNotFound')}</h2>
+        <p className="text-slate-600 dark:text-slate-400 max-w-md">{t('dashboard.policyNotFoundDesc')}</p>
         <Link href="/dashboard/client" className="mt-6 text-sm font-bold text-blue-700 hover:text-blue-600 transition-colors uppercase tracking-widest">
-          Return to Dashboard
+          {t('dashboard.returnToDash')}
         </Link>
       </div>
     );
@@ -61,7 +63,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700 mb-4"></div>
-        <p className="text-slate-600 dark:text-slate-400">An error occurred while loading policy details.</p>
+        <p className="text-slate-600 dark:text-slate-400">{t('dashboard.errorLoadingPolicyDesc')}</p>
       </div>
     );
   }
@@ -84,7 +86,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
         className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors uppercase tracking-widest group"
       >
         <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-        Back to Dashboard
+        {t('dashboard.backToDash')}
       </Link>
 
       {/* Hero Section */}
@@ -102,17 +104,17 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
               </span>
             </div>
             <div className="space-y-1">
-              <p className="font-mono text-slate-500 dark:text-slate-400 text-sm tracking-tight">Policy ID: {policy.policyNumber}</p>
+              <p className="font-mono text-slate-500 dark:text-slate-400 text-sm tracking-tight">{t('dashboard.policyId')}: {policy.policyNumber}</p>
               <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                 <Calendar className="h-4 w-4" />
-                <p className="text-sm">Coverage: {formatDate(policy.startDate)} – {formatDate(policy.endDate)}</p>
+                <p className="text-sm">{t('dashboard.coverage')}: {formatDate(policy.startDate)} – {formatDate(policy.endDate)}</p>
               </div>
             </div>
           </div>
           
           <div className="text-left md:text-right space-y-3">
             <div>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-widest mb-1">Annual Premium</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-widest mb-1">{t('dashboard.annualPremium')}</p>
               <p className="text-3xl font-bold text-emerald-700 dark:text-emerald-400">{formatCurrency(policy.premiumAmount)}</p>
             </div>
             {policy.status === 'ACTIVE' && (
@@ -121,7 +123,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-700 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-blue-500/20"
               >
                 <Activity className="h-4 w-4" />
-                File a Claim
+                {t('dashboard.fileClaim')}
               </Link>
             )}
           </div>
@@ -136,8 +138,8 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
               <CreditCard className="h-6 w-6 text-blue-700" />
             </div>
             <div>
-              <p className="text-blue-700 font-bold uppercase text-xs tracking-widest">Payment Required</p>
-              <p className="text-slate-700 dark:text-slate-300 text-sm mt-1">Activate your policy today by completing the annual premium payment.</p>
+              <p className="text-blue-700 font-bold uppercase text-xs tracking-widest">{t('dashboard.paymentRequired')}</p>
+              <p className="text-slate-700 dark:text-slate-300 text-sm mt-1">{t('dashboard.paymentRequiredDesc')}</p>
             </div>
           </div>
           <PolicyPaymentButton policyId={policy.id} amount={policy.premiumAmount} />
@@ -151,7 +153,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
             <Package className="h-5 w-5 text-blue-700" />
           </div>
           <div>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Product Type</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">{t('dashboard.productType')}</p>
             <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{policy.product.type}</p>
           </div>
         </div>
@@ -161,7 +163,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
             <Building2 className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
           </div>
           <div>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Provider</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">{t('dashboard.provider')}</p>
             <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{policy.product.company.name}</p>
           </div>
         </div>
@@ -171,7 +173,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
             <CheckCircle2 className="h-5 w-5 text-blue-700" />
           </div>
           <div>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Status</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">{t('dashboard.statusLabel')}</p>
             <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{policy.status.replace('_', ' ')}</p>
           </div>
         </div>
@@ -181,7 +183,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
             <Clock className="h-5 w-5 text-slate-600 dark:text-slate-400" />
           </div>
           <div>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Effective Since</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">{t('dashboard.effectiveSince')}</p>
             <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{formatDate(policy.createdAt)}</p>
           </div>
         </div>
@@ -192,7 +194,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center gap-3">
             <Activity className="h-5 w-5 text-rose-500" />
-            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Claims History</h2>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">{t('dashboard.claimsHistory')}</h2>
           </div>
 
           <div className="space-y-4">
@@ -202,7 +204,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
                   <div className="p-6 space-y-4">
                     <div className="flex items-start justify-between gap-4">
                       <div className="space-y-1">
-                        <p className="font-mono text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest">Claim #{claim.id.substring(0, 8)}</p>
+                        <p className="font-mono text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest">{t('dashboard.claimNumber')} #{claim.id.substring(0, 8)}</p>
                         <p className="text-slate-800 dark:text-slate-200 italic">"{claim.description}"</p>
                       </div>
                       <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase border ${
@@ -217,11 +219,11 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
                     <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
                       <div className="flex items-center gap-6">
                         <div>
-                          <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-widest">Amount</p>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-widest">{t('dashboard.amount')}</p>
                           <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{formatCurrency(claim.amount)}</p>
                         </div>
                         <div>
-                          <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-widest">Filed On</p>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-widest">{t('dashboard.filedOn')}</p>
                           <p className="text-sm text-slate-700 dark:text-slate-300 font-mono">{formatDate(claim.createdAt)}</p>
                         </div>
                       </div>
@@ -230,7 +232,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
                         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-[#060b1a]/50 border border-slate-200 dark:border-slate-800/50">
                           <ShieldCheck className={`h-3 w-3 ${claim.fraudAssessments[0].flag === 'SUSPICIOUS' ? 'text-rose-500' : 'text-emerald-500'}`} />
                           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
-                            Fraud Assessment: <span className={claim.fraudAssessments[0].flag === 'SUSPICIOUS' ? 'text-rose-400' : 'text-emerald-400'}>{claim.fraudAssessments[0].flag}</span>
+                            {t('dashboard.fraudAssessmentLabel')}: <span className={claim.fraudAssessments[0].flag === 'SUSPICIOUS' ? 'text-rose-400' : 'text-emerald-400'}>{claim.fraudAssessments[0].flag}</span>
                           </span>
                         </div>
                       )}
@@ -241,7 +243,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
                       <div className="pt-4 border-t border-slate-200 dark:border-slate-800/50">
                         <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-widest mb-2 flex items-center gap-1">
                           <FileText className="h-3 w-3" />
-                          Supporting Documents
+                          {t('dashboard.supportingDocs')}
                         </p>
                         <div className="flex flex-wrap gap-2">
                           {claim.documents.map((doc: any) => (
@@ -265,9 +267,9 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
             ) : (
               <div className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 border-dashed rounded-2xl p-12 text-center">
                 <Activity className="h-10 w-10 text-slate-300 mx-auto mb-4" />
-                <p className="text-slate-500 dark:text-slate-400">No claims filed yet against this policy.</p>
+                <p className="text-slate-500 dark:text-slate-400">{t('dashboard.noClaimsOnPolicy')}</p>
                 <Link href="/dashboard/client" className="mt-4 inline-block text-xs font-bold text-blue-700 hover:text-blue-600 transition-colors uppercase tracking-widest">
-                  File a Claim →
+                  {t('dashboard.fileClaimArrow')}
                 </Link>
               </div>
             )}
@@ -278,7 +280,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
         <div className="space-y-6">
           <div className="flex items-center gap-3">
             <CreditCard className="h-5 w-5 text-blue-500" />
-            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Payment History</h2>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">{t('dashboard.paymentHistory')}</h2>
           </div>
 
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-lg">
@@ -286,9 +288,9 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
               <table className="w-full text-left text-sm">
                 <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
                   <tr>
-                    <th className="px-5 py-3">Date</th>
-                    <th className="px-5 py-3">Amount</th>
-                    <th className="px-5 py-3 text-right">Status</th>
+                    <th className="px-5 py-3">{t('dashboard.date')}</th>
+                    <th className="px-5 py-3">{t('dashboard.amount')}</th>
+                    <th className="px-5 py-3 text-right">{t('dashboard.statusLabel')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-800">
@@ -315,7 +317,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={3} className="px-5 py-10 text-center text-slate-500 dark:text-slate-400 italic">No payment records yet.</td>
+                      <td colSpan={3} className="px-5 py-10 text-center text-slate-500 dark:text-slate-400 italic">{t('dashboard.noPayments')}</td>
                     </tr>
                   )}
                 </tbody>

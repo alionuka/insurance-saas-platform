@@ -5,6 +5,7 @@ import { ArrowLeft, FileText, ShieldAlert, CheckCircle, ShieldCheck, Box, Calend
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import ApplicationStatusUpdateForm from './ApplicationStatusUpdateForm';
 import RiskContributionsChart from '@/components/charts/RiskContributionsChart';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -34,12 +35,13 @@ async function getApplication(id: string) {
 export default async function AgentApplicationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const result = await getApplication(id);
+  const { t } = await getT();
 
   if (result.status === 401) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
-        <p className="mt-4 text-slate-600 dark:text-slate-400">Session expired. Redirecting...</p>
+        <p className="mt-4 text-slate-600 dark:text-slate-400">{t('dashboard.sessionExpired')}</p>
       </div>
     );
   }
@@ -51,8 +53,8 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
   if (result.status !== 200 || !result.data) {
     return (
       <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400">
-        <h2 className="text-lg font-semibold">Error Loading Application</h2>
-        <p className="text-sm mt-1">We couldn't fetch the application details. Please try again later.</p>
+        <h2 className="text-lg font-semibold">{t('dashboard.errorLoadingApp')}</h2>
+        <p className="text-sm mt-1">{t('dashboard.errorLoadingAppDesc')}</p>
       </div>
     );
   }
@@ -79,7 +81,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
         className="inline-flex items-center text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-blue-700 transition-colors"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to Applications
+        {t('dashboard.backToApps')}
       </Link>
 
       {/* Hero */}
@@ -90,15 +92,15 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 flex items-center gap-3">
-              Application <span className="font-mono text-slate-500 dark:text-slate-400 text-lg">#{app.id.slice(0, 8)}</span>
+              {t('dashboard.appHeader')} <span className="font-mono text-slate-500 dark:text-slate-400 text-lg">#{app.id.slice(0, 8)}</span>
             </h1>
-            <p className="text-slate-600 dark:text-slate-400 mt-1">Agent Investigation Workspace</p>
+            <p className="text-slate-600 dark:text-slate-400 mt-1">{t('dashboard.agentInvestigation')}</p>
           </div>
         </div>
         
         {/* Status Update Widget */}
         <div className="bg-slate-50 dark:bg-[#060b1a]/50 border border-slate-200 dark:border-slate-800 p-4 rounded-xl flex flex-col items-start gap-2">
-          <span className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">Update Status</span>
+          <span className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wider">{t('dashboard.updateStatus')}</span>
           <ApplicationStatusUpdateForm applicationId={app.id} currentStatus={app.status} />
         </div>
       </div>
@@ -111,28 +113,28 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md">
             <div className="flex items-center gap-2 mb-4">
               <UserIcon className="h-5 w-5 text-blue-700" />
-              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Customer Profile</h2>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('dashboard.customerProfile')}</h2>
             </div>
             {user ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Name</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('dashboard.name')}</p>
                   <p className="text-slate-900 dark:text-slate-100 font-medium text-lg mt-1">{user.firstName} {user.lastName}</p>
                   <p className="text-sm text-slate-600 dark:text-slate-400">{user.email}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Age</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('dashboard.age')}</p>
                     <p className="text-slate-700 dark:text-slate-300 mt-1 font-mono text-lg">{user.age ?? 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Credit Score</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('dashboard.creditScore')}</p>
                     <p className="text-slate-700 dark:text-slate-300 mt-1 font-mono text-lg">{user.creditScore ?? 'N/A'}</p>
                   </div>
                 </div>
               </div>
             ) : (
-              <p className="text-sm text-slate-500 dark:text-slate-400 italic">No customer details available.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 italic">{t('dashboard.noCustomerDetails')}</p>
             )}
           </div>
 
@@ -143,26 +145,26 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
                 <ShieldCheck className="h-5 w-5 text-emerald-700 dark:text-emerald-400" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Linked Policy</h2>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('dashboard.linkedPolicy')}</h2>
                 {policy ? (
                   <div className="mt-2 space-y-1">
                     <p className="text-sm text-slate-700 dark:text-slate-300">
-                      Policy Number: <span className="font-mono font-bold text-slate-900 dark:text-slate-100 uppercase">{policy.policyNumber}</span>
+                      {t('dashboard.policyNumber')}: <span className="font-mono font-bold text-slate-900 dark:text-slate-100 uppercase">{policy.policyNumber}</span>
                     </p>
                     <p className="text-sm text-slate-700 dark:text-slate-300">
-                      Status: <span className="text-emerald-700 dark:text-emerald-400 font-medium">{policy.status.replace('_', ' ')}</span>
+                      {t('dashboard.statusLabel')}: <span className="text-emerald-700 dark:text-emerald-400 font-medium">{policy.status.replace('_', ' ')}</span>
                     </p>
                     <p className="text-sm text-slate-700 dark:text-slate-300">
-                      Premium: <span className="text-blue-700 font-bold">{formatCurrency(policy.premiumAmount)}</span>
+                      {t('dashboard.premiumLabel')}: <span className="text-blue-700 font-bold">{formatCurrency(policy.premiumAmount)}</span>
                     </p>
                   </div>
                 ) : (
                   <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                    {app.status === 'APPROVED' 
-                      ? 'Policy is being generated.' 
+                    {app.status === 'APPROVED'
+                      ? t('dashboard.policyGenerating')
                       : app.status === 'REJECTED'
-                      ? 'Application was rejected. No policy will be issued.'
-                      : 'Policy will be created once approved.'}
+                      ? t('dashboard.appRejected')
+                      : t('dashboard.policyAfterApproval')}
                   </p>
                 )}
               </div>
@@ -172,7 +174,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
                 href={`/dashboard/agent/policies/${policy.id}`}
                 className="inline-flex justify-center items-center px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-blue-500/20 shrink-0"
               >
-                View Policy
+                {t('dashboard.viewPolicy')}
               </Link>
             )}
           </div>
@@ -184,7 +186,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md flex flex-col">
             <div className="flex items-center gap-2 mb-4">
               <ShieldAlert className="h-5 w-5 text-blue-700" />
-              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Risk Assessment</h2>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('dashboard.riskAssessment')}</h2>
             </div>
             {risk ? (
               <div className="flex-1 flex flex-col">
@@ -201,14 +203,14 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
                 </div>
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-2">ML Analysis</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-2">{t('dashboard.mlAnalysis')}</p>
                     <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic bg-slate-50 dark:bg-[#060b1a]/50 p-4 rounded-lg border border-slate-200 dark:border-slate-800">
                       "{risk.explanation}"
                     </p>
                   </div>
                   {risk.featureContributions && risk.featureContributions.length > 0 && (
                     <div className="mt-6 border-t border-slate-200 dark:border-slate-800 pt-5">
-                      <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-3">Feature Contributions</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-3">{t('dashboard.featureContributions')}</p>
                       <RiskContributionsChart contributions={risk.featureContributions} />
                     </div>
                   )}
@@ -216,7 +218,7 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
               </div>
             ) : (
               <div className="flex-1 flex items-center justify-center text-center p-6 border border-dashed border-slate-200 dark:border-slate-800 rounded-lg">
-                <p className="text-sm text-slate-500 dark:text-slate-400">Risk assessment has not been completed yet.</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">{t('dashboard.riskNotReady')}</p>
               </div>
             )}
           </div>
@@ -225,25 +227,25 @@ export default async function AgentApplicationDetailPage({ params }: { params: P
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-md">
             <div className="flex items-center gap-2 mb-4">
               <Box className="h-5 w-5 text-blue-700" />
-              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Product Info</h2>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('dashboard.productInfo')}</h2>
             </div>
             {product ? (
               <div className="space-y-3">
                 <div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Name</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('dashboard.name')}</p>
                   <p className="text-slate-900 dark:text-slate-100 font-medium mt-1">{product.name}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Type</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('dashboard.type')}</p>
                   <p className="text-slate-700 dark:text-slate-300 mt-1 uppercase font-bold text-xs bg-slate-100 dark:bg-slate-800 inline-block px-2 py-0.5 rounded">{product.type}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Base Premium</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('dashboard.basePremium')}</p>
                   <p className="text-blue-700 mt-1 font-bold">{formatCurrency(product.basePremium)}</p>
                 </div>
               </div>
             ) : (
-              <p className="text-sm text-slate-500 dark:text-slate-400 italic">No product details available.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 italic">{t('dashboard.noProductDetails')}</p>
             )}
           </div>
         </div>

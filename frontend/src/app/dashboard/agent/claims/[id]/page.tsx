@@ -5,6 +5,7 @@ import { formatDate, formatCurrency } from '@/lib/formatDate';
 import ClaimDocuments from '@/components/ClaimDocuments';
 import StatusUpdateForm from './StatusUpdateForm';
 import FraudContributionsChart from '@/components/charts/FraudContributionsChart';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -42,15 +43,16 @@ async function getClaimDetails(id: string) {
 export default async function AgentClaimDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const { status, data: claim } = await getClaimDetails(id);
+  const { t } = await getT();
 
   if (status === 401 || status === 403) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-4">
         <ShieldAlert className="h-16 w-16 text-rose-500" />
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Access Denied</h1>
-        <p className="text-slate-600 dark:text-slate-400">You do not have permission to view this claim.</p>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('dashboard.accessDenied')}</h1>
+        <p className="text-slate-600 dark:text-slate-400">{t('dashboard.accessDeniedClaim')}</p>
         <Link href="/dashboard/agent" className="text-blue-700 hover:text-blue-600 font-medium">
-          Return to Dashboard
+          {t('dashboard.returnToDash')}
         </Link>
       </div>
     );
@@ -60,10 +62,10 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-4">
         <AlertTriangle className="h-16 w-16 text-blue-500" />
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Claim Not Found</h1>
-        <p className="text-slate-600 dark:text-slate-400">The claim you are looking for does not exist.</p>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('dashboard.claimNotFound')}</h1>
+        <p className="text-slate-600 dark:text-slate-400">{t('dashboard.claimNotFoundDesc')}</p>
         <Link href="/dashboard/agent" className="text-blue-700 hover:text-blue-600 font-medium">
-          Return to Dashboard
+          {t('dashboard.returnToDash')}
         </Link>
       </div>
     );
@@ -91,7 +93,7 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
     <div className="space-y-8 max-w-4xl">
       <Link href="/dashboard/agent" className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors text-sm font-medium">
         <ArrowLeft className="h-4 w-4" />
-        Back to Dashboard
+        {t('dashboard.backToDash')}
       </Link>
 
       {/* Hero Section */}
@@ -104,7 +106,7 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                  Claim #{claim.id.substring(0, 8)}
+                  {t('dashboard.claimNumber')} #{claim.id.substring(0, 8)}
                 </h1>
                 <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${statusColors[claim.status] || 'bg-zinc-500/10 text-slate-600 dark:text-slate-400 border-zinc-500/20'}`}>
                   {claim.status}
@@ -114,20 +116,20 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
                 {formatCurrency(claim.amount)}
               </p>
               <p className="text-sm text-slate-500 dark:text-slate-400">
-                Filed: {formatDate(claim.createdAt)}
+                {t('dashboard.filedColon')} {formatDate(claim.createdAt)}
               </p>
             </div>
           </div>
           <div className="bg-slate-50 dark:bg-[#060b1a]/50 rounded-lg p-4 border border-slate-200 dark:border-slate-800/50 min-w-[200px]">
             <div className="flex items-center gap-2 mb-2">
               <User className="h-4 w-4 text-slate-500 dark:text-slate-400" />
-              <span className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Customer</span>
+              <span className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">{t('dashboard.customer')}</span>
             </div>
             <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
-              {claim.user ? `${claim.user.firstName} ${claim.user.lastName}` : 'Unknown Customer'}
+              {claim.user ? `${claim.user.firstName} ${claim.user.lastName}` : t('dashboard.unknownCustomer')}
             </p>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              {claim.user?.email || 'No email provided'}
+              {claim.user?.email || t('dashboard.noEmail')}
             </p>
           </div>
         </div>
@@ -141,8 +143,8 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
               <ShieldCheck className="h-6 w-6 text-blue-700" />
             </div>
             <div className="flex-grow">
-              <p className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-0.5">Policy #{policy.policyNumber}</p>
-              <p className="text-xs text-slate-600 dark:text-slate-400">{product?.name || 'Unknown Product'} • {company?.name || 'Unknown Company'}</p>
+              <p className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-0.5">{t('dashboard.policyHash')}{policy.policyNumber}</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400">{product?.name || t('dashboard.unknownProduct')} • {company?.name || t('dashboard.unknownCompany')}</p>
             </div>
           </div>
         ) : (
@@ -151,8 +153,8 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
               <ShieldCheck className="h-6 w-6 text-slate-500 dark:text-slate-400" />
             </div>
             <div>
-              <p className="text-sm font-bold text-slate-600 dark:text-slate-400 mb-0.5">No active policy linked</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Application: {claim.applicationId}</p>
+              <p className="text-sm font-bold text-slate-600 dark:text-slate-400 mb-0.5">{t('dashboard.noPolicyLinked')}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">{t('dashboard.applicationColon')} {claim.applicationId}</p>
             </div>
           </div>
         )}
@@ -160,7 +162,7 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
 
       {/* Description Section */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 md:p-8">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">Incident Description</h2>
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">{t('dashboard.incidentDescription')}</h2>
         <div className="bg-slate-50 dark:bg-[#060b1a]/50 rounded-lg p-5 border border-slate-200 dark:border-slate-800/50">
           <p className="text-slate-700 dark:text-slate-300 italic leading-relaxed whitespace-pre-wrap">
             "{claim.description}"
@@ -173,14 +175,14 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 md:p-8">
           <div className="flex items-center gap-2 mb-6">
             <ShieldAlert className="h-5 w-5 text-blue-700" />
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Fraud Assessment</h2>
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{t('dashboard.fraudAssessment')}</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="md:col-span-1 p-4 rounded-lg bg-slate-50 dark:bg-[#060b1a]/50 border border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp className="h-4 w-4 text-slate-500 dark:text-slate-400" />
-                <span className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Score</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">{t('dashboard.score')}</span>
               </div>
               <p className="text-2xl font-mono font-bold text-slate-900 dark:text-slate-100">
                 {fraud.fraudScore.toFixed(1)}<span className="text-sm text-slate-500 dark:text-slate-400 ml-1">/ 100</span>
@@ -189,7 +191,7 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
             <div className="md:col-span-1 p-4 rounded-lg bg-slate-50 dark:bg-[#060b1a]/50 border border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2 mb-2">
                 <AlertCircle className="h-4 w-4 text-slate-500 dark:text-slate-400" />
-                <span className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Flag</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">{t('dashboard.flag')}</span>
               </div>
               <p className={`text-xl font-bold ${fraudFlagColors[fraud.flag] || 'text-slate-600 dark:text-slate-400'}`}>
                 {fraud.flag}
@@ -198,7 +200,7 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
             <div className="md:col-span-2 p-4 rounded-lg bg-slate-50 dark:bg-[#060b1a]/50 border border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2 mb-2">
                 <AlertTriangle className="h-4 w-4 text-slate-500 dark:text-slate-400" />
-                <span className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">ML Assessment</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">{t('dashboard.mlAssessment')}</span>
               </div>
               <p className="text-sm text-slate-600 dark:text-slate-400 italic leading-relaxed">
                 "{fraud.explanation}"
@@ -208,7 +210,7 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
 
           {fraud.featureContributions && (fraud.featureContributions as any).length > 0 && (
             <div className="mt-6 border-t border-slate-200 dark:border-slate-800 pt-5">
-              <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-3">Feature Contributions</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-3">{t('dashboard.featureContributions')}</p>
               <FraudContributionsChart contributions={fraud.featureContributions as any} />
             </div>
           )}
@@ -220,7 +222,7 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
 
       {/* Documents Section */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 md:p-8">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">Supporting Documents</h2>
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-6">{t('dashboard.supportingDocs')}</h2>
         <ClaimDocuments claimId={claim.id} canUpload={false} />
       </div>
 
