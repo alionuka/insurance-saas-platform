@@ -572,6 +572,12 @@ const en: Dictionary = {
     medium: 'Medium',
     high: 'High',
   },
+  roles: {
+    customer: 'Customer',
+    agent: 'Agent',
+    companyAdmin: 'Company Admin',
+    platformAdmin: 'Platform Admin',
+  },
   productTypes: {
     LIFE: 'Life Insurance',
     AUTO: 'Auto Insurance',
@@ -1699,6 +1705,12 @@ const uk: Dictionary = {
     low: 'Низький',
     medium: 'Середній',
     high: 'Високий',
+  },
+  roles: {
+    customer: 'Клієнт',
+    agent: 'Агент',
+    companyAdmin: 'Адмін компанії',
+    platformAdmin: 'Адмін платформи',
   },
   productTypes: {
     LIFE: 'Страхування життя',

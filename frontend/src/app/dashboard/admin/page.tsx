@@ -6,6 +6,7 @@ import Link from 'next/link';
 import StatusPieChart from '@/components/charts/StatusPieChart';
 import ActivityLineChart from '@/components/charts/ActivityLineChart';
 import CountUpNumber from '@/components/charts/CountUpNumber';
+import { translateStatus, translateRiskLevel } from '@/i18n/translateStatus';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -333,7 +334,7 @@ export default async function AdminDashboard() {
                           app.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20' : 
                           'bg-blue-700/10 text-blue-700 border-blue-700/20'
                         }`}>
-                          {app.status}
+                          {translateStatus(t, app.status)}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right">
@@ -343,7 +344,7 @@ export default async function AdminDashboard() {
                             <span className={`text-[9px] font-bold uppercase ${
                               risk.riskLevel === 'LOW' ? 'text-emerald-700 dark:text-emerald-400' : 
                               risk.riskLevel === 'HIGH' ? 'text-rose-700 dark:text-rose-400' : 'text-blue-700'
-                            }`}>{risk.riskLevel}</span>
+                            }`}>{translateRiskLevel(t, risk.riskLevel)}</span>
                           </div>
                         ) : <span className="text-slate-300">—</span>}
                       </td>
@@ -390,7 +391,7 @@ export default async function AdminDashboard() {
                           claim.status === 'DENIED' ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20' : 
                           'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-300 dark:border-slate-700'
                         }`}>
-                          {claim.status}
+                          {translateStatus(t, claim.status)}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right">

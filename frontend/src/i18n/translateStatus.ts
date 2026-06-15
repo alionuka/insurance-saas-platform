@@ -93,3 +93,22 @@ export function translateResourceType(
   if (translated === key) return type;
   return translated;
 }
+
+/**
+ * Translate user role enums (CUSTOMER, AGENT, COMPANY_ADMIN,
+ * PLATFORM_ADMIN). Backend stores them as the canonical
+ * SCREAMING_SNAKE form; the UI shows the localised label.
+ */
+export function translateRole(
+  t: TFn,
+  role: string | null | undefined,
+): string {
+  if (!role) return '';
+  const map: Record<string, string> = {
+    CUSTOMER: t('roles.customer'),
+    AGENT: t('roles.agent'),
+    COMPANY_ADMIN: t('roles.companyAdmin'),
+    PLATFORM_ADMIN: t('roles.platformAdmin'),
+  };
+  return map[role] ?? role.replace(/_/g, ' ');
+}

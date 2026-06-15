@@ -5,6 +5,7 @@ import EmptyState from '@/components/ui/EmptyState';
 import ApplicationFilters from './ApplicationFilters';
 import Link from 'next/link';
 import { getT } from '@/i18n/getT';
+import { translateStatus, translateRiskLevel } from '@/i18n/translateStatus';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -78,7 +79,7 @@ export default async function ClientApplicationsPage(props: Props) {
                       app.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20' : 
                       'bg-blue-700/10 text-blue-700 border-blue-700/20'
                     }`}>
-                      {app.status}
+                      {translateStatus(t, app.status)}
                     </span>
                   </div>
                 </div>
@@ -102,7 +103,7 @@ export default async function ClientApplicationsPage(props: Props) {
                         <p className={`text-lg font-bold ${
                           risk.riskLevel === 'LOW' ? 'text-emerald-700 dark:text-emerald-400' : 
                           risk.riskLevel === 'HIGH' ? 'text-rose-700 dark:text-rose-400' : 'text-blue-700'
-                        }`}>{risk.riskLevel}</p>
+                        }`}>{translateRiskLevel(t, risk.riskLevel)}</p>
                       </div>
                       <div className="md:col-span-2 p-3 rounded-lg bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
                         <div className="flex items-center gap-2 mb-1">

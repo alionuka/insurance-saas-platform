@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import Link from 'next/link';
 import PolicyPaymentButton from '@/components/PolicyPaymentButton';
 import { getT } from '@/i18n/getT';
+import { translateStatus, translateRiskLevel } from '@/i18n/translateStatus';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -100,7 +101,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
             <div className="flex flex-wrap items-center gap-3">
               <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100">{policy.product.name}</h1>
               <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border ${getStatusColor(policy.status)}`}>
-                {policy.status.replace('_', ' ')}
+                {translateStatus(t, policy.status)}
               </span>
             </div>
             <div className="space-y-1">
@@ -174,7 +175,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
           </div>
           <div>
             <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">{t('dashboard.statusLabel')}</p>
-            <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{policy.status.replace('_', ' ')}</p>
+            <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{translateStatus(t, policy.status)}</p>
           </div>
         </div>
 
@@ -212,7 +213,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
                         claim.status === 'DENIED' ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20' : 
                         'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-300 dark:border-slate-700'
                       }`}>
-                        {claim.status}
+                        {translateStatus(t, claim.status)}
                       </span>
                     </div>
 
@@ -310,7 +311,7 @@ export default async function PolicyDetailPage({ params }: { params: Promise<{ i
                             payment.status === 'FAILED' ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20' : 
                             'bg-blue-700/10 text-blue-700 border-blue-700/20'
                           }`}>
-                            {payment.status}
+                            {translateStatus(t, payment.status)}
                           </span>
                         </td>
                       </tr>

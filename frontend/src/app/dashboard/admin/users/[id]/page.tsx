@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowLeft, UserCircle, Mail, Shield, Building2, Calendar, FileText, ShieldCheck, Activity, CreditCard, TrendingUp } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { getT } from '@/i18n/getT';
+import { translateStatus, translateRiskLevel, translateRole } from '@/i18n/translateStatus';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -96,7 +97,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
           </p>
           <div className="mt-3">
             <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border ${roleColors[user.role] || 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'}`}>
-              {user.role.replace('_', ' ')}
+              {translateRole(t, user.role)}
             </span>
           </div>
         </div>
@@ -127,7 +128,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
               </div>
               <div>
                 <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">{t('users.roleLabel')}</p>
-                <p className="text-slate-900 dark:text-slate-100 text-sm mt-1">{user.role.replace('_', ' ')}</p>
+                <p className="text-slate-900 dark:text-slate-100 text-sm mt-1">{translateRole(t, user.role)}</p>
               </div>
               {user.age != null && (
                 <div>
@@ -223,7 +224,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                           app.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20' :
                           'bg-blue-700/10 text-blue-700 border-blue-700/20'
                         }`}>
-                          {app.status}
+                          {translateStatus(t, app.status)}
                         </span>
                       </div>
                     ))}
@@ -254,7 +255,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                           pol.status === 'CANCELLED' ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20' :
                           'bg-blue-700/10 text-blue-700 border-blue-700/20'
                         }`}>
-                          {pol.status.replace('_', ' ')}
+                          {translateStatus(t, pol.status)}
                         </span>
                       </div>
                     ))}
@@ -285,7 +286,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                           claim.status === 'DENIED' ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20' :
                           'bg-blue-700/10 text-blue-700 border-blue-700/20'
                         }`}>
-                          {claim.status.replace('_', ' ')}
+                          {translateStatus(t, claim.status)}
                         </span>
                       </div>
                     ))}

@@ -19,6 +19,7 @@ import {
 import FilterPills from '@/components/ui/FilterPills';
 import BulkActionBar from '@/components/BulkActionBar';
 import { useT } from '@/i18n/LocaleProvider';
+import { translateStatus } from '@/i18n/translateStatus';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
@@ -286,7 +287,7 @@ export default function ClaimsTable({
                               <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold border uppercase ${
                                 policy.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20' : 'bg-zinc-500/10 text-slate-600 dark:text-slate-400 border-zinc-500/20'
                               }`}>
-                                {policy.status}
+                                {translateStatus(t, policy.status)}
                               </span>
                             </div>
                             <div className="text-xs text-slate-700 dark:text-slate-300 font-medium">{product?.name ?? '—'}</div>

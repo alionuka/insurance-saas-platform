@@ -8,6 +8,7 @@ import StopClickPropagation from '@/components/StopClickPropagation';
 import EmptyState from '@/components/ui/EmptyState';
 import ClaimFilters from './ClaimFilters';
 import { getT } from '@/i18n/getT';
+import { translateStatus } from '@/i18n/translateStatus';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -96,7 +97,7 @@ export default async function ClientClaimsPage(props: Props) {
                       claim.status === 'DENIED' ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20' : 
                       'bg-zinc-500/10 text-slate-600 dark:text-slate-400 border-zinc-500/20'
                     }`}>
-                      {claim.status}
+                      {translateStatus(t, claim.status)}
                     </span>
                   </div>
                 </div>

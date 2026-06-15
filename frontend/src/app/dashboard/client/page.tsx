@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import Link from 'next/link';
 import CountUpNumber from '@/components/charts/CountUpNumber';
 import { getT } from '@/i18n/getT';
+import { translateStatus } from '@/i18n/translateStatus';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -156,7 +157,7 @@ export default async function ClientDashboardOverview() {
                     </div>
                     <div className="flex items-center gap-4 shrink-0 pl-4">
                       <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider border bg-slate-50 dark:bg-[#060b1a] text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800">
-                        {item.status.replace('_', ' ')}
+                        {translateStatus(t, item.status)}
                       </span>
                       <ChevronRight className="h-4 w-4 text-slate-400 dark:text-slate-500 group-hover:text-slate-600 transition-colors" />
                     </div>

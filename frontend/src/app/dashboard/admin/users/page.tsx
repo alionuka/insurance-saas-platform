@@ -6,6 +6,7 @@ import UsersFilters from './UsersFilters';
 import EmptyState from '@/components/ui/EmptyState';
 import { formatDate } from '@/lib/formatDate';
 import { getT } from '@/i18n/getT';
+import { translateStatus, translateRiskLevel, translateRole } from '@/i18n/translateStatus';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -130,7 +131,7 @@ export default async function ManageUsersPage(props: Props) {
                       </td>
                       <td className="px-6 py-4">
                         <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${roleColors[user.role] || 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'}`}>
-                          {user.role.replace('_', ' ')}
+                          {translateRole(t, user.role)}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-slate-600 dark:text-slate-400 text-xs">

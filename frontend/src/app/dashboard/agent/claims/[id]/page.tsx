@@ -6,6 +6,7 @@ import ClaimDocuments from '@/components/ClaimDocuments';
 import StatusUpdateForm from './StatusUpdateForm';
 import FraudContributionsChart from '@/components/charts/FraudContributionsChart';
 import { getT } from '@/i18n/getT';
+import { translateStatus } from '@/i18n/translateStatus';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -109,7 +110,7 @@ export default async function AgentClaimDetailPage({ params }: { params: Promise
                   {t('dashboard.claimNumber')} #{claim.id.substring(0, 8)}
                 </h1>
                 <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${statusColors[claim.status] || 'bg-zinc-500/10 text-slate-600 dark:text-slate-400 border-zinc-500/20'}`}>
-                  {claim.status}
+                  {translateStatus(t, claim.status)}
                 </span>
               </div>
               <p className="text-xl text-slate-700 dark:text-slate-300 font-medium mb-1">

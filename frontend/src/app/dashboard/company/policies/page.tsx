@@ -3,6 +3,7 @@ import EmptyState from '@/components/ui/EmptyState';
 import { ShieldCheck } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { getT } from '@/i18n/getT';
+import { translateStatus, translateRiskLevel } from '@/i18n/translateStatus';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -69,7 +70,7 @@ export default async function CompanyPoliciesPage() {
                         policy.status === 'PENDING_PAYMENT' ? 'bg-blue-700/10 text-blue-700 border-blue-700/20' :
                         'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-300 dark:border-slate-700'
                       }`}>
-                        {policy.status.replace('_', ' ')}
+                        {translateStatus(t, policy.status)}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right text-slate-500 dark:text-slate-400 font-mono text-xs">

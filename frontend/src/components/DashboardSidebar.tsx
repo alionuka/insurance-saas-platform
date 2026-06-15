@@ -28,6 +28,7 @@ import GlobalSearch from '@/components/GlobalSearch';
 import { useT } from '@/i18n/LocaleProvider';
 import LocaleSwitcher from '@/i18n/LocaleSwitcher';
 import ThemeToggle from '@/theme/ThemeToggle';
+import { translateRole } from '@/i18n/translateStatus';
 
 type NavItem = {
   href: string;
@@ -322,7 +323,7 @@ export default function DashboardSidebar() {
                   {user ? `${user.firstName} ${user.lastName}` : 'Demo User'}
                 </p>
                 <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-tighter truncate">
-                  {user ? user.role.replace('_', ' ') : t('sidebar.readonlyRole')}
+                  {user ? translateRole(t, user.role) : t('sidebar.readonlyRole')}
                 </p>
               </div>
             </div>

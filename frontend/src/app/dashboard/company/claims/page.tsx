@@ -3,6 +3,7 @@ import EmptyState from '@/components/ui/EmptyState';
 import { Activity, AlertTriangle } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/formatDate';
 import { getT } from '@/i18n/getT';
+import { translateStatus } from '@/i18n/translateStatus';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -72,7 +73,7 @@ export default async function CompanyClaimsPage() {
                           claim.status === 'DENIED' ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20' : 
                           'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-300 dark:border-slate-700'
                         }`}>
-                          {claim.status}
+                          {translateStatus(t, claim.status)}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right">
