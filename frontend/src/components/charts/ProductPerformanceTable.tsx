@@ -1,4 +1,7 @@
+'use client';
+
 import { Package, TrendingUp, TrendingDown } from 'lucide-react';
+import { useT } from '@/i18n/LocaleProvider';
 
 export type ProductRow = {
   productId: string;
@@ -26,14 +29,15 @@ function formatCurrency(n: number): string {
 }
 
 export default function ProductPerformanceTable({ rows }: { rows: ProductRow[] }) {
+  const { t } = useT();
   if (!rows || rows.length === 0) {
     return (
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
         <div className="flex items-center gap-2 mb-2">
           <Package className="h-5 w-5 text-blue-700" />
-          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Performance per Product</h3>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('dashboard.perfPerProduct')}</h3>
         </div>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-4">No products to compare yet.</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-4">{t('dashboard.perfEmpty')}</p>
       </div>
     );
   }
@@ -47,10 +51,10 @@ export default function ProductPerformanceTable({ rows }: { rows: ProductRow[] }
       <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
         <div className="flex items-center gap-2">
           <Package className="h-5 w-5 text-blue-700" />
-          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Performance per Product</h3>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('dashboard.perfPerProduct')}</h3>
         </div>
         <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-          Revenue, in-force policies, and claim experience — ranked by premium revenue
+          {t('dashboard.perfSubtitle')}
         </p>
       </div>
 
@@ -58,12 +62,12 @@ export default function ProductPerformanceTable({ rows }: { rows: ProductRow[] }
         <table className="w-full text-left text-sm">
           <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
             <tr>
-              <th className="px-6 py-3">Product</th>
-              <th className="px-6 py-3 text-right">Apps</th>
-              <th className="px-6 py-3 text-right">Active Policies</th>
-              <th className="px-6 py-3 text-right">Revenue</th>
-              <th className="px-6 py-3 text-right">Claims</th>
-              <th className="px-6 py-3 text-right">Loss Ratio</th>
+              <th className="px-6 py-3">{t('dashboard.perfColProduct')}</th>
+              <th className="px-6 py-3 text-right">{t('dashboard.statApps')}</th>
+              <th className="px-6 py-3 text-right">{t('dashboard.perfColPolicies')}</th>
+              <th className="px-6 py-3 text-right">{t('dashboard.perfColRevenue')}</th>
+              <th className="px-6 py-3 text-right">{t('dashboard.perfColClaims')}</th>
+              <th className="px-6 py-3 text-right">{t('dashboard.perfColLossRatio')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-800">

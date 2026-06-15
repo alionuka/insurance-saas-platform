@@ -1,6 +1,7 @@
 import { ScrollText, ShieldX, Clock, User, Box, FileText, ChevronRight } from 'lucide-react';
 import { formatDate } from '@/lib/formatDate';
 import { cookies } from 'next/headers';
+import { getT } from '@/i18n/getT';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -29,13 +30,14 @@ async function getAuditLogs() {
 
 export default async function AuditLogPage() {
   const result = await getAuditLogs();
+  const { t } = await getT();
 
   if (result.status === 401 || result.status === 403) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 border-2 border-dashed border-rose-900/30 rounded-3xl bg-rose-950/10 text-center">
         <ShieldX className="h-12 w-12 text-rose-500 mb-4" />
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">Access Restricted</h2>
-        <p className="text-slate-600 dark:text-slate-400 max-w-md">You do not have permission to view the system audit logs.</p>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">{t('dashboard.accessRestricted')}</h2>
+        <p className="text-slate-600 dark:text-slate-400 max-w-md">{t('dashboard.auditAccessDenied')}</p>
       </div>
     );
   }
@@ -43,7 +45,7 @@ export default async function AuditLogPage() {
   if (result.status !== 200 || !result.data) {
     return (
       <div className="text-center py-12">
-        <p className="text-slate-500 dark:text-slate-400 text-sm">Failed to load audit logs. Please try again later.</p>
+        <p className="text-slate-500 dark:text-slate-400 text-sm">{t('dashboard.auditLoadFailed')}</p>
       </div>
     );
   }
@@ -64,9 +66,9 @@ export default async function AuditLogPage() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 flex items-center gap-3">
           <ScrollText className="h-8 w-8 text-blue-700" />
-          Audit Log
+          {t('dashboard.auditPageTitle')}
         </h1>
-        <p className="text-slate-600 dark:text-slate-400 mt-1">Platform-wide record of state-changing events.</p>
+        <p className="text-slate-600 dark:text-slate-400 mt-1">{t('dashboard.auditPageSubtitle')}</p>
       </div>
 
       <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xl">
@@ -74,11 +76,11 @@ export default async function AuditLogPage() {
           <table className="w-full text-left text-sm border-collapse">
             <thead className="bg-slate-50 dark:bg-[#060b1a] text-slate-500 dark:text-slate-400 uppercase text-[10px] font-bold tracking-wider">
               <tr>
-                <th className="px-6 py-4 border-b border-slate-200 dark:border-slate-800">When</th>
-                <th className="px-6 py-4 border-b border-slate-200 dark:border-slate-800">Action</th>
-                <th className="px-6 py-4 border-b border-slate-200 dark:border-slate-800">Actor</th>
-                <th className="px-6 py-4 border-b border-slate-200 dark:border-slate-800">Resource</th>
-                <th className="px-6 py-4 border-b border-slate-200 dark:border-slate-800">Details</th>
+                <th className="px-6 py-4 border-b border-slate-200 dark:border-slate-800">{t('dashboard.auditColWhen')}</th>
+                <th className="px-6 py-4 border-b border-slate-200 dark:border-slate-800">{t('dashboard.auditColAction')}</th>
+                <th className="px-6 py-4 border-b border-slate-200 dark:border-slate-800">{t('dashboard.auditColActor')}</th>
+                <th className="px-6 py-4 border-b border-slate-200 dark:border-slate-800">{t('dashboard.auditColResource')}</th>
+                <th className="px-6 py-4 border-b border-slate-200 dark:border-slate-800">{t('dashboard.auditColDetails')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-800">
@@ -134,7 +136,7 @@ export default async function AuditLogPage() {
                     <details className="group">
                       <summary className="list-none cursor-pointer flex items-center gap-1 text-[10px] font-bold uppercase text-blue-700 hover:text-blue-600 transition-colors">
                         <FileText className="h-3 w-3" />
-                        View
+                        {t('dashboard.auditView')}
                         <ChevronRight className="h-3 w-3 group-open:rotate-90 transition-transform" />
                       </summary>
                       <div className="mt-2 p-3 bg-slate-50 dark:bg-[#060b1a] rounded-lg border border-slate-200 dark:border-slate-800 max-w-md overflow-x-auto shadow-inner">
@@ -149,7 +151,7 @@ export default async function AuditLogPage() {
               {items.length === 0 && (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400 italic">
-                    No audit records found.
+                    {t('dashboard.auditNoRecords')}
                   </td>
                 </tr>
               )}
@@ -158,10 +160,10 @@ export default async function AuditLogPage() {
         </div>
         <div className="px-6 py-4 bg-slate-50 dark:bg-[#060b1a]/50 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
           <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
-            Showing 1–{items.length} of {total}
+            {t('dashboard.auditShowing')}{items.length}{t('dashboard.auditOf')}{total}
           </p>
           <div className="flex gap-2 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase">
-            Pagination disabled in Phase 1
+            {t('dashboard.auditPaginationDisabled')}
           </div>
         </div>
       </section>
