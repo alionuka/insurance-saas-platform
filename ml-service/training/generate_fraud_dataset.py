@@ -1,22 +1,22 @@
 """
-Generate synthetic dataset for insurance claim fraud detection.
+Генерація синтетичного датасету для задачі виявлення страхового шахрайства.
 
-Produces a CSV with both numeric and text features. Fraud labels are derived
-from a probabilistic model that combines amount, timing, witness status, and
-the textual description style. Approximately 15% of claims are labelled as
-fraudulent — class imbalance comparable to industry estimates.
+Створює CSV з числовими і текстовими ознаками. Мітки шахрайства отримуються
+з імовірнісної моделі, яка комбінує суму, час подачі, наявність свідків і
+стиль текстового опису. Приблизно 15% заявок позначаються як шахрайські —
+це рівень незбалансованості, порівнянний із галузевими оцінками.
 
-The text descriptions are sampled from two pools:
-    - "legitimate" templates: specific, detailed accounts.
-    - "suspicious" templates: vague, generic, often using high-risk keywords.
+Текстові описи семплюються з двох пулів шаблонів:
+    - "легітимні" шаблони: конкретні, деталізовані розповіді.
+    - "підозрілі" шаблони: розмиті, узагальнені, часто з ризиковою лексикою.
 
-A trained classifier should pick up both numeric signals (high amount, no
-witnesses, claim filed shortly after policy start) and lexical signals
-(vague language, suspicious keywords).
+Навчений класифікатор має ловити і числові сигнали (велика сума, відсутність
+свідків, заявка незабаром після оформлення поліса), і лексичні сигнали
+(розмиті формулювання, підозрілі ключові слова).
 
-Usage:
+Використання:
     python training/generate_fraud_dataset.py
-    -> writes data/fraud_dataset.csv with 5,000 rows.
+    -> записує data/fraud_dataset.csv (5 000 рядків).
 """
 
 import numpy as np
@@ -28,7 +28,7 @@ N_SAMPLES = 5_000
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "fraud_dataset.csv")
 
 
-# --- Description templates ---
+# --- Шаблони текстових описів заявок ---
 
 LEGITIMATE_TEMPLATES = [
     "Rear-end collision at the intersection of {street} and {avenue}; minor whiplash and bumper damage.",
@@ -68,7 +68,7 @@ SUSPICIOUS_TEMPLATES = [
 
 
 def _fill_template(template: str, rng: np.random.Generator) -> str:
-    """Replace placeholder tokens with random plausible values."""
+    """Замінює плейсхолдери у шаблоні випадковими правдоподібними значеннями."""
     streets = ["Main St", "Oak Ave", "Pine Rd", "Elm Blvd", "5th Ave"]
     avenues = ["Maple Ave", "Cedar Lane", "Birch St", "Walnut Rd"]
     hospitals = ["Mercy General", "St. Luke's", "Riverside Medical", "City General"]
@@ -88,44 +88,44 @@ def _fill_template(template: str, rng: np.random.Generator) -> str:
 def generate_dataset(n: int = N_SAMPLES, seed: int = RNG_SEED) -> pd.DataFrame:
     rng = np.random.default_rng(seed)
 
-    # --- Numeric features ---
+    # --- Числові ознаки ---
 
-    # Claim amount: log-normal, fraud claims biased higher.
-    base_amount = rng.lognormal(mean=7.5, sigma=1.0, size=n)  # median ~$1800
+    # Сума заявки: лог-нормальний розподіл, шахрайські заявки зсунуті вгору.
+    base_amount = rng.lognormal(mean=7.5, sigma=1.0, size=n)  # медіана ~$1800
 
-    # Claim type: categorical
+    # Тип заявки: категорія
     claim_type = rng.choice(["AUTO", "HEALTH", "PROPERTY", "LIFE"], size=n, p=[0.4, 0.3, 0.25, 0.05])
 
-    # Days between policy start and claim filing.
-    # Fraud often occurs early (right after buying policy).
+    # Кількість днів між оформленням поліса та подачею заявки.
+    # Шахрайство часто трапляється на початку (одразу після купівлі поліса).
     days_since_policy_start = rng.integers(1, 1500, size=n)
 
-    # Whether the incident has witnesses (bool).
+    # Чи були свідки інциденту (булеве)
     has_witnesses = rng.choice([0, 1], size=n, p=[0.4, 0.6])
 
-    # How many prior claims this customer has had on the same policy.
+    # Скільки попередніх заявок було у клієнта по цьому ж полісу
     prior_claims_count = rng.poisson(lam=0.5, size=n)
 
-    # --- Compute fraud probability per row ---
+    # --- Обчислюємо ймовірність шахрайства для кожного рядка ---
 
-    # Base logit
-    logit = -3.0  # most claims are legitimate
+    # Базовий логіт
+    logit = -3.0  # більшість заявок легітимні
 
-    # Higher amount → higher fraud risk (especially if very high)
+    # Більша сума → більший ризик шахрайства (особливо при дуже високих сумах)
     amount_factor = np.where(base_amount > 30000, 1.5, 0) + np.where(base_amount > 10000, 0.5, 0)
 
-    # Early claims are suspicious
+    # Ранні заявки підозрілі
     timing_factor = np.where(days_since_policy_start < 30, 1.5, 0) + np.where(
         days_since_policy_start < 90, 0.5, 0
     )
 
-    # No witnesses → suspicious
+    # Відсутність свідків → підозріло
     witness_factor = np.where(has_witnesses == 0, 0.7, 0)
 
-    # Many prior claims → suspicious
+    # Багато попередніх заявок → підозріло
     prior_factor = prior_claims_count * 0.3
 
-    # Combine + noise
+    # Об'єднуємо + додаємо шум
     final_logit = (
         logit
         + amount_factor
@@ -137,9 +137,9 @@ def generate_dataset(n: int = N_SAMPLES, seed: int = RNG_SEED) -> pd.DataFrame:
     proba_fraud = 1 / (1 + np.exp(-final_logit))
     is_fraud = (rng.uniform(size=n) < proba_fraud).astype(int)
 
-    # --- Text descriptions ---
-    # Fraud rows pull from suspicious templates with 80% probability,
-    # legitimate rows pull from legitimate templates with 95% probability.
+    # --- Текстові описи ---
+    # Для шахрайських рядків з імовірністю 80% беремо підозрілий шаблон,
+    # для легітимних — з імовірністю 95% беремо легітимний шаблон.
     descriptions = []
     for fraud_label in is_fraud:
         if fraud_label == 1:

@@ -1,20 +1,20 @@
 """
-Insurance SaaS ML Service.
+ML-сервіс страхової SaaS-платформи.
 
-FastAPI application exposing risk prediction, fraud detection, and product
-recommendation endpoints. All three are backed by trained scikit-learn
-models loaded from disk at startup.
+FastAPI-додаток, який надає ендпоінти оцінки ризику, виявлення шахрайства
+та формування рекомендацій продуктів. Усі три моделі — це навчені
+scikit-learn pipeline-и, які завантажуються з диска при старті сервісу.
 
-  - Risk prediction: logistic regression over standardized numeric +
-    one-hot encoded categorical features.
-  - Fraud detection: logistic regression combining numeric claim features
-    with TF-IDF text features (bag-of-words + bigrams) on the description.
-  - Recommendations: content-based filtering — TF-IDF over the product
-    catalog with cosine similarity ranking against a customer interest
-    query derived from demographics and life events.
+  - Оцінка ризику: логістична регресія / Gradient Boosting на
+    стандартизованих числових та one-hot закодованих категорійних ознаках.
+  - Виявлення шахрайства: логістична регресія, що поєднує числові ознаки
+    заявки з текстовими ознаками TF-IDF (мішок слів + біграми) опису заявки.
+  - Рекомендації: content-based фільтрація — TF-IDF над каталогом продуктів
+    із ранжуванням за косинусною подібністю до запиту, побудованого на
+    демографічних даних і життєвих подіях клієнта.
 
-If a model file is missing, the endpoint falls back to a simple rule-based
-prediction with a clear marker in the response explanation.
+Якщо файл моделі відсутній, ендпоінт переходить у режим простого
+rule-based передбачення з чіткою позначкою у поясненні відповіді.
 """
 
 import contextvars
@@ -31,36 +31,37 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 
-# --- API key auth ---
-# Protects /risk/predict, /fraud/detect, /recommendations from arbitrary
-# external callers. Backend must include X-Internal-API-Key header matching
-# ML_INTERNAL_API_KEY env var. When the env var is unset (local dev),
-# authentication is skipped to keep the dev flow frictionless.
+# --- Авторизація через API-ключ ---
+# Захищає /risk/predict, /fraud/detect, /recommendations від довільних
+# зовнішніх викликів. Бекенд має передавати заголовок X-Internal-API-Key,
+# який збігається зі змінною середовища ML_INTERNAL_API_KEY. Якщо змінна
+# не задана (локальна розробка), авторизація пропускається, щоб не
+# заважати dev-процесу.
 INTERNAL_API_KEY = os.environ.get("ML_INTERNAL_API_KEY")
 
 
 def require_api_key(x_internal_api_key: Optional[str] = Header(default=None)) -> None:
     if INTERNAL_API_KEY is None:
-        return  # no key configured → auth disabled (dev mode)
+        return  # ключ не задано → авторизація вимкнена (dev-режим)
     if not x_internal_api_key or x_internal_api_key != INTERNAL_API_KEY:
         raise HTTPException(status_code=401, detail="Invalid or missing X-Internal-API-Key header")
 
-# --- Model loading ---
+# --- Завантаження моделей ---
 
 RISK_MODEL_PATH = Path(__file__).parent / "models" / "risk_model.joblib"
 FRAUD_MODEL_PATH = Path(__file__).parent / "models" / "fraud_model.joblib"
 RECS_MODEL_PATH = Path(__file__).parent / "models" / "recommendations_model.joblib"
 
-# Feature columns the trained risk pipeline expects.
+# Ознаки, які очікує навчений pipeline моделі ризику.
 RISK_NUMERIC_FEATURES = ["age", "annual_income", "credit_score", "years_customer", "prior_claims"]
 RISK_CATEGORICAL_FEATURES = ["region"]
 
-# Feature columns the trained fraud pipeline expects.
+# Ознаки, які очікує навчений pipeline моделі шахрайства.
 FRAUD_NUMERIC_FEATURES = ["amount", "days_since_policy_start", "has_witnesses", "prior_claims_count"]
 FRAUD_CATEGORICAL_FEATURES = ["claim_type"]
 FRAUD_TEXT_FEATURE = "description"
 
-# Container for loaded models — populated in lifespan startup.
+# Контейнер для завантажених моделей — заповнюється у lifespan при старті.
 ml_models: dict = {}
 
 RISK_FEATURE_LABELS = {
@@ -105,12 +106,12 @@ def _try_load(label: str, path: Path):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Load all models once at startup; release on shutdown."""
+    """Завантажити всі моделі один раз при старті; вивільнити при зупинці."""
     _try_load("risk", RISK_MODEL_PATH)
     _try_load("fraud", FRAUD_MODEL_PATH)
     _try_load("recommendations", RECS_MODEL_PATH)
-    
-    # Try loading SHAP background and explainer
+
+    # Спроба завантажити фонові дані SHAP та сам пояснювач для моделі ризику
     try:
         import shap
         background_path = Path(__file__).parent / "models" / "risk_shap_background.csv"
@@ -131,7 +132,7 @@ async def lifespan(app: FastAPI):
         ml_models["risk_explainer"] = None
         print(f"[ml-service] WARNING: Failed to load risk SHAP explainer: {e}")
 
-    # Try loading Fraud SHAP background and explainer
+    # Спроба завантажити фонові дані SHAP та пояснювач для моделі шахрайства
     try:
         import shap
         fraud_background_path = Path(__file__).parent / "models" / "fraud_shap_background.csv"
@@ -165,13 +166,13 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Mount StaticFiles for training plots
+# Підключення StaticFiles для роздачі графіків з фази тренування
 plots_dir = Path(__file__).parent / "training" / "plots"
 if plots_dir.exists():
     app.mount("/plots", StaticFiles(directory=str(plots_dir)), name="plots")
 
 
-# --- Request & Response Models ---
+# --- Моделі запитів і відповідей (Pydantic) ---
 
 
 class RiskRequest(BaseModel):
@@ -179,9 +180,9 @@ class RiskRequest(BaseModel):
     age: int
     annualIncome: float
     creditScore: int
-    # Optional features the trained model can use; sensible defaults applied
-    # if the caller does not provide them (preserves backwards compatibility
-    # with the previous rule-based API).
+    # Опціональні ознаки, які може використовувати навчена модель;
+    # якщо абонент не передасть — застосовуються розумні дефолти
+    # (зберігає зворотну сумісність із попереднім rule-based API).
     yearsCustomer: Optional[int] = Field(default=5, ge=0, le=80)
     priorClaims: Optional[int] = Field(default=0, ge=0, le=20)
     region: Optional[int] = Field(default=1, ge=0, le=2, description="0=urban, 1=suburban, 2=rural")
@@ -205,8 +206,8 @@ class FraudRequest(BaseModel):
     amount: float
     claimType: str
     description: str
-    # Optional features the trained fraud model uses; defaults preserve
-    # backwards compatibility with the previous rule-based API.
+    # Опціональні ознаки, які використовує навчена модель шахрайства;
+    # дефолти зберігають зворотну сумісність з rule-based API.
     daysSincePolicyStart: Optional[int] = Field(default=180, ge=0, le=10000)
     hasWitnesses: Optional[int] = Field(default=1, ge=0, le=1, description="0=no witnesses, 1=has witnesses")
     priorClaimsCount: Optional[int] = Field(default=0, ge=0, le=20)
@@ -235,16 +236,16 @@ class RecommendedProduct(BaseModel):
 
 
 class RecommendationResponse(BaseModel):
-    recommendedProducts: List[str]  # backward-compat: list of product names
+    recommendedProducts: List[str]  # для зворотної сумісності: список назв продуктів
     rankedProducts: List[RecommendedProduct]
     explanation: str
 
 
-# --- Helpers ---
+# --- Допоміжні функції ---
 
 
 def _risk_level(score: float) -> Literal["LOW", "MEDIUM", "HIGH"]:
-    """Bucket a 0-100 risk score into a categorical level."""
+    """Перетворює числову оцінку ризику 0–100 у категорійний рівень."""
     if score < 33:
         return "LOW"
     if score < 66:
@@ -253,7 +254,7 @@ def _risk_level(score: float) -> Literal["LOW", "MEDIUM", "HIGH"]:
 
 
 def _build_explanation(score: float, request: RiskRequest, top_factors: List[str]) -> str:
-    """Compose a short, human-readable explanation citing the score and top contributing factors."""
+    """Будує коротке текстове пояснення з оцінкою та переліком ключових факторів."""
     level = _risk_level(score)
     factor_text = ", ".join(top_factors) if top_factors else "general profile"
     return (
@@ -263,7 +264,7 @@ def _build_explanation(score: float, request: RiskRequest, top_factors: List[str
 
 
 def _identify_top_factors(request: RiskRequest) -> List[str]:
-    """Heuristic — surface up to 2 features whose values lean toward the high-risk side, used for the textual explanation."""
+    """Евристика — вибирає до 2 ознак, чиї значення схиляються до зони високого ризику; використовується для текстового пояснення."""
     flags = []
     if request.creditScore < 600:
         flags.append("low credit score")
@@ -279,7 +280,7 @@ def _identify_top_factors(request: RiskRequest) -> List[str]:
 
 
 def _rule_based_risk_fallback(request: RiskRequest) -> RiskResponse:
-    """Used only when the trained model is missing on disk."""
+    """Використовується лише коли натренована модель відсутня на диску."""
     if request.creditScore >= 750:
         return RiskResponse(
             riskScore=15.0, riskLevel="LOW",
@@ -296,7 +297,7 @@ def _rule_based_risk_fallback(request: RiskRequest) -> RiskResponse:
     )
 
 
-# --- Endpoints ---
+# --- Ендпоінти ---
 
 
 @app.get("/health")
@@ -318,7 +319,7 @@ def predict_risk(request: RiskRequest):
     if model is None:
         return _rule_based_risk_fallback(request)
 
-    # Build a single-row DataFrame matching the trained pipeline's feature schema.
+    # Будуємо DataFrame з одного рядка за схемою ознак, яку очікує навчений pipeline.
     row = pd.DataFrame(
         [{
             "age": request.age,
@@ -354,7 +355,7 @@ def predict_risk(request: RiskRequest):
                 contrib_val = float(shap_vals[i, 1]) * 100
                 raw_val = row.iloc[0][feat_name]
                 
-                # Coerce numpy values to python native type
+                # Конвертуємо значення numpy у нативні типи Python
                 if feat_name == "region":
                     val_display = {0: "Urban", 1: "Suburban", 2: "Rural"}.get(int(raw_val), str(raw_val))
                 elif isinstance(raw_val, (np.integer, int)):
@@ -370,7 +371,7 @@ def predict_risk(request: RiskRequest):
                     contribution=round(contrib_val, 2)
                 ))
             
-            # Sort by abs(contribution) DESC, keep top 5
+            # Сортуємо за модулем внеску за спаданням, лишаємо топ-5
             contrib_list.sort(key=lambda x: abs(x.contribution), reverse=True)
             feature_contributions = contrib_list[:5]
         except Exception as e:
@@ -386,7 +387,7 @@ def predict_risk(request: RiskRequest):
 
 
 def _rule_based_fraud_fallback(request: FraudRequest) -> FraudResponse:
-    """Used only when the trained fraud model is missing on disk."""
+    """Використовується лише коли натренована модель шахрайства відсутня на диску."""
     suspicious_keywords = ["stolen", "lost", "fire", "unwitnessed", "cash"]
     desc_lower = request.description.lower()
 
@@ -404,7 +405,7 @@ def _rule_based_fraud_fallback(request: FraudRequest) -> FraudResponse:
 
 
 def _build_fraud_explanation(score: float, flag: str, request: FraudRequest) -> str:
-    """Compose a human-readable explanation citing key contributing signals."""
+    """Будує текстове пояснення з переліком ключових сигналів, що вплинули на результат."""
     signals = []
     if request.amount > 30000:
         signals.append(f"high amount (${request.amount:,.0f})")
@@ -452,8 +453,9 @@ def detect_fraud(request: FraudRequest):
         raise HTTPException(status_code=500, detail=f"Fraud model inference failed: {exc}")
 
     score = round(proba_fraud * 100, 1)
-    # Decision threshold: above 50% probability => SUSPICIOUS.
-    # Tunable; lower threshold catches more fraud at cost of more false positives.
+    # Поріг рішення: ймовірність вище 50% => SUSPICIOUS.
+    # Параметр можна змінювати; нижчий поріг ловить більше шахрайства,
+    # але ціною більшої кількості хибнопозитивних спрацювань.
     flag = "SUSPICIOUS" if score >= 50 else "NORMAL"
     explanation = _build_fraud_explanation(score, flag, request)
 
@@ -461,11 +463,12 @@ def detect_fraud(request: FraudRequest):
     explainer = ml_models.get("fraud_explainer")
     if explainer is not None:
         try:
-            # Set request context variables
+            # Записуємо контекстні змінні запиту (тип і опис заявки),
+            # щоб обгортка-предиктор могла достроїти повний DataFrame
             _fraud_context_claim_type.set(request.claimType)
             _fraud_context_description.set(request.description)
-            
-            # Form numeric row for explainer
+
+            # Формуємо рядок числових ознак для пояснювача SHAP
             numeric_row = pd.DataFrame(
                 [{
                     "amount": request.amount,
@@ -484,21 +487,21 @@ def detect_fraud(request: FraudRequest):
                 contrib_val = float(shap_vals[i, 1]) * 100
                 raw_val = numeric_row.iloc[0][feat_name]
                 
-                # Coerce numpy values to python native type
+                # Конвертуємо значення numpy у нативні типи Python
                 if isinstance(raw_val, (np.integer, int)):
                     val_display = int(raw_val)
                 elif isinstance(raw_val, (np.floating, float)):
                     val_display = float(raw_val)
                 else:
                     val_display = str(raw_val)
-                
+
                 contrib_list.append(FeatureContribution(
                     feature=FRAUD_FEATURE_LABELS.get(feat_name, feat_name),
                     value=val_display,
                     contribution=round(contrib_val, 2)
                 ))
-            
-            # Sort by abs(contribution) DESC, keep top 3
+
+            # Сортуємо за модулем внеску за спаданням, лишаємо топ-3
             contrib_list.sort(key=lambda x: abs(x.contribution), reverse=True)
             feature_contributions = contrib_list[:3]
         except Exception as e:
@@ -515,9 +518,9 @@ def detect_fraud(request: FraudRequest):
 
 def _build_recs_query(age: int, annual_income: float, life_events: List[str]) -> str:
     """
-    Translate a customer profile into the same TF-IDF query string the
-    recommendations training script uses. Kept in sync with
-    training/train_recommendations_model.py:build_query_keywords().
+    Перетворює профіль клієнта у такий самий TF-IDF-запит, який
+    використовує тренувальний скрипт рекомендацій. Має бути синхронізована
+    з training/train_recommendations_model.py:build_query_keywords().
     """
     parts: List[str] = []
 
@@ -557,7 +560,7 @@ def _build_recs_query(age: int, annual_income: float, life_events: List[str]) ->
 
 
 def _rule_based_recs_fallback(request: RecommendationRequest) -> RecommendationResponse:
-    """Used only when the trained recommendations model is missing on disk."""
+    """Використовується лише коли натренована модель рекомендацій відсутня на диску."""
     products = ["Basic Health Insurance"]
     if "marriage" in request.lifeEvents or "child" in request.lifeEvents:
         products.extend(["Family Health Plan", "Life Insurance"])
@@ -597,7 +600,7 @@ def get_recommendations(request: RecommendationRequest):
         for i in ranked_idx
     ]
 
-    top_types = list(dict.fromkeys(rp.type for rp in ranked_products))  # preserve order, dedupe
+    top_types = list(dict.fromkeys(rp.type for rp in ranked_products))  # зберігаємо порядок, прибираємо дублікати
     explanation = (
         f"Content-based ranking over {len(products)} catalog products using "
         f"TF-IDF + cosine similarity. Top match: {ranked_products[0].name} "
@@ -611,7 +614,7 @@ def get_recommendations(request: RecommendationRequest):
     )
 
 
-# --- Metrics Endpoints ---
+# --- Ендпоінти метрик моделей ---
 import json
 
 def _load_metrics(name: str):

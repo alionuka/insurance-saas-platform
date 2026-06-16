@@ -1,34 +1,34 @@
 """
-Train a content-based product recommendation model.
+Тренування content-based моделі рекомендацій страхових продуктів.
 
-The recommender uses TF-IDF vectorization of insurance product descriptions
-and ranks products by cosine similarity to a customer's interest profile.
+Рекомендатор використовує TF-IDF-векторизацію описів продуктів і
+ранжує продукти за косинусною подібністю до профілю інтересів клієнта.
 
-Approach:
-    1. Load the product catalog (8 synthetic insurance products covering
-       four types: AUTO, HEALTH, LIFE, PROPERTY).
-    2. Fit a TF-IDF vectorizer over the combined text features
-       (name + type + description) for each product.
-    3. Compute the product-feature matrix (n_products x n_features).
-    4. Save the vectorizer + product matrix + product metadata as a single
-       joblib bundle that the FastAPI service loads at startup.
+Підхід:
+    1. Завантажити каталог продуктів (8 синтетичних страхових продуктів,
+       які охоплюють чотири типи: AUTO, HEALTH, LIFE, PROPERTY).
+    2. Натренувати TF-IDF-векторизатор на об'єднаному тексті (назва +
+       тип + опис) для кожного продукту.
+    3. Обчислити матрицю ознак продуктів (n_products × n_features).
+    4. Зберегти векторизатор + матрицю + метадані продуктів як єдиний
+       joblib-bundle, який FastAPI-сервіс завантажує при старті.
 
-At inference time the service constructs a customer "interest query" string
-from demographic features (age bracket, income bracket, life events) and
-ranks products by cosine similarity to the query vector. This is a standard
-content-based recommender pattern (Aggarwal 2016, "Recommender Systems: The
-Textbook", chapter 4) chosen because:
+Під час інференсу сервіс будує "запит інтересів" клієнта з його
+демографічних ознак (вікова категорія, рівень доходу, життєві події)
+і ранжує продукти за косинусною подібністю до вектора запиту. Це
+стандартний content-based підхід (Aggarwal 2016, "Recommender Systems:
+The Textbook", розділ 4), обраний з таких міркувань:
 
-  - It does not require a user-item interaction matrix (unlike collaborative
-    filtering), which suits a system that has just launched.
-  - It handles the cold-start problem natively — recommendations work for
-    customers with zero prior history.
-  - The product catalog is small (8 products), so cosine similarity runs in
-    constant time per query.
-  - The output is interpretable: matched terms can be surfaced as the
-    explanation, which the platform's UI requires.
+  - Не потребує матриці user-item взаємодій (на відміну від collaborative
+    filtering), що підходить системі на старті, де таких даних ще немає.
+  - Природно вирішує cold-start: рекомендації працюють і для клієнтів
+    без жодної історії взаємодій.
+  - Каталог невеликий (8 продуктів), тому косинусна подібність
+    обчислюється за константний час на запит.
+  - Результат інтерпретований: матчингові слова можна показати як
+    пояснення, що і вимагає UI платформи.
 
-Usage:
+Використання:
     python training/train_recommendations_model.py
 """
 
@@ -47,12 +47,13 @@ MODEL_PATH = os.path.join(HERE, "..", "models", "recommendations_model.joblib")
 METRICS_PATH = os.path.join(HERE, "..", "models", "recommendations_model_metrics.json")
 
 
-# Demographic-to-keywords mapping used at inference time. Documented here so
-# the training output can verify it produces sensible rankings.
+# Маппінг демографічних профілів у ключові слова, який використовується
+# при інференсі. Документується тут, щоб тренувальний скрипт міг
+# перевірити, що результати ранжування адекватні.
 DEMO_PROFILES = {
     "young_low_income": {
         "age": 22, "income": 28000, "life_events": [],
-        "expected_top_type": "AUTO",  # young drivers + low income → basic auto
+        "expected_top_type": "AUTO",  # молоді водії + низький дохід → базове авто
     },
     "young_with_car": {
         "age": 26, "income": 45000, "life_events": ["new_car"],
@@ -60,45 +61,45 @@ DEMO_PROFILES = {
     },
     "family_with_children": {
         "age": 35, "income": 75000, "life_events": ["marriage", "child"],
-        "expected_top_type": "HEALTH",  # family events → health/life
+        "expected_top_type": "HEALTH",  # сімейні події → здоров'я / життя
     },
     "high_income_homeowner": {
         "age": 48, "income": 150000, "life_events": ["new_home"],
-        "expected_top_type": "PROPERTY",  # homeowner → property
+        "expected_top_type": "PROPERTY",  # власник житла → майно
     },
     "near_retirement": {
         "age": 58, "income": 95000, "life_events": ["retirement_planning"],
-        "expected_top_type": "LIFE",  # older + planning → whole life
+        "expected_top_type": "LIFE",  # старший вік + планування → довічне страхування життя
     },
 }
 
 
 def build_query_keywords(age: int, income: float, life_events: list) -> str:
     """
-    Translate a customer profile into a free-text query string that the
-    TF-IDF vectorizer can score against the product catalog.
+    Перетворює профіль клієнта у вільний текстовий запит, проти якого
+    TF-IDF-векторизатор оцінює каталог продуктів.
 
-    The mapping is documented and deterministic so it can be exercised
-    from tests and explained in the thesis text.
+    Маппінг детермінований і задокументований — це дозволяє покрити його
+    тестами і пояснити у тексті дипломної роботи.
     """
     parts = []
 
-    # Age brackets (general baseline — weak signal, single occurrence each)
+    # Вікові категорії (загальна базова лінія — слабкий сигнал, по одному входженню)
     if age < 30:
         parts.extend(["young", "affordable", "basic"])
     if 30 <= age < 50:
-        parts.append("comprehensive")  # without "family" — that's a life-event signal
+        parts.append("comprehensive")  # без "family" — це сигнал life-event, не віку
     if age >= 50:
         parts.extend(["retirement", "security"])
 
-    # Income brackets
+    # Категорії доходу
     if income < 35000:
         parts.extend(["affordable", "budget"])
     if income > 100000:
         parts.extend(["premium", "luxury"])
 
-    # Life events — these are strong signals so repeat each keyword three times
-    # to dominate the bag-of-words query (TF-IDF weights term frequency).
+    # Життєві події — це сильні сигнали, тому повторюємо кожне ключове слово
+    # тричі, щоб воно домінувало у запиті (TF-IDF зважує частоту терма).
     def boost(*keywords):
         for kw in keywords:
             parts.extend([kw] * 3)
@@ -127,7 +128,7 @@ def main():
     catalog = pd.read_csv(CATALOG_PATH)
     print(f"  -> {len(catalog)} products across {catalog['type'].nunique()} types\n")
 
-    # Combined text per product = name + type + description.
+    # Об'єднаний текст для кожного продукту = назва + тип + опис.
     catalog["combined_text"] = (
         catalog["name"].astype(str)
         + " "
@@ -136,19 +137,19 @@ def main():
         + catalog["description"].astype(str)
     )
 
-    # Fit TF-IDF vectorizer.
+    # Тренуємо TF-IDF-векторизатор.
     vectorizer = TfidfVectorizer(
         max_features=200,
         ngram_range=(1, 2),
         stop_words="english",
-        min_df=1,  # small catalog — keep all terms
+        min_df=1,  # малий каталог — зберігаємо всі терми
     )
     product_matrix = vectorizer.fit_transform(catalog["combined_text"])
     print(f"TF-IDF vocabulary size: {len(vectorizer.vocabulary_)}")
     print(f"Product matrix shape:   {product_matrix.shape}\n")
 
-    # Sanity-check: produce ranked recommendations for the documented
-    # demographic profiles and compare against expected top-type.
+    # Перевірка адекватності: будуємо ранжування рекомендацій для задокументованих
+    # демографічних профілів і порівнюємо з очікуваним top-type.
     print("=" * 70)
     print(f"{'Profile':<28} {'Top-1 product':<28} {'Type':<10} {'Sim':>6}")
     print("=" * 70)
@@ -190,7 +191,7 @@ def main():
     accuracy = correct_count / len(DEMO_PROFILES)
     print(f"\nProfile match accuracy: {correct_count}/{len(DEMO_PROFILES)} = {accuracy:.0%}")
 
-    # Save bundle.
+    # Збереження bundle на диск.
     bundle = {
         "vectorizer": vectorizer,
         "product_matrix": product_matrix,
@@ -200,7 +201,7 @@ def main():
     joblib.dump(bundle, MODEL_PATH)
     print(f"\nSaved model -> {MODEL_PATH}")
 
-    # Save metrics summary for thesis.
+    # Збереження зведених метрик для дипломної роботи.
     summary = {
         "approach": "Content-based filtering with TF-IDF + cosine similarity",
         "n_products_in_catalog": int(len(catalog)),

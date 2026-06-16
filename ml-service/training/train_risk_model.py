@@ -1,35 +1,37 @@
 """
-Train and compare classification models for insurance risk prediction.
+Тренування та порівняння класифікаційних моделей для оцінки страхового ризику.
 
-Methodology (upgraded):
-    1. Load synthetic dataset (must be generated first via generate_risk_dataset.py).
-    2. Stratified train/test split (80/20) for the final held-out evaluation.
-    3. For each candidate algorithm:
-        - Define a hyperparameter search grid.
-        - Run GridSearchCV with 5-fold StratifiedKFold cross-validation
-          on the training set, scoring by ROC-AUC. Class imbalance is
-          handled via class_weight='balanced'.
-        - Refit the best estimator on the full training set.
-    4. Report cross-validation results (mean ± std for ROC-AUC) per algorithm
-       to demonstrate variance, alongside test-set metrics for the final
-       held-out evaluation.
-    5. Compute permutation feature importance on the test set for the best
-       model — a model-agnostic, statistically-grounded alternative to SHAP
-       that does not require external dependencies. Surfaces per-feature
-       contribution to held-out performance.
-    6. Save the best-performing model (by mean CV ROC-AUC) to
+Методологія:
+    1. Завантажити синтетичний датасет (попередньо має бути згенерований
+       скриптом generate_risk_dataset.py).
+    2. Стратифікований поділ на навчальну і тестову вибірки (80/20) для
+       фінального оцінювання на відкладених даних.
+    3. Для кожного алгоритму-кандидата:
+        - Задати сітку гіперпараметрів для пошуку.
+        - Запустити GridSearchCV із 5-fold StratifiedKFold крос-валідацією
+          на навчальній вибірці, метрика — ROC-AUC. Незбалансованість
+          класів обробляється через class_weight='balanced'.
+        - Перенавчити найкращий естиматор на повній навчальній вибірці.
+    4. Сформувати звіт з результатами крос-валідації (середнє ± стандартне
+       відхилення ROC-AUC) для кожного алгоритму, щоб продемонструвати
+       розкид, разом з метриками на тестовій вибірці.
+    5. Обчислити permutation feature importance на тестовій вибірці для
+       найкращої моделі — це model-agnostic, статистично обґрунтована
+       альтернатива SHAP без додаткових залежностей. Показує внесок
+       кожної ознаки у якість на відкладених даних.
+    6. Зберегти найкращу модель (за середнім CV ROC-AUC) у файл
        ../models/risk_model.joblib.
-    7. Generate plots:
-        - CV ROC-AUC distribution per model (box plot) — visualises variance.
-        - Test-set ROC curves for all candidate models.
-        - Confusion matrix of the best model.
-        - Permutation importance of the best model.
+    7. Згенерувати графіки:
+        - Розподіл CV ROC-AUC по моделях (box plot) — візуалізує розкид.
+        - ROC-криві всіх кандидатів на тестовій вибірці.
+        - Confusion matrix найкращої моделі.
+        - Permutation importance найкращої моделі.
 
-Optional: pip install xgboost shap — to compare against XGBoost and
-generate SHAP per-prediction explanations. The current sklearn-only
-configuration produces equivalent rigor with no extra dependencies.
+Опційно: pip install xgboost shap — для порівняння з XGBoost та
+генерації SHAP-пояснень окремих передбачень. Поточна конфігурація
+лише на sklearn дає еквівалентну строгість без зовнішніх залежностей.
 
-Usage:
+Використання:
     python training/train_risk_model.py
 """
 
@@ -65,7 +67,7 @@ from sklearn.metrics import (
     classification_report,
 )
 
-# --- Paths ---
+# --- Шляхи до файлів ---
 HERE = os.path.dirname(__file__)
 DATA_PATH = os.path.join(HERE, "..", "data", "risk_dataset.csv")
 MODEL_PATH = os.path.join(HERE, "..", "models", "risk_model.joblib")
@@ -92,9 +94,10 @@ def build_preprocessor() -> ColumnTransformer:
 
 def build_search_specs() -> dict:
     """
-    Returns dict of {model_name: (Pipeline, param_grid)}.
-    Each Pipeline has a 'preprocess' and a 'clf' step. Grid keys must use
-    the 'clf__' prefix to address the classifier inside the pipeline.
+    Повертає словник {назва_моделі: (Pipeline, param_grid)}.
+    Кожен Pipeline має крок 'preprocess' і крок 'clf'. Ключі сітки мають
+    починатися з префіксу 'clf__', щоб звертатися до класифікатора
+    всередині pipeline.
     """
     return {
         "Logistic Regression": (
@@ -174,16 +177,16 @@ def evaluate(model, X_test, y_test):
     )
 
 
-# --- Plot helpers ---
+# --- Допоміжні функції для графіків ---
 
 
 def plot_cv_distribution(cv_results: dict, save_path: str):
-    """Box plot of cross-validation ROC-AUC per model."""
+    """Box plot значень ROC-AUC, отриманих при крос-валідації, по моделях."""
     names = list(cv_results.keys())
     scores = [cv_results[n]["cv_scores"] for n in names]
 
     plt.figure(figsize=(8, 5))
-    bp = plt.boxplot(scores, labels=names, patch_artist=True, widths=0.5)
+    bp = plt.boxplot(scores, tick_labels=names, patch_artist=True, widths=0.5)
     colors = ["#6366f1", "#10b981", "#f59e0b"]
     for patch, color in zip(bp["boxes"], colors[: len(bp["boxes"])]):
         patch.set_facecolor(color)
@@ -240,15 +243,15 @@ def plot_confusion(cm: list, model_name: str, save_path: str):
 
 
 def plot_permutation_importance(importances, feature_names, model_name, save_path):
-    """Box plot per feature of permutation importance over multiple repeats."""
+    """Box plot важливості ознак (permutation importance) по кількох повтореннях."""
     sorted_idx = importances.importances_mean.argsort()[::-1]
     sorted_names = [feature_names[i] for i in sorted_idx]
-    sorted_importances = importances.importances[sorted_idx].T  # (n_repeats, n_features)
+    sorted_importances = importances.importances[sorted_idx].T  # форма (n_repeats, n_features)
 
     plt.figure(figsize=(9, 5))
     bp = plt.boxplot(
         sorted_importances,
-        labels=sorted_names,
+        tick_labels=sorted_names,
         vert=True,
         patch_artist=True,
         widths=0.5,
@@ -286,7 +289,7 @@ def main():
 
     cv_strategy = StratifiedKFold(n_splits=CV_FOLDS, shuffle=True, random_state=RANDOM_STATE)
 
-    # --- Hyperparameter tuning + CV per model ---
+    # --- Підбір гіперпараметрів + крос-валідація для кожної моделі ---
     search_specs = build_search_specs()
     cv_results = {}
 
@@ -306,7 +309,8 @@ def main():
         )
         gs.fit(X_train, y_train)
 
-        # Re-evaluate with cross_val_score to get per-fold scores for plotting.
+        # Перераховуємо через cross_val_score, щоб отримати окремі значення
+        # для кожного фолду — потрібні для побудови графіку розкиду.
         cv_scores = cross_val_score(
             gs.best_estimator_, X_train, y_train, cv=cv_strategy, scoring="roc_auc", n_jobs=-1
         )
@@ -331,7 +335,7 @@ def main():
 
     print("=" * 90)
 
-    # --- Test-set evaluation ---
+    # --- Оцінка на тестовій вибірці ---
     print("\nFinal evaluation on held-out test set:")
     print("-" * 80)
     print(f"{'Model':<22} {'Precision':>10} {'Recall':>10} {'F1':>8} {'Test ROC-AUC':>14}")
@@ -347,7 +351,7 @@ def main():
         )
     print("-" * 80)
 
-    # --- Pick best by CV mean (more robust than single-split test score) ---
+    # --- Вибір найкращої моделі за середнім CV (стабільніше за один тестовий поділ) ---
     best_name = max(cv_results.keys(), key=lambda k: cv_results[k]["cv_mean"])
     best = cv_results[best_name]
     print(f"\nBest model selected by CV mean: {best_name}")
@@ -359,7 +363,7 @@ def main():
     y_pred_best = best["best_estimator"].predict(X_test)
     print(classification_report(y_test, y_pred_best, target_names=["Low Risk", "High Risk"]))
 
-    # --- Permutation feature importance (model-agnostic, alternative to SHAP) ---
+    # --- Permutation feature importance (model-agnostic, альтернатива SHAP) ---
     print("Computing permutation feature importance (15 repeats)...")
     importances = permutation_importance(
         best["best_estimator"],
@@ -389,7 +393,7 @@ def main():
             f"  {item['feature']:<18} {item['mean_decrease_auc']:.4f} ± {item['std_decrease_auc']:.4f}"
         )
 
-    # --- Save best model + metrics ---
+    # --- Збереження найкращої моделі та метрик ---
     os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
     joblib.dump(best["best_estimator"], MODEL_PATH)
     print(f"\nSaved model -> {MODEL_PATH}")
@@ -430,7 +434,7 @@ def main():
         json.dump(summary, f, indent=2)
     print(f"Saved metrics  -> {METRICS_PATH}")
 
-    # --- Plots ---
+    # --- Генерація графіків ---
     os.makedirs(PLOTS_DIR, exist_ok=True)
     plot_cv_distribution(cv_results, os.path.join(PLOTS_DIR, "risk_cv_distribution.png"))
     plot_roc_curves(cv_results, y_test, os.path.join(PLOTS_DIR, "risk_roc_curves.png"))
